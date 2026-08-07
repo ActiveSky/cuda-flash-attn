@@ -1,0 +1,38 @@
+# Local credentials (keep the committed template)
+/.env
+/.env.*
+!/tools/.env.example
+/tools/.env
+
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+/.pytest_cache/
+/.mypy_cache/
+/.ruff_cache/
+/.venv/
+/venv/
+/env/
+
+# CUDA/C++ build outputs
+/build/
+/dist/
+*.o
+*.obj
+*.a
+*.so
+*.d
+*.ptx
+*.cubin
+*.fatbin
+*.sass
+*.ncu-rep
+
+# Local editor and runtime state
+/.vscode/
+/.idea/
+/.claude/*.lock
+
+# Generated XPUOJ artifacts
+/results/raw/
+/log/cuda_compile_log.md

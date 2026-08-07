@@ -1,0 +1,3 @@
+[submodule "flash-attn"]
+	path = third/flash-attn
+	url = https://github.com/dao-ailab/flash-attention
