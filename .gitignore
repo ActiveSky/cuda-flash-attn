@@ -31,8 +31,8 @@ __pycache__/
 # Local editor and runtime state
 /.vscode/
 /.idea/
-/.claude/*.lock
+/.claude/
 
 # Generated XPUOJ artifacts
-/results/raw/
-/log/cuda_compile_log.md
+
+
