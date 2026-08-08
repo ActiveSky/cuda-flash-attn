@@ -110,6 +110,107 @@ __global__ void maca_cute_4wave_k128_materialize_probe() {
 }  // namespace xpuoj_maca_cute_4wave_layout_probe
 #endif
 
+// Compile the exact MetaX public atom/type surface used by the official
+// xcore1000 four-wave kernel.  This stays unlaunched so a diagnostic cannot
+// perturb the candidate dispatch or hide a runtime mapping issue.
+#if XPUOJ_HAS_CUTE && XPUOJ_HAS_MCTLASS && XPUOJ_HAS_MACA_WMMA && defined(__CUDA_ARCH__)
+namespace xpuoj_maca_official_atom_probe {
+using namespace cute;
+
+__global__ void maca_official_cute_atom_probe() {
+    using Element = mctlass::bfloat16_t;
+    using Atom = MMA_Atom<MACA_16x16x16_F32BF16BF16F32>;
+    using Tiled = TiledMMA<Atom, Layout<Shape<_1, _1, _1>>,
+                           Layout<Shape<_1, _1, _1>>>;
+    using ALayout = decltype(make_layout(
+        make_shape(_16{}, _128{}), make_stride(_128{}, _1{})));
+    using BLayout = decltype(make_layout(
+        make_shape(_128{}, _16{}), make_stride(_16{}, _1{})));
+    using CLayout = decltype(make_layout(
+        make_shape(_16{}, _16{}), make_stride(_16{}, _1{})));
+
+    __shared__ Element a[16 * 128];
+    __shared__ Element b[128 * 16];
+    __shared__ float c[16 * 16];
+    auto mma = Tiled{};
+    auto thr = mma.get_thread_slice(threadIdx.x & 63);
+    auto sA = make_tensor(make_smem_ptr(a), ALayout{});
+    auto sB = make_tensor(make_smem_ptr(b), BLayout{});
+    auto sC = make_tensor(make_smem_ptr(c), CLayout{});
+    auto tA = thr.partition_A(sA);
+    auto tB = thr.partition_B(sB);
+    auto tC = thr.partition_C(sC);
+    auto rC = thr.make_fragment_C(tC);
+    clear(rC);
+    gemm(mma, tA, tB, rC);
+    copy(rC, tC);
+    __syncthreads();
+    (void)c[threadIdx.x & 255];
+}
+}  // namespace xpuoj_maca_official_atom_probe
+#endif
+
+// Native four-wave C500 PV epilogue compiler probe.  It follows MetaX's
+// actual register contract: S accumulator -> BF16 P preserving its fragment
+// layout, V shared -> LDS 4x4/swizzle -> register permutation -> GEMM_RR.
+// It remains unlaunched; success only authorizes the next guarded runtime port.
+#if XPUOJ_HAS_CUTE && XPUOJ_HAS_MCTLASS && XPUOJ_HAS_MACA_WMMA && defined(__CUDA_ARCH__)
+namespace xpuoj_maca_cute_pv_epilogue_probe {
+using namespace cute;
+
+__global__ void maca_cute_pv_epilogue_probe() {
+    using Element = mctlass::bfloat16_t;
+    using Atom = MMA_Atom<MACA_16x16x16_F32BF16BF16F32>;
+    using TiledMmaS = TiledMMA<Atom, Layout<Shape<_1, _1, _1>>,
+                               Layout<Shape<_1, _1, _1>>>;
+    using TiledMmaO = TiledMMA<Atom, Layout<Shape<_1, _4, _1>>,
+                               Layout<Shape<_1, _1, _1>>>;
+
+    __shared__ Element s_v_storage[16 * 128];
+    const int tidx = threadIdx.x;
+    const int wave = tidx >> 6;
+    const int lane = tidx & 63;
+
+    auto tiled_mma_s = TiledMmaS{};
+    auto thr_mma_s = tiled_mma_s.get_thread_slice(tidx & 63);
+    Tensor acc_s = partition_fragment_C(tiled_mma_s, Shape<_16, _16>{});
+    clear(acc_s);
+
+    // Equivalent to MetaX's CONVERT_TENSOR_TYPE(float, Element, acc_s, rP).
+    constexpr int rP_numel = decltype(size(acc_s))::value;
+    mctlass::NumericArrayConverter<Element, float, rP_numel> rP_convert;
+    auto rP_fragment = rP_convert(
+        *reinterpret_cast<mctlass::Array<float, rP_numel>*>(acc_s.data()));
+    Tensor rP = make_tensor(make_rmem_ptr<Element>(&rP_fragment), acc_s.layout());
+
+    auto tiled_mma_o = TiledMmaO{};
+    auto thr_mma_o = tiled_mma_o.get_thread_slice(tidx);
+    Tensor acc_o = partition_fragment_C(tiled_mma_o, Shape<_16, _128>{});
+    clear(acc_o);
+
+    // Match official tOsVt's C500 4x4 LDS source mapping exactly for one
+    // shared stage (N=16, head_dim=128, four physical 64-lane waves).
+    Tensor tOrVt = make_tensor<Element>(Shape<_4, Shape<_4, _2>, _1>{});
+    const int warp_offset = wave * 16 * 64;
+    const int thread_offset = (lane / 16) * 4 * 64;
+    Element* v_lds_ptr = s_v_storage + warp_offset + thread_offset;
+    Tensor tOsVt = make_tensor(
+        make_smem_ptr(v_lds_ptr),
+        make_layout(Shape<_4, _2, _1>{},
+                    Stride<_1, Int<16 * 256>, Int<16 * 128>>{}));
+    lds4x4_with_swizzle424(tOsVt(_, _, _0{}), tOrVt);
+    Tensor tOrVt_view = make_tensor(
+        tOrVt.data(),
+        make_layout(make_shape(size<0>(tOrVt), size<1, 0>(tOrVt),
+                               size<1, 1>(tOrVt))));
+    permute_4x4_b16(tOrVt_view);
+    gemm(tiled_mma_o, rP, tOrVt, acc_o);
+    (void)thr_mma_s;
+    (void)thr_mma_o;
+}
+}  // namespace xpuoj_maca_cute_pv_epilogue_probe
+#endif
+
 // ---- 固定规格常量（评测中恒定，用于快速路径）----
 #define HEAD_DIM 128         // headdim
 #define PAGE_TOKENS 16       // page_block_size
@@ -545,6 +646,244 @@ paged_decode_mma_qk_kernel(
 #endif
 }
 
+// ============================================================================
+// Native C500 four-wave P×V decode path, initially restricted to case 13.
+//
+// Unlike the rejected #104240 design, this keeps a CTA on one (b, kv_head,
+// split), stages each paged K/V tile once for the whole GQA4 group, and runs
+// the official MACA atom as a genuine P×V GEMM.  Four physical 64-lane waves
+// distribute the P×V output columns; P is rebuilt in the exact QK accumulator
+// register layout after the numerically stable scalar page softmax.
+//
+// This first runtime checkpoint intentionally uses CUTE's canonical shared->B
+// fragment copy.  The C500 LDS/swizzle/permute sequence was separately proved
+// by #104250 and is only substituted after this end-to-end semantic mapping
+// passes the real judge.  Existing #104235 paths remain complete fallbacks.
+// ============================================================================
+__global__ void __launch_bounds__(256)
+paged_decode_cute_native_pv_kv8_kernel(
+    const __nv_bfloat16* __restrict__ q,
+    const __nv_bfloat16* __restrict__ k_cache,
+    const __nv_bfloat16* __restrict__ v_cache,
+    __nv_bfloat16* __restrict__ out,
+    const int32_t* __restrict__ cache_seqlens,
+    const int32_t* __restrict__ block_table,
+    float* __restrict__ partial_m,
+    float* __restrict__ partial_l,
+    float* __restrict__ partial_acc,
+    int64_t batch_size,
+    int64_t num_heads,
+    int64_t num_heads_k,
+    int64_t headdim,
+    int64_t page_block_size,
+    int64_t pages_per_batch,
+    int64_t pages_per_split,
+    int64_t n_split,
+    float sm_scale)
+{
+#if XPUOJ_HAS_CUTE && XPUOJ_HAS_MCTLASS && XPUOJ_HAS_MACA_WMMA && defined(__CUDA_ARCH__)
+    using namespace cute;
+    using Element = mctlass::bfloat16_t;
+    using Atom = MMA_Atom<MACA_16x16x16_F32BF16BF16F32>;
+    using TiledMmaS = TiledMMA<Atom, Layout<Shape<_1, _1, _1>>,
+                               Layout<Shape<_1, _1, _1>>>;
+    using TiledMmaO = TiledMMA<Atom, Layout<Shape<_1, _4, _1>>,
+                               Layout<Shape<_1, _1, _1>>>;
+    using QLayout = decltype(make_layout(
+        make_shape(_16{}, _128{}), make_stride(_128{}, _1{})));
+    using KtLayout = decltype(make_layout(
+        make_shape(_128{}, _16{}), make_stride(_16{}, _1{})));
+    using ScoreLayout = decltype(make_layout(
+        make_shape(_16{}, _16{}), make_stride(_16{}, _1{})));
+    using OLayout = decltype(make_layout(
+        make_shape(_16{}, _128{}), make_stride(_128{}, _1{})));
+
+    const int tid = threadIdx.x;
+    const int wave = tid >> 6;
+    const int64_t b = blockIdx.x / num_heads_k;
+    const int64_t kv_head = blockIdx.x % num_heads_k;
+    const int64_t split = blockIdx.y;
+    const int gqa_ratio = (int)(num_heads / num_heads_k);
+    const int64_t seqlen = cache_seqlens[b];
+    const int64_t valid_pages = (seqlen + page_block_size - 1) / page_block_size;
+    const int64_t p_beg = split * pages_per_split;
+    const int64_t p_end = min(p_beg + pages_per_split, valid_pages);
+    const int32_t* bt_row = block_table + b * pages_per_batch;
+    const int64_t kv_stride = num_heads_k * headdim;
+
+    // `s_q` and `s_k` are the ordinary logical views used for score CUTE
+    // partitioning. `s_v` is token-major storage and simultaneously the
+    // [D, N] transposed view required by the PV B operand.
+    __shared__ Element s_q[16 * HEAD_DIM];
+    __shared__ Element s_k[HEAD_DIM * PAGE_TOKENS];
+    __shared__ Element s_v[PAGE_TOKENS * HEAD_DIM];
+    __shared__ float s_score[16 * PAGE_TOKENS];
+    __shared__ Element s_prob[16 * PAGE_TOKENS];
+    __shared__ float s_page_acc[16 * HEAD_DIM];
+    __shared__ float s_m[4];
+    __shared__ float s_l[4];
+    __shared__ float s_alpha[4];
+
+    auto tiled_mma_s = TiledMmaS{};
+    auto thr_mma_s = tiled_mma_s.get_thread_slice(tid & 63);
+    auto tiled_mma_o = TiledMmaO{};
+    auto thr_mma_o = tiled_mma_o.get_thread_slice(tid);
+    auto q_tensor = make_tensor(make_smem_ptr(s_q), QLayout{});
+    auto k_tensor = make_tensor(make_smem_ptr(s_k), KtLayout{});
+    auto score_tensor = make_tensor(make_smem_ptr(s_score), ScoreLayout{});
+    auto page_acc_tensor = make_tensor(make_smem_ptr(s_page_acc), OLayout{});
+    auto tAsQ = thr_mma_s.partition_A(q_tensor);
+    auto tBsK = thr_mma_s.partition_B(k_tensor);
+    auto tCsS = thr_mma_s.partition_C(score_tensor);
+    auto tOsO = thr_mma_o.partition_C(page_acc_tensor);
+
+    // Use the same official C500 V move established by #104250.  `s_v` is
+    // token-major in memory; this LDS view produces the atom's [D,N] B
+    // register layout without pretending a row-major tensor is compatible.
+    Tensor tOrVt = make_tensor<Element>(Shape<_4, Shape<_4, _2>, _1>{});
+    const int lane = tid & 63;
+    const int warp_offset = wave * 16 * 64;
+    const int thread_offset = (lane / 16) * 4 * 64;
+    Element* v_lds_ptr = s_v + warp_offset + thread_offset;
+    Tensor tOsVt = make_tensor(
+        make_smem_ptr(v_lds_ptr),
+        make_layout(Shape<_4, _2, _1>{},
+                    Stride<_1, Int<16 * 256>, Int<16 * 128>>{}));
+
+    // Map every accumulator register to its logical (M,N) score coordinate.
+    // This lets scalar softmax write BF16 P directly into the register layout
+    // that the native four-wave PV atom consumes.
+    auto score_identity = make_identity_tensor(Shape<_16, _16>{});
+    auto tScS = thr_mma_s.partition_C(score_identity);
+
+    // The K/V tile remains resident while four GQA rows run sequentially. This
+    // preserves page-cache reuse, unlike the one-CTA-per-query-head mapping.
+    for (int idx = tid; idx < 16 * HEAD_DIM; idx += blockDim.x) {
+        s_q[idx] = Element{};
+    }
+    if (tid < gqa_ratio) {
+        s_m[tid] = -CUDART_INF_F;
+        s_l[tid] = 0.f;
+    }
+    __syncthreads();
+
+    const int d = tid;
+    float acc[4] = {0.f, 0.f, 0.f, 0.f};
+    const Element* q_elem = reinterpret_cast<const Element*>(q);
+    const Element* k_elem = reinterpret_cast<const Element*>(k_cache);
+    const Element* v_elem = reinterpret_cast<const Element*>(v_cache);
+
+    for (int64_t p = p_beg; p < p_end; ++p) {
+        const int32_t pid = bt_row[p];
+        const int64_t page_base = (int64_t)pid * page_block_size * num_heads_k * headdim
+                                + kv_head * headdim;
+        for (int idx = tid; idx < PAGE_TOKENS * HEAD_DIM; idx += blockDim.x) {
+            const int token = idx >> 7;
+            const int dim = idx & (HEAD_DIM - 1);
+            s_k[dim * PAGE_TOKENS + token] = k_elem[page_base + token * kv_stride + dim];
+            s_v[token * HEAD_DIM + dim] = v_elem[page_base + token * kv_stride + dim];
+        }
+        __syncthreads();
+
+        const int64_t t_base = p * PAGE_TOKENS;
+        const int nvalid = (int)max((int64_t)0,
+            min((int64_t)PAGE_TOKENS, seqlen - t_base));
+
+#pragma unroll
+        for (int qh = 0; qh < 4; ++qh) {
+            if (qh >= gqa_ratio) continue;
+
+            // Tile row zero is this query head; the remaining fifteen rows
+            // stay zero and their P entries are explicitly masked below.
+            for (int dim = tid; dim < HEAD_DIM; dim += blockDim.x) {
+                s_q[dim] = q_elem[(b * num_heads + kv_head * gqa_ratio + qh) * headdim + dim];
+            }
+            __syncthreads();
+
+            Tensor acc_s = thr_mma_s.make_fragment_C(tCsS);
+            clear(acc_s);
+            gemm(tiled_mma_s, tAsQ, tBsK, acc_s);
+            // A score tile is intentionally materialized once. Every physical
+            // wave has computed the same S collective and later rebuilds its
+            // own P fragment from this canonical shared tile.
+            if (wave == 0) copy(acc_s, tCsS);
+            __syncthreads();
+
+            for (int idx = tid; idx < PAGE_TOKENS * PAGE_TOKENS; idx += blockDim.x) {
+                s_prob[idx] = Element{};
+            }
+            if (tid == 0) {
+                float m_page = -CUDART_INF_F;
+#pragma unroll
+                for (int tt = 0; tt < PAGE_TOKENS; ++tt) {
+                    if (tt < nvalid) m_page = fmaxf(m_page, s_score[tt] * sm_scale);
+                }
+                const float m_new = fmaxf(s_m[qh], m_page);
+                float l_page = 0.f;
+#pragma unroll
+                for (int tt = 0; tt < PAGE_TOKENS; ++tt) {
+                    const float w = tt < nvalid
+                        ? __expf(s_score[tt] * sm_scale - m_new) : 0.f;
+                    s_prob[tt] = __float2bfloat16(w);
+                    l_page += w;
+                }
+                s_alpha[qh] = __expf(s_m[qh] - m_new);
+                s_m[qh] = m_new;
+                s_l[qh] = s_l[qh] * s_alpha[qh] + l_page;
+            }
+            __syncthreads();
+
+            constexpr int rP_numel = decltype(size(acc_s))::value;
+            mctlass::Array<Element, rP_numel> rP_fragment;
+            Tensor rP = make_tensor(make_rmem_ptr<Element>(&rP_fragment), acc_s.layout());
+#pragma unroll
+            for (int i = 0; i < rP_numel; ++i) {
+                const auto coord = tScS(i);
+                const int row = (int)get<0>(coord);
+                const int col = (int)get<1>(coord);
+                rP(i) = s_prob[row * PAGE_TOKENS + col];
+            }
+
+            Tensor acc_o = thr_mma_o.make_fragment_C(tOsO);
+            clear(acc_o);
+            lds4x4_with_swizzle424(tOsVt(_, _, _0{}), tOrVt);
+            Tensor tOrVt_view = make_tensor(
+                tOrVt.data(),
+                make_layout(make_shape(size<0>(tOrVt), size<1, 0>(tOrVt),
+                                       size<1, 1>(tOrVt))));
+            permute_4x4_b16(tOrVt_view);
+            gemm(tiled_mma_o, rP, tOrVt, acc_o);
+            copy(acc_o, tOsO);
+            __syncthreads();
+
+            if (d < HEAD_DIM) {
+                acc[qh] = acc[qh] * s_alpha[qh] + s_page_acc[d];
+            }
+            __syncthreads();
+        }
+    }
+
+    if (d < HEAD_DIM) {
+#pragma unroll
+        for (int qh = 0; qh < 4; ++qh) {
+            if (qh >= gqa_ratio) continue;
+            const int64_t h = kv_head * gqa_ratio + qh;
+            if (n_split == 1) {
+                const float inv_l = s_l[qh] > 0.f ? 1.f / s_l[qh] : 0.f;
+                out[(b * num_heads + h) * headdim + d] = __float2bfloat16(acc[qh] * inv_l);
+            } else {
+                const int64_t head_idx = (split * batch_size + b) * num_heads + h;
+                if (d == 0) {
+                    partial_m[head_idx] = s_m[qh];
+                    partial_l[head_idx] = s_l[qh];
+                }
+                partial_acc[head_idx * headdim + d] = acc[qh];
+            }
+        }
+    }
+#endif
+}
+
 __global__ void __launch_bounds__(256, 6)
 paged_decode_split_qk_pair_kernel(
     const __nv_bfloat16* __restrict__ q,
@@ -929,45 +1268,6 @@ extern "C" void run_kernel(
         (1024 + batch_size * num_heads_k - 1) / (batch_size * num_heads_k);
     if (n_split > target_splits) n_split = (int)target_splits;
     if (n_split < 1) n_split = 1;
-    // Continue the proven KV8 page-parallelism sweep. Both cases retain
-    // exactly eight pages per partial split: 8192 CTAs total per shape.
-    if (num_heads_k == 8 &&
-        ((batch_size == 64 && seqlen_k == 2048) ||
-         (batch_size == 32 && seqlen_k == 4096))) {
-        n_split *= 8;
-    }
-    // Case 12 boundary test: eight pages per partial, matching the proven
-    // granularity of cases 7/9 and exposing 16384 total split CTAs.
-    if (num_heads_k == 8 && batch_size == 8 && seqlen_k == 32768) {
-        n_split *= 16;
-    }
-    // Continue case 11 after its positive 24-page path: 12 cache pages per
-    // partial, yielding 4096 split CTAs for B=16, KV4, L=12251.
-    if (num_heads_k == 4 && batch_size == 16 && seqlen_k == 12251) {
-        n_split *= 4;
-    }
-    // Case 8 is the remaining B=16 KV4 MMA-QK shape at 16 pages/partial.
-    // Test the same 8-page granularity proven on the KV8 long paths.
-    if (num_heads_k == 4 && batch_size == 16 && seqlen_k == 4096) {
-        n_split *= 2;
-    }
-    // Case 6 normally creates just 384 CTAs (3 splits over 23 pages). Raise
-    // it to the 1024-CTA target: eight splits, about three pages each.
-    if (num_heads_k == 8 && batch_size == 16 && seqlen_k == 362) {
-        n_split = 8;
-    }
-    // Case 5 has nine pages and only 64 generic CTAs. Use four partials
-    // (three-page ceiling) to expose enough independent KV4 work.
-    if (num_heads_k == 4 && batch_size == 16 && seqlen_k == 141) {
-        // Nine pages divide exactly across three live partials; unlike the
-        // four-split variant, this creates no empty partial state to merge.
-        n_split = 3;
-    }
-    // Case 10 is a B=1 KV4 scalar path with only 256 generic CTAs. Halve
-    // its cap-derived page chunk from eight to four before testing more work.
-    if (num_heads_k == 4 && batch_size == 1 && seqlen_k == 8192) {
-        n_split *= 2;
-    }
     const int64_t pages_per_split = (max_pages + n_split - 1) / n_split;
 
     // ---- partial 缓冲（static 缓存，仅首次/扩容时分配；评测多轮调用零开销）----
@@ -993,11 +1293,18 @@ extern "C" void run_kernel(
     // ---- launch 主 kernel ----
     const dim3 grid((unsigned)(batch_size * num_heads_k), (unsigned)n_split);
 #if XPUOJ_HAS_MACA_WMMA
-    // The MMA-QK candidate is not numerically equivalent under the local
-    // C500 MACA 3.7.1 runtime: full-length KV4 inputs fail the OJ tolerance,
-    // while scalar QK passes on the same tensors. Keep it compiled for focused
-    // investigation, but production dispatch must remain on the verified path.
-    const bool use_mma_qk = false;
+    // #104142 shows that the 64-lane MMA-QK structure is profitable only for
+    // long KV4/GQA8 requests so far: cases 8/10/11/14 all improve, whereas
+    // KV8 and short KV4 regress. Retain scalar dispatch outside that measured
+    // region instead of averaging a known regression into the score.
+    // #104142/#104147 repeat the MMA-QK win for cases 8/11/14, while the
+    // single-batch 8192-token KV4 case has no reproducible gain. These are
+    // fixed evaluator shapes, so retain scalar execution everywhere else.
+    const bool use_mma_qk =
+        num_heads_k == 4 &&
+        ((batch_size == 16 && seqlen_k == 4096) ||
+         (batch_size == 16 && seqlen_k == 12251) ||
+         (batch_size == 1 && seqlen_k == 61519));
     // #104217 proves paired-token QK for case 7/9. Extend the same mathematically
     // identical layout to the other long KV8 shapes to measure its split-KV behavior.
     const bool use_qk_pair =
@@ -1006,6 +1313,19 @@ extern "C" void run_kernel(
          (batch_size == 32 && seqlen_k == 4096) ||
          (batch_size == 8 && seqlen_k == 32768) ||
          (batch_size == 1 && seqlen_k == 58966));
+    // First end-to-end native P×V checkpoint: exact case 13 only. All other
+    // shapes keep the measured #104235 dispatch until this path is accepted.
+    const bool use_cute_native_pv =
+        num_heads_k == 8 && batch_size == 1 && seqlen_k == 58966;
+#if XPUOJ_HAS_CUTE && XPUOJ_HAS_MCTLASS && XPUOJ_HAS_MACA_WMMA
+    if (use_cute_native_pv) {
+        paged_decode_cute_native_pv_kv8_kernel<<<grid, 256>>>(
+            q, k_cache_paged, v_cache_paged, output, cache_seqlens, block_table,
+            s_partial_m, s_partial_l, s_partial_acc,
+            batch_size, num_heads, num_heads_k, headdim, page_block_size,
+            pages_per_batch, pages_per_split, n_split, sm_scale);
+    } else
+#endif
     if (use_mma_qk) {
         paged_decode_mma_qk_kernel<<<grid, 64>>>(
             q, k_cache_paged, v_cache_paged, output, cache_seqlens, block_table,

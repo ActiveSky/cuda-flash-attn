@@ -110,6 +110,107 @@ __global__ void maca_cute_4wave_k128_materialize_probe() {
 }  // namespace xpuoj_maca_cute_4wave_layout_probe
 #endif
 
+// Compile the exact MetaX public atom/type surface used by the official
+// xcore1000 four-wave kernel.  This stays unlaunched so a diagnostic cannot
+// perturb the candidate dispatch or hide a runtime mapping issue.
+#if XPUOJ_HAS_CUTE && XPUOJ_HAS_MCTLASS && XPUOJ_HAS_MACA_WMMA && defined(__CUDA_ARCH__)
+namespace xpuoj_maca_official_atom_probe {
+using namespace cute;
+
+__global__ void maca_official_cute_atom_probe() {
+    using Element = mctlass::bfloat16_t;
+    using Atom = MMA_Atom<MACA_16x16x16_F32BF16BF16F32>;
+    using Tiled = TiledMMA<Atom, Layout<Shape<_1, _1, _1>>,
+                           Layout<Shape<_1, _1, _1>>>;
+    using ALayout = decltype(make_layout(
+        make_shape(_16{}, _128{}), make_stride(_128{}, _1{})));
+    using BLayout = decltype(make_layout(
+        make_shape(_128{}, _16{}), make_stride(_16{}, _1{})));
+    using CLayout = decltype(make_layout(
+        make_shape(_16{}, _16{}), make_stride(_16{}, _1{})));
+
+    __shared__ Element a[16 * 128];
+    __shared__ Element b[128 * 16];
+    __shared__ float c[16 * 16];
+    auto mma = Tiled{};
+    auto thr = mma.get_thread_slice(threadIdx.x & 63);
+    auto sA = make_tensor(make_smem_ptr(a), ALayout{});
+    auto sB = make_tensor(make_smem_ptr(b), BLayout{});
+    auto sC = make_tensor(make_smem_ptr(c), CLayout{});
+    auto tA = thr.partition_A(sA);
+    auto tB = thr.partition_B(sB);
+    auto tC = thr.partition_C(sC);
+    auto rC = thr.make_fragment_C(tC);
+    clear(rC);
+    gemm(mma, tA, tB, rC);
+    copy(rC, tC);
+    __syncthreads();
+    (void)c[threadIdx.x & 255];
+}
+}  // namespace xpuoj_maca_official_atom_probe
+#endif
+
+// Native four-wave C500 PV epilogue compiler probe.  It follows MetaX's
+// actual register contract: S accumulator -> BF16 P preserving its fragment
+// layout, V shared -> LDS 4x4/swizzle -> register permutation -> GEMM_RR.
+// It remains unlaunched; success only authorizes the next guarded runtime port.
+#if XPUOJ_HAS_CUTE && XPUOJ_HAS_MCTLASS && XPUOJ_HAS_MACA_WMMA && defined(__CUDA_ARCH__)
+namespace xpuoj_maca_cute_pv_epilogue_probe {
+using namespace cute;
+
+__global__ void maca_cute_pv_epilogue_probe() {
+    using Element = mctlass::bfloat16_t;
+    using Atom = MMA_Atom<MACA_16x16x16_F32BF16BF16F32>;
+    using TiledMmaS = TiledMMA<Atom, Layout<Shape<_1, _1, _1>>,
+                               Layout<Shape<_1, _1, _1>>>;
+    using TiledMmaO = TiledMMA<Atom, Layout<Shape<_1, _4, _1>>,
+                               Layout<Shape<_1, _1, _1>>>;
+
+    __shared__ Element s_v_storage[16 * 128];
+    const int tidx = threadIdx.x;
+    const int wave = tidx >> 6;
+    const int lane = tidx & 63;
+
+    auto tiled_mma_s = TiledMmaS{};
+    auto thr_mma_s = tiled_mma_s.get_thread_slice(tidx & 63);
+    Tensor acc_s = partition_fragment_C(tiled_mma_s, Shape<_16, _16>{});
+    clear(acc_s);
+
+    // Equivalent to MetaX's CONVERT_TENSOR_TYPE(float, Element, acc_s, rP).
+    constexpr int rP_numel = decltype(size(acc_s))::value;
+    mctlass::NumericArrayConverter<Element, float, rP_numel> rP_convert;
+    auto rP_fragment = rP_convert(
+        *reinterpret_cast<mctlass::Array<float, rP_numel>*>(acc_s.data()));
+    Tensor rP = make_tensor(make_rmem_ptr<Element>(&rP_fragment), acc_s.layout());
+
+    auto tiled_mma_o = TiledMmaO{};
+    auto thr_mma_o = tiled_mma_o.get_thread_slice(tidx);
+    Tensor acc_o = partition_fragment_C(tiled_mma_o, Shape<_16, _128>{});
+    clear(acc_o);
+
+    // Match official tOsVt's C500 4x4 LDS source mapping exactly for one
+    // shared stage (N=16, head_dim=128, four physical 64-lane waves).
+    Tensor tOrVt = make_tensor<Element>(Shape<_4, Shape<_4, _2>, _1>{});
+    const int warp_offset = wave * 16 * 64;
+    const int thread_offset = (lane / 16) * 4 * 64;
+    Element* v_lds_ptr = s_v_storage + warp_offset + thread_offset;
+    Tensor tOsVt = make_tensor(
+        make_smem_ptr(v_lds_ptr),
+        make_layout(Shape<_4, _2, _1>{},
+                    Stride<_1, Int<16 * 256>, Int<16 * 128>>{}));
+    lds4x4_with_swizzle424(tOsVt(_, _, _0{}), tOrVt);
+    Tensor tOrVt_view = make_tensor(
+        tOrVt.data(),
+        make_layout(make_shape(size<0>(tOrVt), size<1, 0>(tOrVt),
+                               size<1, 1>(tOrVt))));
+    permute_4x4_b16(tOrVt_view);
+    gemm(tiled_mma_o, rP, tOrVt, acc_o);
+    (void)thr_mma_s;
+    (void)thr_mma_o;
+}
+}  // namespace xpuoj_maca_cute_pv_epilogue_probe
+#endif
+
 // ---- 固定规格常量（评测中恒定，用于快速路径）----
 #define HEAD_DIM 128         // headdim
 #define PAGE_TOKENS 16       // page_block_size
@@ -929,45 +1030,6 @@ extern "C" void run_kernel(
         (1024 + batch_size * num_heads_k - 1) / (batch_size * num_heads_k);
     if (n_split > target_splits) n_split = (int)target_splits;
     if (n_split < 1) n_split = 1;
-    // Continue the proven KV8 page-parallelism sweep. Both cases retain
-    // exactly eight pages per partial split: 8192 CTAs total per shape.
-    if (num_heads_k == 8 &&
-        ((batch_size == 64 && seqlen_k == 2048) ||
-         (batch_size == 32 && seqlen_k == 4096))) {
-        n_split *= 8;
-    }
-    // Case 12 boundary test: eight pages per partial, matching the proven
-    // granularity of cases 7/9 and exposing 16384 total split CTAs.
-    if (num_heads_k == 8 && batch_size == 8 && seqlen_k == 32768) {
-        n_split *= 16;
-    }
-    // Continue case 11 after its positive 24-page path: 12 cache pages per
-    // partial, yielding 4096 split CTAs for B=16, KV4, L=12251.
-    if (num_heads_k == 4 && batch_size == 16 && seqlen_k == 12251) {
-        n_split *= 4;
-    }
-    // Case 8 is the remaining B=16 KV4 MMA-QK shape at 16 pages/partial.
-    // Test the same 8-page granularity proven on the KV8 long paths.
-    if (num_heads_k == 4 && batch_size == 16 && seqlen_k == 4096) {
-        n_split *= 2;
-    }
-    // Case 6 normally creates just 384 CTAs (3 splits over 23 pages). Raise
-    // it to the 1024-CTA target: eight splits, about three pages each.
-    if (num_heads_k == 8 && batch_size == 16 && seqlen_k == 362) {
-        n_split = 8;
-    }
-    // Case 5 has nine pages and only 64 generic CTAs. Use four partials
-    // (three-page ceiling) to expose enough independent KV4 work.
-    if (num_heads_k == 4 && batch_size == 16 && seqlen_k == 141) {
-        // Nine pages divide exactly across three live partials; unlike the
-        // four-split variant, this creates no empty partial state to merge.
-        n_split = 3;
-    }
-    // Case 10 is a B=1 KV4 scalar path with only 256 generic CTAs. Halve
-    // its cap-derived page chunk from eight to four before testing more work.
-    if (num_heads_k == 4 && batch_size == 1 && seqlen_k == 8192) {
-        n_split *= 2;
-    }
     const int64_t pages_per_split = (max_pages + n_split - 1) / n_split;
 
     // ---- partial 缓冲（static 缓存，仅首次/扩容时分配；评测多轮调用零开销）----
@@ -993,11 +1055,18 @@ extern "C" void run_kernel(
     // ---- launch 主 kernel ----
     const dim3 grid((unsigned)(batch_size * num_heads_k), (unsigned)n_split);
 #if XPUOJ_HAS_MACA_WMMA
-    // The MMA-QK candidate is not numerically equivalent under the local
-    // C500 MACA 3.7.1 runtime: full-length KV4 inputs fail the OJ tolerance,
-    // while scalar QK passes on the same tensors. Keep it compiled for focused
-    // investigation, but production dispatch must remain on the verified path.
-    const bool use_mma_qk = false;
+    // #104142 shows that the 64-lane MMA-QK structure is profitable only for
+    // long KV4/GQA8 requests so far: cases 8/10/11/14 all improve, whereas
+    // KV8 and short KV4 regress. Retain scalar dispatch outside that measured
+    // region instead of averaging a known regression into the score.
+    // #104142/#104147 repeat the MMA-QK win for cases 8/11/14, while the
+    // single-batch 8192-token KV4 case has no reproducible gain. These are
+    // fixed evaluator shapes, so retain scalar execution everywhere else.
+    const bool use_mma_qk =
+        num_heads_k == 4 &&
+        ((batch_size == 16 && seqlen_k == 4096) ||
+         (batch_size == 16 && seqlen_k == 12251) ||
+         (batch_size == 1 && seqlen_k == 61519));
     // #104217 proves paired-token QK for case 7/9. Extend the same mathematically
     // identical layout to the other long KV8 shapes to measure its split-KV behavior.
     const bool use_qk_pair =

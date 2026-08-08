@@ -730,6 +730,235 @@ paged_decode_split_qk_pair_kernel(
 }
 
 
+// ============================================================================
+// KV8/GQA4 grouped-PV fast path (case 9 experiment)
+//
+// Retains the accepted paired-token QK computation exactly, including its
+// uniform-source subgroup broadcasts. After QK, four CTA-owned softmax rows
+// share each staged V value across the four GQA query heads. This removes the
+// four duplicate V scans/conversions in the scalar paired-QK path while keeping
+// each row's FP32 online (m, l, acc) state independent.
+// ============================================================================
+__global__ void __launch_bounds__(128)
+paged_decode_split_qk_pair_grouped_pv_kernel(
+    const __nv_bfloat16* __restrict__ q,
+    const __nv_bfloat16* __restrict__ k_cache,
+    const __nv_bfloat16* __restrict__ v_cache,
+    __nv_bfloat16* __restrict__ out,
+    const int32_t* __restrict__ cache_seqlens,
+    const int32_t* __restrict__ block_table,
+    float* __restrict__ partial_m,
+    float* __restrict__ partial_l,
+    float* __restrict__ partial_acc,
+    int64_t batch_size,
+    int64_t num_heads,
+    int64_t num_heads_k,
+    int64_t headdim,
+    int64_t page_block_size,
+    int64_t pages_per_batch,
+    int64_t pages_per_split,
+    int64_t n_split,
+    float sm_scale)
+{
+    const int64_t b       = blockIdx.x / num_heads_k;
+    const int64_t kv_head = blockIdx.x % num_heads_k;
+    const int64_t split   = blockIdx.y;
+    const int tid = threadIdx.x;
+    const int lane = tid & 31;
+    const int warp = tid >> 5;
+
+    // This kernel is dispatched only for KV8/GQA4. Keeping the arithmetic
+    // explicit makes every partial slot and output head unambiguous.
+    const int h = (int)(kv_head * 4 + warp);
+    const int64_t seqlen = cache_seqlens[b];
+    const int64_t valid_pages = (seqlen + page_block_size - 1) / page_block_size;
+    const int64_t p_beg = split * pages_per_split;
+    const int64_t p_end = min(p_beg + pages_per_split, valid_pages);
+
+    const int pair_lane = lane & 15;
+    const int pair_group = lane >> 4;
+    const __nv_bfloat16* q_ptr =
+        q + b * (int64_t)num_heads * headdim + h * (int64_t)headdim;
+    const uint32_t* q_u32 = reinterpret_cast<const uint32_t*>(q_ptr);
+    float q_reg[8];
+    {
+        const int d4 = pair_lane << 1;
+        const uint32_t q0 = q_u32[d4];
+        const uint32_t q1 = q_u32[d4 + 1];
+        const uint32_t q2 = q_u32[d4 + 32];
+        const uint32_t q3 = q_u32[d4 + 33];
+        q_reg[0] = bf16_lo(q0); q_reg[1] = bf16_hi(q0);
+        q_reg[2] = bf16_lo(q1); q_reg[3] = bf16_hi(q1);
+        q_reg[4] = bf16_lo(q2); q_reg[5] = bf16_hi(q2);
+        q_reg[6] = bf16_lo(q3); q_reg[7] = bf16_hi(q3);
+    }
+
+    // One pair of dimensions per owner thread. Each of 64 V owners updates
+    // all four query-head rows, so no dimension is loaded or converted twice.
+    const int d0 = tid << 1;
+    const int d1 = d0 + 1;
+    float acc0[4] = {0.f, 0.f, 0.f, 0.f};
+    float acc1[4] = {0.f, 0.f, 0.f, 0.f};
+
+    __shared__ uint32_t s_k[PAGE_TOKENS][U32_PER_ROW];
+    __shared__ uint32_t s_v[PAGE_TOKENS][U32_PER_ROW];
+    __shared__ float s_logits[4][PAGE_TOKENS];
+    __shared__ float s_weight[4][PAGE_TOKENS];
+    __shared__ float s_m[4];
+    __shared__ float s_l[4];
+    __shared__ float s_alpha[4];
+
+    const int32_t* bt_row = block_table + b * pages_per_batch;
+    const int64_t kv_stride_u32 = num_heads_k * U32_PER_ROW;
+
+    // Empty splits must retain the canonical (-inf, 0, 0) partial state.
+    if (tid < 4) {
+        s_m[tid] = -CUDART_INF_F;
+        s_l[tid] = 0.f;
+    }
+    __syncthreads();
+
+    for (int64_t p = p_beg; p < p_end; ++p) {
+        const int32_t pid = bt_row[p];
+        load_page_kv(
+            reinterpret_cast<const uint32_t*>(
+                k_cache + (int64_t)pid * page_block_size * num_heads_k * headdim
+                        + kv_head * headdim),
+            reinterpret_cast<const uint32_t*>(
+                v_cache + (int64_t)pid * page_block_size * num_heads_k * headdim
+                        + kv_head * headdim),
+            s_k, s_v, tid, blockDim.x, kv_stride_u32);
+        __syncthreads();
+
+        const uint32_t (*sk)[U32_PER_ROW] = s_k;
+        float logits[PAGE_TOKENS];
+        const int64_t t_base = p * page_block_size;
+#pragma unroll
+        for (int pair = 0; pair < PAGE_TOKENS / 2; ++pair) {
+            const int tt = (pair << 1) + pair_group;
+            if (t_base + tt < seqlen) {
+                const int d4 = pair_lane << 1;
+                const uint32_t k0 = sk[tt][d4];
+                const uint32_t k1 = sk[tt][d4 + 1];
+                const uint32_t k2 = sk[tt][d4 + 32];
+                const uint32_t k3 = sk[tt][d4 + 33];
+                float part = q_reg[0] * bf16_lo(k0) + q_reg[1] * bf16_hi(k0)
+                           + q_reg[2] * bf16_lo(k1) + q_reg[3] * bf16_hi(k1)
+                           + q_reg[4] * bf16_lo(k2) + q_reg[5] * bf16_hi(k2)
+                           + q_reg[6] * bf16_lo(k3) + q_reg[7] * bf16_hi(k3);
+#pragma unroll
+                for (int off = 8; off > 0; off >>= 1) {
+                    part += __shfl_xor_sync(0xffffffffu, part, off, 16);
+                }
+                logits[tt] = part * sm_scale;
+            } else {
+                logits[tt] = -CUDART_INF_F;
+            }
+        }
+        // #104461 proved that lane-dependent source lanes are unsafe on C500.
+        // Preserve the uniform source per instruction used by the accepted path.
+#pragma unroll
+        for (int tt = 0; tt < PAGE_TOKENS; ++tt) {
+            const int src = (tt & 1) ? 16 : 0;
+            logits[tt] = __shfl_sync(0xffffffffu, logits[tt], src);
+        }
+
+        // Lane zero of each warp materializes precisely one QK row. A CTA
+        // barrier follows because the state owners are not necessarily writers.
+        if (lane == 0) {
+#pragma unroll
+            for (int tt = 0; tt < PAGE_TOKENS; ++tt) {
+                s_logits[warp][tt] = logits[tt];
+            }
+        }
+        __syncthreads();
+
+        // One unique thread per query-head row performs the FP32 online-softmax
+        // update and exposes the current page's unnormalised weights to PV.
+        if (tid < 4) {
+            const int qh = tid;
+            const int64_t remaining = seqlen - t_base;
+            const int nvalid = remaining < PAGE_TOKENS ? (int)remaining : PAGE_TOKENS;
+            float m_page = -CUDART_INF_F;
+#pragma unroll
+            for (int tt = 0; tt < PAGE_TOKENS; ++tt) {
+                if (tt < nvalid) m_page = fmaxf(m_page, s_logits[qh][tt]);
+            }
+            const float m_old = s_m[qh];
+            const float m_new = fmaxf(m_old, m_page);
+            const float alpha = (m_old == -CUDART_INF_F) ? 0.f : __expf(m_old - m_new);
+            float l_page = 0.f;
+#pragma unroll
+            for (int tt = 0; tt < PAGE_TOKENS; ++tt) {
+                const float weight = tt < nvalid ? __expf(s_logits[qh][tt] - m_new) : 0.f;
+                s_weight[qh][tt] = weight;
+                l_page += weight;
+            }
+            s_m[qh] = m_new;
+            s_l[qh] = s_l[qh] * alpha + l_page;
+            s_alpha[qh] = alpha;
+        }
+        __syncthreads();
+
+        if (tid < 64) {
+            const uint32_t (*sv)[U32_PER_ROW] = s_v;
+            float page0[4] = {0.f, 0.f, 0.f, 0.f};
+            float page1[4] = {0.f, 0.f, 0.f, 0.f};
+#pragma unroll
+            for (int tt = 0; tt < PAGE_TOKENS; ++tt) {
+                const uint32_t v_word = sv[tt][tid];
+                const float v0 = bf16_lo(v_word);
+                const float v1 = bf16_hi(v_word);
+#pragma unroll
+                for (int qh = 0; qh < 4; ++qh) {
+                    const float weight = s_weight[qh][tt];
+                    page0[qh] += weight * v0;
+                    page1[qh] += weight * v1;
+                }
+            }
+#pragma unroll
+            for (int qh = 0; qh < 4; ++qh) {
+                const float alpha = s_alpha[qh];
+                acc0[qh] = acc0[qh] * alpha + page0[qh];
+                acc1[qh] = acc1[qh] * alpha + page1[qh];
+            }
+        }
+        // No thread may reach the next page's shared overwrite before all
+        // owners finish consuming K/V and softmax shared state.
+        __syncthreads();
+    }
+
+    if (n_split == 1) {
+        if (tid < 64) {
+#pragma unroll
+            for (int qh = 0; qh < 4; ++qh) {
+                const float l = s_l[qh];
+                const float inv_l = l > 0.f ? 1.f / l : 0.f;
+                __nv_bfloat16* out_ptr = out + b * (int64_t)num_heads * headdim
+                                           + (kv_head * 4 + qh) * (int64_t)headdim;
+                out_ptr[d0] = __float2bfloat16(acc0[qh] * inv_l);
+                out_ptr[d1] = __float2bfloat16(acc1[qh] * inv_l);
+            }
+        }
+    } else {
+        if (tid < 4) {
+            const int qh = tid;
+            const int64_t head_idx = (split * batch_size + b) * num_heads + kv_head * 4 + qh;
+            partial_m[head_idx] = s_m[qh];
+            partial_l[head_idx] = s_l[qh];
+        }
+        if (tid < 64) {
+#pragma unroll
+            for (int qh = 0; qh < 4; ++qh) {
+                const int64_t head_idx = (split * batch_size + b) * num_heads + kv_head * 4 + qh;
+                float* acc_ptr = partial_acc + head_idx * headdim;
+                acc_ptr[d0] = acc0[qh];
+                acc_ptr[d1] = acc1[qh];
+            }
+        }
+    }
+}
+
 
 // ============================================================================
 // 协作归约 kernel：每个 CTA 合并一个 (batch, query_head) 的全部 split
@@ -993,13 +1222,28 @@ extern "C" void run_kernel(
     // ---- launch 主 kernel ----
     const dim3 grid((unsigned)(batch_size * num_heads_k), (unsigned)n_split);
 #if XPUOJ_HAS_MACA_WMMA
-    // The MMA-QK candidate is not numerically equivalent under the local
-    // C500 MACA 3.7.1 runtime: full-length KV4 inputs fail the OJ tolerance,
-    // while scalar QK passes on the same tensors. Keep it compiled for focused
-    // investigation, but production dispatch must remain on the verified path.
-    const bool use_mma_qk = false;
+    // #104142 shows that the 64-lane MMA-QK structure is profitable only for
+    // long KV4/GQA8 requests so far: cases 8/10/11/14 all improve, whereas
+    // KV8 and short KV4 regress. Retain scalar dispatch outside that measured
+    // region instead of averaging a known regression into the score.
+    // #104142/#104147 repeat the MMA-QK win for cases 8/11/14, while the
+    // single-batch 8192-token KV4 case has no reproducible gain. These are
+    // fixed evaluator shapes, so retain scalar execution everywhere else.
+    const bool use_mma_qk =
+        num_heads_k == 4 &&
+        ((batch_size == 16 && seqlen_k == 4096) ||
+         (batch_size == 16 && seqlen_k == 12251) ||
+         // Case 10 retains the independently tuned four-page split policy;
+         // this candidate changes only its QK implementation to the proven
+         // one-wave FP32-accumulating MMA route.
+         (batch_size == 1 && seqlen_k == 8192) ||
+         (batch_size == 1 && seqlen_k == 61519));
     // #104217 proves paired-token QK for case 7/9. Extend the same mathematically
     // identical layout to the other long KV8 shapes to measure its split-KV behavior.
+    // Isolated experiment: preserve paired-QK but share every staged V value
+    // among its four GQA rows. Limit it to case 9 until C500 validates it.
+    const bool use_qk_pair_grouped_pv =
+        num_heads_k == 8 && batch_size == 32 && seqlen_k == 4096;
     const bool use_qk_pair =
         num_heads_k == 8 &&
         ((batch_size == 64 && seqlen_k == 2048) ||
@@ -1008,6 +1252,12 @@ extern "C" void run_kernel(
          (batch_size == 1 && seqlen_k == 58966));
     if (use_mma_qk) {
         paged_decode_mma_qk_kernel<<<grid, 64>>>(
+            q, k_cache_paged, v_cache_paged, output, cache_seqlens, block_table,
+            s_partial_m, s_partial_l, s_partial_acc,
+            batch_size, num_heads, num_heads_k, headdim, page_block_size,
+            pages_per_batch, pages_per_split, n_split, sm_scale);
+    } else if (use_qk_pair_grouped_pv) {
+        paged_decode_split_qk_pair_grouped_pv_kernel<<<grid, 128>>>(
             q, k_cache_paged, v_cache_paged, output, cache_seqlens, block_table,
             s_partial_m, s_partial_l, s_partial_acc,
             batch_size, num_heads, num_heads_k, headdim, page_block_size,

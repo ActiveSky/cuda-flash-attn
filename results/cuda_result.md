@@ -1,8 +1,37 @@
 # XPUOJ FlashAttention KV Cache Decode 提交结果记录
 
-用于持续记录同一题目的多次提交结果。主文件只保留便于比较和优化的摘要；完整原始数据（提交代码，OJ 协议、SPJ 报告、编译日志）以 JSON 归档在 `results/raw/`，按提交编号命名，可供深度分析。
+用于持续记录同一题目的多次提交结果。主文件只保留便于比较和优化的摘要；完整原始数据（提交代码，OJ 协议、SPJ 报告、编译日志）以 JSON 归档在 `results/raw/`，按提交编号命名，可供深度分析。全部 raw 记录对应的字节精确提交源码见 [`solutions/archive/SUBMISSIONS.md`](../solutions/archive/SUBMISSIONS.md)。
+
+当前最高真实 OJ 分数为 **`57.43`**：#105915 首次达到，#105932 与 #105952 保持该记录；最新归档提交为 #105952。
 
 ## 按日期提交索引
+
+### 2026-08-08
+
+| 提交 | 时间 | 环境 | 状态 | 总分 | 备注 |
+|---|---|---|---|---:|---|
+| [#105952](https://xpuoj.com/contest/11/submissions/105952) | 2026-08-08 19:28:37 | CUDA Maca C500 / 86.8 K | Accepted | **57.43** | 最终归档候选；为 B64/KV8/L64 增加短序列 BSM loader dispatch，case 4 OJ 仍为 `0.030 ms`，总分与最高记录持平 |
+| [#105932](https://xpuoj.com/contest/11/submissions/105932) | 2026-08-08 19:01:37 | CUDA Maca C500 / 86.2 K | Accepted | **57.43** | `reduce_splits<=16` 使用寄存器/shuffle reducer；case 5/6 为 `0.025/0.033 ms`，总分保持最高记录 |
+| [#105915](https://xpuoj.com/contest/11/submissions/105915) | 2026-08-08 18:36:05 | CUDA Maca C500 / 84.6 K | Accepted | **57.43** | token-parallel 阈值由 `seqlen_k>=64` 下调到 `>=17`，case 3 `0.022→0.010 ms`；首次达到当前最高分 |
+| [#105899](https://xpuoj.com/contest/11/submissions/105899) | 2026-08-08 18:06:45 | CUDA Maca C500 / 84.6 K | Accepted | 56.21 | 新增单 token 直接 V copy 与双 token 专用 attention；case 1/2 降至 `0.003/0.004 ms` |
+| [#105835](https://xpuoj.com/contest/11/submissions/105835) | 2026-08-08 16:58:56 | CUDA Maca C500 / 79.3 K | Accepted | 54.86 | case 11 专用 Q shared-memory 复用将其降到 `0.439 ms`，但短 case 波动令 aggregate 回退 |
+| [#105823](https://xpuoj.com/contest/11/submissions/105823) | 2026-08-08 16:43:17 | CUDA Maca C500 / 78.9 K | Accepted | 55.36 | KV8 z-partition 在 CTA 内借用 K/V shared memory 完成合并；长 case 继续改善并刷新分数 |
+| [#105814](https://xpuoj.com/contest/11/submissions/105814) | 2026-08-08 16:25:59 | CUDA Maca C500 / 77.4 K | Accepted | 55.29 | full-page 与 tail-page 分离 launch/reduce，case 7/9/12/13 为 `0.324/0.328/0.547/0.300 ms` |
+| [#105801](https://xpuoj.com/contest/11/submissions/105801) | 2026-08-08 16:09:52 | CUDA Maca C500 / 70.5 K | Accepted | 54.29 | 调整 B64/KV8/L2048、B32/KV8/L4096 与 B16/KV8/L362 的 split 数；小幅刷新 |
+| [#105762](https://xpuoj.com/contest/11/submissions/105762) | 2026-08-08 15:43:33 | CUDA Maca C500 / 70.4 K | Accepted | 54.21 | KV4 Q staging + full-page/tail 专门循环；case 7–14 全线跃升，比分提高 `2.35` |
+| [#105749](https://xpuoj.com/contest/11/submissions/105749) | 2026-08-08 15:29:38 | CUDA Maca C500 / 66.3 K | Accepted | 51.86 | 撤回 split canonicalization 并恢复 case 12 的 128 splits；长 case 小幅改善但 aggregate 略降 |
+| [#105738](https://xpuoj.com/contest/11/submissions/105738) | 2026-08-08 15:23:02 | CUDA Maca C500 / 66.6 K | Accepted | 51.93 | packed pair QK/PV 读取与条件 max 更新；刷新该阶段最高分 |
+| [#105704](https://xpuoj.com/contest/11/submissions/105704) | 2026-08-08 15:04:44 | CUDA Maca C500 / 65.9 K | Accepted | 51.43 | 调整长 KV8 split 并按 pages-per-split canonicalize；目标 case 持平，aggregate 回退 |
+| [#105674](https://xpuoj.com/contest/11/submissions/105674) | 2026-08-08 14:45:43 | CUDA Maca C500 / 65.6 K | Accepted | 51.79 | 按 shape 在同步 `uint4` copy 与 BSM loader 之间选择；case 6/13 继续小幅改善 |
+| [#105650](https://xpuoj.com/contest/11/submissions/105650) | 2026-08-08 14:26:32 | CUDA Maca C500 / 64.9 K | Accepted | 51.79 | KV8 使用同步 `uint4` loader，最长 KV4 保留 BSM；case 7/9/12/13 明显改善 |
+| [#105636](https://xpuoj.com/contest/11/submissions/105636) | 2026-08-08 14:12:46 | CUDA Maca C500 / 64.6 K | Accepted | 51.50 | 三个固定 shape 的 split 微调；case 6/13 降到 `0.038/0.369 ms` |
+| [#105616](https://xpuoj.com/contest/11/submissions/105616) | 2026-08-08 13:51:06 | CUDA Maca C500 / 64.3 K | Accepted | 51.29 | packed FMA/scale/accumulate 替代标量热循环；相对 #105608 提升 `0.93` 分 |
+| [#105608](https://xpuoj.com/contest/11/submissions/105608) | 2026-08-08 13:41:57 | CUDA Maca C500 / 62.7 K | Accepted | 50.36 | 热路径改用 exp2 标度并按编译环境特化 reducer；长 case 小幅改善 |
+| [#105601](https://xpuoj.com/contest/11/submissions/105601) | 2026-08-08 13:30:27 | CUDA Maca C500 / 62.3 K | Accepted | 50.29 | 单 live-split 直出 + 8 heads/CTA grouped reducer；首次突破 50 分 |
+| [#105570](https://xpuoj.com/contest/11/submissions/105570) | 2026-08-08 12:52:35 | CUDA Maca C500 / 56.4 K | Accepted | 48.71 | reducer 只遍历 live splits；长 case 改善但 case 3/5/6 波动使总分略降 |
+| [#105561](https://xpuoj.com/contest/11/submissions/105561) | 2026-08-08 12:45:19 | CUDA Maca C500 / 56.2 K | Accepted | 48.93 | 首个 token-parallel + MetaX BSM 版本；从 #105501 的 `40.71` 大幅跃升 |
+| [#105501](https://xpuoj.com/contest/11/submissions/105501) | 2026-08-08 12:22:30 | CUDA Maca C500 / 45.1 K | Accepted | **40.71** | #105492 的模板特化 + softmax 化简版本，撤回空 split prune；KV8 case 7/9/12/13 为 `0.726/0.739/1.346/0.656 ms`，但停用 MMA 后 KV4 case 8/10/11/14 仍为 `0.408/0.118/1.094/0.701 ms` |
+| [#105492](https://xpuoj.com/contest/11/submissions/105492) | 2026-08-08 12:14:21 | CUDA Maca C500 / 45.0 K | Accepted | 38.36 | #104441 派生的 softmax 化简 + empty-split/live-split contract + MMA rollback；KV8 局部改善被失去的 KV4 MMA 路径抵消，拒绝作为维护基线 |
 
 ### 2026-08-07
 
@@ -69,7 +98,9 @@
 | [#104227](https://xpuoj.com/contest/11/submissions/104227) | 2026-08-07 02:18:56 | CUDA Maca C500 / 41.8 K | Accepted | 36.29 | paired-token QK 扩至 KV8 case 12/13：四个 KV8 长序列均加速，单轮总分受评测波动影响低于 #104221 |
 | [#104225](https://xpuoj.com/contest/11/submissions/104225) | 2026-08-07 02:16:00 | CUDA Maca C500 / 26.2 K | Accepted | 36.29 | CUTE shared-tensor partition + explicit `gemm` probe 可编译，生产路径不变 |
 | [#104221](https://xpuoj.com/contest/11/submissions/104221) | 2026-08-07 02:07:51 | CUDA Maca C500 / 41.7 K | Accepted | 37.07 | 精确 KV4 MMA-QK（8/11/14）+ KV8 paired-token QK（7/9）组合，14/14 通过；后续 #104235 在扩展 KV8 dispatch 上取得更高单轮分数 |
+| [#104220](https://xpuoj.com/contest/11/submissions/104220) | 2026-08-07 02:04:17 | CUDA Maca C500 / 26.3 K | Accepted | 35.14 | CUTE thread-partition tensor + 三参数 `gemm` API probe 编译通过；生产路径不变，补录 raw checkpoint |
 | [#104217](https://xpuoj.com/contest/11/submissions/104217) | 2026-08-07 01:56:19 | CUDA Maca C500 / 31.6 K | Accepted | 35.21 | KV8 case 7/9 paired-token scalar QK；两例均显著加速，值得与精确 MMA-QK dispatch 组合 |
+| [#104216](https://xpuoj.com/contest/11/submissions/104216) | 2026-08-07 01:54:50 | CUDA Maca C500 / 26.1 K | Accepted | 36.21 | CUTE shared tensor partition + tiled-MMA `gemm` probe 编译通过；生产路径不变，补录 raw checkpoint |
 | [#104210](https://xpuoj.com/contest/11/submissions/104210) | 2026-08-07 01:40:44 | CUDA Maca C500 / 25.2 K | Accepted | 36.21 | 基线保持不变；CUTE MMA_Atom/TiledMMA 类型构造 probe 可编译，验证全量 CUTE kernel 的下一道编译边界 |
 | [#104202](https://xpuoj.com/contest/11/submissions/104202) | 2026-08-07 01:28:41 | CUDA Maca C500 / 31.2 K | WrongAnswer | 33.50 | KV8 case 7/9 native packed BF16x2 conversion；两例均超时式 WA，已禁用 |
 | [#104197](https://xpuoj.com/contest/11/submissions/104197) | 2026-08-07 01:12:10 | CUDA Maca C500 / 31.7 K | Accepted | 36.14 | 4 KB sequential K→V shared staging on KV8 case 7/9；正确但两 case 退化，已禁用 |
@@ -85,6 +116,8 @@
 |---|---|---|---|---:|---|
 | [#104147](https://xpuoj.com/contest/11/submissions/104147) | 2026-08-06 23:57:45 | CUDA Maca C500 / 32.5 K | Accepted | 35.57 | 仅长 KV4 启用 MMA-QK；case 8/11/14 保持实质提升，但全局分数受非目标路径本轮变慢影响 |
 | [#104142](https://xpuoj.com/contest/11/submissions/104142) | 2026-08-06 23:43:37 | CUDA Maca C500 / 31.9 K | Accepted | 31.64 | 全量 64-lane MMA-QK + FP32 scalar-PV；正确但混合 KV4/KV8 dispatch 退化，改为选择性启用 |
+| [#104130](https://xpuoj.com/contest/11/submissions/104130) | 2026-08-06 23:10:21 | CUDA Maca C500 / 24.3 K | Accepted | 35.86 | raw WMMA API probe 加入 device-pass guard 后编译并 14/14 通过；生产路径不变 |
+| [#104128](https://xpuoj.com/contest/11/submissions/104128) | 2026-08-06 23:07:24 | CUDA Maca C500 / 24.1 K | CompilationError | — | raw WMMA API probe 暴露给 host pass，`mxmaca/wmma` namespace 不可见；由 #104130 修复 |
 | [#104101](https://xpuoj.com/contest/11/submissions/104101) | 2026-08-06 22:11:22 | CUDA Maca C500 / 23.1 K | Accepted | 35.29 | lane-0-only partial m/l store；负优化，已回退 |
 | [#104091](https://xpuoj.com/contest/11/submissions/104091) | 2026-08-06 21:53:05 | CUDA Maca C500 / 22.9 K | Accepted | **36.21** | 协作式 split-KV reduce；当前最佳 |
 | [#104025](https://xpuoj.com/contest/11/submissions/104025) | 2026-08-06 20:44:46 | CUDA Maca C500 / 20.8 K | Accepted | 34.79 | `uint4` K/V page load + n_split==1 标量直写 |
@@ -94,15 +127,189 @@
 | [#103891](https://xpuoj.com/contest/11/submissions/103891) | 2026-08-06 18:03:55 | CUDA Maca C500 / 20.4 K | WrongAnswer | 0 | v3（direct-out）；样例 #1 输出未写入，WA |
 | [#103870](https://xpuoj.com/contest/11/submissions/103870) | 2026-08-06 17:39:43 | CUDA Maca C500 / 18.3 K | Accepted | 31.14 | v2；当前最佳 |
 | [#103799](https://xpuoj.com/contest/11/submissions/103799) | 2026-08-06 16:33:33 | CUDA Maca C500 / 15.4 K | Accepted | 28.29 | v1 基线 |
+| [#103773](https://xpuoj.com/contest/11/submissions/103773) | 2026-08-06 16:16:36 | CUDA Maca C500 / 15.2 K | CompilationError | — | 初版在 C500 CUTE 中调用不存在的 `cute::convert<float>`；后续改用可用的 BF16 转换路径 |
 
 ## 记录编排
 
 - 提交索引按日期分组，日期与同一日期内的提交均按时间倒序排列。
 - 详细记录按相同日期分组；同一提交内固定使用以下顺序：提交信息、提交总览（如有）、结果分析、测试点汇总（如有）、原始归档链接。
 - 提交索引覆盖所有已归档提交；详细记录保留有分析内容的实验 checkpoint。
-- 原始数据归档为 `results/raw/cuda_<id>_raw.json`（完整接口响应，含提交的代码、OJCHAL/OJRESULT 协议、SPJ 报告、编译日志）。
+- 原始数据归档为 `results/raw/cuda_<id>_raw.json`（完整接口响应，含提交的代码、OJCHAL/OJRESULT 协议、SPJ 报告、编译日志）。每条 raw 中的 `raw_detail.content.code` 同时按原始字节提取到 `solutions/archive/<date>-submissions/cuda_<id>.cpp`。
 
 ## 详细记录
+
+### 2026-08-08
+
+#### 提交 #105561–#105952 · token-parallel 连续优化批次
+
+##### 提交总览
+
+- 本批 20 次提交全部为 Accepted（14/14）。总分从前序 #105501 的 `40.71` 提高到 `57.43`，净增 `16.72` 分。
+- #105915 首次达到当前最高分 `57.43`；#105932 与最终 #105952 保持同分。最终源码 SHA-256 为 `eba3c95b18f5e62eb13d00f17de346946de6b8293fd00daaa0cece5d94f7c34a`。
+- 每一次提交的字节精确源码与 raw JSON 都已独立归档；同源复投也保留各自的提交号文件，不做去重替代。
+
+| 提交 | 总分 | 本轮主要代码变化 | 归档 |
+|---:|---:|---|---|
+| #105952 | **57.43** | B64/KV8/L64 改走短序列 BSM loader dispatch；OJ case 4 未进一步下降 | [cpp](../solutions/archive/2026-08-08-submissions/cuda_105952.cpp) / [raw](raw/cuda_105952_raw.json) |
+| #105932 | **57.43** | `reduce_splits<=16` 增加寄存器/shuffle reducer | [cpp](../solutions/archive/2026-08-08-submissions/cuda_105932.cpp) / [raw](raw/cuda_105932_raw.json) |
+| #105915 | **57.43** | token-parallel 阈值 `seqlen_k>=64→>=17` | [cpp](../solutions/archive/2026-08-08-submissions/cuda_105915.cpp) / [raw](raw/cuda_105915_raw.json) |
+| #105899 | 56.21 | 单 token 直接复制 V；双 token 专用 attention kernel | [cpp](../solutions/archive/2026-08-08-submissions/cuda_105899.cpp) / [raw](raw/cuda_105899_raw.json) |
+| #105835 | 54.86 | case 11 复用 K shared-memory 存 Q，降低 full/tail 变体资源压力 | [cpp](../solutions/archive/2026-08-08-submissions/cuda_105835.cpp) / [raw](raw/cuda_105835_raw.json) |
+| #105823 | 55.36 | KV8 z-partition 在 CTA 内借用 K/V shared-memory 合并 FP32 状态 | [cpp](../solutions/archive/2026-08-08-submissions/cuda_105823.cpp) / [raw](raw/cuda_105823_raw.json) |
+| #105814 | 55.29 | full-page 与 tail-page 独立 launch，并匹配 reducer 的有效 split | [cpp](../solutions/archive/2026-08-08-submissions/cuda_105814.cpp) / [raw](raw/cuda_105814_raw.json) |
+| #105801 | 54.29 | 三个 KV8 shape 的 split 数微调 | [cpp](../solutions/archive/2026-08-08-submissions/cuda_105801.cpp) / [raw](raw/cuda_105801_raw.json) |
+| #105762 | 54.21 | KV4 Q staging；完整页 predicate-free 循环与 tail 循环分离 | [cpp](../solutions/archive/2026-08-08-submissions/cuda_105762.cpp) / [raw](raw/cuda_105762_raw.json) |
+| #105749 | 51.86 | 撤回 split canonicalization，case 12 恢复 128 splits | [cpp](../solutions/archive/2026-08-08-submissions/cuda_105749.cpp) / [raw](raw/cuda_105749_raw.json) |
+| #105738 | 51.93 | packed pair QK/PV 读取和条件 max/scale 更新 | [cpp](../solutions/archive/2026-08-08-submissions/cuda_105738.cpp) / [raw](raw/cuda_105738_raw.json) |
+| #105704 | 51.43 | 长 KV8 split 调整，并按 pages-per-split 收敛实际 split 数 | [cpp](../solutions/archive/2026-08-08-submissions/cuda_105704.cpp) / [raw](raw/cuda_105704_raw.json) |
+| #105674 | 51.79 | 按 shape 模板化同步 `uint4` copy / BSM loader | [cpp](../solutions/archive/2026-08-08-submissions/cuda_105674.cpp) / [raw](raw/cuda_105674_raw.json) |
+| #105650 | 51.79 | KV8 loader 改为同步 `uint4`，最长 KV4 保留 BSM | [cpp](../solutions/archive/2026-08-08-submissions/cuda_105650.cpp) / [raw](raw/cuda_105650_raw.json) |
+| #105636 | 51.50 | case 6/8/13 对应 shape 的 split 微调 | [cpp](../solutions/archive/2026-08-08-submissions/cuda_105636.cpp) / [raw](raw/cuda_105636_raw.json) |
+| #105616 | 51.29 | packed FMA、scale 与 accumulate 覆盖 QK/PV 热循环 | [cpp](../solutions/archive/2026-08-08-submissions/cuda_105616.cpp) / [raw](raw/cuda_105616_raw.json) |
+| #105608 | 50.36 | exp2 标度与 reducer 编译期特化 | [cpp](../solutions/archive/2026-08-08-submissions/cuda_105608.cpp) / [raw](raw/cuda_105608_raw.json) |
+| #105601 | 50.29 | 单 live-split 直出；8 heads/CTA grouped reducer | [cpp](../solutions/archive/2026-08-08-submissions/cuda_105601.cpp) / [raw](raw/cuda_105601_raw.json) |
+| #105570 | 48.71 | reducer 由全部 splits 改为只遍历 live splits | [cpp](../solutions/archive/2026-08-08-submissions/cuda_105570.cpp) / [raw](raw/cuda_105570_raw.json) |
+| #105561 | 48.93 | 首次加入 token-parallel page kernel 与 MetaX BSM 128-bit load | [cpp](../solutions/archive/2026-08-08-submissions/cuda_105561.cpp) / [raw](raw/cuda_105561_raw.json) |
+
+##### 完整测试点耗时
+
+以下数字直接取自 raw OJ 结果，单位为 `μs`；行按提交时间倒序排列。
+
+| 提交 | 分数 | C1 | C2 | C3 | C4 | C5 | C6 | C7 | C8 | C9 | C10 | C11 | C12 | C13 | C14 |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| #105952 | **57.43** | 3 | 4 | 10 | 30 | 26 | 33 | 322 | 175 | 321 | 58 | 448 | 533 | 294 | 297 |
+| #105932 | **57.43** | 3 | 4 | 10 | 30 | 25 | 33 | 322 | 180 | 322 | 60 | 454 | 539 | 294 | 300 |
+| #105915 | **57.43** | 3 | 4 | 10 | 29 | 26 | 34 | 321 | 174 | 321 | 60 | 453 | 539 | 294 | 299 |
+| #105899 | 56.21 | 3 | 4 | 22 | 30 | 26 | 33 | 320 | 179 | 322 | 60 | 454 | 533 | 296 | 297 |
+| #105835 | 54.86 | 8 | 9 | 22 | 30 | 26 | 34 | 321 | 174 | 322 | 60 | 439 | 534 | 296 | 300 |
+| #105823 | 55.36 | 7 | 9 | 18 | 30 | 26 | 34 | 321 | 174 | 323 | 58 | 448 | 533 | 294 | 297 |
+| #105814 | 55.29 | 7 | 9 | 18 | 29 | 26 | 33 | 324 | 175 | 328 | 60 | 453 | 547 | 300 | 299 |
+| #105801 | 54.29 | 8 | 11 | 22 | 30 | 26 | 34 | 338 | 180 | 342 | 57 | 458 | 576 | 315 | 296 |
+| #105762 | 54.21 | 7 | 11 | 22 | 30 | 26 | 35 | 342 | 179 | 342 | 60 | 463 | 583 | 316 | 300 |
+| #105749 | 51.86 | 7 | 9 | 18 | 33 | 30 | 37 | 387 | 220 | 389 | 70 | 585 | 657 | 354 | 386 |
+| #105738 | 51.93 | 7 | 9 | 18 | 32 | 30 | 38 | 386 | 220 | 389 | 70 | 587 | 658 | 355 | 386 |
+| #105704 | 51.43 | 8 | 11 | 18 | 32 | 30 | 38 | 391 | 225 | 394 | 72 | 599 | 676 | 361 | 391 |
+| #105674 | 51.79 | 7 | 9 | 18 | 33 | 30 | 37 | 389 | 221 | 396 | 70 | 591 | 670 | 359 | 389 |
+| #105650 | 51.79 | 7 | 9 | 18 | 33 | 30 | 38 | 391 | 221 | 395 | 70 | 591 | 670 | 360 | 389 |
+| #105636 | 51.50 | 7 | 9 | 18 | 34 | 30 | 38 | 404 | 221 | 411 | 70 | 590 | 694 | 369 | 389 |
+| #105616 | 51.29 | 7 | 9 | 18 | 33 | 30 | 41 | 405 | 224 | 410 | 70 | 590 | 693 | 381 | 389 |
+| #105608 | 50.36 | 7 | 9 | 18 | 35 | 31 | 43 | 432 | 235 | 438 | 74 | 619 | 739 | 405 | 409 |
+| #105601 | 50.29 | 7 | 9 | 18 | 35 | 31 | 43 | 438 | 239 | 444 | 75 | 628 | 748 | 409 | 414 |
+| #105570 | 48.71 | 7 | 9 | 22 | 35 | 43 | 55 | 451 | 247 | 451 | 77 | 634 | 771 | 412 | 417 |
+| #105561 | 48.93 | 8 | 10 | 18 | 35 | 37 | 50 | 469 | 257 | 472 | 75 | 653 | 830 | 410 | 416 |
+
+##### 结果分析
+
+- 最大的结构跃升有两次。#105561 的 token-parallel/BSM 路径将 score `40.71→48.93`；#105762 的 KV4 Q staging 与 full-page/tail 专门循环又将 `51.86→54.21`。两次都同时改善多组中长序列，而不是依赖单 case 波动。
+- #105601 的 grouped reducer、#105616 的 packed arithmetic、#105650–#105749 的 loader/split/PV 微调把第一阶段稳定推进到约 `51.8–51.9`。其中 #105704 和 #105749 表明 aggregate 会受短 case 波动影响，shape-specific 决策仍应优先看目标 case。
+- #105814 分离完整页与尾页，#105823 再把 KV8 z-state 合并收进 CTA，长 case 达到新平台。#105835 将 case 11 刷新到 `439 μs`，但 case 1/3 的本轮波动令总分下降，不能据 aggregate 否定该局部路径。
+- #105899 的 1/2-token kernel 把 case 1/2 固定到 `3/4 μs`。#105915 只把 token-parallel 阈值从 64 改到 17，case 3 随即由 `22→10 μs`，并首次得到 `57.43`。
+- #105932 的小 split reducer 和 #105952 的短 KV8 loader dispatch 在 OJ 上没有突破 `57.43`，但分别保留了 case 5/6 的 `25/33 μs` 样本，以及最终轮 case 10–14 的 `58/448/533/294/297 μs`。当前最高分应表述为“#105915 首次达到，#105932/#105952 保持”，而不是只归因于最后一次提交。
+
+#### 提交 #105501 · 2026-08-08 12:22:30
+
+##### 提交信息
+
+提交记录：[打开 OJ 页面](https://xpuoj.com/contest/11/submissions/105501)
+
+- **提交语言/环境**：CUDA Maca C500 / 45.1 K（`cuda.maca-c500`）
+- **总状态/总分**：Accepted（14/14）/ **`40.71`**
+- **代码溯源**：原始归档的嵌入源码 SHA-256 为 `541c1ceee4938962f9e7d36c3c8b369c5a1234a8bcf6d98c3fa74eb32c00cf41`。它是 #105492 的模板特化后续版本：固定 KV4/KV8 fast path 的编译期参数、直接按新的 global max 累积 page softmax；同时撤回 #105492 的 empty-split early return 与 live-split reducer 剪枝。
+- **策略**：保持 KV8 的 paired-QK，并关闭本机 MACA 3.7.1 数值不可靠的 MMA-QK dispatch。所有 fast path 都走编译期特化 scalar/paired kernel。
+
+##### 结果分析
+
+- 相对 #104441，KV8 long case 均显著改善：case 7 `0.858→0.726 ms`、case 9 `0.866→0.739 ms`、case 12 `1.600→1.346 ms`、case 13 `0.709→0.656 ms`。真实 C500 交错 A/B 也独立复现 case 7/9 均约 `1.151x`。
+- KV4 的 MMA rollback 仍是主要代价：case 8/10/11/14 分别为 `0.408/0.118/1.094/0.701 ms`，后两例明显慢于 #104441 的 MMA 路径。因此 aggregate `40.71` 含评测 timing tier 影响，不能仅凭总分把 scalar KV4 视为胜过已验收的 MMA 版本。
+- #105501 与后续 token-parallel 链不是同一候选；其提交源码现已单独归档为 [`cuda_105501.cpp`](../solutions/archive/2026-08-08-submissions/cuda_105501.cpp)，不能把 #105561–#105952 的收益回溯归因给本次提交。
+
+##### 测试点汇总
+
+| case | 时间 | 分数 |
+|---:|---:|---:|
+| 1 | `0.008 ms` | 82 |
+| 2 | `0.010 ms` | 79 |
+| 3 | `0.018 ms` | 71 |
+| 4 | `0.061 ms` | 49 |
+| 5 | `0.053 ms` | 46 |
+| 6 | `0.078 ms` | 38 |
+| 7 | `0.726 ms` | 27 |
+| 8 | `0.408 ms` | 21 |
+| 9 | `0.739 ms` | 30 |
+| 10 | `0.118 ms` | 35 |
+| 11 | `1.094 ms` | 18 |
+| 12 | `1.346 ms` | 29 |
+| 13 | `0.656 ms` | 26 |
+| 14 | `0.701 ms` | 19 |
+
+##### 原始评测归档
+
+- [cuda_105501_raw.json](raw/cuda_105501_raw.json)
+
+#### 提交 #105492 · 2026-08-08 12:14:21
+
+##### 提交信息
+
+提交记录：[打开 OJ 页面](https://xpuoj.com/contest/11/submissions/105492)
+
+- **提交语言/环境**：CUDA Maca C500 / 45.0 K（`cuda.maca-c500`）
+- **总状态/总分**：Accepted（14/14）/ `38.36`
+- **代码溯源**：原始归档的嵌入源码 SHA-256 为 `5c80382799394028e707d4d66f023c4acb4cacb0cff5d196e98103c457bc20dc`；字节精确源码现已归档为 [`cuda_105492.cpp`](../solutions/archive/2026-08-08-submissions/cuda_105492.cpp)。其最近祖先是 #104441 / `cuda_maca_version.cpp`。
+- **策略**：page softmax 的 `beta` rescale elimination、empty-split early return 和与之配对的 live-split reduce；同时将原先固定 KV4 的 MMA-QK dispatch 固定关闭。
+
+##### 结果分析
+
+- KV8 的 softmax/split 改动具有局部正收益：case 7 `0.858→0.837 ms`、case 9 `0.866→0.853 ms`、case 12 `1.600→1.538 ms`、case 13 `0.709→0.703 ms`。
+- 但被关闭的 MMA-QK 使 KV4 case 8/10/11/14 退化为 `0.419/0.124/1.124/0.723 ms`；尤其 case 14 比 #104441 慢 `0.194 ms`。因此它不是可保留的完整维护基线，只有其已验证的模板化/softmax 思路被后续 #105501 继承。
+
+##### 测试点汇总
+
+| case | 时间 | 分数 |
+|---:|---:|---:|
+| 1 | `0.010 ms` | 79 |
+| 2 | `0.012 ms` | 75 |
+| 3 | `0.024 ms` | 65 |
+| 4 | `0.064 ms` | 48 |
+| 5 | `0.066 ms` | 41 |
+| 6 | `0.092 ms` | 34 |
+| 7 | `0.837 ms` | 25 |
+| 8 | `0.419 ms` | 20 |
+| 9 | `0.853 ms` | 27 |
+| 10 | `0.124 ms` | 34 |
+| 11 | `1.124 ms` | 18 |
+| 12 | `1.538 ms` | 27 |
+| 13 | `0.703 ms` | 25 |
+| 14 | `0.723 ms` | 19 |
+
+##### 原始评测归档
+
+- [cuda_105492_raw.json](raw/cuda_105492_raw.json)
+
+#### 本地 C500 验证（#105501 后续开发的阶段性记录）
+
+##### 验证信息
+
+- **设备/运行时**：MetaX C500，PyTorch `2.8.0+metax3.7.1.3`，MACA `3.7.1`；`flash_attn_with_kvcache` 仅作为本地 GPU reference，未安装或构建仓库子模块。
+- **当时候选代码**：`solutions/cuda_maca_optimized.cpp`；相对于历史维护源 `solutions/cuda_maca_version.cpp`，将固定的 KV4/KV8 fast path 编译期特化，并将每页 softmax 直接累计到新的全局 max 标度，消除 `beta = exp(m_page - m_new)` 及其 5 次后续缩放。本节保留的是进入 OJ 连续优化前的本地筛选记录。
+- **正确性**：`tests/c500_paged_decode_harness.py` 在真实 14 个 OJ shape 上完成 full-length、boundary-length 和随机长度/page-table padding-trap 验证，均为 14/14 Pass，且无 NaN/Inf 或超 `8×tol` 元素。
+- **已发现并修复的本地问题**：原 MMA-QK dispatch 在本机完整 KV4 case 8/10/11/14 上无法满足 OJ 容差，而 scalar QK 在相同张量上通过。因此维护源已经停止派发该 candidate，保留其代码仅用于后续 fragment/layout 调查。
+
+##### 本地交错 A/B
+
+对 `cuda_maca_version.so`（control）和 `cuda_maca_optimized.so`（candidate）交替顺序进行 event timing；下表为 candidate/control p50。该数据是本地筛选依据，不与 OJ 的绝对时间或 aggregate 分数混用。
+
+| case | candidate/control p50 | 本地加速 |
+|---:|---:|---:|
+| 7 | `0.8690x` | `1.151x` |
+| 8 | `0.9644x` | `1.037x` |
+| 9 | `0.8687x` | `1.151x` |
+| 11 | `0.9658x` | `1.035x` |
+| 12 | `0.8656x` | `1.155x` |
+| 13 | `0.9360x` | `1.068x` |
+| 14 | `0.9694x` | `1.032x` |
+
+- 最大获益集中在 KV8 paired-QK 的 case 7/9/12（约 15%），显著超过同次 A/B 约 0.1% 的 ratio spread。
+- 模板特化/softmax 路径先由 #105501 在 OJ 14/14 Accepted；随后 token-parallel/BSM 路径从 #105561 起完成 20 次连续 OJ Accepted，并在 #105915/#105932/#105952 达到 `57.43`。因此这里的 “WIP” 判断只代表提交前的历史阶段，不再是当前状态。
 
 ### 2026-08-07
 

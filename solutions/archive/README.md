@@ -1,12 +1,30 @@
 # Solution experiment archive
 
-This directory stores historical and rejected XPUOJ C500 candidate sources. The active `solutions/` directory intentionally contains only the maintained implementation:
+This directory stores historical/rejected candidates and byte-exact XPUOJ C500 submission sources.
 
-- `../cuda_maca_version.cpp`
+## Active source roles
+
+- [`2026-08-08-submissions/cuda_105952.cpp`](2026-08-08-submissions/cuda_105952.cpp) — the immutable source of the currently selected best submission and the default optimization control.
+- [`../cuda_maca_optimized.cpp`](../cuda_maca_optimized.cpp) — the mutable optimization and iteration working file. It may diverge while an experiment is active.
+- [`../cuda_maca_version.cpp`](../cuda_maca_version.cpp) — the earlier maintenance/control implementation, retained for historical comparison.
+
+There is intentionally no separate `best` or `frozen` source copy. When a new best is selected, use that submission's immutable snapshot directly and update the current-best references in `AGENTS.md` and `results/cuda_result.md`.
 
 ## Archive collections
 
-- [`2026-08-07-experiments/`](2026-08-07-experiments/) — 65 historical CUDA candidates from the 2026-08-07 optimization cycle. Each source is tied to an experiment or submission in `results/cuda_result.md`; raw OJ responses are in `results/raw/`.
+- [`SUBMISSIONS.md`](SUBMISSIONS.md) — generated manifest for all 108 raw OJ records currently in `results/raw/`, including submission time, status, score, SHA-256, exact source snapshot, and raw result links.
+- [`2026-08-08-submissions/`](2026-08-08-submissions/) — 22 byte-exact submitted sources, one `cuda_<id>.cpp` file per attempt.
+- [`2026-08-07-submissions/`](2026-08-07-submissions/) — 72 byte-exact submitted sources, one `cuda_<id>.cpp` file per attempt.
+- [`2026-08-06-submissions/`](2026-08-06-submissions/) — 14 byte-exact submitted sources, one `cuda_<id>.cpp` file per attempt.
+- [`2026-08-07-experiments/`](2026-08-07-experiments/) — 64 historical CUDA candidates from the 2026-08-07 optimization cycle. Historical sources are tied to experiments or submissions in `results/cuda_result.md`; raw OJ responses are in `results/raw/`.
+
+The `*-submissions/` collections are immutable provenance snapshots. They deliberately keep a separate file for every attempt even when two submissions used identical code. Files are extracted without adding or removing a trailing newline, so their SHA-256 hashes match `raw_detail.content.code` exactly. Regenerate the collections and manifest from the repository root with:
+
+```bash
+python3 tools/archive_cuda_submissions.py
+```
+
+Promote a new best only after evaluating the complete OJ result. Keep its immutable `*-submissions/cuda_<id>.cpp` snapshot in place and update documentation to point to it; do not create another source copy.
 
 ### Important rejected candidates in the 2026-08-07 collection
 

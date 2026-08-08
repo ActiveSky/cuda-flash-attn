@@ -218,6 +218,11 @@ paged_decode_split_kernel(
     const int64_t p_beg = split * pages_per_split;
     const int64_t p_end = min(p_beg + pages_per_split, valid_pages);
 
+    // Variable-length batches launch from the capacity-derived split count.
+    // An empty split must not touch Q or stale partial storage; the reducer
+    // independently derives the same live split count from cache_seqlens.
+    if (p_beg >= valid_pages) return;
+
     // 加载本 warp 的 q：dims {2*lane, 2*lane+1, 2*lane+64, 2*lane+65}
     // （每 2 个连续 bf16 打包为 1 个 uint32 读入）
     const __nv_bfloat16* q_ptr =
@@ -289,12 +294,15 @@ paged_decode_split_kernel(
             m_page = fmaxf(m_page, logits[tt]);
         }
 
+        const float m_new = fmaxf(m, m_page);
         float l_page = 0.f;
         float acc_page[4] = {0.f, 0.f, 0.f, 0.f};
 #pragma unroll
         for (int tt = 0; tt < PAGE_TOKENS; tt++) {
             if (t_base + tt >= seqlen) continue;
-            const float p_val = __expf(logits[tt] - m_page);
+            // Accumulate the page directly in the new global-max scale.  This
+            // removes the page beta exponential and its five rescale multiplies.
+            const float p_val = __expf(logits[tt] - m_new);
             l_page += p_val;
             const uint32_t v0 = sv[tt][lane];
             const uint32_t v1 = sv[tt][lane + 32];
@@ -305,14 +313,12 @@ paged_decode_split_kernel(
         }
 
         // 在线 softmax 更新（每 page 一次）
-        const float m_new = fmaxf(m, m_page);
         const float alpha = __expf(m - m_new);
-        const float beta  = __expf(m_page - m_new);
         m = m_new;
-        l = l * alpha + l_page * beta;
+        l = l * alpha + l_page;
 #pragma unroll
         for (int i = 0; i < 4; i++) {
-            acc[i] = acc[i] * alpha + acc_page[i] * beta;
+            acc[i] = acc[i] * alpha + acc_page[i];
         }
 
         __syncthreads();  // 预取完成 + 计算完成，下一轮才可覆盖两个 buffer
@@ -385,6 +391,8 @@ paged_decode_mma_qk_kernel(
     const int64_t valid_pages = (seqlen + page_block_size - 1) / page_block_size;
     const int64_t p_beg = split * pages_per_split;
     const int64_t p_end = min(p_beg + pages_per_split, valid_pages);
+
+    if (p_beg >= valid_pages) return;
     const int32_t* bt_row = block_table + b * pages_per_batch;
     const int64_t kv_stride = num_heads_k * headdim;
 
@@ -583,6 +591,8 @@ paged_decode_split_qk_pair_kernel(
     const int64_t p_beg = split * pages_per_split;
     const int64_t p_end = min(p_beg + pages_per_split, valid_pages);
 
+    if (p_beg >= valid_pages) return;
+
     // Pair-token QK divides each 32-lane warp into two 16-lane subgroups.
     // Each subgroup owns one token and eight dimensions per lane, so both
     // 128-D dot products complete in parallel with four 16-lane reductions.
@@ -673,12 +683,13 @@ paged_decode_split_qk_pair_kernel(
             m_page = fmaxf(m_page, logits[tt]);
         }
 
+        const float m_new = fmaxf(m, m_page);
         float l_page = 0.f;
         float acc_page[4] = {0.f, 0.f, 0.f, 0.f};
 #pragma unroll
         for (int tt = 0; tt < PAGE_TOKENS; tt++) {
             if (t_base + tt >= seqlen) continue;
-            const float p_val = __expf(logits[tt] - m_page);
+            const float p_val = __expf(logits[tt] - m_new);
             l_page += p_val;
             const uint32_t v0 = sv[tt][lane];
             const uint32_t v1 = sv[tt][lane + 32];
@@ -689,14 +700,12 @@ paged_decode_split_qk_pair_kernel(
         }
 
         // 在线 softmax 更新（每 page 一次）
-        const float m_new = fmaxf(m, m_page);
         const float alpha = __expf(m - m_new);
-        const float beta  = __expf(m_page - m_new);
         m = m_new;
-        l = l * alpha + l_page * beta;
+        l = l * alpha + l_page;
 #pragma unroll
         for (int i = 0; i < 4; i++) {
-            acc[i] = acc[i] * alpha + acc_page[i] * beta;
+            acc[i] = acc[i] * alpha + acc_page[i];
         }
 
         __syncthreads();  // 预取完成 + 计算完成，下一轮才可覆盖两个 buffer
@@ -748,9 +757,11 @@ paged_decode_reduce_kernel(
     const float* __restrict__ partial_l,
     const float* __restrict__ partial_acc,
     __nv_bfloat16* __restrict__ out,
+    const int32_t* __restrict__ cache_seqlens,
     int64_t batch_size,
     int64_t num_heads,
     int64_t headdim,
+    int64_t pages_per_split,
     int64_t n_split)
 {
     const int tid = threadIdx.x;
@@ -759,6 +770,10 @@ paged_decode_reduce_kernel(
     const int64_t bh = blockIdx.x;
     const int64_t b = bh / num_heads;
     const int64_t h = bh % num_heads;
+    const int valid_pages =
+        (cache_seqlens[b] + PAGE_TOKENS - 1) / PAGE_TOKENS;
+    const int live_splits = min((int)n_split,
+        (valid_pages + (int)pages_per_split - 1) / (int)pages_per_split);
 
     extern __shared__ float smem[];
     float* s_m = smem;                  // [n_split]
@@ -767,7 +782,7 @@ paged_decode_reduce_kernel(
 
     // 合作加载每个 split 的局部 max，并通过 4 个 warp 得到全局 max。
     float m_local = -CUDART_INF_F;
-    for (int64_t s = tid; s < n_split; s += blockDim.x) {
+    for (int s = tid; s < live_splits; s += blockDim.x) {
         const float ms = partial_m[(s * batch_size + b) * num_heads + h];
         s_m[s] = ms;
         m_local = fmaxf(m_local, ms);
@@ -792,7 +807,7 @@ paged_decode_reduce_kernel(
 
     // 每个 split 的指数权重及 l_sum 仅计算一次，而不是每个 d 重复一次。
     float l_local = 0.f;
-    for (int64_t s = tid; s < n_split; s += blockDim.x) {
+    for (int s = tid; s < live_splits; s += blockDim.x) {
         const int64_t hidx = (s * batch_size + b) * num_heads + h;
         const float w = __expf(s_m[s] - m);
         s_w[s] = w;
@@ -819,7 +834,7 @@ paged_decode_reduce_kernel(
     // 评测固定 headdim=128；保留判断使 kernel 对合法快速路径更稳健。
     if (tid < headdim) {
         float acc_sum = 0.f;
-        for (int64_t s = 0; s < n_split; s++) {
+        for (int s = 0; s < live_splits; s++) {
             const int64_t hidx = (s * batch_size + b) * num_heads + h;
             acc_sum += partial_acc[hidx * headdim + tid] * s_w[s];
         }
@@ -1048,6 +1063,7 @@ extern "C" void run_kernel(
         const size_t rsmem = ((size_t)2 * (size_t)n_split + 4) * sizeof(float);
         paged_decode_reduce_kernel<<<rgrid, rthreads, rsmem>>>(
             s_partial_m, s_partial_l, s_partial_acc, output,
-            batch_size, num_heads, headdim, n_split);
+            cache_seqlens, batch_size, num_heads, headdim,
+            pages_per_split, n_split);
     }
 }

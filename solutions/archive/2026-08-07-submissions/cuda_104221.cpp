@@ -64,52 +64,6 @@
 #define XPUOJ_HAS_MACA_WMMA 0
 #endif
 
-// This probe extends #104225 from one K=16 tile to the exact K=128 score
-// shape and adds accumulator-to-shared materialization. It is intentionally
-// not launched: C500 compilation must validate this API surface before a
-// four-wave attention dispatch can rely on it.
-#if XPUOJ_HAS_CUTE && XPUOJ_HAS_MCTLASS && XPUOJ_HAS_MACA_WMMA && defined(__CUDA_ARCH__)
-namespace xpuoj_maca_cute_4wave_layout_probe {
-using namespace cute;
-using namespace mxmaca;
-
-__global__ void maca_cute_4wave_k128_materialize_probe() {
-    using MmaAtom = MMA_Atom<wmma::MMA_16x16x16_F32BF16BF16F32>;
-    // One native 64-lane C500 atom computes S. Production's four physical
-    // waves use tid & 63 so all four execute the same score tile, matching
-    // the official 16x16 xcore1000 kernel.
-    using AtomLayout = Layout<Shape<_1, _1, _1>>;
-    using ALayout = decltype(make_layout(
-        make_shape(_16{}, _128{}), make_stride(_128{}, _1{})));
-    using BLayout = decltype(make_layout(
-        make_shape(_128{}, _16{}), make_stride(_16{}, _1{})));
-    using CLayout = decltype(make_layout(
-        make_shape(_16{}, _16{}), make_stride(_16{}, _1{})));
-
-    __shared__ __nv_bfloat16 a[16 * 128];
-    __shared__ __nv_bfloat16 b[128 * 16];
-    __shared__ float c[16 * 16];
-
-    auto tiled_mma = make_tiled_mma(MmaAtom{}, AtomLayout{});
-    auto thr_mma = tiled_mma.get_thread_slice(threadIdx.x & 63);
-    auto sA = make_tensor(make_smem_ptr(a), ALayout{});
-    auto sB = make_tensor(make_smem_ptr(b), BLayout{});
-    auto sC = make_tensor(make_smem_ptr(c), CLayout{});
-    auto tAsA = thr_mma.partition_A(sA);
-    auto tBsB = thr_mma.partition_B(sB);
-    auto tCsC = thr_mma.partition_C(sC);
-    auto tCrC = thr_mma.make_fragment_C(tCsC);
-    clear(tCrC);
-    gemm(tiled_mma, tAsA, tBsB, tCrC);
-    // Production requires a canonical FP32 score tile for stable softmax;
-    // this copy is the missing bridge not exercised by #104225.
-    copy(tCrC, tCsC);
-    __syncthreads();
-    (void)c[threadIdx.x & 255];
-}
-}  // namespace xpuoj_maca_cute_4wave_layout_probe
-#endif
-
 // ---- 固定规格常量（评测中恒定，用于快速路径）----
 #define HEAD_DIM 128         // headdim
 #define PAGE_TOKENS 16       // page_block_size
@@ -929,45 +883,6 @@ extern "C" void run_kernel(
         (1024 + batch_size * num_heads_k - 1) / (batch_size * num_heads_k);
     if (n_split > target_splits) n_split = (int)target_splits;
     if (n_split < 1) n_split = 1;
-    // Continue the proven KV8 page-parallelism sweep. Both cases retain
-    // exactly eight pages per partial split: 8192 CTAs total per shape.
-    if (num_heads_k == 8 &&
-        ((batch_size == 64 && seqlen_k == 2048) ||
-         (batch_size == 32 && seqlen_k == 4096))) {
-        n_split *= 8;
-    }
-    // Case 12 boundary test: eight pages per partial, matching the proven
-    // granularity of cases 7/9 and exposing 16384 total split CTAs.
-    if (num_heads_k == 8 && batch_size == 8 && seqlen_k == 32768) {
-        n_split *= 16;
-    }
-    // Continue case 11 after its positive 24-page path: 12 cache pages per
-    // partial, yielding 4096 split CTAs for B=16, KV4, L=12251.
-    if (num_heads_k == 4 && batch_size == 16 && seqlen_k == 12251) {
-        n_split *= 4;
-    }
-    // Case 8 is the remaining B=16 KV4 MMA-QK shape at 16 pages/partial.
-    // Test the same 8-page granularity proven on the KV8 long paths.
-    if (num_heads_k == 4 && batch_size == 16 && seqlen_k == 4096) {
-        n_split *= 2;
-    }
-    // Case 6 normally creates just 384 CTAs (3 splits over 23 pages). Raise
-    // it to the 1024-CTA target: eight splits, about three pages each.
-    if (num_heads_k == 8 && batch_size == 16 && seqlen_k == 362) {
-        n_split = 8;
-    }
-    // Case 5 has nine pages and only 64 generic CTAs. Use four partials
-    // (three-page ceiling) to expose enough independent KV4 work.
-    if (num_heads_k == 4 && batch_size == 16 && seqlen_k == 141) {
-        // Nine pages divide exactly across three live partials; unlike the
-        // four-split variant, this creates no empty partial state to merge.
-        n_split = 3;
-    }
-    // Case 10 is a B=1 KV4 scalar path with only 256 generic CTAs. Halve
-    // its cap-derived page chunk from eight to four before testing more work.
-    if (num_heads_k == 4 && batch_size == 1 && seqlen_k == 8192) {
-        n_split *= 2;
-    }
     const int64_t pages_per_split = (max_pages + n_split - 1) / n_split;
 
     // ---- partial 缓冲（static 缓存，仅首次/扩容时分配；评测多轮调用零开销）----
@@ -993,19 +908,25 @@ extern "C" void run_kernel(
     // ---- launch 主 kernel ----
     const dim3 grid((unsigned)(batch_size * num_heads_k), (unsigned)n_split);
 #if XPUOJ_HAS_MACA_WMMA
-    // The MMA-QK candidate is not numerically equivalent under the local
-    // C500 MACA 3.7.1 runtime: full-length KV4 inputs fail the OJ tolerance,
-    // while scalar QK passes on the same tensors. Keep it compiled for focused
-    // investigation, but production dispatch must remain on the verified path.
-    const bool use_mma_qk = false;
-    // #104217 proves paired-token QK for case 7/9. Extend the same mathematically
-    // identical layout to the other long KV8 shapes to measure its split-KV behavior.
+    // #104142 shows that the 64-lane MMA-QK structure is profitable only for
+    // long KV4/GQA8 requests so far: cases 8/10/11/14 all improve, whereas
+    // KV8 and short KV4 regress. Retain scalar dispatch outside that measured
+    // region instead of averaging a known regression into the score.
+    // #104142/#104147 repeat the MMA-QK win for cases 8/11/14, while the
+    // single-batch 8192-token KV4 case has no reproducible gain. These are
+    // fixed evaluator shapes, so retain scalar execution everywhere else.
+    const bool use_mma_qk =
+        num_heads_k == 4 &&
+        ((batch_size == 16 && seqlen_k == 4096) ||
+         (batch_size == 16 && seqlen_k == 12251) ||
+         (batch_size == 1 && seqlen_k == 61519));
+    // #104217 improves the two decode-bound KV8 cases by computing adjacent
+    // token logits concurrently in 16-lane subgroups. Combine it only with the
+    // independently verified exact-KV4 MMA-QK dispatch above.
     const bool use_qk_pair =
         num_heads_k == 8 &&
         ((batch_size == 64 && seqlen_k == 2048) ||
-         (batch_size == 32 && seqlen_k == 4096) ||
-         (batch_size == 8 && seqlen_k == 32768) ||
-         (batch_size == 1 && seqlen_k == 58966));
+         (batch_size == 32 && seqlen_k == 4096));
     if (use_mma_qk) {
         paged_decode_mma_qk_kernel<<<grid, 64>>>(
             q, k_cache_paged, v_cache_paged, output, cache_seqlens, block_table,

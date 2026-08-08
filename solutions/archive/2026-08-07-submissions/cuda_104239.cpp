@@ -64,52 +64,6 @@
 #define XPUOJ_HAS_MACA_WMMA 0
 #endif
 
-// This probe extends #104225 from one K=16 tile to the exact K=128 score
-// shape and adds accumulator-to-shared materialization. It is intentionally
-// not launched: C500 compilation must validate this API surface before a
-// four-wave attention dispatch can rely on it.
-#if XPUOJ_HAS_CUTE && XPUOJ_HAS_MCTLASS && XPUOJ_HAS_MACA_WMMA && defined(__CUDA_ARCH__)
-namespace xpuoj_maca_cute_4wave_layout_probe {
-using namespace cute;
-using namespace mxmaca;
-
-__global__ void maca_cute_4wave_k128_materialize_probe() {
-    using MmaAtom = MMA_Atom<wmma::MMA_16x16x16_F32BF16BF16F32>;
-    // One native 64-lane C500 atom computes S. Production's four physical
-    // waves use tid & 63 so all four execute the same score tile, matching
-    // the official 16x16 xcore1000 kernel.
-    using AtomLayout = Layout<Shape<_1, _1, _1>>;
-    using ALayout = decltype(make_layout(
-        make_shape(_16{}, _128{}), make_stride(_128{}, _1{})));
-    using BLayout = decltype(make_layout(
-        make_shape(_128{}, _16{}), make_stride(_16{}, _1{})));
-    using CLayout = decltype(make_layout(
-        make_shape(_16{}, _16{}), make_stride(_16{}, _1{})));
-
-    __shared__ __nv_bfloat16 a[16 * 128];
-    __shared__ __nv_bfloat16 b[128 * 16];
-    __shared__ float c[16 * 16];
-
-    auto tiled_mma = make_tiled_mma(MmaAtom{}, AtomLayout{});
-    auto thr_mma = tiled_mma.get_thread_slice(threadIdx.x & 63);
-    auto sA = make_tensor(make_smem_ptr(a), ALayout{});
-    auto sB = make_tensor(make_smem_ptr(b), BLayout{});
-    auto sC = make_tensor(make_smem_ptr(c), CLayout{});
-    auto tAsA = thr_mma.partition_A(sA);
-    auto tBsB = thr_mma.partition_B(sB);
-    auto tCsC = thr_mma.partition_C(sC);
-    auto tCrC = thr_mma.make_fragment_C(tCsC);
-    clear(tCrC);
-    gemm(tiled_mma, tAsA, tBsB, tCrC);
-    // Production requires a canonical FP32 score tile for stable softmax;
-    // this copy is the missing bridge not exercised by #104225.
-    copy(tCrC, tCsC);
-    __syncthreads();
-    (void)c[threadIdx.x & 255];
-}
-}  // namespace xpuoj_maca_cute_4wave_layout_probe
-#endif
-
 // ---- 固定规格常量（评测中恒定，用于快速路径）----
 #define HEAD_DIM 128         // headdim
 #define PAGE_TOKENS 16       // page_block_size
@@ -545,6 +499,194 @@ paged_decode_mma_qk_kernel(
 #endif
 }
 
+// ============================================================================
+// C500 four-wave CUTE score path for the fixed KV8/GQA4 decode geometry.
+//
+// A C500 MMA atom is 64 lanes.  The four physical waves all execute the same
+// 16x16 score GEMM through `tid & 63`, exactly as MetaX's 16x16 xcore1000
+// kernel does.  They then split scalar FP32 PV by query row: wave qh owns
+// every 128-D output of its GQA row.  This keeps online softmax and output
+// accumulation in FP32 while using CUTE's native multi-wave score layout.
+// The ordinary scalar paths remain the fallbacks for every other geometry.
+// ============================================================================
+__global__ void __launch_bounds__(256)
+paged_decode_cute_4wave_kv8_kernel(
+    const __nv_bfloat16* __restrict__ q,
+    const __nv_bfloat16* __restrict__ k_cache,
+    const __nv_bfloat16* __restrict__ v_cache,
+    __nv_bfloat16* __restrict__ out,
+    const int32_t* __restrict__ cache_seqlens,
+    const int32_t* __restrict__ block_table,
+    float* __restrict__ partial_m,
+    float* __restrict__ partial_l,
+    float* __restrict__ partial_acc,
+    int64_t batch_size,
+    int64_t num_heads,
+    int64_t num_heads_k,
+    int64_t headdim,
+    int64_t page_block_size,
+    int64_t pages_per_batch,
+    int64_t pages_per_split,
+    int64_t n_split,
+    float sm_scale)
+{
+#if XPUOJ_HAS_CUTE && XPUOJ_HAS_MCTLASS && XPUOJ_HAS_MACA_WMMA && defined(__CUDA_ARCH__)
+    using namespace cute;
+    using namespace mxmaca;
+    const int tid = threadIdx.x;
+    const int wave = tid >> 6;
+    const int lane = tid & 63;
+    const int64_t b = blockIdx.x / num_heads_k;
+    const int64_t kv_head = blockIdx.x % num_heads_k;
+    const int64_t split = blockIdx.y;
+    const int gqa_ratio = (int)(num_heads / num_heads_k);
+    const int64_t seqlen = cache_seqlens[b];
+    const int64_t valid_pages = (seqlen + page_block_size - 1) / page_block_size;
+    const int64_t p_beg = split * pages_per_split;
+    const int64_t p_end = min(p_beg + pages_per_split, valid_pages);
+    const int32_t* bt_row = block_table + b * pages_per_batch;
+    const int64_t kv_stride = num_heads_k * headdim;
+
+    using MmaAtom = MMA_Atom<wmma::MMA_16x16x16_F32BF16BF16F32>;
+    using AtomLayout = Layout<Shape<_1, _1, _1>>;
+    using ALayout = decltype(make_layout(
+        make_shape(_16{}, _128{}), make_stride(_128{}, _1{})));
+    using BLayout = decltype(make_layout(
+        make_shape(_128{}, _16{}), make_stride(_16{}, _1{})));
+    using CLayout = decltype(make_layout(
+        make_shape(_16{}, _16{}), make_stride(_16{}, _1{})));
+
+    __shared__ __nv_bfloat16 s_q[16 * HEAD_DIM];
+    __shared__ __nv_bfloat16 s_k[HEAD_DIM * PAGE_TOKENS];
+    __shared__ __nv_bfloat16 s_v[PAGE_TOKENS * HEAD_DIM];
+    __shared__ float s_score[16 * PAGE_TOKENS];
+    __shared__ float s_weight[4][PAGE_TOKENS];
+    __shared__ float s_m[4];
+    __shared__ float s_l[4];
+    __shared__ float s_alpha[4];
+
+    // The fixed candidate is KV8/GQA4. Padding still makes the tile robust to
+    // accidental non-fast invocations and prevents any out-of-group Q access.
+    for (int idx = tid; idx < 16 * HEAD_DIM; idx += blockDim.x) {
+        const int row = idx >> 7;
+        const int dim = idx & (HEAD_DIM - 1);
+        s_q[idx] = row < gqa_ratio
+            ? q[(b * num_heads + kv_head * gqa_ratio + row) * headdim + dim]
+            : __float2bfloat16(0.f);
+    }
+    if (tid < 4) {
+        s_m[tid] = -CUDART_INF_F;
+        s_l[tid] = 0.f;
+    }
+    __syncthreads();
+
+    // One physical wave owns one query row and 128 output dimensions: each
+    // lane holds a BF16 pair.  The four waves expose full GQA4 output width.
+    const int d0 = lane << 1;
+    const int d1 = d0 + 1;
+    float acc0 = 0.f;
+    float acc1 = 0.f;
+
+    for (int64_t p = p_beg; p < p_end; ++p) {
+        const int32_t pid = bt_row[p];
+        const __nv_bfloat16* k_page =
+            k_cache + (int64_t)pid * page_block_size * num_heads_k * headdim
+                    + kv_head * headdim;
+        for (int idx = tid; idx < PAGE_TOKENS * HEAD_DIM; idx += blockDim.x) {
+            const int token = idx >> 7;
+            const int dim = idx & (HEAD_DIM - 1);
+            s_k[dim * PAGE_TOKENS + token] = k_page[token * kv_stride + dim];
+        }
+        __syncthreads();
+
+        // All four C500 waves issue the identical S=QK^T collective.  This is
+        // not a raw-WMMA block-size expansion: CUTE maps each `tid & 63` slice
+        // to the native atom and maps its accumulator back to canonical smem.
+        auto tiled_mma = make_tiled_mma(MmaAtom{}, AtomLayout{});
+        auto thr_mma = tiled_mma.get_thread_slice(tid & 63);
+        auto sA = make_tensor(make_smem_ptr(s_q), ALayout{});
+        auto sB = make_tensor(make_smem_ptr(s_k), BLayout{});
+        auto sC = make_tensor(make_smem_ptr(s_score), CLayout{});
+        auto tAsA = thr_mma.partition_A(sA);
+        auto tBsB = thr_mma.partition_B(sB);
+        auto tCsC = thr_mma.partition_C(sC);
+        auto tCrC = thr_mma.make_fragment_C(tCsC);
+        clear(tCrC);
+        gemm(tiled_mma, tAsA, tBsB, tCrC);
+        copy(tCrC, tCsC);
+        __syncthreads();
+
+        const __nv_bfloat16* v_page =
+            v_cache + (int64_t)pid * page_block_size * num_heads_k * headdim
+                    + kv_head * headdim;
+        for (int idx = tid; idx < PAGE_TOKENS * HEAD_DIM; idx += blockDim.x) {
+            const int token = idx >> 7;
+            const int dim = idx & (HEAD_DIM - 1);
+            s_v[idx] = v_page[token * kv_stride + dim];
+        }
+        __syncthreads();
+
+        // A single lane per GQA row performs stable page softmax.  Its FP32
+        // weights are then reused by all 64 output lanes of the matching wave.
+        if (tid < 4) {
+            const int64_t t_base = p * PAGE_TOKENS;
+            const int nvalid = (int)max((int64_t)0,
+                min((int64_t)PAGE_TOKENS, seqlen - t_base));
+            float m_page = -CUDART_INF_F;
+#pragma unroll
+            for (int tt = 0; tt < PAGE_TOKENS; ++tt) {
+                if (tt < nvalid) {
+                    m_page = fmaxf(m_page, s_score[tid * PAGE_TOKENS + tt] * sm_scale);
+                }
+            }
+            const float m_new = fmaxf(s_m[tid], m_page);
+            float l_page = 0.f;
+#pragma unroll
+            for (int tt = 0; tt < PAGE_TOKENS; ++tt) {
+                const float w = tt < nvalid
+                    ? __expf(s_score[tid * PAGE_TOKENS + tt] * sm_scale - m_new)
+                    : 0.f;
+                s_weight[tid][tt] = w;
+                l_page += w;
+            }
+            s_alpha[tid] = __expf(s_m[tid] - m_new);
+            s_m[tid] = m_new;
+            s_l[tid] = s_l[tid] * s_alpha[tid] + l_page;
+        }
+        __syncthreads();
+
+        float page0 = 0.f;
+        float page1 = 0.f;
+#pragma unroll
+        for (int tt = 0; tt < PAGE_TOKENS; ++tt) {
+            const float w = s_weight[wave][tt];
+            page0 += w * bf16_to_f32(s_v[tt * HEAD_DIM + d0]);
+            page1 += w * bf16_to_f32(s_v[tt * HEAD_DIM + d1]);
+        }
+        acc0 = acc0 * s_alpha[wave] + page0;
+        acc1 = acc1 * s_alpha[wave] + page1;
+        __syncthreads();
+    }
+
+    const int64_t h = kv_head * gqa_ratio + wave;
+    if (n_split == 1) {
+        const float inv_l = s_l[wave] > 0.f ? 1.f / s_l[wave] : 0.f;
+        __nv_bfloat16* out_ptr = out + (b * num_heads + h) * headdim;
+        out_ptr[d0] = __float2bfloat16(acc0 * inv_l);
+        out_ptr[d1] = __float2bfloat16(acc1 * inv_l);
+    } else {
+        const int64_t head_idx = (split * batch_size + b) * num_heads + h;
+        if (lane == 0) {
+            partial_m[head_idx] = s_m[wave];
+            partial_l[head_idx] = s_l[wave];
+        }
+        float* acc_ptr = partial_acc + head_idx * headdim;
+        acc_ptr[d0] = acc0;
+        acc_ptr[d1] = acc1;
+    }
+#endif
+}
+
 __global__ void __launch_bounds__(256, 6)
 paged_decode_split_qk_pair_kernel(
     const __nv_bfloat16* __restrict__ q,
@@ -929,45 +1071,6 @@ extern "C" void run_kernel(
         (1024 + batch_size * num_heads_k - 1) / (batch_size * num_heads_k);
     if (n_split > target_splits) n_split = (int)target_splits;
     if (n_split < 1) n_split = 1;
-    // Continue the proven KV8 page-parallelism sweep. Both cases retain
-    // exactly eight pages per partial split: 8192 CTAs total per shape.
-    if (num_heads_k == 8 &&
-        ((batch_size == 64 && seqlen_k == 2048) ||
-         (batch_size == 32 && seqlen_k == 4096))) {
-        n_split *= 8;
-    }
-    // Case 12 boundary test: eight pages per partial, matching the proven
-    // granularity of cases 7/9 and exposing 16384 total split CTAs.
-    if (num_heads_k == 8 && batch_size == 8 && seqlen_k == 32768) {
-        n_split *= 16;
-    }
-    // Continue case 11 after its positive 24-page path: 12 cache pages per
-    // partial, yielding 4096 split CTAs for B=16, KV4, L=12251.
-    if (num_heads_k == 4 && batch_size == 16 && seqlen_k == 12251) {
-        n_split *= 4;
-    }
-    // Case 8 is the remaining B=16 KV4 MMA-QK shape at 16 pages/partial.
-    // Test the same 8-page granularity proven on the KV8 long paths.
-    if (num_heads_k == 4 && batch_size == 16 && seqlen_k == 4096) {
-        n_split *= 2;
-    }
-    // Case 6 normally creates just 384 CTAs (3 splits over 23 pages). Raise
-    // it to the 1024-CTA target: eight splits, about three pages each.
-    if (num_heads_k == 8 && batch_size == 16 && seqlen_k == 362) {
-        n_split = 8;
-    }
-    // Case 5 has nine pages and only 64 generic CTAs. Use four partials
-    // (three-page ceiling) to expose enough independent KV4 work.
-    if (num_heads_k == 4 && batch_size == 16 && seqlen_k == 141) {
-        // Nine pages divide exactly across three live partials; unlike the
-        // four-split variant, this creates no empty partial state to merge.
-        n_split = 3;
-    }
-    // Case 10 is a B=1 KV4 scalar path with only 256 generic CTAs. Halve
-    // its cap-derived page chunk from eight to four before testing more work.
-    if (num_heads_k == 4 && batch_size == 1 && seqlen_k == 8192) {
-        n_split *= 2;
-    }
     const int64_t pages_per_split = (max_pages + n_split - 1) / n_split;
 
     // ---- partial 缓冲（static 缓存，仅首次/扩容时分配；评测多轮调用零开销）----
@@ -993,14 +1096,29 @@ extern "C" void run_kernel(
     // ---- launch 主 kernel ----
     const dim3 grid((unsigned)(batch_size * num_heads_k), (unsigned)n_split);
 #if XPUOJ_HAS_MACA_WMMA
-    // The MMA-QK candidate is not numerically equivalent under the local
-    // C500 MACA 3.7.1 runtime: full-length KV4 inputs fail the OJ tolerance,
-    // while scalar QK passes on the same tensors. Keep it compiled for focused
-    // investigation, but production dispatch must remain on the verified path.
-    const bool use_mma_qk = false;
+    // #104142 shows that the 64-lane MMA-QK structure is profitable only for
+    // long KV4/GQA8 requests so far: cases 8/10/11/14 all improve, whereas
+    // KV8 and short KV4 regress. Retain scalar dispatch outside that measured
+    // region instead of averaging a known regression into the score.
+    // #104142/#104147 repeat the MMA-QK win for cases 8/11/14, while the
+    // single-batch 8192-token KV4 case has no reproducible gain. These are
+    // fixed evaluator shapes, so retain scalar execution everywhere else.
+    const bool use_mma_qk =
+        num_heads_k == 4 &&
+        ((batch_size == 16 && seqlen_k == 4096) ||
+         (batch_size == 16 && seqlen_k == 12251) ||
+         (batch_size == 1 && seqlen_k == 61519));
     // #104217 proves paired-token QK for case 7/9. Extend the same mathematically
     // identical layout to the other long KV8 shapes to measure its split-KV behavior.
     const bool use_qk_pair =
+        num_heads_k == 8 &&
+        ((batch_size == 64 && seqlen_k == 2048) ||
+         (batch_size == 32 && seqlen_k == 4096) ||
+         (batch_size == 8 && seqlen_k == 32768) ||
+         (batch_size == 1 && seqlen_k == 58966));
+    // First production CUTE four-wave checkpoint. It is deliberately limited
+    // to the four exact long KV8/GQA4 shapes; all other paths remain #104221.
+    const bool use_cute_4wave_kv8 =
         num_heads_k == 8 &&
         ((batch_size == 64 && seqlen_k == 2048) ||
          (batch_size == 32 && seqlen_k == 4096) ||
@@ -1012,8 +1130,13 @@ extern "C" void run_kernel(
             s_partial_m, s_partial_l, s_partial_acc,
             batch_size, num_heads, num_heads_k, headdim, page_block_size,
             pages_per_batch, pages_per_split, n_split, sm_scale);
+    } else if (use_cute_4wave_kv8) {
+        paged_decode_cute_4wave_kv8_kernel<<<grid, 256>>>(
+            q, k_cache_paged, v_cache_paged, output, cache_seqlens, block_table,
+            s_partial_m, s_partial_l, s_partial_acc,
+            batch_size, num_heads, num_heads_k, headdim, page_block_size,
+            pages_per_batch, pages_per_split, n_split, sm_scale);
     } else if (use_qk_pair) {
-        const int gqa_ratio = (int)(num_heads / num_heads_k);
         const int threads = 32 * gqa_ratio;
         paged_decode_split_qk_pair_kernel<<<grid, threads>>>(
             q, k_cache_paged, v_cache_paged, output, cache_seqlens, block_table,

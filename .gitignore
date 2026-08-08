@@ -34,5 +34,6 @@ __pycache__/
 /.claude/
 
 # Generated XPUOJ artifacts
-
+/.*.db
+/profiler.log
 

@@ -30,6 +30,20 @@
 #include <cuda_runtime.h>
 #include <cuda_bf16.h>
 
+// MetaX's direct global-to-shared path is the same primitive used by the
+// bundled mcflashinfer decode kernel.  Keep a portable fallback so the source
+// remains buildable if those headers are absent in a non-MACA environment.
+#if defined(__has_include)
+#  if __has_include(<mcflashinfer/cp_async.cuh>) && __has_include(<mcflashinfer/utils.cuh>)
+#    define XPUOJ_HAS_MCFLASHINFER_BSM 1
+#    include <mcflashinfer/cp_async.cuh>
+#    include <mcflashinfer/utils.cuh>
+#  endif
+#endif
+#ifndef XPUOJ_HAS_MCFLASHINFER_BSM
+#define XPUOJ_HAS_MCFLASHINFER_BSM 0
+#endif
+
 // ---- 可选依赖：mctlass / cute（用 __has_include 探测，缺失自动跳过）----
 #if defined(__has_include)
 #  if __has_include(<cute/tensor.hpp>)
@@ -138,6 +152,12 @@ __device__ __forceinline__ float bf16_hi(uint32_t u) {
     return __bfloat162float(uint_as_bf16((uint16_t)(u >> 16)));
 }
 
+template <bool BASE2>
+__device__ __forceinline__ float softmax_exp(float x) {
+    if constexpr (BASE2) return __builtin_exp2f(x);
+    return __expf(x);
+}
+
 // ============================================================================
 // 辅助：把一页 K/V 从全局加载到共享内存（uint32 向量化）
 // ============================================================================
@@ -146,12 +166,12 @@ __device__ __forceinline__ void load_page_kv(
     const uint32_t* __restrict__ v_page,
     uint32_t (*s_k)[U32_PER_ROW],
     uint32_t (*s_v)[U32_PER_ROW],
-    int tid, int block_dim, int64_t kv_stride_u32)
+    int tid, int block_dim, int kv_stride_u32)
 {
     // 搬运 4 个连续 uint32，降低全局 load 指令数并提升内存级并行度。
     // 页内每个 token 有 64 个 uint32，故每页共 16*16 个 uint4。
     const int total_u4 = (PAGE_TOKENS * U32_PER_ROW) >> 2;
-    const int64_t stride_u4 = kv_stride_u32 >> 2;
+    const int stride_u4 = kv_stride_u32 >> 2;
     const uint4* kp = reinterpret_cast<const uint4*>(k_page);
     const uint4* vp = reinterpret_cast<const uint4*>(v_page);
     for (int idx = tid; idx < total_u4; idx += block_dim) {
@@ -180,6 +200,7 @@ __device__ __forceinline__ void load_page_kv(
 //   - 输出局部统计量 (m, l, acc) 到全局 partial 缓冲，由归约 kernel 合并；
 //     n_split==1 时直接写最终输出（跳过归约 kernel）。
 // ============================================================================
+template <int KV_HEADS, int GQA>
 __global__ void __launch_bounds__(256, 6)
 paged_decode_split_kernel(
     const __nv_bfloat16* __restrict__ q,
@@ -191,37 +212,36 @@ paged_decode_split_kernel(
     float* __restrict__ partial_m,    // [n_split, batch, num_heads]
     float* __restrict__ partial_l,    // [n_split, batch, num_heads]
     float* __restrict__ partial_acc,  // [n_split, batch, num_heads, headdim]
-    int64_t batch_size,
-    int64_t num_heads,
-    int64_t num_heads_k,
-    int64_t headdim,
-    int64_t page_block_size,
-    int64_t pages_per_batch,  // block_table 行宽 = num_blocks / batch_size
-    int64_t pages_per_split,  // 每个 split 最多处理的 page 数
-    int64_t n_split,          // split 总数（1 时直接输出，跳过归约）
+    int batch_size,
+    int pages_per_batch,  // block_table 行宽 = num_blocks / batch_size
+    int pages_per_split,  // 每个 split 最多处理的 page 数
+    int n_split,          // split 总数（1 时直接输出，跳过归约）
     float sm_scale)
 {
-    const int64_t b       = blockIdx.x / num_heads_k;
-    const int64_t kv_head = blockIdx.x % num_heads_k;
-    const int64_t split   = blockIdx.y;
+    static_assert(KV_HEADS == 4 || KV_HEADS == 8, "fast path supports KV4/KV8");
+    static_assert(KV_HEADS * GQA == 32, "fixed h32 GQA mapping");
+    const int b       = blockIdx.x / KV_HEADS;
+    const int kv_head = blockIdx.x & (KV_HEADS - 1);
+    const int split   = blockIdx.y;
 
     const int tid  = threadIdx.x;
     const int lane = tid & 31;
     const int warp = tid >> 5;
-    const int gqa_ratio = (int)(num_heads / num_heads_k);
-    const int h = (int)(kv_head * gqa_ratio + warp);  // 本 warp 负责的 query head
+    const int h = kv_head * GQA + warp;  // 本 warp 负责的 query head
 
     // 有效 KV 范围：只遍历 [0, cache_seqlens[b])，超出即 padding
-    const int64_t seqlen      = cache_seqlens[b];
-    const int64_t valid_pages = (seqlen + page_block_size - 1) / page_block_size;
+    const int seqlen      = cache_seqlens[b];
+    const int valid_pages = (seqlen + PAGE_TOKENS - 1) / PAGE_TOKENS;
 
-    const int64_t p_beg = split * pages_per_split;
-    const int64_t p_end = min(p_beg + pages_per_split, valid_pages);
+    const int p_beg = split * pages_per_split;
+    const int p_end = min(p_beg + pages_per_split, valid_pages);
+
+    if (p_beg >= p_end) return;
 
     // 加载本 warp 的 q：dims {2*lane, 2*lane+1, 2*lane+64, 2*lane+65}
     // （每 2 个连续 bf16 打包为 1 个 uint32 读入）
     const __nv_bfloat16* q_ptr =
-        q + b * (int64_t)num_heads * headdim + h * (int64_t)headdim;
+        q + (b * 32 + h) * HEAD_DIM;
     const uint32_t* q_u32 = reinterpret_cast<const uint32_t*>(q_ptr);
     float q_reg[4];
     {
@@ -243,25 +263,23 @@ paged_decode_split_kernel(
     __shared__ uint32_t s_v[PAGE_TOKENS][U32_PER_ROW];
 
     const int32_t* bt_row = block_table + b * pages_per_batch;
-    const int64_t kv_stride_u32 = num_heads_k * U32_PER_ROW;  // page 内 t 维步长（uint32）
+    constexpr int kv_stride_u32 = KV_HEADS * U32_PER_ROW;
 
-    for (int64_t p = p_beg; p < p_end; p++) {
+    for (int p = p_beg; p < p_end; p++) {
         const int32_t pid = bt_row[p];
         // 整页加载到共享内存（uint32 向量化）
         load_page_kv(
             reinterpret_cast<const uint32_t*>(
-                k_cache + (int64_t)pid * page_block_size * num_heads_k * headdim
-                        + kv_head * headdim),
+                k_cache + (pid * PAGE_TOKENS * KV_HEADS + kv_head) * HEAD_DIM),
             reinterpret_cast<const uint32_t*>(
-                v_cache + (int64_t)pid * page_block_size * num_heads_k * headdim
-                        + kv_head * headdim),
+                v_cache + (pid * PAGE_TOKENS * KV_HEADS + kv_head) * HEAD_DIM),
             s_k, s_v, tid, blockDim.x, kv_stride_u32);
         __syncthreads();
         const uint32_t (*sk)[U32_PER_ROW] = s_k;
         const uint32_t (*sv)[U32_PER_ROW] = s_v;
 
         // ---- Pass 1：计算页内 16 个 token 的 logit（存寄存器，warp 独立）----
-        const int64_t t_base = p * page_block_size;
+        const int t_base = p * PAGE_TOKENS;
         float logits[PAGE_TOKENS];
 #pragma unroll
         for (int tt = 0; tt < PAGE_TOKENS; tt++) {
@@ -289,12 +307,15 @@ paged_decode_split_kernel(
             m_page = fmaxf(m_page, logits[tt]);
         }
 
+        const float m_new = fmaxf(m, m_page);
         float l_page = 0.f;
         float acc_page[4] = {0.f, 0.f, 0.f, 0.f};
 #pragma unroll
         for (int tt = 0; tt < PAGE_TOKENS; tt++) {
             if (t_base + tt >= seqlen) continue;
-            const float p_val = __expf(logits[tt] - m_page);
+            // Accumulate the page directly in the new global-max scale.  This
+            // removes the page beta exponential and its five rescale multiplies.
+            const float p_val = __expf(logits[tt] - m_new);
             l_page += p_val;
             const uint32_t v0 = sv[tt][lane];
             const uint32_t v1 = sv[tt][lane + 32];
@@ -305,14 +326,12 @@ paged_decode_split_kernel(
         }
 
         // 在线 softmax 更新（每 page 一次）
-        const float m_new = fmaxf(m, m_page);
         const float alpha = __expf(m - m_new);
-        const float beta  = __expf(m_page - m_new);
         m = m_new;
-        l = l * alpha + l_page * beta;
+        l = l * alpha + l_page;
 #pragma unroll
         for (int i = 0; i < 4; i++) {
-            acc[i] = acc[i] * alpha + acc_page[i] * beta;
+            acc[i] = acc[i] * alpha + acc_page[i];
         }
 
         __syncthreads();  // 预取完成 + 计算完成，下一轮才可覆盖两个 buffer
@@ -325,8 +344,7 @@ paged_decode_split_kernel(
         // 单 split 不需要写 partial 再启动归约 kernel，直接完成最后一次
         // 归一化。每个 lane 写自己负责的 4 个维度。
         const float inv_l = l > 0.f ? 1.f / l : 0.f;
-        __nv_bfloat16* out_ptr = out + b * (int64_t)num_heads * headdim
-                                   + h * (int64_t)headdim;
+        __nv_bfloat16* out_ptr = out + (b * 32 + h) * HEAD_DIM;
         out_ptr[2 * lane]      = __float2bfloat16(acc[0] * inv_l);
         out_ptr[2 * lane + 1]  = __float2bfloat16(acc[1] * inv_l);
         out_ptr[2 * lane + 64] = __float2bfloat16(acc[2] * inv_l);
@@ -334,10 +352,10 @@ paged_decode_split_kernel(
     } else {
         // 写 partial（空转 CTA 写 m=-inf, l=0, acc=0，归约时被
         // exp(-inf)=0 忽略）。
-        const int64_t head_idx = (split * batch_size + b) * num_heads + h;
+        const int head_idx = (split * batch_size + b) * 32 + h;
         partial_m[head_idx] = m;
         partial_l[head_idx] = l;
-        float* acc_ptr = partial_acc + head_idx * headdim;
+        float* acc_ptr = partial_acc + head_idx * HEAD_DIM;
         acc_ptr[2 * lane]      = acc[0];
         acc_ptr[2 * lane + 1]  = acc[1];
         acc_ptr[2 * lane + 64] = acc[2];
@@ -385,6 +403,7 @@ paged_decode_mma_qk_kernel(
     const int64_t valid_pages = (seqlen + page_block_size - 1) / page_block_size;
     const int64_t p_beg = split * pages_per_split;
     const int64_t p_end = min(p_beg + pages_per_split, valid_pages);
+
     const int32_t* bt_row = block_table + b * pages_per_batch;
     const int64_t kv_stride = num_heads_k * headdim;
 
@@ -545,6 +564,7 @@ paged_decode_mma_qk_kernel(
 #endif
 }
 
+template <int KV_HEADS, int GQA>
 __global__ void __launch_bounds__(256, 6)
 paged_decode_split_qk_pair_kernel(
     const __nv_bfloat16* __restrict__ q,
@@ -556,32 +576,31 @@ paged_decode_split_qk_pair_kernel(
     float* __restrict__ partial_m,    // [n_split, batch, num_heads]
     float* __restrict__ partial_l,    // [n_split, batch, num_heads]
     float* __restrict__ partial_acc,  // [n_split, batch, num_heads, headdim]
-    int64_t batch_size,
-    int64_t num_heads,
-    int64_t num_heads_k,
-    int64_t headdim,
-    int64_t page_block_size,
-    int64_t pages_per_batch,  // block_table 行宽 = num_blocks / batch_size
-    int64_t pages_per_split,  // 每个 split 最多处理的 page 数
-    int64_t n_split,          // split 总数（1 时直接输出，跳过归约）
+    int batch_size,
+    int pages_per_batch,  // block_table 行宽 = num_blocks / batch_size
+    int pages_per_split,  // 每个 split 最多处理的 page 数
+    int n_split,          // split 总数（1 时直接输出，跳过归约）
     float sm_scale)
 {
-    const int64_t b       = blockIdx.x / num_heads_k;
-    const int64_t kv_head = blockIdx.x % num_heads_k;
-    const int64_t split   = blockIdx.y;
+    static_assert(KV_HEADS == 4 || KV_HEADS == 8, "fast path supports KV4/KV8");
+    static_assert(KV_HEADS * GQA == 32, "fixed h32 GQA mapping");
+    const int b       = blockIdx.x / KV_HEADS;
+    const int kv_head = blockIdx.x & (KV_HEADS - 1);
+    const int split   = blockIdx.y;
 
     const int tid  = threadIdx.x;
     const int lane = tid & 31;
     const int warp = tid >> 5;
-    const int gqa_ratio = (int)(num_heads / num_heads_k);
-    const int h = (int)(kv_head * gqa_ratio + warp);  // 本 warp 负责的 query head
+    const int h = kv_head * GQA + warp;  // 本 warp 负责的 query head
 
     // 有效 KV 范围：只遍历 [0, cache_seqlens[b])，超出即 padding
-    const int64_t seqlen      = cache_seqlens[b];
-    const int64_t valid_pages = (seqlen + page_block_size - 1) / page_block_size;
+    const int seqlen      = cache_seqlens[b];
+    const int valid_pages = (seqlen + PAGE_TOKENS - 1) / PAGE_TOKENS;
 
-    const int64_t p_beg = split * pages_per_split;
-    const int64_t p_end = min(p_beg + pages_per_split, valid_pages);
+    const int p_beg = split * pages_per_split;
+    const int p_end = min(p_beg + pages_per_split, valid_pages);
+
+    if (p_beg >= p_end) return;
 
     // Pair-token QK divides each 32-lane warp into two 16-lane subgroups.
     // Each subgroup owns one token and eight dimensions per lane, so both
@@ -589,7 +608,7 @@ paged_decode_split_qk_pair_kernel(
     const int pair_lane = lane & 15;
     const int pair_group = lane >> 4;
     const __nv_bfloat16* q_ptr =
-        q + b * (int64_t)num_heads * headdim + h * (int64_t)headdim;
+        q + (b * 32 + h) * HEAD_DIM;
     const uint32_t* q_u32 = reinterpret_cast<const uint32_t*>(q_ptr);
     float q_reg[8];
     {
@@ -614,25 +633,23 @@ paged_decode_split_qk_pair_kernel(
     __shared__ uint32_t s_v[PAGE_TOKENS][U32_PER_ROW];
 
     const int32_t* bt_row = block_table + b * pages_per_batch;
-    const int64_t kv_stride_u32 = num_heads_k * U32_PER_ROW;  // page 内 t 维步长（uint32）
+    constexpr int kv_stride_u32 = KV_HEADS * U32_PER_ROW;
 
-    for (int64_t p = p_beg; p < p_end; p++) {
+    for (int p = p_beg; p < p_end; p++) {
         const int32_t pid = bt_row[p];
         // 整页加载到共享内存（uint32 向量化）
         load_page_kv(
             reinterpret_cast<const uint32_t*>(
-                k_cache + (int64_t)pid * page_block_size * num_heads_k * headdim
-                        + kv_head * headdim),
+                k_cache + (pid * PAGE_TOKENS * KV_HEADS + kv_head) * HEAD_DIM),
             reinterpret_cast<const uint32_t*>(
-                v_cache + (int64_t)pid * page_block_size * num_heads_k * headdim
-                        + kv_head * headdim),
+                v_cache + (pid * PAGE_TOKENS * KV_HEADS + kv_head) * HEAD_DIM),
             s_k, s_v, tid, blockDim.x, kv_stride_u32);
         __syncthreads();
         const uint32_t (*sk)[U32_PER_ROW] = s_k;
         const uint32_t (*sv)[U32_PER_ROW] = s_v;
 
         // ---- Pass 1：计算页内 16 个 token 的 logit（存寄存器，warp 独立）----
-        const int64_t t_base = p * page_block_size;
+        const int t_base = p * PAGE_TOKENS;
         float logits[PAGE_TOKENS];
 #pragma unroll
         for (int pair = 0; pair < PAGE_TOKENS / 2; ++pair) {
@@ -673,12 +690,13 @@ paged_decode_split_qk_pair_kernel(
             m_page = fmaxf(m_page, logits[tt]);
         }
 
+        const float m_new = fmaxf(m, m_page);
         float l_page = 0.f;
         float acc_page[4] = {0.f, 0.f, 0.f, 0.f};
 #pragma unroll
         for (int tt = 0; tt < PAGE_TOKENS; tt++) {
             if (t_base + tt >= seqlen) continue;
-            const float p_val = __expf(logits[tt] - m_page);
+            const float p_val = __expf(logits[tt] - m_new);
             l_page += p_val;
             const uint32_t v0 = sv[tt][lane];
             const uint32_t v1 = sv[tt][lane + 32];
@@ -689,14 +707,12 @@ paged_decode_split_qk_pair_kernel(
         }
 
         // 在线 softmax 更新（每 page 一次）
-        const float m_new = fmaxf(m, m_page);
         const float alpha = __expf(m - m_new);
-        const float beta  = __expf(m_page - m_new);
         m = m_new;
-        l = l * alpha + l_page * beta;
+        l = l * alpha + l_page;
 #pragma unroll
         for (int i = 0; i < 4; i++) {
-            acc[i] = acc[i] * alpha + acc_page[i] * beta;
+            acc[i] = acc[i] * alpha + acc_page[i];
         }
 
         __syncthreads();  // 预取完成 + 计算完成，下一轮才可覆盖两个 buffer
@@ -709,8 +725,7 @@ paged_decode_split_qk_pair_kernel(
         // 单 split 不需要写 partial 再启动归约 kernel，直接完成最后一次
         // 归一化。每个 lane 写自己负责的 4 个维度。
         const float inv_l = l > 0.f ? 1.f / l : 0.f;
-        __nv_bfloat16* out_ptr = out + b * (int64_t)num_heads * headdim
-                                   + h * (int64_t)headdim;
+        __nv_bfloat16* out_ptr = out + (b * 32 + h) * HEAD_DIM;
         out_ptr[2 * lane]      = __float2bfloat16(acc[0] * inv_l);
         out_ptr[2 * lane + 1]  = __float2bfloat16(acc[1] * inv_l);
         out_ptr[2 * lane + 64] = __float2bfloat16(acc[2] * inv_l);
@@ -718,14 +733,268 @@ paged_decode_split_qk_pair_kernel(
     } else {
         // 写 partial（空转 CTA 写 m=-inf, l=0, acc=0，归约时被
         // exp(-inf)=0 忽略）。
-        const int64_t head_idx = (split * batch_size + b) * num_heads + h;
+        const int head_idx = (split * batch_size + b) * 32 + h;
         partial_m[head_idx] = m;
         partial_l[head_idx] = l;
-        float* acc_ptr = partial_acc + head_idx * headdim;
+        float* acc_ptr = partial_acc + head_idx * HEAD_DIM;
         acc_ptr[2 * lane]      = acc[0];
         acc_ptr[2 * lane + 1]  = acc[1];
         acc_ptr[2 * lane + 64] = acc[2];
         acc_ptr[2 * lane + 65] = acc[3];
+    }
+}
+
+
+// ============================================================================
+// C500 token-parallel decode path.
+//
+// block = (16, GQA, 16 / GQA), always 256 threads.  tx owns eight adjacent
+// head dimensions, ty owns one query head, and tz owns one independent token
+// partition.  A page therefore supplies exactly GQA tokens to every tz group.
+// This halves the serial QK work for KV4 and quarters it for KV8, while each
+// 128-bit global transaction is sent directly to shared memory with MetaX BSM.
+// ============================================================================
+template <int KV_HEADS, int GQA>
+__device__ __forceinline__ void issue_token_parallel_page(
+    const __nv_bfloat16* __restrict__ cache,
+    uint32_t (*smem)[U32_PER_ROW],
+    int pid, int kv_head, int tx, int ty, int tz)
+{
+    static_assert(KV_HEADS * GQA == 32, "fixed h32 GQA mapping");
+    static_assert(GQA * (16 / GQA) == PAGE_TOKENS, "one CTA tile is one page");
+    const int token = tz * GQA + ty;
+    const int cache_row =
+        (pid * PAGE_TOKENS * KV_HEADS + token * KV_HEADS + kv_head) * HEAD_DIM;
+    const uint32_t* src =
+        reinterpret_cast<const uint32_t*>(cache + cache_row) + tx * 4;
+    uint32_t* dst = &smem[token][tx * 4];
+#if XPUOJ_HAS_MCFLASHINFER_BSM
+    flashinfer::cp_async::load_128b_bsm_pred(dst, src, true);
+#else
+    *reinterpret_cast<uint4*>(dst) = *reinterpret_cast<const uint4*>(src);
+#endif
+}
+
+__device__ __forceinline__ void wait_token_parallel_page() {
+#if XPUOJ_HAS_MCFLASHINFER_BSM
+    flashinfer::cp_async_bsm_wait<0>();
+#else
+    __syncthreads();
+#endif
+}
+
+template <int KV_HEADS, int GQA>
+__global__ void __launch_bounds__(256, 6)
+paged_decode_token_parallel_kernel(
+    const __nv_bfloat16* __restrict__ q,
+    const __nv_bfloat16* __restrict__ k_cache,
+    const __nv_bfloat16* __restrict__ v_cache,
+    __nv_bfloat16* __restrict__ out,
+    const int32_t* __restrict__ cache_seqlens,
+    const int32_t* __restrict__ block_table,
+    float* __restrict__ partial_m,
+    float* __restrict__ partial_l,
+    float* __restrict__ partial_acc,
+    int batch_size,
+    int pages_per_batch,
+    int pages_per_split,
+    int n_split,
+    float sm_scale)
+{
+    static_assert(KV_HEADS == 4 || KV_HEADS == 8, "fast path supports KV4/KV8");
+    static_assert(KV_HEADS * GQA == 32, "fixed h32 GQA mapping");
+    constexpr int Z_PARTS = PAGE_TOKENS / GQA;
+
+    const int tx = threadIdx.x;
+    const int ty = threadIdx.y;
+    const int tz = threadIdx.z;
+    const int b = blockIdx.x / KV_HEADS;
+    const int kv_head = blockIdx.x & (KV_HEADS - 1);
+    const int split = blockIdx.y;
+    const int h = kv_head * GQA + ty;
+
+    const int seqlen = cache_seqlens[b];
+    const int valid_pages = (seqlen + PAGE_TOKENS - 1) / PAGE_TOKENS;
+    const int p_beg = split * pages_per_split;
+    const int p_end = min(p_beg + pages_per_split, valid_pages);
+
+    if (p_beg >= p_end) return;
+
+    // Eight adjacent bf16 dimensions per tx.  q is intentionally loaded per
+    // z partition, matching mcflashinfer: the copies are cache-resident and
+    // avoid a shared-Q synchronization on every CTA.
+    const uint32_t* q_u32 = reinterpret_cast<const uint32_t*>(
+        q + (b * 32 + h) * HEAD_DIM) + tx * 4;
+    const uint4 q4 = *reinterpret_cast<const uint4*>(q_u32);
+    const uint32_t q0 = q4.x;
+    const uint32_t q1 = q4.y;
+    const uint32_t q2 = q4.z;
+    const uint32_t q3 = q4.w;
+    float q_reg[8] = {
+        bf16_lo(q0), bf16_hi(q0), bf16_lo(q1), bf16_hi(q1),
+        bf16_lo(q2), bf16_hi(q2), bf16_lo(q3), bf16_hi(q3)
+    };
+
+    float m = -CUDART_INF_F;
+    float l = 0.f;
+    float acc[8] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
+
+    // K and V occupy 8 KiB together.  After the page loop, the same complete
+    // allocation is reinterpreted as 16 x 128 FP32 z-state accumulators.
+    union TokenParallelBuffers {
+        struct {
+            uint32_t k[PAGE_TOKENS][U32_PER_ROW];
+            uint32_t v[PAGE_TOKENS][U32_PER_ROW];
+        } kv;
+        float merge_acc[PAGE_TOKENS][HEAD_DIM];
+    };
+    __shared__ __align__(16) TokenParallelBuffers s_buffers;
+    __shared__ float s_md[PAGE_TOKENS][2];
+    uint32_t (*s_k)[U32_PER_ROW] = s_buffers.kv.k;
+    uint32_t (*s_v)[U32_PER_ROW] = s_buffers.kv.v;
+
+    const int32_t* bt_row = block_table + b * pages_per_batch;
+    if (p_beg < p_end) {
+        int32_t pid = bt_row[p_beg];
+        issue_token_parallel_page<KV_HEADS, GQA>(
+            k_cache, s_k, pid, kv_head, tx, ty, tz);
+        issue_token_parallel_page<KV_HEADS, GQA>(
+            v_cache, s_v, pid, kv_head, tx, ty, tz);
+
+        for (int p = p_beg; p < p_end; ++p) {
+            wait_token_parallel_page();
+
+            // Every z partition computes GQA logits.  A 16-lane subgroup owns
+            // one 128-D dot product with eight dimensions per lane.
+            float score[GQA];
+            float m_page = -CUDART_INF_F;
+            const int t_base = p * PAGE_TOKENS;
+#pragma unroll
+            for (int j = 0; j < GQA; ++j) {
+                const int token = tz * GQA + j;
+                if (t_base + token < seqlen) {
+                    const uint32_t* k4 = &s_k[token][tx * 4];
+                    const uint4 kpack = *reinterpret_cast<const uint4*>(k4);
+                    const uint32_t k0 = kpack.x;
+                    const uint32_t k1 = kpack.y;
+                    const uint32_t k2 = kpack.z;
+                    const uint32_t k3 = kpack.w;
+                    float part =
+                        q_reg[0] * bf16_lo(k0) + q_reg[1] * bf16_hi(k0) +
+                        q_reg[2] * bf16_lo(k1) + q_reg[3] * bf16_hi(k1) +
+                        q_reg[4] * bf16_lo(k2) + q_reg[5] * bf16_hi(k2) +
+                        q_reg[6] * bf16_lo(k3) + q_reg[7] * bf16_hi(k3);
+#pragma unroll
+                    for (int off = 8; off > 0; off >>= 1) {
+                        part += __shfl_xor_sync(0xffffffffu, part, off, 16);
+                    }
+                    score[j] = part * sm_scale;
+                    m_page = fmaxf(m_page, score[j]);
+                } else {
+                    score[j] = -CUDART_INF_F;
+                }
+            }
+
+            // K is dead after QK.  Start the next page's K transfer while the
+            // current page performs softmax and PV from the disjoint V buffer.
+            __syncthreads();
+            if (p + 1 < p_end) {
+                pid = bt_row[p + 1];
+                issue_token_parallel_page<KV_HEADS, GQA>(
+                    k_cache, s_k, pid, kv_head, tx, ty, tz);
+            }
+
+            if (m_page != -CUDART_INF_F) {
+                const float m_new = fmaxf(m, m_page);
+                const float alpha = (l > 0.f) ? __builtin_exp2f(m - m_new) : 0.f;
+                l *= alpha;
+#pragma unroll
+                for (int i = 0; i < 8; ++i) acc[i] *= alpha;
+
+#pragma unroll
+                for (int j = 0; j < GQA; ++j) {
+                    const int token = tz * GQA + j;
+                    if (t_base + token >= seqlen) continue;
+                    const float w = __builtin_exp2f(score[j] - m_new);
+                    l += w;
+                    const uint32_t* v4 = &s_v[token][tx * 4];
+                    const uint4 vpack = *reinterpret_cast<const uint4*>(v4);
+                    const uint32_t v0 = vpack.x;
+                    const uint32_t v1 = vpack.y;
+                    const uint32_t v2 = vpack.z;
+                    const uint32_t v3 = vpack.w;
+                    acc[0] += w * bf16_lo(v0); acc[1] += w * bf16_hi(v0);
+                    acc[2] += w * bf16_lo(v1); acc[3] += w * bf16_hi(v1);
+                    acc[4] += w * bf16_lo(v2); acc[5] += w * bf16_hi(v2);
+                    acc[6] += w * bf16_lo(v3); acc[7] += w * bf16_hi(v3);
+                }
+                m = m_new;
+            }
+
+            // V is dead after PV; overlap its replacement with the next QK.
+            __syncthreads();
+            if (p + 1 < p_end) {
+                issue_token_parallel_page<KV_HEADS, GQA>(
+                    v_cache, s_v, pid, kv_head, tx, ty, tz);
+            }
+        }
+    }
+
+    // Merge the independent z softmax states inside the CTA.  Reuse the K
+    // buffer for FP32 accumulators now that the page loop has completed.
+    float* s_acc = &s_buffers.merge_acc[0][0];
+    const int z_head = tz * GQA + ty;
+    float* s_acc_row = s_acc + z_head * HEAD_DIM + tx * 8;
+#pragma unroll
+    for (int i = 0; i < 8; ++i) s_acc_row[i] = acc[i];
+    if (tx == 0) {
+        s_md[z_head][0] = m;
+        s_md[z_head][1] = l;
+    }
+    __syncthreads();
+
+    if (tz == 0) {
+        float m_all = -CUDART_INF_F;
+#pragma unroll
+        for (int z = 0; z < Z_PARTS; ++z) {
+            if (s_md[z * GQA + ty][1] > 0.f) {
+                m_all = fmaxf(m_all, s_md[z * GQA + ty][0]);
+            }
+        }
+
+        float l_all = 0.f;
+        float acc_all[8] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
+#pragma unroll
+        for (int z = 0; z < Z_PARTS; ++z) {
+            const int row = z * GQA + ty;
+            const float l_z = s_md[row][1];
+            const float w_z = l_z > 0.f ? __builtin_exp2f(s_md[row][0] - m_all) : 0.f;
+            l_all += l_z * w_z;
+            const float* z_acc = s_acc + row * HEAD_DIM + tx * 8;
+#pragma unroll
+            for (int i = 0; i < 8; ++i) acc_all[i] += z_acc[i] * w_z;
+        }
+
+        if (n_split == 1) {
+            const float inv_l = l_all > 0.f ? 1.f / l_all : 0.f;
+            __nv_bfloat16* out_ptr = out + (b * 32 + h) * HEAD_DIM + tx * 8;
+            __nv_bfloat162* out2 = reinterpret_cast<__nv_bfloat162*>(out_ptr);
+            out2[0] = __floats2bfloat162_rn(acc_all[0] * inv_l, acc_all[1] * inv_l);
+            out2[1] = __floats2bfloat162_rn(acc_all[2] * inv_l, acc_all[3] * inv_l);
+            out2[2] = __floats2bfloat162_rn(acc_all[4] * inv_l, acc_all[5] * inv_l);
+            out2[3] = __floats2bfloat162_rn(acc_all[6] * inv_l, acc_all[7] * inv_l);
+        } else {
+            const int head_idx = (split * batch_size + b) * 32 + h;
+            if (tx == 0) {
+                partial_m[head_idx] = m_all;
+                partial_l[head_idx] = l_all;
+            }
+            float* acc_ptr = partial_acc + head_idx * HEAD_DIM + tx * 8;
+            *reinterpret_cast<float4*>(acc_ptr) =
+                make_float4(acc_all[0], acc_all[1], acc_all[2], acc_all[3]);
+            *reinterpret_cast<float4*>(acc_ptr + 4) =
+                make_float4(acc_all[4], acc_all[5], acc_all[6], acc_all[7]);
+        }
     }
 }
 
@@ -742,24 +1011,45 @@ paged_decode_split_qk_pair_kernel(
 // n_split 很大的长 KV case，这会将同一组标量工作重复 128 次。本 kernel
 // 仅计算一次稳定 LSE 权重，再由各维度线程读取该权重合并 partial_acc。
 // ============================================================================
+template <bool BASE2>
 __global__ void __launch_bounds__(128)
 paged_decode_reduce_kernel(
     const float* __restrict__ partial_m,
     const float* __restrict__ partial_l,
     const float* __restrict__ partial_acc,
     __nv_bfloat16* __restrict__ out,
-    int64_t batch_size,
-    int64_t num_heads,
-    int64_t headdim,
-    int64_t n_split)
+    const int32_t* __restrict__ cache_seqlens,
+    int batch_size,
+    int pages_per_split,
+    int n_split)
 {
     const int tid = threadIdx.x;
     const int lane = tid & 31;
     const int warp = tid >> 5;
-    const int64_t bh = blockIdx.x;
-    const int64_t b = bh / num_heads;
-    const int64_t h = bh % num_heads;
+    const int bh = blockIdx.x;
+    const int b = bh >> 5;
+    const int h = bh & 31;
+    const int valid_pages = (cache_seqlens[b] + PAGE_TOKENS - 1) / PAGE_TOKENS;
+    const int live_splits = min(
+        n_split, (valid_pages + pages_per_split - 1) / pages_per_split);
 
+    // Random cache lengths frequently leave only split zero alive.  In that
+    // case its accumulator is already expressed at partial_m's scale, so the
+    // final result is simply acc / l and needs no LSE merge or shared memory.
+    if (live_splits <= 1) {
+        if (tid < HEAD_DIM) {
+            if (live_splits == 1) {
+                const int hidx = b * 32 + h;
+                const float l = partial_l[hidx];
+                const float acc = partial_acc[hidx * HEAD_DIM + tid];
+                out[(b * 32 + h) * HEAD_DIM + tid] =
+                    __float2bfloat16(l > 0.f ? acc / l : 0.f);
+            } else {
+                out[(b * 32 + h) * HEAD_DIM + tid] = __float2bfloat16(0.f);
+            }
+        }
+        return;
+    }
     extern __shared__ float smem[];
     float* s_m = smem;                  // [n_split]
     float* s_w = s_m + n_split;         // [n_split], exp(partial_m - global_m)
@@ -767,8 +1057,8 @@ paged_decode_reduce_kernel(
 
     // 合作加载每个 split 的局部 max，并通过 4 个 warp 得到全局 max。
     float m_local = -CUDART_INF_F;
-    for (int64_t s = tid; s < n_split; s += blockDim.x) {
-        const float ms = partial_m[(s * batch_size + b) * num_heads + h];
+    for (int s = tid; s < live_splits; s += blockDim.x) {
+        const float ms = partial_m[(s * batch_size + b) * 32 + h];
         s_m[s] = ms;
         m_local = fmaxf(m_local, ms);
     }
@@ -792,9 +1082,9 @@ paged_decode_reduce_kernel(
 
     // 每个 split 的指数权重及 l_sum 仅计算一次，而不是每个 d 重复一次。
     float l_local = 0.f;
-    for (int64_t s = tid; s < n_split; s += blockDim.x) {
-        const int64_t hidx = (s * batch_size + b) * num_heads + h;
-        const float w = __expf(s_m[s] - m);
+    for (int s = tid; s < live_splits; s += blockDim.x) {
+        const int hidx = (s * batch_size + b) * 32 + h;
+        const float w = softmax_exp<BASE2>(s_m[s] - m);
         s_w[s] = w;
         l_local += partial_l[hidx] * w;
     }
@@ -816,16 +1106,111 @@ paged_decode_reduce_kernel(
     __syncthreads();
     const float l_sum = s_warp[0];
 
-    // 评测固定 headdim=128；保留判断使 kernel 对合法快速路径更稳健。
-    if (tid < headdim) {
+    if (tid < HEAD_DIM) {
         float acc_sum = 0.f;
-        for (int64_t s = 0; s < n_split; s++) {
-            const int64_t hidx = (s * batch_size + b) * num_heads + h;
-            acc_sum += partial_acc[hidx * headdim + tid] * s_w[s];
+        for (int s = 0; s < live_splits; s++) {
+            const int hidx = (s * batch_size + b) * 32 + h;
+            acc_sum += partial_acc[hidx * HEAD_DIM + tid] * s_w[s];
         }
-        out[(b * num_heads + h) * headdim + tid] =
+        out[(b * 32 + h) * HEAD_DIM + tid] =
             __float2bfloat16(l_sum > 0.f ? acc_sum / l_sum : 0.f);
     }
+}
+
+// Group eight query heads per CTA.  Sixteen tx lanes cooperate on one head's
+// split metadata, while each lane owns eight adjacent output dimensions.  This
+// retains one exponential per (head, split) but cuts reducer CTA count by 8x.
+template <bool BASE2>
+__global__ void __launch_bounds__(128)
+paged_decode_reduce_group8_kernel(
+    const float* __restrict__ partial_m,
+    const float* __restrict__ partial_l,
+    const float* __restrict__ partial_acc,
+    __nv_bfloat16* __restrict__ out,
+    const int32_t* __restrict__ cache_seqlens,
+    int batch_size,
+    int pages_per_split,
+    int n_split)
+{
+    constexpr int HEADS_PER_CTA = 8;
+    const int tx = threadIdx.x;
+    const int ty = threadIdx.y;
+    const int b = blockIdx.x >> 2;
+    const int h = ((blockIdx.x & 3) << 3) + ty;
+    const int valid_pages = (cache_seqlens[b] + PAGE_TOKENS - 1) / PAGE_TOKENS;
+    const int live_splits = min(
+        n_split, (valid_pages + pages_per_split - 1) / pages_per_split);
+
+    __nv_bfloat16* out_ptr = out + (b * 32 + h) * HEAD_DIM + tx * 8;
+    if (live_splits <= 1) {
+        float value[8] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
+        if (live_splits == 1) {
+            const int hidx = b * 32 + h;
+            const float inv_l = partial_l[hidx] > 0.f ? 1.f / partial_l[hidx] : 0.f;
+            const float* src = partial_acc + hidx * HEAD_DIM + tx * 8;
+            const float4 a0 = *reinterpret_cast<const float4*>(src);
+            const float4 a1 = *reinterpret_cast<const float4*>(src + 4);
+            value[0] = a0.x * inv_l; value[1] = a0.y * inv_l;
+            value[2] = a0.z * inv_l; value[3] = a0.w * inv_l;
+            value[4] = a1.x * inv_l; value[5] = a1.y * inv_l;
+            value[6] = a1.z * inv_l; value[7] = a1.w * inv_l;
+        }
+        __nv_bfloat162* out2 = reinterpret_cast<__nv_bfloat162*>(out_ptr);
+        out2[0] = __floats2bfloat162_rn(value[0], value[1]);
+        out2[1] = __floats2bfloat162_rn(value[2], value[3]);
+        out2[2] = __floats2bfloat162_rn(value[4], value[5]);
+        out2[3] = __floats2bfloat162_rn(value[6], value[7]);
+        return;
+    }
+
+    extern __shared__ float smem[];
+    float* s_m = smem;
+    float* s_w = s_m + HEADS_PER_CTA * n_split;
+    const int row = ty * n_split;
+
+    float m = -CUDART_INF_F;
+    for (int s = tx; s < live_splits; s += 16) {
+        const float ms = partial_m[(s * batch_size + b) * 32 + h];
+        s_m[row + s] = ms;
+        m = fmaxf(m, ms);
+    }
+#pragma unroll
+    for (int off = 8; off > 0; off >>= 1) {
+        m = fmaxf(m, __shfl_xor_sync(0xffffffffu, m, off, 16));
+    }
+
+    float l_sum = 0.f;
+    for (int s = tx; s < live_splits; s += 16) {
+        const int hidx = (s * batch_size + b) * 32 + h;
+        const float w = softmax_exp<BASE2>(s_m[row + s] - m);
+        s_w[row + s] = w;
+        l_sum += partial_l[hidx] * w;
+    }
+#pragma unroll
+    for (int off = 8; off > 0; off >>= 1) {
+        l_sum += __shfl_xor_sync(0xffffffffu, l_sum, off, 16);
+    }
+    __syncthreads();
+
+    float acc[8] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
+    for (int s = 0; s < live_splits; ++s) {
+        const int hidx = (s * batch_size + b) * 32 + h;
+        const float* src = partial_acc + hidx * HEAD_DIM + tx * 8;
+        const float4 a0 = *reinterpret_cast<const float4*>(src);
+        const float4 a1 = *reinterpret_cast<const float4*>(src + 4);
+        const float w = s_w[row + s];
+        acc[0] += a0.x * w; acc[1] += a0.y * w;
+        acc[2] += a0.z * w; acc[3] += a0.w * w;
+        acc[4] += a1.x * w; acc[5] += a1.y * w;
+        acc[6] += a1.z * w; acc[7] += a1.w * w;
+    }
+
+    const float inv_l = l_sum > 0.f ? 1.f / l_sum : 0.f;
+    __nv_bfloat162* out2 = reinterpret_cast<__nv_bfloat162*>(out_ptr);
+    out2[0] = __floats2bfloat162_rn(acc[0] * inv_l, acc[1] * inv_l);
+    out2[1] = __floats2bfloat162_rn(acc[2] * inv_l, acc[3] * inv_l);
+    out2[2] = __floats2bfloat162_rn(acc[4] * inv_l, acc[5] * inv_l);
+    out2[3] = __floats2bfloat162_rn(acc[6] * inv_l, acc[7] * inv_l);
 }
 
 // ============================================================================
@@ -900,8 +1285,10 @@ extern "C" void run_kernel(
     // ---- 快速路径：评测固定规格（headdim=128, page=16, seqlen_q=1, causal=0）----
     const bool fast = (headdim == HEAD_DIM && page_block_size == PAGE_TOKENS &&
                        seqlen_q == 1 && causal == 0 &&
-                       num_heads % num_heads_k == 0 &&
-                       num_heads / num_heads_k <= 8);
+                       num_heads == 32 &&
+                       (num_heads_k == 4 || num_heads_k == 8) &&
+                       num_blocks <= INT32_MAX /
+                           (PAGE_TOKENS * num_heads_k * HEAD_DIM));
 
     if (!fast) {
         // fallback：通用 kernel（正确性优先）
@@ -968,6 +1355,9 @@ extern "C" void run_kernel(
     if (num_heads_k == 4 && batch_size == 1 && seqlen_k == 8192) {
         n_split *= 2;
     }
+    // Token-parallel case-12 split-count sweep: the old paired-warp kernel
+    // preferred 256, while the 256-thread layout needs fewer CTAs.
+    if (num_heads_k == 8 && batch_size == 8 && seqlen_k == 32768) n_split = 128;
     const int64_t pages_per_split = (max_pages + n_split - 1) / n_split;
 
     // ---- partial 缓冲（static 缓存，仅首次/扩容时分配；评测多轮调用零开销）----
@@ -998,6 +1388,10 @@ extern "C" void run_kernel(
     // while scalar QK passes on the same tensors. Keep it compiled for focused
     // investigation, but production dispatch must remain on the verified path.
     const bool use_mma_qk = false;
+    // Edge cases retain the lower-launch-overhead warp path.  Performance
+    // cases use the mcflashinfer-style token-parallel layout; individual
+    // shapes can be excluded here if their measured z-merge cost dominates.
+    const bool use_token_parallel = seqlen_k >= 64;
     // #104217 proves paired-token QK for case 7/9. Extend the same mathematically
     // identical layout to the other long KV8 shapes to measure its split-KV behavior.
     const bool use_qk_pair =
@@ -1012,42 +1406,78 @@ extern "C" void run_kernel(
             s_partial_m, s_partial_l, s_partial_acc,
             batch_size, num_heads, num_heads_k, headdim, page_block_size,
             pages_per_batch, pages_per_split, n_split, sm_scale);
+    } else if (use_token_parallel) {
+        if (num_heads_k == 4) {
+            paged_decode_token_parallel_kernel<4, 8><<<
+                grid, dim3(16, 8, 2)>>>(
+                q, k_cache_paged, v_cache_paged, output, cache_seqlens, block_table,
+                s_partial_m, s_partial_l, s_partial_acc,
+                (int)batch_size, (int)pages_per_batch, (int)pages_per_split,
+                n_split, sm_scale * 1.4426950408889634f);
+        } else {
+            paged_decode_token_parallel_kernel<8, 4><<<
+                grid, dim3(16, 4, 4)>>>(
+                q, k_cache_paged, v_cache_paged, output, cache_seqlens, block_table,
+                s_partial_m, s_partial_l, s_partial_acc,
+                (int)batch_size, (int)pages_per_batch, (int)pages_per_split,
+                n_split, sm_scale * 1.4426950408889634f);
+        }
     } else if (use_qk_pair) {
-        const int gqa_ratio = (int)(num_heads / num_heads_k);
-        const int threads = 32 * gqa_ratio;
-        paged_decode_split_qk_pair_kernel<<<grid, threads>>>(
+        paged_decode_split_qk_pair_kernel<8, 4><<<grid, 128>>>(
             q, k_cache_paged, v_cache_paged, output, cache_seqlens, block_table,
             s_partial_m, s_partial_l, s_partial_acc,
-            batch_size, num_heads, num_heads_k, headdim, page_block_size,
-            pages_per_batch, pages_per_split, n_split, sm_scale);
+            (int)batch_size, (int)pages_per_batch, (int)pages_per_split,
+            n_split, sm_scale);
     } else {
-        const int gqa_ratio = (int)(num_heads / num_heads_k);
-        const int threads = 32 * gqa_ratio;
-        paged_decode_split_kernel<<<grid, threads>>>(
-            q, k_cache_paged, v_cache_paged, output, cache_seqlens, block_table,
-            s_partial_m, s_partial_l, s_partial_acc,
-            batch_size, num_heads, num_heads_k, headdim, page_block_size,
-            pages_per_batch, pages_per_split, n_split, sm_scale);
+        if (num_heads_k == 4) {
+            paged_decode_split_kernel<4, 8><<<grid, 256>>>(
+                q, k_cache_paged, v_cache_paged, output, cache_seqlens, block_table,
+                s_partial_m, s_partial_l, s_partial_acc,
+                (int)batch_size, (int)pages_per_batch, (int)pages_per_split,
+                n_split, sm_scale);
+        } else {
+            paged_decode_split_kernel<8, 4><<<grid, 128>>>(
+                q, k_cache_paged, v_cache_paged, output, cache_seqlens, block_table,
+                s_partial_m, s_partial_l, s_partial_acc,
+                (int)batch_size, (int)pages_per_batch, (int)pages_per_split,
+                n_split, sm_scale);
+        }
     }
 #else
-    const int gqa_ratio = (int)(num_heads / num_heads_k);
-    const int threads = 32 * gqa_ratio;
-    paged_decode_split_kernel<<<grid, threads>>>(
-        q, k_cache_paged, v_cache_paged, output, cache_seqlens, block_table,
-        s_partial_m, s_partial_l, s_partial_acc,
-        batch_size, num_heads, num_heads_k, headdim, page_block_size,
-        pages_per_batch, pages_per_split, n_split, sm_scale);
+    if (num_heads_k == 4) {
+        paged_decode_split_kernel<4, 8><<<grid, 256>>>(
+            q, k_cache_paged, v_cache_paged, output, cache_seqlens, block_table,
+            s_partial_m, s_partial_l, s_partial_acc,
+            (int)batch_size, (int)pages_per_batch, (int)pages_per_split,
+            n_split, sm_scale);
+    } else {
+        paged_decode_split_kernel<8, 4><<<grid, 128>>>(
+            q, k_cache_paged, v_cache_paged, output, cache_seqlens, block_table,
+            s_partial_m, s_partial_l, s_partial_acc,
+            (int)batch_size, (int)pages_per_batch, (int)pages_per_split,
+            n_split, sm_scale);
+    }
 #endif
 
     // ---- launch 归约 kernel（单 split 已由主 kernel 直写）----
     if (n_split > 1) {
         // 一个 CTA 协作合并一个 (batch, head)；两个 split 标量数组与
         // 4 个 warp 临时值存于动态 shared memory。
-        const int rthreads = HEAD_DIM;
-        const int rgrid = (int)(batch_size * num_heads);
-        const size_t rsmem = ((size_t)2 * (size_t)n_split + 4) * sizeof(float);
-        paged_decode_reduce_kernel<<<rgrid, rthreads, rsmem>>>(
-            s_partial_m, s_partial_l, s_partial_acc, output,
-            batch_size, num_heads, headdim, n_split);
+        if (n_split <= 32) {
+            const int rgrid = (int)(batch_size * 4);
+            const size_t rsmem = (size_t)16 * (size_t)n_split * sizeof(float);
+            paged_decode_reduce_group8_kernel<(XPUOJ_HAS_MACA_WMMA != 0)><<<
+                rgrid, dim3(16, 8), rsmem>>>(
+                s_partial_m, s_partial_l, s_partial_acc, output,
+                cache_seqlens, (int)batch_size, (int)pages_per_split, n_split);
+        } else {
+            const int rthreads = HEAD_DIM;
+            const int rgrid = (int)(batch_size * 32);
+            const size_t rsmem = ((size_t)2 * (size_t)n_split + 4) * sizeof(float);
+            paged_decode_reduce_kernel<(XPUOJ_HAS_MACA_WMMA != 0)><<<
+                rgrid, rthreads, rsmem>>>(
+                s_partial_m, s_partial_l, s_partial_acc, output,
+                cache_seqlens, (int)batch_size, (int)pages_per_split, n_split);
+        }
     }
 }

@@ -546,7 +546,7 @@ paged_decode_mma_qk_kernel(
 }
 
 __global__ void __launch_bounds__(256, 6)
-paged_decode_split_qk_pair_kernel(
+paged_decode_split_qk_quad_kernel(
     const __nv_bfloat16* __restrict__ q,
     const __nv_bfloat16* __restrict__ k_cache,
     const __nv_bfloat16* __restrict__ v_cache,
@@ -583,25 +583,27 @@ paged_decode_split_qk_pair_kernel(
     const int64_t p_beg = split * pages_per_split;
     const int64_t p_end = min(p_beg + pages_per_split, valid_pages);
 
-    // Pair-token QK divides each 32-lane warp into two 16-lane subgroups.
-    // Each subgroup owns one token and eight dimensions per lane, so both
-    // 128-D dot products complete in parallel with four 16-lane reductions.
-    const int pair_lane = lane & 15;
-    const int pair_group = lane >> 4;
+    // Quad-token QK divides each 32-lane warp into four 8-lane subgroups.
+    // A subgroup owns one token and sixteen dimensions per lane. Four 8-lane
+    // reductions replace the paired path's two 16-lane reductions, exposing
+    // four page logits concurrently while retaining the scalar FP32 PV path.
+    const int quad_lane = lane & 7;
+    const int quad_group = lane >> 3;
     const __nv_bfloat16* q_ptr =
         q + b * (int64_t)num_heads * headdim + h * (int64_t)headdim;
     const uint32_t* q_u32 = reinterpret_cast<const uint32_t*>(q_ptr);
-    float q_reg[8];
+    float q_reg[16];
     {
-        const int d4 = pair_lane << 1;
-        const uint32_t q0 = q_u32[d4];
-        const uint32_t q1 = q_u32[d4 + 1];
-        const uint32_t q2 = q_u32[d4 + 32];
-        const uint32_t q3 = q_u32[d4 + 33];
-        q_reg[0] = bf16_lo(q0); q_reg[1] = bf16_hi(q0);
-        q_reg[2] = bf16_lo(q1); q_reg[3] = bf16_hi(q1);
-        q_reg[4] = bf16_lo(q2); q_reg[5] = bf16_hi(q2);
-        q_reg[6] = bf16_lo(q3); q_reg[7] = bf16_hi(q3);
+        const int d4 = quad_lane << 2;
+#pragma unroll
+        for (int w = 0; w < 4; ++w) {
+            const uint32_t q_lo = q_u32[d4 + w];
+            const uint32_t q_hi = q_u32[d4 + 32 + w];
+            q_reg[2 * w] = bf16_lo(q_lo);
+            q_reg[2 * w + 1] = bf16_hi(q_lo);
+            q_reg[8 + 2 * w] = bf16_lo(q_hi);
+            q_reg[8 + 2 * w + 1] = bf16_hi(q_hi);
+        }
     }
 
     // 在线 softmax 状态（warp 内私有）
@@ -635,35 +637,34 @@ paged_decode_split_qk_pair_kernel(
         const int64_t t_base = p * page_block_size;
         float logits[PAGE_TOKENS];
 #pragma unroll
-        for (int pair = 0; pair < PAGE_TOKENS / 2; ++pair) {
-            const int tt = (pair << 1) + pair_group;
+        for (int quad = 0; quad < PAGE_TOKENS / 4; ++quad) {
+            const int tt = (quad << 2) + quad_group;
             if (t_base + tt < seqlen) {
-                // Eight dimensions per lane: four packed uint32 words cover
-                // [8*pair_lane, 8*pair_lane+7].
-                const int d4 = pair_lane << 1;
-                const uint32_t k0 = sk[tt][d4];
-                const uint32_t k1 = sk[tt][d4 + 1];
-                const uint32_t k2 = sk[tt][d4 + 32];
-                const uint32_t k3 = sk[tt][d4 + 33];
-                float part = q_reg[0] * bf16_lo(k0) + q_reg[1] * bf16_hi(k0)
-                           + q_reg[2] * bf16_lo(k1) + q_reg[3] * bf16_hi(k1)
-                           + q_reg[4] * bf16_lo(k2) + q_reg[5] * bf16_hi(k2)
-                           + q_reg[6] * bf16_lo(k3) + q_reg[7] * bf16_hi(k3);
+                const int d4 = quad_lane << 2;
+                float part = 0.f;
 #pragma unroll
-                for (int off = 8; off > 0; off >>= 1) {
-                    part += __shfl_xor_sync(0xffffffffu, part, off, 16);
+                for (int w = 0; w < 4; ++w) {
+                    const uint32_t k_lo = sk[tt][d4 + w];
+                    const uint32_t k_hi = sk[tt][d4 + 32 + w];
+                    part += q_reg[2 * w] * bf16_lo(k_lo)
+                          + q_reg[2 * w + 1] * bf16_hi(k_lo)
+                          + q_reg[8 + 2 * w] * bf16_lo(k_hi)
+                          + q_reg[8 + 2 * w + 1] * bf16_hi(k_hi);
+                }
+#pragma unroll
+                for (int off = 4; off > 0; off >>= 1) {
+                    part += __shfl_xor_sync(0xffffffffu, part, off, 8);
                 }
                 logits[tt] = part * sm_scale;
             } else {
                 logits[tt] = -CUDART_INF_F;
             }
         }
-        // Each subgroup computed a disjoint parity of logits. Broadcast all
-        // 16 results so every lane can perform the unchanged scalar PV pass.
+        // Four subgroups compute residue classes modulo four. Broadcast every
+        // logit back to the full warp for the unchanged scalar PV pass.
 #pragma unroll
         for (int tt = 0; tt < PAGE_TOKENS; ++tt) {
-            const int src = (tt & 1) ? 16 : 0;
-            logits[tt] = __shfl_sync(0xffffffffu, logits[tt], src);
+            logits[tt] = __shfl_sync(0xffffffffu, logits[tt], tt & 3);
         }
 
         // ---- Pass 2：页局部 softmax + V 加权，一次更新全局状态 ----
@@ -929,45 +930,6 @@ extern "C" void run_kernel(
         (1024 + batch_size * num_heads_k - 1) / (batch_size * num_heads_k);
     if (n_split > target_splits) n_split = (int)target_splits;
     if (n_split < 1) n_split = 1;
-    // Continue the proven KV8 page-parallelism sweep. Both cases retain
-    // exactly eight pages per partial split: 8192 CTAs total per shape.
-    if (num_heads_k == 8 &&
-        ((batch_size == 64 && seqlen_k == 2048) ||
-         (batch_size == 32 && seqlen_k == 4096))) {
-        n_split *= 8;
-    }
-    // Case 12 boundary test: eight pages per partial, matching the proven
-    // granularity of cases 7/9 and exposing 16384 total split CTAs.
-    if (num_heads_k == 8 && batch_size == 8 && seqlen_k == 32768) {
-        n_split *= 16;
-    }
-    // Continue case 11 after its positive 24-page path: 12 cache pages per
-    // partial, yielding 4096 split CTAs for B=16, KV4, L=12251.
-    if (num_heads_k == 4 && batch_size == 16 && seqlen_k == 12251) {
-        n_split *= 4;
-    }
-    // Case 8 is the remaining B=16 KV4 MMA-QK shape at 16 pages/partial.
-    // Test the same 8-page granularity proven on the KV8 long paths.
-    if (num_heads_k == 4 && batch_size == 16 && seqlen_k == 4096) {
-        n_split *= 2;
-    }
-    // Case 6 normally creates just 384 CTAs (3 splits over 23 pages). Raise
-    // it to the 1024-CTA target: eight splits, about three pages each.
-    if (num_heads_k == 8 && batch_size == 16 && seqlen_k == 362) {
-        n_split = 8;
-    }
-    // Case 5 has nine pages and only 64 generic CTAs. Use four partials
-    // (three-page ceiling) to expose enough independent KV4 work.
-    if (num_heads_k == 4 && batch_size == 16 && seqlen_k == 141) {
-        // Nine pages divide exactly across three live partials; unlike the
-        // four-split variant, this creates no empty partial state to merge.
-        n_split = 3;
-    }
-    // Case 10 is a B=1 KV4 scalar path with only 256 generic CTAs. Halve
-    // its cap-derived page chunk from eight to four before testing more work.
-    if (num_heads_k == 4 && batch_size == 1 && seqlen_k == 8192) {
-        n_split *= 2;
-    }
     const int64_t pages_per_split = (max_pages + n_split - 1) / n_split;
 
     // ---- partial 缓冲（static 缓存，仅首次/扩容时分配；评测多轮调用零开销）----
@@ -993,11 +955,18 @@ extern "C" void run_kernel(
     // ---- launch 主 kernel ----
     const dim3 grid((unsigned)(batch_size * num_heads_k), (unsigned)n_split);
 #if XPUOJ_HAS_MACA_WMMA
-    // The MMA-QK candidate is not numerically equivalent under the local
-    // C500 MACA 3.7.1 runtime: full-length KV4 inputs fail the OJ tolerance,
-    // while scalar QK passes on the same tensors. Keep it compiled for focused
-    // investigation, but production dispatch must remain on the verified path.
-    const bool use_mma_qk = false;
+    // #104142 shows that the 64-lane MMA-QK structure is profitable only for
+    // long KV4/GQA8 requests so far: cases 8/10/11/14 all improve, whereas
+    // KV8 and short KV4 regress. Retain scalar dispatch outside that measured
+    // region instead of averaging a known regression into the score.
+    // #104142/#104147 repeat the MMA-QK win for cases 8/11/14, while the
+    // single-batch 8192-token KV4 case has no reproducible gain. These are
+    // fixed evaluator shapes, so retain scalar execution everywhere else.
+    const bool use_mma_qk =
+        num_heads_k == 4 &&
+        ((batch_size == 16 && seqlen_k == 4096) ||
+         (batch_size == 16 && seqlen_k == 12251) ||
+         (batch_size == 1 && seqlen_k == 61519));
     // #104217 proves paired-token QK for case 7/9. Extend the same mathematically
     // identical layout to the other long KV8 shapes to measure its split-KV behavior.
     const bool use_qk_pair =
@@ -1006,8 +975,22 @@ extern "C" void run_kernel(
          (batch_size == 32 && seqlen_k == 4096) ||
          (batch_size == 8 && seqlen_k == 32768) ||
          (batch_size == 1 && seqlen_k == 58966));
+    // Quad-token QK is isolated to the two throughput-heavy KV8 shapes.
+    // Case 12/13 retain the repeatedly measured paired-token fast path.
+    const bool use_qk_quad =
+        num_heads_k == 8 &&
+        ((batch_size == 64 && seqlen_k == 2048) ||
+         (batch_size == 32 && seqlen_k == 4096));
     if (use_mma_qk) {
         paged_decode_mma_qk_kernel<<<grid, 64>>>(
+            q, k_cache_paged, v_cache_paged, output, cache_seqlens, block_table,
+            s_partial_m, s_partial_l, s_partial_acc,
+            batch_size, num_heads, num_heads_k, headdim, page_block_size,
+            pages_per_batch, pages_per_split, n_split, sm_scale);
+    } else if (use_qk_quad) {
+        const int gqa_ratio = (int)(num_heads / num_heads_k);
+        const int threads = 32 * gqa_ratio;
+        paged_decode_split_qk_quad_kernel<<<grid, threads>>>(
             q, k_cache_paged, v_cache_paged, output, cache_seqlens, block_table,
             s_partial_m, s_partial_l, s_partial_acc,
             batch_size, num_heads, num_heads_k, headdim, page_block_size,
