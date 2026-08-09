@@ -1,3 +1,6 @@
 [submodule "flash-attn"]
 	path = third/flash-attn
 	url = https://github.com/dao-ailab/flash-attention
+[submodule "third/op_optimization"]
+	path = third/op_optimization
+	url = https://www.gitlink.org.cn/metax-maca/op_optimization.git
