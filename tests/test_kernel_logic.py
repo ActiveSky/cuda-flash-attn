@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""验证 cuda-maca-version.cpp 的算法逻辑（CPU 模拟重放，无需 GPU）。
+"""验证当前 paged-decode fast path 的数学契约（CPU 模拟，无需 GPU）。
 
 用 numpy 精确重放 kernel 的实现逻辑：
   - GQA 分组：query head h 使用 kv_head = h // gqa_ratio
@@ -24,7 +24,7 @@ SM_SCALE = 1.0 / np.sqrt(HEAD_DIM)
 
 def split_kernel_sim(q, k_cache, v_cache, cache_seqlens, block_table,
                      num_heads, num_heads_k, seqlen_k, n_split=None):
-    """重放 cuda-maca-version.cpp 的主 kernel + 归约 kernel 逻辑。"""
+    """重放 producer partial 与 split reducer 的数学逻辑。"""
     batch = len(cache_seqlens)
     gqa = num_heads // num_heads_k
     max_pages = (seqlen_k + PAGE_SIZE - 1) // PAGE_SIZE
@@ -465,20 +465,20 @@ def run_case(name, rng, batch, seqlen_k, num_heads_k, n_split=None, tol=1e-4):
 
 
 def run_manifest_case(case: CaseConfig, rng, max_seqlen_k=None):
-    """Replay the production scalar split contract for an authoritative OJ case.
+    """Replay the production split contract for an authoritative OJ case.
 
     CPU reference cost grows with B * L.  The default quick suite caps only the
     capacity while retaining the case's actual batch/KV-head/dispatch policy;
     ``--exhaustive`` uses the full OJ capacities.
     """
     seqlen_k = min(case.seqlen_k, max_seqlen_k) if max_seqlen_k else case.seqlen_k
-    n_split, _, kernel = split_policy(case)
+    n_split, _, producer_family = split_policy(case)
     if seqlen_k != case.seqlen_k:
         # Preserve the production split count to exercise empty partials even
         # when using a bounded capacity in the quick semantic suite.
-        label = f"case{case.case_id}: {kernel} bounded"
+        label = f"case{case.case_id}: {producer_family} bounded"
     else:
-        label = f"case{case.case_id}: {kernel}"
+        label = f"case{case.case_id}: {producer_family}"
     return run_case(label, rng, case.batch_size, seqlen_k, case.num_heads_k,
                     n_split=n_split)
 

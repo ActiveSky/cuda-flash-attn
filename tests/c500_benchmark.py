@@ -7,7 +7,7 @@ per-round candidate/control ratio distribution; conclusions should use the
 ratio rather than separately collected absolute timings.
 
 Examples:
-    python tests/c500_benchmark.py --control build/cuda_maca_version.so \\
+    python tests/c500_benchmark.py --control build/cuda_112302_control.so \\
         --candidate build/cuda_maca_optimized.so --cases 7,9,12,13
 """
 
@@ -22,7 +22,6 @@ import torch
 
 from c500_case_manifest import CASES, CaseConfig
 from c500_paged_decode_harness import (
-    DEFAULT_LIBRARY,
     PagedDecodeInput,
     check_correctness,
     load_kernel,
@@ -35,6 +34,7 @@ from c500_paged_decode_harness import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_CONTROL = ROOT / "build/cuda_112302_control.so"
 DEFAULT_CANDIDATE = ROOT / "build/cuda_maca_optimized.so"
 
 
@@ -134,7 +134,7 @@ def print_result(
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--control", type=Path, default=DEFAULT_LIBRARY)
+    parser.add_argument("--control", type=Path, default=DEFAULT_CONTROL)
     parser.add_argument("--candidate", type=Path, default=DEFAULT_CANDIDATE)
     parser.add_argument("--cases", type=parse_case_ids, default=(7, 9, 12, 13))
     parser.add_argument("--seed", type=int, default=20260808)
@@ -145,6 +145,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--warmup", type=int, default=20)
     parser.add_argument("--iterations", type=int, default=50)
     parser.add_argument("--rounds", type=int, default=15)
+    parser.add_argument(
+        "--skip-correctness",
+        action="store_true",
+        help=(
+            "timing-only mode for deliberately invalid phase-ablation probes; "
+            "never use this option as candidate validation"
+        ),
+    )
     args = parser.parse_args(argv)
     if min(args.warmup, args.iterations, args.rounds) < 1:
         parser.error("warmup, iterations and rounds must all be positive")
@@ -159,8 +167,9 @@ def main(argv: list[str] | None = None) -> int:
     for case in selected_cases(args.cases):
         inputs = make_input(case, seed=args.seed + case.case_id, length_mode=args.lengths)
         try:
-            check_library("control", control, inputs)
-            check_library("candidate", candidate, inputs)
+            if not args.skip_correctness:
+                check_library("control", control, inputs)
+                check_library("candidate", candidate, inputs)
             control_ms, candidate_ms, ratios = benchmark_case(
                 control,
                 candidate,

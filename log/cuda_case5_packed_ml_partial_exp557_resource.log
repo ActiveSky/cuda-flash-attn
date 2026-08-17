@@ -1,0 +1,10 @@
+# exp557 case5 packed-(m,l) partial static resource gate
+# Parent: cuda_113696.cpp (fce1b410d03c4042fd18e6bdc3e379d0742acc42931786d337cd552dd8e13932)
+# Candidate: cuda_case5_packed_ml_partial_exp557.cpp (b0fe713c217d12f90a8de6e962bd1efecb20ebb6bf9285aea135c33130327d7a)
+# Commands:
+#   tools/build_local_maca.sh solutions/archive/2026-08-16-submissions/cuda_113696.cpp build/cuda_113696_control_resource.so -resource-usage
+#   tools/build_local_maca.sh solutions/archive/2026-08-16-experiments/cuda_case5_packed_ml_partial_exp557.cpp build/cuda_case5_packed_ml_partial_exp557_resource.so -resource-usage
+# Target case5 producer specializations:
+#   control:   74 MTregisters / 52 STregisters / 8320 B shared / 0 B stack / 6 waves
+#   candidate: 74 MTregisters / 48 STregisters / 8320 B shared / 0 B stack / 6 waves
+# Verdict: pass.  The packed metadata producer does not spill or lower occupancy.

@@ -14,7 +14,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_RAW_RESULT = ROOT / "results/raw/cuda_104441_raw.json"
+DEFAULT_RAW_RESULT = ROOT / "results/raw/cuda_112302_raw.json"
 NUM_HEADS = 32
 HEAD_DIM = 128
 PAGE_SIZE = 16
@@ -104,17 +104,12 @@ def load_cases(raw_result: Path = DEFAULT_RAW_RESULT) -> tuple[CaseConfig, ...]:
 CASES = load_cases()
 
 
-def split_policy(
-    case: CaseConfig,
-    *,
-    token_parallel_kv8: bool = False,
-) -> tuple[int, int, str]:
-    """Mirror the validated fast-path split and kernel dispatch.
+def split_policy(case: CaseConfig) -> tuple[int, int, str]:
+    """Mirror #112302's validated split count and production family.
 
-    ``token_parallel_kv8`` models the isolated candidate: it replaces only
-    the four long KV8 OJ shapes and changes case 12 from 256 to 128 splits.
-    Returns ``(n_split, pages_per_split, kernel)`` where kernel is one of
-    ``scalar``, ``mma_qk``, ``qk_pair`` or ``token_parallel``.
+    Returns ``(n_split, pages_per_split, producer_family)``. The family label
+    is descriptive only; CPU replay validates paged lookup and the split/
+    reducer contract, not backend instruction scheduling.
     """
     n_split = (case.seqlen_k + 127) // 128
     target_splits = (1024 + case.batch_size * case.num_heads_k - 1) // (
@@ -130,45 +125,50 @@ def split_policy(
     if case.num_heads_k == 8 and case.batch_size == 8 and case.seqlen_k == 32768:
         n_split *= 16
     if case.num_heads_k == 4 and case.batch_size == 16 and case.seqlen_k == 12251:
-        n_split *= 4
+        n_split = 39
     if case.num_heads_k == 4 and case.batch_size == 16 and case.seqlen_k == 4096:
         n_split *= 2
     if case.num_heads_k == 8 and case.batch_size == 16 and case.seqlen_k == 362:
         n_split = 8
     if case.num_heads_k == 4 and case.batch_size == 16 and case.seqlen_k == 141:
-        n_split = 3
+        # Production retains the validated five-split/two-page policy. Keep
+        # this manifest aligned with the structural control #112302.
+        n_split = 5
     if case.num_heads_k == 4 and case.batch_size == 1 and case.seqlen_k == 8192:
         n_split *= 2
+    if case.num_heads_k == 4 and case.batch_size == 1 and case.seqlen_k == 61519:
+        n_split = 257
 
-    # The MMA candidate stays compiled but is deliberately not dispatched:
-    # local full-length C500 validation shows it violates OJ tolerance while
-    # scalar QK passes on the exact same paged tensors.
-    use_mma_qk = False
-    use_qk_pair = case.num_heads_k == 8 and (
-        (case.batch_size == 64 and case.seqlen_k == 2048)
-        or (case.batch_size == 32 and case.seqlen_k == 4096)
-        or (case.batch_size == 8 and case.seqlen_k == 32768)
-        or (case.batch_size == 1 and case.seqlen_k == 58966)
-    )
-    use_token_parallel = token_parallel_kv8 and use_qk_pair
-    if use_token_parallel and case.batch_size == 8 and case.seqlen_k == 32768:
-        n_split = 128
-    if use_mma_qk:
-        kernel = "mma_qk"
-    elif use_token_parallel:
-        kernel = "token_parallel"
-    elif use_qk_pair:
-        kernel = "qk_pair"
+    # Keep the manifest byte-for-byte policy-equivalent to run_kernel's final
+    # shape overrides; the earlier generic multipliers are only intermediate.
+    if case.num_heads_k == 8 and case.batch_size == 64 and case.seqlen_k == 2048:
+        n_split = 3
+    if case.num_heads_k == 8 and case.batch_size == 32 and case.seqlen_k == 4096:
+        n_split = 6
+    if case.num_heads_k == 4 and case.batch_size == 16 and case.seqlen_k == 4096:
+        n_split = 14
+    if case.num_heads_k == 8 and case.batch_size == 8 and case.seqlen_k == 32768:
+        n_split = 40
+    if case.num_heads_k == 8 and case.batch_size == 1 and case.seqlen_k == 58966:
+        n_split = 65
+    if case.seqlen_k == 1:
+        producer_family = "copy1"
+    elif case.seqlen_k == 2:
+        producer_family = "attn2"
+    elif case.case_id in (7, 9, 12, 13):
+        producer_family = "kv8-z8-native"
+    elif case.case_id in (5, 8, 10, 11, 14):
+        producer_family = "kv4-z4-mma"
     else:
-        kernel = "scalar"
-    return n_split, (case.max_pages + n_split - 1) // n_split, kernel
+        producer_family = "token-parallel"
+    return n_split, (case.max_pages + n_split - 1) // n_split, producer_family
 
 
 if __name__ == "__main__":
     for case in CASES:
-        n_split, pages_per_split, kernel = split_policy(case)
+        n_split, pages_per_split, producer_family = split_policy(case)
         print(
             f"case {case.case_id:2d}: B={case.batch_size:2d} L={case.seqlen_k:5d} "
-            f"KV={case.num_heads_k} {case.kind:4s} | {kernel:7s} "
+            f"KV={case.num_heads_k} {case.kind:4s} | {producer_family:14s} "
             f"splits={n_split:3d} pages/split={pages_per_split:2d}"
         )

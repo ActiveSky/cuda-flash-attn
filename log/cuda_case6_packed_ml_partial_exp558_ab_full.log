@@ -1,0 +1,4 @@
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+control:   build/cuda_113696_control.so
+candidate: build/cuda_case6_packed_ml_partial_exp558.so
+case  6 B=16 L=  362 KV=8 | control p50=0.0415 ms | candidate p50=0.0414 ms | candidate/control p10/p50/p90=0.9902/0.9975/1.0172 | speedup=1.002x

@@ -1,0 +1,14 @@
+Source: solutions/archive/2026-08-16-experiments/cuda_case12_pair_split_q_reuse_exp556.cpp
+Source SHA-256: 9328d3e5d16345b8e5e6834011eb6c2625501cdc3d22d1528195debf3bb5b275
+Command: tools/build_local_maca.sh solutions/archive/2026-08-16-experiments/cuda_case12_pair_split_q_reuse_exp556.cpp build/cuda_case12_pair_split_q_reuse_exp556_resource.so -resource-usage
+
+Target specialization:
+  paged_decode_case13_kv8_headpair_z8_kernel<true, false, false, true>
+
+Compiler resource report:
+  0 bytes stack frame
+  Used 102 MTregisters, 80 STregisters, 8448 bytes shared mem
+  staticMaxWarps/PEU: 4
+
+Control case12 specialization <true, false, false> is 82 MTregisters,
+50 STregisters, 8448 bytes shared mem, staticMaxWarps/PEU: 5.

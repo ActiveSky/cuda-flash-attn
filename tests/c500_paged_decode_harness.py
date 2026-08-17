@@ -7,8 +7,8 @@ entry point with the exact OJ ABI, and compares against the installed
 from :mod:`c500_case_manifest`, which parses an accepted OJ SPJ response.
 
 Examples:
-    tools/build_local_maca.sh
-    python tests/c500_paged_decode_harness.py
+    tools/build_local_maca.sh solutions/cuda_maca_optimized.cpp build/cuda_maca_optimized.so
+    python tests/c500_paged_decode_harness.py --library build/cuda_maca_optimized.so
     python tests/c500_paged_decode_harness.py --cases 7,9 --benchmark
 """
 
@@ -27,7 +27,7 @@ from c500_case_manifest import CASES, CaseConfig, HEAD_DIM, NUM_HEADS, PAGE_SIZE
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_LIBRARY = ROOT / "build/cuda_maca_version.so"
+DEFAULT_LIBRARY = ROOT / "build/cuda_maca_optimized.so"
 ATOL = 1.6e-2
 RTOL = 1.6e-2
 
@@ -99,6 +99,20 @@ def parse_case_ids(value: str) -> tuple[int, ...]:
             f"cases must be a comma-separated subset of 1-14; unknown: {unknown}"
         )
     return ids
+
+
+def parse_length_values(value: str) -> tuple[int, ...]:
+    try:
+        lengths = tuple(int(part) for part in value.split(",") if part.strip())
+    except ValueError as error:
+        raise argparse.ArgumentTypeError(
+            "length values must be comma-separated positive integers"
+        ) from error
+    if not lengths or any(length < 1 for length in lengths):
+        raise argparse.ArgumentTypeError(
+            "length values must be comma-separated positive integers"
+        )
+    return lengths
 
 
 def selected_cases(case_ids: Iterable[int]) -> tuple[CaseConfig, ...]:
@@ -368,6 +382,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--seed", type=int, default=20260808)
     parser.add_argument("--lengths", choices=("boundary", "random", "full"), default="boundary")
     parser.add_argument(
+        "--length-values",
+        type=parse_length_values,
+        help=(
+            "comma-separated exact cache lengths; each value is broadcast to "
+            "the selected case's whole batch and tested in the same process"
+        ),
+    )
+    parser.add_argument(
         "--full-length",
         action="store_true",
         help="run every selected case at cache capacity (equivalent to --lengths full)",
@@ -380,27 +402,50 @@ def main(argv: list[str] | None = None) -> int:
 
     if min(args.warmup, args.iterations, args.samples) < 1:
         parser.error("warmup, iterations and samples must all be positive")
+    if args.full_length and args.length_values is not None:
+        parser.error("--full-length and --length-values are mutually exclusive")
+
+    cases = selected_cases(args.cases)
+    if args.length_values is not None:
+        invalid = [
+            (case.case_id, length)
+            for case in cases
+            for length in args.length_values
+            if length > case.seqlen_k
+        ]
+        if invalid:
+            parser.error(
+                "exact cache length exceeds case capacity: "
+                + ", ".join(f"case {case_id}: {length}" for case_id, length in invalid)
+            )
 
     require_maca_gpu()
     length_mode = "full" if args.full_length else args.lengths
     print(f"GPU: {torch.cuda.get_device_name()} | torch={torch.__version__}")
     kernel = load_kernel(args.library)
     all_passed = True
-    for case in selected_cases(args.cases):
-        inputs = make_input(case, seed=args.seed + case.case_id, length_mode=length_mode)
+    for case in cases:
+        input_mode = "full" if args.length_values is not None else length_mode
+        inputs = make_input(case, seed=args.seed + case.case_id, length_mode=input_mode)
         try:
-            result = check_correctness(kernel, inputs)
-            print_correctness(result, case, length_mode)
-            all_passed = all_passed and result.passed
-            if args.benchmark and result.passed:
-                candidate, reference = benchmark_case(
-                    kernel,
-                    inputs,
-                    warmup=args.warmup,
-                    iterations=args.iterations,
-                    samples=args.samples,
-                )
-                print_timing(case, candidate, reference)
+            exact_lengths = args.length_values or (None,)
+            for exact_length in exact_lengths:
+                display_mode = length_mode
+                if exact_length is not None:
+                    inputs.cache_seqlens.fill_(exact_length)
+                    display_mode = f"exact:{exact_length}"
+                result = check_correctness(kernel, inputs)
+                print_correctness(result, case, display_mode)
+                all_passed = all_passed and result.passed
+                if args.benchmark and result.passed:
+                    candidate, reference = benchmark_case(
+                        kernel,
+                        inputs,
+                        warmup=args.warmup,
+                        iterations=args.iterations,
+                        samples=args.samples,
+                    )
+                    print_timing(case, candidate, reference)
         finally:
             # Long cases allocate up to several GiB of K/V. Release each case
             # before constructing the next one so --cases all cannot OOM from
