@@ -1,0 +1,278 @@
+2-Compiler: /opt/maca/mxgpu_llvm/bin/mxcc
+3-MACA path: /opt/maca
+4-CUDA bridge: /opt/maca-3.7.1/tools/cu-bridge
+5-Target: xcore1000
+6-Output: build/exp600_control_resource.so
+7:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+8-  335 | __global__ void __launch_bounds__(256, 6)
+9-      |                                        ^
+10:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+11-  701 | __global__ void __launch_bounds__(256, 6)
+12-      |                                        ^
+13:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+14- 1229 | __global__ void __launch_bounds__(256, 6)
+15-      |                                        ^
+16:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+17-solutions/archive/2026-08-16-submissions/cuda_113889.cpp:5531:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, true, false, false, false, false, false, true, false, false, false>' requested here
+18- 5531 |                     paged_decode_token_parallel_kernel<
+19-      |                     ^
+20:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+21- 1229 | __global__ void __launch_bounds__(256, 6)
+22-      |                                        ^
+23-solutions/archive/2026-08-16-submissions/cuda_113889.cpp:5543:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false>' requested here
+24- 5543 |                     paged_decode_token_parallel_kernel<4, 8, false><<<
+25-      |                     ^
+26:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+27- 1229 | __global__ void __launch_bounds__(256, 6)
+28-      |                                        ^
+29-solutions/archive/2026-08-16-submissions/cuda_113889.cpp:5678:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, false, false, false, false, false, true, false, false, false, false, true, true, true, true, false>' requested here
+30- 5678 |                     paged_decode_token_parallel_kernel<
+31-      |                     ^
+32:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+33- 1229 | __global__ void __launch_bounds__(256, 6)
+34-      |                                        ^
+35-solutions/archive/2026-08-16-submissions/cuda_113889.cpp:5700:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, true, false, false, false, false, true, false, false, true, false, true, true, false, false, true>' requested here
+36- 5700 |                     paged_decode_token_parallel_kernel<
+37-      |                     ^
+38:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+39-  701 | __global__ void __launch_bounds__(256, 6)
+40-      |                                        ^
+41-solutions/archive/2026-08-16-submissions/cuda_113889.cpp:5715:9: note: in instantiation of function template specialization 'paged_decode_split_qk_pair_kernel<8, 4>' requested here
+42- 5715 |         paged_decode_split_qk_pair_kernel<8, 4><<<grid, 128>>>(
+43-      |         ^
+44:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+45-  335 | __global__ void __launch_bounds__(256, 6)
+46-      |                                        ^
+47-solutions/archive/2026-08-16-submissions/cuda_113889.cpp:5722:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<4, 8>' requested here
+48- 5722 |             paged_decode_split_kernel<4, 8><<<grid, 256>>>(
+49-      |             ^
+50:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+51-  335 | __global__ void __launch_bounds__(256, 6)
+52-      |                                        ^
+53-solutions/archive/2026-08-16-submissions/cuda_113889.cpp:5728:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<8, 4>' requested here
+54- 5728 |             paged_decode_split_kernel<8, 4><<<grid, 128>>>(
+55-      |             ^
+56-10 warnings generated when compiling for xcore1000.
+57:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+58-  335 | __global__ void __launch_bounds__(256, 6)
+59-      |                                        ^
+60:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+61-  701 | __global__ void __launch_bounds__(256, 6)
+62-      |                                        ^
+63:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+64- 1229 | __global__ void __launch_bounds__(256, 6)
+65-      |                                        ^
+66:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+67-solutions/archive/2026-08-16-submissions/cuda_113889.cpp:5531:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, true, false, false, false, false, false, true, false, false, false>' requested here
+68- 5531 |                     paged_decode_token_parallel_kernel<
+69-      |                     ^
+70:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+71- 1229 | __global__ void __launch_bounds__(256, 6)
+72-      |                                        ^
+73-solutions/archive/2026-08-16-submissions/cuda_113889.cpp:5543:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false>' requested here
+74- 5543 |                     paged_decode_token_parallel_kernel<4, 8, false><<<
+75-      |                     ^
+76:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+77- 1229 | __global__ void __launch_bounds__(256, 6)
+78-      |                                        ^
+79-solutions/archive/2026-08-16-submissions/cuda_113889.cpp:5678:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, false, false, false, false, false, true, false, false, false, false, true, true, true, true, false>' requested here
+80- 5678 |                     paged_decode_token_parallel_kernel<
+81-      |                     ^
+82:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+83- 1229 | __global__ void __launch_bounds__(256, 6)
+84-      |                                        ^
+85-solutions/archive/2026-08-16-submissions/cuda_113889.cpp:5700:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, true, false, false, false, false, true, false, false, true, false, true, true, false, false, true>' requested here
+86- 5700 |                     paged_decode_token_parallel_kernel<
+87-      |                     ^
+88:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+89-  701 | __global__ void __launch_bounds__(256, 6)
+90-      |                                        ^
+91-solutions/archive/2026-08-16-submissions/cuda_113889.cpp:5715:9: note: in instantiation of function template specialization 'paged_decode_split_qk_pair_kernel<8, 4>' requested here
+92- 5715 |         paged_decode_split_qk_pair_kernel<8, 4><<<grid, 128>>>(
+93-      |         ^
+94:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+95-  335 | __global__ void __launch_bounds__(256, 6)
+96-      |                                        ^
+97-solutions/archive/2026-08-16-submissions/cuda_113889.cpp:5722:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<4, 8>' requested here
+98- 5722 |             paged_decode_split_kernel<4, 8><<<grid, 256>>>(
+99-      |             ^
+100:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+101-  335 | __global__ void __launch_bounds__(256, 6)
+102-      |                                        ^
+103-solutions/archive/2026-08-16-submissions/cuda_113889.cpp:5728:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<8, 4>' requested here
+104- 5728 |             paged_decode_split_kernel<8, 4><<<grid, 128>>>(
+105-      |             ^
+106- maca info  : Function properties for  _Z27paged_decode_generic_kernelPK15__maca_bfloat16S1_S1_PS_PKiS4_llllllf 
+107:  0 bytes stack frame 
+108: maca info  : Used  28 MTregisters, 50 STregisters, 0 bytes shared mem  
+109: maca info  : staticMaxWarps/PEU : 8
+110- maca info  : Function properties for  _Z32paged_decode_single_token_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKii 
+111:  0 bytes stack frame 
+112: maca info  : Used  6 MTregisters, 18 STregisters, 0 bytes shared mem  
+113: maca info  : staticMaxWarps/PEU : 8
+114- maca info  : Function properties for  _Z32paged_decode_single_token_kernelILi8ELi4EEvPK15__maca_bfloat16PS0_PKii 
+115:  0 bytes stack frame 
+116: maca info  : Used  6 MTregisters, 18 STregisters, 0 bytes shared mem  
+117: maca info  : staticMaxWarps/PEU : 8
+118- maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+119:  0 bytes stack frame 
+120: maca info  : Used  22 MTregisters, 26 STregisters, 0 bytes shared mem  
+121: maca info  : staticMaxWarps/PEU : 8
+122- maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+123:  0 bytes stack frame 
+124: maca info  : Used  22 MTregisters, 26 STregisters, 0 bytes shared mem  
+125: maca info  : staticMaxWarps/PEU : 8
+126- maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+127:  0 bytes stack frame 
+128: maca info  : Used  86 MTregisters, 70 STregisters, 8320 bytes shared mem  
+129: maca info  : staticMaxWarps/PEU : 5
+130- maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+131:  0 bytes stack frame 
+132: maca info  : Used  80 MTregisters, 58 STregisters, 8320 bytes shared mem  
+133: maca info  : staticMaxWarps/PEU : 6
+134- maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+135:  0 bytes stack frame 
+136: maca info  : Used  82 MTregisters, 66 STregisters, 8320 bytes shared mem  
+137: maca info  : staticMaxWarps/PEU : 5
+138- maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+139:  0 bytes stack frame 
+140: maca info  : Used  80 MTregisters, 58 STregisters, 8320 bytes shared mem  
+141: maca info  : staticMaxWarps/PEU : 6
+142- maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+143:  0 bytes stack frame 
+144: maca info  : Used  74 MTregisters, 52 STregisters, 8320 bytes shared mem  
+145: maca info  : staticMaxWarps/PEU : 6
+146- maca info  : Function properties for  _Z34paged_decode_token_parallel_kernelILi4ELi8ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+147:  0 bytes stack frame 
+148: maca info  : Used  92 MTregisters, 48 STregisters, 8320 bytes shared mem  
+149: maca info  : staticMaxWarps/PEU : 5
+150- maca info  : Function properties for  _Z34paged_decode_token_parallel_kernelILi4ELi8ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+151:  0 bytes stack frame 
+152: maca info  : Used  92 MTregisters, 48 STregisters, 8320 bytes shared mem  
+153: maca info  : staticMaxWarps/PEU : 5
+154- maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+155:  0 bytes stack frame 
+156: maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+157: maca info  : staticMaxWarps/PEU : 5
+158- maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+159:  0 bytes stack frame 
+160: maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+161: maca info  : staticMaxWarps/PEU : 5
+162- maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+163:  0 bytes stack frame 
+164: maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+165: maca info  : staticMaxWarps/PEU : 5
+166- maca info  : Function properties for  _Z34paged_decode_token_parallel_kernelILi8ELi4ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+167:  0 bytes stack frame 
+168: maca info  : Used  74 MTregisters, 44 STregisters, 8320 bytes shared mem  
+169: maca info  : staticMaxWarps/PEU : 6
+170- maca info  : Function properties for  _Z34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+171:  0 bytes stack frame 
+172: maca info  : Used  80 MTregisters, 44 STregisters, 8320 bytes shared mem  
+173: maca info  : staticMaxWarps/PEU : 6
+174- maca info  : Function properties for  _Z33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+175:  0 bytes stack frame 
+176: maca info  : Used  118 MTregisters, 50 STregisters, 8192 bytes shared mem  
+177: maca info  : staticMaxWarps/PEU : 4
+178- maca info  : Function properties for  _Z25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+179:  0 bytes stack frame 
+180: maca info  : Used  104 MTregisters, 74 STregisters, 8192 bytes shared mem  
+181: maca info  : staticMaxWarps/PEU : 4
+182- maca info  : Function properties for  _Z25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+183:  0 bytes stack frame 
+184: maca info  : Used  104 MTregisters, 74 STregisters, 8192 bytes shared mem  
+185: maca info  : staticMaxWarps/PEU : 4
+186: maca info  : Function properties for  _Z31paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+187:  0 bytes stack frame 
+188: maca info  : Used  38 MTregisters, 39 STregisters, 0 bytes shared mem  
+189: maca info  : staticMaxWarps/PEU : 8
+190: maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb1ELb1ELb0ELi0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+191:  0 bytes stack frame 
+192: maca info  : Used  66 MTregisters, 24 STregisters, 0 bytes shared mem  
+193: maca info  : staticMaxWarps/PEU : 7
+194: maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb1ELb0ELb1ELi3EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+195:  0 bytes stack frame 
+196: maca info  : Used  54 MTregisters, 25 STregisters, 0 bytes shared mem  
+197: maca info  : staticMaxWarps/PEU : 8
+198: maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb1ELb0ELi0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+199:  0 bytes stack frame 
+200: maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+201: maca info  : staticMaxWarps/PEU : 7
+202: maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb0ELb0ELi0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+203:  0 bytes stack frame 
+204: maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+205: maca info  : staticMaxWarps/PEU : 7
+206: maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb0ELb0ELb0ELb0ELi0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+207:  0 bytes stack frame 
+208: maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+209: maca info  : staticMaxWarps/PEU : 7
+210: maca info  : Function properties for  _Z31paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+211:  0 bytes stack frame 
+212: maca info  : Used  38 MTregisters, 36 STregisters, 0 bytes shared mem  
+213: maca info  : staticMaxWarps/PEU : 8
+214: maca info  : Function properties for  _Z31paged_decode_reduce_vec4_kernelILb1ELb0ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+215:  0 bytes stack frame 
+216: maca info  : Used  64 MTregisters, 35 STregisters, 0 bytes shared mem  
+217: maca info  : staticMaxWarps/PEU : 8
+218- maca info  : Function properties for  _Z26paged_d10 warnings generated when compiling for xcore1000.
+219-ecode_reduce_kernelILb1ELb0ELb1ELb1ELb1ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+220:  0 bytes stack frame 
+221: maca info  : Used  40 MTregisters, 28 STregisters, 0 bytes shared mem  
+222: maca info  : staticMaxWarps/PEU : 8
+223: maca info  : Function properties for  _Z26paged_decode_reduce_kernelILb1ELb0ELb0ELb0ELb0ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+224:  0 bytes stack frame 
+225: maca info  : Used  40 MTregisters, 36 STregisters, 0 bytes shared mem  
+226: maca info  : staticMaxWarps/PEU : 8
+227- maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+228:  0 bytes stack frame 
+229: maca info  : Used  82 MTregisters, 64 STregisters, 8320 bytes shared mem  
+230: maca info  : staticMaxWarps/PEU : 5
+231:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+232-  335 | __global__ void __launch_bounds__(256, 6)
+233-      |                                        ^
+234:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+235-  701 | __global__ void __launch_bounds__(256, 6)
+236-      |                                        ^
+237:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+238- 1229 | __global__ void __launch_bounds__(256, 6)
+239-      |                                        ^
+240:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+241-solutions/archive/2026-08-16-submissions/cuda_113889.cpp:5531:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, true, false, false, false, false, false, true, false, false, false>' requested here
+242- 5531 |                     paged_decode_token_parallel_kernel<
+243-      |                     ^
+244:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+245- 1229 | __global__ void __launch_bounds__(256, 6)
+246-      |                                        ^
+247-solutions/archive/2026-08-16-submissions/cuda_113889.cpp:5543:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false>' requested here
+248- 5543 |                     paged_decode_token_parallel_kernel<4, 8, false><<<
+249-      |                     ^
+250:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+251- 1229 | __global__ void __launch_bounds__(256, 6)
+252-      |                                        ^
+253-solutions/archive/2026-08-16-submissions/cuda_113889.cpp:5678:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, false, false, false, false, false, true, false, false, false, false, true, true, true, true, false>' requested here
+254- 5678 |                     paged_decode_token_parallel_kernel<
+255-      |                     ^
+256:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+257- 1229 | __global__ void __launch_bounds__(256, 6)
+258-      |                                        ^
+259-solutions/archive/2026-08-16-submissions/cuda_113889.cpp:5700:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, true, false, false, false, false, true, false, false, true, false, true, true, false, false, true>' requested here
+260- 5700 |                     paged_decode_token_parallel_kernel<
+261-      |                     ^
+262:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+263-  701 | __global__ void __launch_bounds__(256, 6)
+264-      |                                        ^
+265-solutions/archive/2026-08-16-submissions/cuda_113889.cpp:5715:9: note: in instantiation of function template specialization 'paged_decode_split_qk_pair_kernel<8, 4>' requested here
+266- 5715 |         paged_decode_split_qk_pair_kernel<8, 4><<<grid, 128>>>(
+267-      |         ^
+268:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+269-  335 | __global__ void __launch_bounds__(256, 6)
+270-      |                                        ^
+271-solutions/archive/2026-08-16-submissions/cuda_113889.cpp:5722:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<4, 8>' requested here
+272- 5722 |             paged_decode_split_kernel<4, 8><<<grid, 256>>>(
+273-      |             ^
+274:solutions/archive/2026-08-16-submissions/cuda_113889.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+275-  335 | __global__ void __launch_bounds__(256, 6)
+276-      |                                        ^
+277-solutions/archive/2026-08-16-submissions/cuda_113889.cpp:5728:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<8, 4>' requested here
+278- 5728 |             paged_decode_split_kernel<8, 4><<<grid, 128>>>(
+279-      |             ^

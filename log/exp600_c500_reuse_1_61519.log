@@ -1,0 +1,5 @@
+a40e04a96cf836c339e9a92a232b2ce79d26f7c7211fbce5d7a6248ec670e38f  solutions/archive/2026-08-18-experiments/cuda_case14_partial_b16_stx_exp600.cpp
+3a660b08915262c672252edff3a4186a51bea672bfe598a25ed0438a0c5c593d  build/exp600_c500_candidate.so
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+[PASS] case 14 B= 1 L=61519 KV=4 lengths=exact:1  match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 finite=True
+[PASS] case 14 B= 1 L=61519 KV=4 lengths=exact:61519 match=1.000000 max_error=1.220703e-04 max_tol_ratio=0.008 finite=True

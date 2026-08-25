@@ -1,0 +1,13 @@
+exp599 OJ probe dry-run and post-dry-run identity
+UTC 2026-08-18T15:28:51Z
+pre-dry-run work SHA256:
+35013de595b082974e0b59de7b87b1f9bfd3476afb2affae1c8aeb8d73635da7  solutions/cuda_maca_optimized.cpp
+command: python3 tools/xpuoj_submit.py solutions/cuda_maca_optimized.cpp
+target: contest #11, problem #1
+language: cuda.maca-c500
+code: solutions/cuda_maca_optimized.cpp (264625 bytes)
+dry-run: no submission created; use --submit to submit
+post-dry-run work SHA256:
+35013de595b082974e0b59de7b87b1f9bfd3476afb2affae1c8aeb8d73635da7  solutions/cuda_maca_optimized.cpp
+dry_run_identity_guard=PASS; no --submit flag used
+exit_status=0

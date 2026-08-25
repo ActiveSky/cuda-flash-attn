@@ -1,0 +1,96 @@
+exp612 static resource/LLVM gate summary
+candidate source: solutions/archive/2026-08-21-experiments/cuda_case7_two_stage_finalizer_exp612.cpp
+control source: solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+candidate source SHA pre/post:
+78d9b89ba21808d57b84bf9a796330fb2b549a67597d215aadd246fa9557996f  solutions/archive/2026-08-21-experiments/cuda_case7_two_stage_finalizer_exp612.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+78d9b89ba21808d57b84bf9a796330fb2b549a67597d215aadd246fa9557996f  solutions/archive/2026-08-21-experiments/cuda_case7_two_stage_finalizer_exp612.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+source SHA diff: clean (pre == post)
+build commands (all exit 0):
+tools/build_local_maca.sh solutions/archive/2026-08-21-experiments/cuda_case7_two_stage_finalizer_exp612.cpp build/exp612_candidate_resource.so -resource-usage
+tools/build_local_maca.sh solutions/archive/2026-08-16-submissions/cuda_113889.cpp build/exp612_control_resource.so -resource-usage
+tools/build_local_maca.sh solutions/archive/2026-08-21-experiments/cuda_case7_two_stage_finalizer_exp612.cpp build/exp612_candidate.ll -c -emit-llvm -S
+tools/build_local_maca.sh solutions/archive/2026-08-16-submissions/cuda_113889.cpp build/exp612_control.ll -c -emit-llvm -S
+logs: log/exp612_candidate_resource.log log/exp612_control_resource.log log/exp612_candidate_llvm.log log/exp612_control_llvm.log
+artifact SHA-256:
+e97c1f5b3dea48b7123ad9188d835128bf1fa4010aa16a26e8688c674c092bea  build/exp612_candidate_resource.so
+b6c698cb46553eece3a907dd820881887f7c5b05776d178419f0f6cba81a2fe5  build/exp612_control_resource.so
+55202bfa060248c16322e22523e1c74fe97143902ce1e675efd820917af8cf92  build/exp612_candidate.ll
+25509a2cb9cfae61b302b18a5e4ab0f8a6e2bfe7687e8a8763b88eeb85910df1  build/exp612_control.ll
+candidate case7 ordinary producer resource (CASE7_FINALIZER=false; <true,false,true,false>):
+   158	 maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+   159	  0 bytes stack frame 
+   160	 maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+   161	 maca info  : staticMaxWarps/PEU : 5
+candidate case7 finalizer resource (CASE7_FINALIZER=true; <true,false,true,true>):
+   162	 maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+   163	  0 bytes stack frame 
+   164	 maca info  : Used  88 MTregisters, 55 STregisters, 8448 bytes shared mem  
+   165	 maca info  : staticMaxWarps/PEU : 5
+control case7 ordinary producer resource (<true,false,true>):
+   158	 maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+   159	  0 bytes stack frame 
+   160	 maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+   161	 maca info  : staticMaxWarps/PEU : 5
+resource gate: ordinary producer candidate/control both 82 MTreg / 50 STreg / 8448 B shared / 0 B stack / 5 waves; finalizer 88 MTreg / 55 STreg / 8448 B shared / 0 B stack / 5 waves; finalizer exceeds 82/50 hard gate => FAIL. No spill/stack, but not exempt.
+candidate target function signatures and dispatch:
+ 19786	define protected metaxgpu_kernel void @_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef readnone %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+ 21537	define protected metaxgpu_kernel void @_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef readonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias noundef readonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+ 45752	  tail call void @_Z57__device_stub__paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr noundef %q, ptr noundef %k_cache_paged, ptr noundef %v_cache_paged, ptr noundef %output, ptr noundef %cache_seqlens, ptr noundef %block_table, ptr noundef %47, ptr noundef %48, ptr noundef %49, i32 noundef 64, i32 noundef %conv405, i32 noundef %conv406, i32 noundef %n_split.14, float noundef 0x3FC0527DC0000000) #9
+ 45753	  br label %kcall.end408
+ 45754	
+ 45755	kcall.end408:                                     ; preds = %kcall.configok403, %if.then396
+ 45756	  %case7_final_grid.sroa.0.4.insert.insert = or disjoint i64 %grid228.sroa.0.0.insert.ext, 4294967296
+ 45757	  %call413 = tail call i32 @__mcPushCallConfiguration(i64 %case7_final_grid.sroa.0.4.insert.insert, i32 1, i64 8589934608, i32 8, i64 noundef 0, ptr noundef null)
+ 45758	  %tobool414.not = icmp eq i32 %call413, 0
+ 45759	  br i1 %tobool414.not, label %kcall.configok415, label %if.end519
+ 45760	
+ 45761	kcall.configok415:                                ; preds = %kcall.end408
+ 45762	  %50 = load ptr, ptr @_ZZ10run_kernelE11s_partial_m, align 8, !tbaa !7
+ 45763	  %51 = load ptr, ptr @_ZZ10run_kernelE11s_partial_l, align 8, !tbaa !7
+ 45764	  %52 = load ptr, ptr @_ZZ10run_kernelE13s_partial_acc, align 8, !tbaa !7
+ 45765	  %conv417 = trunc i64 %div24 to i32
+ 45766	  %conv418 = trunc i64 %div201 to i32
+ 45767	  tail call void @_Z57__device_stub__paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr noundef %q, ptr noundef %k_cache_paged, ptr noundef %v_cache_paged, ptr noundef %output, ptr noundef %cache_seqlens, ptr noundef %block_table, ptr noundef %50, ptr noundef %51, ptr noundef %52, i32 noundef 64, i32 noundef %conv417, i32 noundef %conv418, i32 noundef %n_split.14, float noundef 0x3FC0527DC0000000) #9
+candidate LLVM body counts (ordinary lines 19786-21534; finalizer lines 21537-24187):
+ordinary load float addrspace(1): 0
+ordinary store float addrspace(1): 16
+ordinary store i16 addrspace(1): 0
+ordinary partial_acc.coerce references: 3
+ordinary out.coerce references: 1
+finalizer load float addrspace(1): 64
+finalizer store float addrspace(1): 0
+finalizer store i16 addrspace(1): 46
+finalizer partial_acc.coerce references: 9
+finalizer out.coerce references: 7
+ordinary producer evidence (partial writes only, output is readnone):
+ 19786	define protected metaxgpu_kernel void @_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef readnone %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+ 21457	  store half %399, ptr addrspace(1) %add.ptr530, align 4, !tbaa !16
+ 21458	  %add.ptr530.sroa_idx = getelementptr inbounds i8, ptr addrspace(1) %add.ptr530, i64 2
+ 21459	  store half %401, ptr addrspace(1) %add.ptr530.sroa_idx, align 2, !tbaa !16
+ 21460	  %402 = tail call i32 @llvm.mxc.gethwreg(i32 2177)
+ 21488	  store float %acc0.sroa.0.0.vec.extract2571, ptr addrspace(1) %add.ptr542, align 16, !tbaa !73
+ 21489	  %ref.tmp549.sroa.4.0..sroa_idx = getelementptr inbounds i8, ptr addrspace(1) %add.ptr542, i64 4
+ 21490	  store float %acc0.sroa.0.4.vec.extract2581, ptr addrspace(1) %ref.tmp549.sroa.4.0..sroa_idx, align 4, !tbaa !73
+ 21491	  %ref.tmp549.sroa.5.0..sroa_idx = getelementptr inbounds i8, ptr addrspace(1) %add.ptr542, i64 8
+finalizer evidence (partial loads/merge inputs and direct output stores):
+ 21537	define protected metaxgpu_kernel void @_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef readonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias noundef readonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+ 21591	  store i16 0, ptr addrspace(1) %add.ptr4.i2658, align 4, !tbaa !27
+ 21592	  %y3.i = getelementptr inbounds i8, ptr addrspace(1) %add.ptr4.i2658, i64 2
+ 21593	  store i16 0, ptr addrspace(1) %y3.i, align 2, !tbaa !27
+ 21594	  %arrayidx5.i2660 = getelementptr inbounds i8, ptr addrspace(1) %add.ptr4.i2658, i64 4
+ 21634	  %a0.sroa.0.0.copyload.i2671 = load float, ptr addrspace(1) %add.ptr30, align 16, !tbaa !73
+ 21635	  %a0.sroa.4.0..sroa_idx.i2672 = getelementptr inbounds i8, ptr addrspace(1) %add.ptr30, i64 4
+ 21636	  %a0.sroa.4.0.copyload.i2673 = load float, ptr addrspace(1) %a0.sroa.4.0..sroa_idx.i2672, align 4, !tbaa !73
+ 21637	  %a0.sroa.5.0..sroa_idx.i2674 = getelementptr inbounds i8, ptr addrspace(1) %add.ptr30, i64 8
+ 23990	  store i16 %conv.i.i.i.i.i3012, ptr addrspace(1) %add.ptr4.i2722, align 4, !tbaa !27
+ 23991	  %y3.i3022 = getelementptr inbounds i8, ptr addrspace(1) %add.ptr4.i2722, i64 2
+ 23992	  store i16 %conv.i.i.i7.i.i3019, ptr addrspace(1) %y3.i3022, align 2, !tbaa !27
+ 23993	  %acc0194.sroa.59.8.vec.extract3867 = extractelement <2 x float> %528, i64 0
+ 24101	  store i16 %conv.i.i.i.i.i3080, ptr addrspace(1) %add.ptr4.i2700, align 4, !tbaa !27
+ 24102	  %y3.i3090 = getelementptr inbounds i8, ptr addrspace(1) %add.ptr4.i2700, i64 2
+ 24103	  store i16 %conv.i.i.i7.i.i3087, ptr addrspace(1) %y3.i3090, align 2, !tbaa !27
+ 24104	  %acc1195.sroa.59.8.vec.extract3563 = extractelement <2 x float> %574, i64 0
+LLVM/backend scope result: candidate has exactly one additional 4-boolean target function with CASE7_FINALIZER=true; run_kernel dispatches the <...true,false,true,false> producer at line 45752 then the <...true,false,true,true> finalizer at line 45767. Only the finalizer signature is output writeonly + partial_m/partial_acc readonly, and only its body has global partial float loads plus BF16 output stores.
+FINAL: RESOURCE GATE FAILED; do not run C500, A/B, or OJ.

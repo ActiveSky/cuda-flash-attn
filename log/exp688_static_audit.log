@@ -1,0 +1,47 @@
+exp688 case13 normalized-BF16 partial native B128 STG static audit
+date: 2026-08-24
+
+parent/control:
+  source: solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+  sha256: 3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+candidate:
+  source: solutions/archive/2026-08-24-experiments/cuda_control124611_case13_native_partial_stg_exp688.cpp
+  sha256: b7793a4e9b160179f9e142c3c4076781eebf617e798d81fd35cdcb74286a1cec
+
+scope:
+  - independent case13 helper xpuoj_case13_native_stg_b128_bf16x8
+  - fifth template gate NATIVE_PARTIAL_STG_B128, default false
+  - only case13 B1/KV8/seqlen_k=58966 dispatch enables <true,true,false,true,true>
+  - only tz==0 normalized-BF16 partial_acc producer replaces four BF162 stores
+  - partial ABI, metadata, split, ownership, reducer, and non-target dispatches unchanged
+
+builds:
+  normal: PASS, build/exp688_candidate_normal.so
+  candidate resource-usage: PASS, build/exp688_candidate_resource.so
+  candidate device LLVM: PASS, build/exp688_candidate_device.ll
+  control resource-usage: PASS, build/exp688_control_resource.so
+  control device LLVM: PASS, build/exp688_control_device.ll
+
+target resource, candidate:
+  82 MTregisters / 48 STregisters / 8448 bytes shared / 0 bytes stack / 5 waves
+target resource, control:
+  82 MTregisters / 48 STregisters / 8448 bytes shared / 0 bytes stack / 5 waves
+
+LLVM lowering:
+  candidate target _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb1ELb1EE: 2 llvm.mxc.stg.predicator.v4i32 calls
+  control target _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb1EE: 0 llvm.mxc.stg.predicator calls
+  candidate total native-store count includes the declaration plus the two target calls; no other candidate call is introduced
+
+safety:
+  candidate normal compilation succeeded; no spill, stack frame, shared-memory or wave-count increase in target
+  native destination remains the existing 16-byte-aligned partial_acc offset tx*8 BF16
+  launch remains dim3(16,2,8)=256 threads with unchanged __launch_bounds__(256)
+  no new barrier, device synchronization, partial format, tail handling, or global index arithmetic
+  no C500 correctness, A/B, or OJ run performed per task assignment
+
+artifacts:
+  307501ce3e311c8fb755ad28bf8943d0c8784fa9f35cd892694a783157a08a50  build/exp688_candidate_normal.so
+  d70490c2272edb31028c414d944175936248f126ef059e4bcecaa5846e7cfe6c  build/exp688_candidate_resource.so
+  42ea07a2c5b2840276d37d52b9e47232456b8828b29acc6ea631fd905f48f985  build/exp688_candidate_device.ll
+  608c93c732180e8cb96db73586d9866918972b64e47907aaa415d4b54cdf2374  build/exp688_control_resource.so
+  c0b1feacbfa1f793737da57fe0104013a92ac56e7408de40deb789d8fd7b29b7  build/exp688_control_device.ll

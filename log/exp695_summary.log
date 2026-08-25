@@ -1,0 +1,26 @@
+exp695 final summary
+2026-08-24T13:34:37Z
+candidate_source_sha=8efee54b8335ce391da7aab12f6607f685a58b01bacdbd6bb1a6982b54f472a8
+control_source_sha=3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+candidate/control source identity: verified
+target: case9 B32 KV8 L4096; RAW_WAVE_FIRST_Z_MERGE only on candidate case9 dispatch; case7/case13 false
+static/build:
+  candidate normal: PASS
+  candidate resource: PASS
+  candidate LLVM: PASS; case9 raw function bsm.bpermute calls=20
+  control normal/resource/LLVM: PASS
+  active candidate resource: 80 MT, 48 ST, 8448B shared, 0B stack, 6 waves
+  active control resource: 82 MT, 48 ST, 8448B shared, 0B stack, 5 waves
+  candidate resource diagnostics: no spill/stack/error/invalid launch
+C500 correctness logs:
+  log/exp695_candidate_full.log: [PASS] case  9
+  log/exp695_candidate_boundary.log: [PASS] case  9
+  log/exp695_candidate_random.log: [PASS] case  9
+  log/exp695_candidate_exact.log: [PASS] case  9
+  log/exp695_candidate_mixed_reuse.log: case=9 exp695 mixed/poison/guards/reuse: PASS
+  log/exp695_control_full.log: [PASS] case  9
+  log/exp695_control_boundary.log: [PASS] case  9
+  log/exp695_control_random.log: [PASS] case  9
+  log/exp695_control_exact.log: [PASS] case  9
+  log/exp695_control_mixed_reuse.log: case=9 exp695 mixed/poison/guards/reuse: PASS
+all requested candidate/control correctness runs completed PASS

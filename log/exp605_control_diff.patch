@@ -1,0 +1,245 @@
+diff --git a/solutions/archive/2026-08-16-submissions/cuda_113889.cpp b/solutions/archive/2026-08-20-experiments/cuda_case12_full_direct_v_bsm_exp605.cpp
+index cf8c168..91968ae 100644
+--- a/solutions/archive/2026-08-16-submissions/cuda_113889.cpp
++++ b/solutions/archive/2026-08-20-experiments/cuda_case12_full_direct_v_bsm_exp605.cpp
+@@ -2462,6 +2462,51 @@ __device__ __forceinline__ void case13_headpair_two_token_pv(
+     }
+ }
+ 
++// exp605: case12's z8 physical wave pairs ty=0/1 at the same tx and z-pair.
++// Consume one token at a time so the V register payload can be overwritten by
++// the peer payload before the next-page V load.  This preserves the existing
++// score ownership and head broadcasts while avoiding a current+next or
++// own+peer two-payload live range.
++template <int TOKEN>
++__device__ __forceinline__ void case13_headpair_one_token_pv_direct(
++    const uint4& vpack,
++    float owned_weight,
++    float& l0,
++    float& l1,
++    float* acc0,
++    float* acc1)
++{
++    static_assert(TOKEN == 0 || TOKEN == 1,
++                  "direct-V token must be one of the two z8 tokens");
++    const float w0 = TOKEN == 0
++        ? native_row16_broadcast<0>(owned_weight)
++        : native_row16_broadcast<1>(owned_weight);
++    const float w1 = TOKEN == 0
++        ? native_row16_broadcast<4>(owned_weight)
++        : native_row16_broadcast<5>(owned_weight);
++    l0 += w0;
++    l1 += w1;
++    pv_two_heads_same_v(acc0, acc1, vpack, w0, w1);
++}
++
++// The case12 dim3(16,2,8) mapping is
++// lane=(tz&1)*32 + ty*16 + tx.  Thus lane^16 selects the other ty in the
++// same physical 64-lane wave and preserves both tx and the adjacent-z pair.
++// Exchange the four words in place only after own-token PV has retired; this
++// deliberately avoids keeping current own and peer V vectors live together.
++__device__ __forceinline__ void case13_direct_v_peer_inplace(uint4& vpack)
++{
++#if defined(__MACA_ARCH__) && (__MACA_ARCH__ == 1000)
++    const unsigned peer_lane = __lane_id() ^ 16u;
++    vpack.x = __builtin_mxc_bsm_bpermute(peer_lane << 2, vpack.x);
++    vpack.y = __builtin_mxc_bsm_bpermute(peer_lane << 2, vpack.y);
++    vpack.z = __builtin_mxc_bsm_bpermute(peer_lane << 2, vpack.z);
++    vpack.w = __builtin_mxc_bsm_bpermute(peer_lane << 2, vpack.w);
++#else
++    (void)vpack;
++#endif
++}
++
+ __device__ __forceinline__ void store_case13_headpair_state(
+     float* s_acc,
+     float (*s_md)[2],
+@@ -2481,7 +2526,7 @@ __device__ __forceinline__ void store_case13_headpair_state(
+ }
+ 
+ template <bool ALL_NATIVE_ROW_QK = false, bool NATIVE_HEAD_BIT1 = false,
+-          bool FIXED_LIVE_BUCKETS = false>
++          bool FIXED_LIVE_BUCKETS = false, bool DIRECT_V_BSM = false>
+ __global__ void __launch_bounds__(256)
+ paged_decode_case13_kv8_headpair_z8_kernel(
+     const __nv_bfloat16* __restrict__ q,
+@@ -2589,13 +2634,28 @@ paged_decode_case13_kv8_headpair_z8_kernel(
+     float acc0[8] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
+     float acc1[8] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
+ 
++    static_assert(!DIRECT_V_BSM ||
++                      (ALL_NATIVE_ROW_QK && !NATIVE_HEAD_BIT1 &&
++                       !FIXED_LIVE_BUCKETS),
++                  "direct V BSM is isolated to case12's native z8 path");
++
+     const int32_t* bt_row = block_table + b * pages_per_batch;
+     if (p_beg < p_end) {
+         int32_t pid = bt_row[p_beg];
+         issue_case13_kv8_headpair_z8_page(
+             k_cache, s_k, pid, kv_head, tx, ty, tz);
+-        issue_case13_kv8_headpair_z8_page(
+-            v_cache, s_v, pid, kv_head, tx, ty, tz);
++        uint4 vpack;
++        if constexpr (DIRECT_V_BSM) {
++            const int token = tz * 2 + ty;
++            const int cache_row =
++                (pid * PAGE_TOKENS * 8 + token * 8 + kv_head) * HEAD_DIM;
++            const uint32_t* src =
++                reinterpret_cast<const uint32_t*>(v_cache + cache_row) + tx * 4;
++            vpack = *reinterpret_cast<const uint4*>(src);
++        } else {
++            issue_case13_kv8_headpair_z8_page(
++                v_cache, s_v, pid, kv_head, tx, ty, tz);
++        }
+ 
+         for (int p = p_beg; p < p_end; ++p) {
+             // One physical 64-lane wave contains two adjacent z partitions
+@@ -2646,20 +2706,22 @@ paged_decode_case13_kv8_headpair_z8_kernel(
+                      next_token * 8 + kv_head) * HEAD_DIM;
+                 const uint2* next_k_src =
+                     reinterpret_cast<const uint2*>(k_cache + next_row) + tx * 2;
+-                const uint2* next_v_src =
+-                    reinterpret_cast<const uint2*>(v_cache + next_row) + tx * 2;
+                 const uint2 next_k01 = next_k_src[0];
+                 const uint2 next_k23 = next_k_src[1];
+-                const uint2 next_v01 = next_v_src[0];
+-                const uint2 next_v23 = next_v_src[1];
+                 next_k0 = next_k01.x;
+                 next_k1 = next_k01.y;
+                 next_k2 = next_k23.x;
+                 next_k3 = next_k23.y;
+-                next_v0 = next_v01.x;
+-                next_v1 = next_v01.y;
+-                next_v2 = next_v23.x;
+-                next_v3 = next_v23.y;
++                if constexpr (!DIRECT_V_BSM) {
++                    const uint2* next_v_src =
++                        reinterpret_cast<const uint2*>(v_cache + next_row) + tx * 2;
++                    const uint2 next_v01 = next_v_src[0];
++                    const uint2 next_v23 = next_v_src[1];
++                    next_v0 = next_v01.x;
++                    next_v1 = next_v01.y;
++                    next_v2 = next_v23.x;
++                    next_v3 = next_v23.y;
++                }
+             }
+ 
+             const bool new_max0 = m_page0 > m0;
+@@ -2682,7 +2744,23 @@ paged_decode_case13_kv8_headpair_z8_kernel(
+                 packed_scale(acc1 + 4, acc1 + 4, alpha1);
+                 packed_scale(acc1 + 6, acc1 + 6, alpha1);
+             }
+-            if constexpr (NATIVE_HEAD_BIT1) {
++            if constexpr (DIRECT_V_BSM) {
++                const float owned_weight = __builtin_exp2f(
++                    owned_score - ((tx & 4) ? m_new1 : m_new0));
++                if (ty == 0) {
++                    case13_headpair_one_token_pv_direct<0>(
++                        vpack, owned_weight, l0, l1, acc0, acc1);
++                    case13_direct_v_peer_inplace(vpack);
++                    case13_headpair_one_token_pv_direct<1>(
++                        vpack, owned_weight, l0, l1, acc0, acc1);
++                } else {
++                    case13_headpair_one_token_pv_direct<1>(
++                        vpack, owned_weight, l0, l1, acc0, acc1);
++                    case13_direct_v_peer_inplace(vpack);
++                    case13_headpair_one_token_pv_direct<0>(
++                        vpack, owned_weight, l0, l1, acc0, acc1);
++                }
++            } else if constexpr (NATIVE_HEAD_BIT1) {
+                 case13_headpair_two_token_pv<2>(
+                     owned_score, m_new0, m_new1, s_v, tz * 2, tx,
+                     l0, l1, acc0, acc1);
+@@ -2702,15 +2780,25 @@ paged_decode_case13_kv8_headpair_z8_kernel(
+                 __syncwarp();
+                 const int next_token = tz * 2 + ty;
+                 uint32_t* next_k_dst = &s_k[next_token][tx * 4];
+-                uint32_t* next_v_dst = &s_v[next_token][tx * 4];
+                 next_k_dst[0] = next_k0;
+                 next_k_dst[1] = next_k1;
+                 next_k_dst[2] = next_k2;
+                 next_k_dst[3] = next_k3;
+-                next_v_dst[0] = next_v0;
+-                next_v_dst[1] = next_v1;
+-                next_v_dst[2] = next_v2;
+-                next_v_dst[3] = next_v3;
++                if constexpr (DIRECT_V_BSM) {
++                    const int next_token = tz * 2 + ty;
++                    const int next_row =
++                        (pid * PAGE_TOKENS * 8 +
++                         next_token * 8 + kv_head) * HEAD_DIM;
++                    const uint32_t* next_v_src =
++                        reinterpret_cast<const uint32_t*>(v_cache + next_row) + tx * 4;
++                    vpack = *reinterpret_cast<const uint4*>(next_v_src);
++                } else {
++                    uint32_t* next_v_dst = &s_v[next_token][tx * 4];
++                    next_v_dst[0] = next_v0;
++                    next_v_dst[1] = next_v1;
++                    next_v_dst[2] = next_v2;
++                    next_v_dst[3] = next_v3;
++                }
+             } else {
+                 __syncthreads();
+             }
+@@ -2721,8 +2809,18 @@ paged_decode_case13_kv8_headpair_z8_kernel(
+         const int32_t pid = bt_row[full_pages];
+         issue_case13_kv8_headpair_z8_page(
+             k_cache, s_k, pid, kv_head, tx, ty, tz);
+-        issue_case13_kv8_headpair_z8_page(
+-            v_cache, s_v, pid, kv_head, tx, ty, tz);
++        uint4 tail_vpack;
++        if constexpr (DIRECT_V_BSM) {
++            const int token = tz * 2 + ty;
++            const int cache_row =
++                (pid * PAGE_TOKENS * 8 + token * 8 + kv_head) * HEAD_DIM;
++            const uint32_t* src =
++                reinterpret_cast<const uint32_t*>(v_cache + cache_row) + tx * 4;
++            tail_vpack = *reinterpret_cast<const uint4*>(src);
++        } else {
++            issue_case13_kv8_headpair_z8_page(
++                v_cache, s_v, pid, kv_head, tx, ty, tz);
++        }
+         __syncwarp();
+ 
+         float owned_score = -CUDART_INF_F;
+@@ -2774,10 +2872,26 @@ paged_decode_case13_kv8_headpair_z8_kernel(
+                 packed_scale(acc1 + 4, acc1 + 4, alpha1);
+                 packed_scale(acc1 + 6, acc1 + 6, alpha1);
+             }
+-            if constexpr (NATIVE_HEAD_BIT1) {
+-                case13_headpair_two_token_pv<2>(
+-                    owned_score, m_new0, m_new1, s_v, tz * 2, tx,
+-                    l0, l1, acc0, acc1);
++        if constexpr (DIRECT_V_BSM) {
++            const float owned_weight = __builtin_exp2f(
++                owned_score - ((tx & 4) ? m_new1 : m_new0));
++            if (ty == 0) {
++                case13_headpair_one_token_pv_direct<0>(
++                    tail_vpack, owned_weight, l0, l1, acc0, acc1);
++                case13_direct_v_peer_inplace(tail_vpack);
++                case13_headpair_one_token_pv_direct<1>(
++                    tail_vpack, owned_weight, l0, l1, acc0, acc1);
++            } else {
++                case13_headpair_one_token_pv_direct<1>(
++                    tail_vpack, owned_weight, l0, l1, acc0, acc1);
++                case13_direct_v_peer_inplace(tail_vpack);
++                case13_headpair_one_token_pv_direct<0>(
++                    tail_vpack, owned_weight, l0, l1, acc0, acc1);
++            }
++        } else if constexpr (NATIVE_HEAD_BIT1) {
++            case13_headpair_two_token_pv<2>(
++                owned_score, m_new0, m_new1, s_v, tz * 2, tx,
++                l0, l1, acc0, acc1);
+             } else if constexpr (ALL_NATIVE_ROW_QK) {
+                 case13_headpair_two_token_pv<4>(
+                     owned_score, m_new0, m_new1, s_v, tz * 2, tx,
+@@ -5606,7 +5720,8 @@ extern "C" void run_kernel(
+                     // prescale, packed metadata, global partial count and vec2
+                     // reducer unchanged. exp428 changes only this z8
+                     // producer's QK exchange to the all-native row network.
+-                    paged_decode_case13_kv8_headpair_z8_kernel<true><<<
++                    paged_decode_case13_kv8_headpair_z8_kernel<
++                        true, false, false, true><<<
+                         grid, dim3(16, 2, 8)>>>(
+                         q, k_cache_paged, v_cache_paged, output,
+                         cache_seqlens, block_table,

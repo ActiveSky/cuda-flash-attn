@@ -1,0 +1,28 @@
+exp633 lowering verdict
+candidate_sha=ca09ee17906429df954c42611e458ee964c4120c7ec85f3e57ca6f3502230411
+control_sha=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+device_bc: candidate/control extracted via mxcc -device-bc and clang-offload-bundler target maca-mxc-metax-macahca--xcore1000-bc
+candidate_target_memcpy_count:
+8
+control_target_memcpy_count:
+1
+candidate_target_memcpy_lines:
+25:  tail call void @llvm.memcpy.p1.p4.i64(ptr addrspace(1) noundef align 16 dereferenceable(16) %25, ptr addrspace(4) noundef align 16 dereferenceable(16) %21, i64 16, i1 false), !call_argsrelate !35
+28:  tail call void @llvm.memcpy.p1.p4.i64(ptr addrspace(1) noundef align 16 dereferenceable(16) %27, ptr addrspace(4) noundef align 16 dereferenceable(16) %21, i64 16, i1 false), !call_argsrelate !35
+31:  tail call void @llvm.memcpy.p1.p4.i64(ptr addrspace(1) noundef align 16 dereferenceable(16) %29, ptr addrspace(4) noundef align 16 dereferenceable(16) %21, i64 16, i1 false), !call_argsrelate !35
+34:  tail call void @llvm.memcpy.p1.p4.i64(ptr addrspace(1) noundef align 16 dereferenceable(16) %31, ptr addrspace(4) noundef align 16 dereferenceable(16) %21, i64 16, i1 false), !call_argsrelate !35
+37:  tail call void @llvm.memcpy.p1.p4.i64(ptr addrspace(1) noundef align 16 dereferenceable(16) %33, ptr addrspace(4) noundef align 16 dereferenceable(16) %21, i64 16, i1 false), !call_argsrelate !35
+40:  tail call void @llvm.memcpy.p1.p4.i64(ptr addrspace(1) noundef align 16 dereferenceable(16) %35, ptr addrspace(4) noundef align 16 dereferenceable(16) %21, i64 16, i1 false), !call_argsrelate !35
+43:  tail call void @llvm.memcpy.p1.p4.i64(ptr addrspace(1) noundef align 16 dereferenceable(16) %37, ptr addrspace(4) noundef align 16 dereferenceable(16) %21, i64 16, i1 false), !call_argsrelate !35
+46:  tail call void @llvm.memcpy.p1.p4.i64(ptr addrspace(1) noundef align 16 dereferenceable(16) %39, ptr addrspace(4) noundef align 16 dereferenceable(16) %21, i64 16, i1 false), !call_argsrelate !35
+control_target_memcpy_lines:
+29:  tail call void @llvm.memcpy.p1.p4.i64(ptr addrspace(1) noundef align 16 dereferenceable(16) %29, ptr addrspace(4) noundef align 16 dereferenceable(16) %28, i64 16, i1 false), !tbaa.struct !35, !call_argsrelate !36
+candidate source pointer use:
+      1 ptr addrspace(4) %0
+      1 ptr addrspace(4) %19
+      1 ptr addrspace(4) noalias
+      8 ptr addrspace(4) noundef
+candidate payload SSA/value evidence:
+machine lowering:
+No readable xcore1000 machine assembly/disassembly was available from public tools; device-bc unbundled and llvm-disassembled only to LLVM IR.
+VERDICT=BLOCK / MECHANISM_NOT_MATERIALIZED / NO_C500 / NO_OJ

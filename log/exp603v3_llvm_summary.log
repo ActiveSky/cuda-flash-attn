@@ -1,0 +1,258 @@
+identity
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+d27f5e5cfb17562baacbc4f4393c3513bc501cae283d222d718719abd251df28  solutions/archive/2026-08-20-experiments/cuda_case12_wave_local_q_bsm_exp603.cpp
+normal binaries
+4bbe97993b7ad219dc607e95a8a45a11c26c8c96042d857084f91098d00ea873  build/exp603v3_control.so
+61ecb650b68ac181fbc17795c0df200b2431cfc69b4c48911890f421e61c65c5  build/exp603v3_candidate.so
+resource binaries
+b6c698cb46553eece3a907dd820881887f7c5b05776d178419f0f6cba81a2fe5  build/exp603v3_control_resource.so
+5c7c8c32130dc4d78a0ae1fd66d92f01c41b080baf563ffa44e37df76957325b  build/exp603v3_candidate_resource.so
+LLVM
+25509a2cb9cfae61b302b18a5e4ab0f8a6e2bfe7687e8a8763b88eeb85910df1  build/exp603v3_control.ll
+6b3d6af5bcbad1f8c6dae43c2cbda7a1081a582660c99d133cb4453f9a735c9d  build/exp603v3_candidate.ll
+BSM counts
+build/exp603v3_candidate.ll:390
+build/exp603v3_control.ll:382
+target definitions control
+18048:define protected metaxgpu_kernel void @_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef readnone %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+19783:define protected metaxgpu_kernel void @_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef readnone %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+21534:define protected metaxgpu_kernel void @_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef readnone %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+target definitions candidate
+18048:define protected metaxgpu_kernel void @_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef readnone %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+19857:define protected metaxgpu_kernel void @_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef readnone %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+21608:define protected metaxgpu_kernel void @_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef readnone %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+candidate wave target snippets
+28-$_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif = comdat any
+29-
+30-$_Z38paged_decode_case11_headpair_z4_kernelILb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif = comdat any
+31-
+32-$_Z34paged_decode_token_parallel_kernelILi4ELi8ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif = comdat any
+33-
+34-$_Z34paged_decode_token_parallel_kernelILi4ELi8ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif = comdat any
+35-
+36:$_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif = comdat any
+37-
+38-$_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif = comdat any
+39-
+40-$_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif = comdat any
+41-
+42-$_Z34paged_decode_token_parallel_kernelILi8ELi4ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif = comdat any
+43-
+44-$_Z34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif = comdat any
+--
+18040-  store float %acc_all.sroa.24.28.vec.extract, ptr addrspace(1) %ref.tmp556.sroa.6.0.add.ptr562.sroa_idx, align 4, !tbaa !73
+18041-  br label %cleanup565
+18042-
+18043-cleanup565:                                       ; preds = %if.end420, %if.end543, %if.then490, %entry
+18044-  ret void
+18045-}
+18046-
+18047-; Function Attrs: convergent mustprogress norecurse nounwind
+18048:define protected metaxgpu_kernel void @_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef readnone %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+18049-entry:
+18050-  %0 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.x(), !range !26
+18051-  %1 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.y(), !range !26
+18052-  %2 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.z(), !range !26
+18053-  %3 = tail call noundef range(i32 0, 2147483647) i32 @llvm.mxc.block.id.x(), !range !15
+18054-  %shr = lshr i32 %3, 3
+18055-  %and = and i32 %3, 7
+18056-  %4 = tail call noundef range(i32 0, 2147483647) i32 @llvm.mxc.block.id.y(), !range !15
+--
+43222-@5 = private unnamed_addr constant [82 x i8] c"_Z29paged_decode_two_token_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if\00", align 1
+43223-@6 = private unnamed_addr constant [170 x i8] c"_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif\00", align 1
+43224-@7 = private unnamed_addr constant [170 x i8] c"_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif\00", align 1
+43225-@8 = private unnamed_addr constant [170 x i8] c"_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif\00", align 1
+43226-@9 = private unnamed_addr constant [170 x i8] c"_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif\00", align 1
+43227-@10 = private unnamed_addr constant [170 x i8] c"_Z38paged_decode_case11_headpair_z4_kernelILb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif\00", align 1
+43228-@11 = private unnamed_addr constant [158 x i8] c"_Z34paged_decode_token_parallel_kernelILi4ELi8ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif\00", align 1
+43229-@12 = private unnamed_addr constant [158 x i8] c"_Z34paged_decode_token_parallel_kernelILi4ELi8ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif\00", align 1
+43230:@13 = private unnamed_addr constant [114 x i8] c"_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif\00", align 1
+43231-@14 = private unnamed_addr constant [114 x i8] c"_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif\00", align 1
+43232-@15 = private unnamed_addr constant [114 x i8] c"_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif\00", align 1
+43233-@16 = private unnamed_addr constant [158 x i8] c"_Z34paged_decode_token_parallel_kernelILi8ELi4ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif\00", align 1
+43234-@17 = private unnamed_addr constant [158 x i8] c"_Z34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif\00", align 1
+43235-@18 = private unnamed_addr constant [97 x i8] c"_Z33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif\00", align 1
+43236-@19 = private unnamed_addr constant [89 x i8] c"_Z25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif\00", align 1
+43237-@20 = private unnamed_addr constant [89 x i8] c"_Z25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif\00", align 1
+43238-@21 = private unnamed_addr constant [92 x i8] c"_Z31paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii\00", align 1
+candidate bsm address-32 snippets
+342-for.body.lr.ph:                                   ; preds = %if.end
+343-  %div16 = sdiv i64 %num_heads, %num_heads_k
+344-  %div17 = sdiv i64 %rem13, %div16
+345-  %mul29 = mul nsw i64 %div15, %pages_per_batch
+346-  %9 = getelementptr i32, ptr addrspace(1) %block_table.coerce, i64 %mul29
+347:  %sext = shl i64 %div17, 32
+348-  %conv38 = ashr exact i64 %sext, 32
+349-  %xtraiter = and i64 %conv19, 3
+350-  %10 = icmp ult i32 %6, 4
+351-  br i1 %10, label %for.cond.cleanup.loopexit.unr-lcssa, label %for.body.lr.ph.new
+352-
+--
+596-  %sub = and i32 %0, 15
+597-  %mul7 = mul nsw i32 %div29, %pages_per_batch
+598-  %idxprom = sext i32 %mul7 to i64
+599-  %arrayidx = getelementptr inbounds i32, ptr addrspace(1) %block_table.coerce, i64 %idxprom
+600-  %2 = load i32, ptr addrspace(1) %arrayidx, align 4, !tbaa !16
+601:  %3 = shl i32 %2, 13
+602:  %and = shl i32 %1, 7
+603-  %4 = and i32 %and, 384
+604-  %mul10 = or disjoint i32 %3, %4
+605-  %idx.ext = sext i32 %mul10 to i64
+606-  %add.ptr = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext
+607:  %5 = shl i32 %1, 10
+608:  %6 = shl nuw nsw i32 %0, 3
+609-  %7 = and i32 %6, 896
+610-  %mul15 = or disjoint i32 %7, %5
+611-  %idx.ext16 = zext nneg i32 %mul15 to i64
+612-  %add.ptr17 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %out.coerce, i64 %idx.ext16
+613-  %idxprom18 = zext nneg i32 %sub to i64
+--
+633-  %sub = and i32 %0, 15
+634-  %mul7 = mul nsw i32 %div29, %pages_per_batch
+635-  %idxprom = sext i32 %mul7 to i64
+636-  %arrayidx = getelementptr inbounds i32, ptr addrspace(1) %block_table.coerce, i64 %idxprom
+637-  %2 = load i32, ptr addrspace(1) %arrayidx, align 4, !tbaa !16
+638:  %3 = shl i32 %2, 14
+639:  %and = shl i32 %1, 7
+640-  %4 = and i32 %and, 896
+641-  %mul10 = or disjoint i32 %3, %4
+642-  %idx.ext = sext i32 %mul10 to i64
+643-  %add.ptr = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext
+644:  %5 = shl i32 %1, 9
+645:  %6 = shl nuw nsw i32 %0, 3
+646-  %7 = and i32 %6, 384
+647-  %mul15 = or disjoint i32 %7, %5
+648-  %idx.ext16 = zext nneg i32 %mul15 to i64
+649-  %add.ptr17 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %out.coerce, i64 %idx.ext16
+650-  %idxprom18 = zext nneg i32 %sub to i64
+--
+671-  %and9 = and i32 %0, 31
+672-  %mul11 = mul nsw i32 %div228, %pages_per_batch
+673-  %idxprom = sext i32 %mul11 to i64
+674-  %arrayidx = getelementptr inbounds i32, ptr addrspace(1) %block_table.coerce, i64 %idxprom
+675-  %2 = load i32, ptr addrspace(1) %arrayidx, align 4, !tbaa !16
+676:  %3 = shl i32 %div228, 12
+677:  %4 = shl nuw nsw i32 %and, 10
+678:  %5 = shl nuw nsw i32 %0, 2
+679-  %6 = and i32 %5, 896
+680-  %7 = or disjoint i32 %4, %6
+681-  %mul14 = or disjoint i32 %7, %3
+682-  %idx.ext = sext i32 %mul14 to i64
+683-  %add.ptr = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %q.coerce, i64 %idx.ext
+--
+696-  %conv.i244 = trunc i32 %9 to i16
+697-  %12 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i244)
+698-  %shr.i273 = lshr i32 %9, 16
+699-  %conv.i274 = trunc nuw i32 %shr.i273 to i16
+700-  %13 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i274)
+701:  %mul29 = shl nsw i32 %2, 13
+702-  %idx.ext30 = sext i32 %mul29 to i64
+703-  %add.ptr31 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext30
+704:  %14 = shl nuw nsw i32 %and, 7
+705-  %15 = zext nneg i32 %14 to i64
+706-  %add.ptr37 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %add.ptr31, i64 %15
+707-  %arrayidx39 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr37, i64 %idxprom15
+708-  %16 = load i32, ptr addrspace(4) %arrayidx39, align 4, !tbaa !16
+709-  %arrayidx42 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr37, i64 %idxprom19
+--
+726-  %mul56 = fmul contract float %13, %21
+727-  %add57 = fadd contract float %mul56, %add53
+728-  %22 = bitcast float %add57 to i32
+729-  %23 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+730-  %24 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %23) #24
+731:  %xor.i.i.i = xor i32 %24, 16
+732-  %25 = and i32 %24, -32
+733-  %and.i.i.i = add nsw i32 %25, 32
+734-  %cmp.not.i.i.i = icmp slt i32 %xor.i.i.i, %and.i.i.i
+735:  %cond.i.i.i = select i1 %cmp.not.i.i.i, i32 %xor.i.i.i, i32 %24
+736:  %shl.i.i.i = shl i32 %cond.i.i.i, 2
+737:  %26 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i, i32 %22)
+738-  %27 = bitcast i32 %26 to float
+739-  %add63 = fadd contract float %add57, %27
+740-  %28 = bitcast float %add63 to i32
+741-  %29 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+742-  %30 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %29) #24
+743:  %xor.i.i.i.1 = xor i32 %30, 8
+744-  %31 = and i32 %30, -32
+745-  %and.i.i.i.1 = add nsw i32 %31, 32
+746-  %cmp.not.i.i.i.1 = icmp slt i32 %xor.i.i.i.1, %and.i.i.i.1
+747:  %cond.i.i.i.1 = select i1 %cmp.not.i.i.i.1, i32 %xor.i.i.i.1, i32 %30
+748:  %shl.i.i.i.1 = shl i32 %cond.i.i.i.1, 2
+749:  %32 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.1, i32 %28)
+750-  %33 = bitcast i32 %32 to float
+751-  %add63.1 = fadd contract float %add63, %33
+752-  %34 = bitcast float %add63.1 to i32
+753-  %35 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+754-  %36 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %35) #24
+755:  %xor.i.i.i.2 = xor i32 %36, 4
+756-  %37 = and i32 %36, -32
+757-  %and.i.i.i.2 = add nsw i32 %37, 32
+758-  %cmp.not.i.i.i.2 = icmp slt i32 %xor.i.i.i.2, %and.i.i.i.2
+759:  %cond.i.i.i.2 = select i1 %cmp.not.i.i.i.2, i32 %xor.i.i.i.2, i32 %36
+760:  %shl.i.i.i.2 = shl i32 %cond.i.i.i.2, 2
+761:  %38 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.2, i32 %34)
+762-  %39 = bitcast i32 %38 to float
+763-  %add63.2 = fadd contract float %add63.1, %39
+764-  %40 = bitcast float %add63.2 to i32
+765-  %41 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+766-  %42 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %41) #24
+767:  %xor.i.i.i.3 = xor i32 %42, 2
+768-  %43 = and i32 %42, -32
+769-  %and.i.i.i.3 = add nsw i32 %43, 32
+770-  %cmp.not.i.i.i.3 = icmp slt i32 %xor.i.i.i.3, %and.i.i.i.3
+771:  %cond.i.i.i.3 = select i1 %cmp.not.i.i.i.3, i32 %xor.i.i.i.3, i32 %42
+772:  %shl.i.i.i.3 = shl i32 %cond.i.i.i.3, 2
+773:  %44 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.3, i32 %40)
+774-  %45 = bitcast i32 %44 to float
+775-  %add63.3 = fadd contract float %add63.2, %45
+776-  %46 = bitcast float %add63.3 to i32
+777-  %47 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+778-  %48 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %47) #24
+779:  %xor.i.i.i.4 = xor i32 %48, 1
+780-  %49 = and i32 %48, -32
+781-  %and.i.i.i.4 = add nsw i32 %49, 32
+782-  %cmp.not.i.i.i.4 = icmp slt i32 %xor.i.i.i.4, %and.i.i.i.4
+783:  %cond.i.i.i.4 = select i1 %cmp.not.i.i.i.4, i32 %xor.i.i.i.4, i32 %48
+784:  %shl.i.i.i.4 = shl i32 %cond.i.i.i.4, 2
+785:  %50 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.4, i32 %46)
+786-  %51 = bitcast i32 %50 to float
+787-  %add63.4 = fadd contract float %add63.3, %51
+788-  %mul65 = fmul contract float %add63.4, %sm_scale
+789-  %52 = or disjoint i64 %15, 512
+790-  %add.ptr37.1 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %add.ptr31, i64 %52
+--
+810-  %mul56.1 = fmul contract float %13, %58
+811-  %add57.1 = fadd contract float %mul56.1, %add53.1
+812-  %59 = bitcast float %add57.1 to i32
+813-  %60 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+814-  %61 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %60) #24
+815:  %xor.i.i.i.1363 = xor i32 %61, 16
+816-  %62 = and i32 %61, -32
+817-  %and.i.i.i.1364 = add nsw i32 %62, 32
+818-  %cmp.not.i.i.i.1365 = icmp slt i32 %xor.i.i.i.1363, %and.i.i.i.1364
+819:  %cond.i.i.i.1366 = select i1 %cmp.not.i.i.i.1365, i32 %xor.i.i.i.1363, i32 %61
+820:  %shl.i.i.i.1367 = shl i32 %cond.i.i.i.1366, 2
+821:  %63 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.1367, i32 %59)
+822-  %64 = bitcast i32 %63 to float
+823-  %add63.1368 = fadd contract float %add57.1, %64
+824-  %65 = bitcast float %add63.1368 to i32
+825-  %66 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+826-  %67 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %66) #24
+827:  %xor.i.i.i.1.1 = xor i32 %67, 8
+828-  %68 = and i32 %67, -32
+829-  %and.i.i.i.1.1 = add nsw i32 %68, 32
+830-  %cmp.not.i.i.i.1.1 = icmp slt i32 %xor.i.i.i.1.1, %and.i.i.i.1.1
+831:  %cond.i.i.i.1.1 = select i1 %cmp.not.i.i.i.1.1, i32 %xor.i.i.i.1.1, i32 %67
+832:  %shl.i.i.i.1.1 = shl i32 %cond.i.i.i.1.1, 2
+833:  %69 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.1.1, i32 %65)
+834-  %70 = bitcast i32 %69 to float
+835-  %add63.1.1 = fadd contract float %add63.1368, %70
+836-  %71 = bitcast float %add63.1.1 to i32
+837-  %72 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+838-  %73 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %72) #24
+839:  %xor.i.i.i.2.1 = xor i32 %73, 4
+840-  %74 = and i32 %73, -32
+841-  %and.i.i.i.2.1 = add nsw i32 %74, 32
+842-  %cmp.not.i.i.i.2.1 = icmp slt i32 %xor.i.i.i.2.1, %and.i.i.i.2.1
+843:  %cond.i.i.i.2.1 = select i1 %cmp.not.i.i.i.2.1, i32 %xor.i.i.i.2.1, i32 %73
+844:  %shl.i.i.i.2.1 = shl i32 %cond.i.i.i.2.1, 2

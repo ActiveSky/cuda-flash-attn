@@ -1,0 +1,16 @@
+# exp635 OJ dry-run
+
+UTC: 2026-08-22T13:23:13Z
+Candidate: solutions/archive/2026-08-22-experiments/cuda_case12_native_ldg_wave_bsm_exp635.cpp
+Candidate SHA-256: f1d2515b3f8f592e990b55d302fe49965e4b18d06198bfecba52431afae80d0f
+Work file: solutions/cuda_maca_optimized.cpp
+Work SHA-256 before dry-run: f1d2515b3f8f592e990b55d302fe49965e4b18d06198bfecba52431afae80d0f
+
+Command:
+python3 tools/xpuoj_submit.py solutions/cuda_maca_optimized.cpp
+
+Output:
+target: contest #11, problem #1
+language: cuda.maca-c500
+code: solutions/cuda_maca_optimized.cpp (266871 bytes)
+dry-run: no submission created; use --submit to submit

@@ -1,0 +1,5 @@
+exp626 revalidation work-file stage
+artifacts=/tmp/exp626_revalidation.L8enFp
+4740515a16d64cf559c90b7eec029cb59daf3cc7910f8d410c87bccf97a4f038  solutions/archive/2026-08-21-experiments/cuda_case2_exact_single_token_vcopy_exp619.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+4740515a16d64cf559c90b7eec029cb59daf3cc7910f8d410c87bccf97a4f038  solutions/cuda_maca_optimized.cpp

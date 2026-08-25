@@ -1,0 +1,6 @@
+method: ephemeral Python ABI smoke with num_blocks=2, legal page table [[1,0]], page0 poison and tagged page1
+safety: 16-element prefix/suffix guards around q, k, v, and output
+candidate: pass=True match=1.000000 finite=True page1_tag_max_abs=0.000000e+00 page1_exact=True guards=True
+control: pass=True match=1.000000 finite=True page1_tag_max_abs=0.000000e+00 page1_exact=True guards=True
+exit: 0
+scope: page1 custom ABI coverage supplements case1 manifest, whose fixed shape has only one physical page

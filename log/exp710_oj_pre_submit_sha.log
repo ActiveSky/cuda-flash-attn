@@ -1,0 +1,6 @@
+UTC 2026-08-24T18:43:30Z
+9496b2add95197c698c0ff39af34ec23bf766c7315078eeff9119a4d66d3aab0  solutions/cuda_maca_optimized.cpp
+9496b2add95197c698c0ff39af34ec23bf766c7315078eeff9119a4d66d3aab0  solutions/archive/2026-08-24-experiments/cuda_control124611_z4_tail_trap_fix_exp710.cpp
+workfile_equals_candidate=0
+expected_exp710=9496b2add95197c698c0ff39af34ec23bf766c7315078eeff9119a4d66d3aab0
+exit_status=0

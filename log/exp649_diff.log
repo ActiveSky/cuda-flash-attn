@@ -1,0 +1,58 @@
+--- solutions/archive/2026-08-22-experiments/cuda_case14_direct_fanin_normalized_bf16_exp639.cpp	2026-08-22 16:58:45.705562151 +0000
++++ solutions/archive/2026-08-23-experiments/cuda_case14_direct_fanin_normalized_bf16_txfix_exp649.cpp	2026-08-23 11:20:51.650249246 +0000
+@@ -2437,6 +2437,7 @@
+     float& m,
+     float& l,
+     float* acc,
++    int tx,
+     float peer_m,
+     float peer_l,
+     const __nv_bfloat162* peer_acc)
+@@ -2456,6 +2457,7 @@
+     packed_scale(acc + 4, acc + 4, self_scale);
+     packed_scale(acc + 6, acc + 6, self_scale);
+     if (peer_valid) {
++        peer_acc += tx * 4;
+         const uint32_t* peer_words =
+             reinterpret_cast<const uint32_t*>(peer_acc);
+         const float peer0[2] = {
+@@ -3857,16 +3859,16 @@
+         if (tz == 0) {
+             // z0: local h0 plus z1/z2/z3 h0.
+             merge_case14_normalized_z_peer(
+-                m0, l0, acc0,
++                m0, l0, acc0, tx,
+                 s_direct_md[16 + head0][0],
+                 s_direct_md[16 + head0][1],
+                 s_norm + (16 + head0) * (HEAD_DIM / 2));
+             merge_case14_normalized_z_peer(
+-                m0, l0, acc0,
++                m0, l0, acc0, tx,
+                 s_direct_md[head0][0], s_direct_md[head0][1],
+                 s_norm + head0 * (HEAD_DIM / 2));
+             merge_case14_normalized_z_peer(
+-                m0, l0, acc0,
++                m0, l0, acc0, tx,
+                 s_direct_md[8 + head0][0],
+                 s_direct_md[8 + head0][1],
+                 s_norm + (8 + head0) * (HEAD_DIM / 2));
+@@ -3914,16 +3916,16 @@
+         } else if (tz == 1) {
+             // z1: local h1 plus z0/z2/z3 h1.
+             merge_case14_normalized_z_peer(
+-                m1, l1, acc1,
++                m1, l1, acc1, tx,
+                 s_direct_md[20 + (head1 - 4)][0],
+                 s_direct_md[20 + (head1 - 4)][1],
+                 s_norm + (20 + (head1 - 4)) * (HEAD_DIM / 2));
+             merge_case14_normalized_z_peer(
+-                m1, l1, acc1,
++                m1, l1, acc1, tx,
+                 s_direct_md[head1][0], s_direct_md[head1][1],
+                 s_norm + head1 * (HEAD_DIM / 2));
+             merge_case14_normalized_z_peer(
+-                m1, l1, acc1,
++                m1, l1, acc1, tx,
+                 s_direct_md[8 + head1][0],
+                 s_direct_md[8 + head1][1],
+                 s_norm + (8 + head1) * (HEAD_DIM / 2));

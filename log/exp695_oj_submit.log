@@ -1,0 +1,39 @@
+exp695 OJ probe (single serialized submission)
+date: 2026-08-24
+candidate: solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp
+candidate_sha256: 8efee54b8335ce391da7aab12f6607f685a58b01bacdbd6bb1a6982b54f472a8
+mechanism: case9 first z-pair merge uses raw physical-wave lane^32; no other intended change
+target: case9 (batch=32, seqlen_k_cap=4096, kv_heads=8), target >=58 display points
+preflight_queue: all listed submissions terminal; no Pending/Running
+dry_run_command: python3 tools/xpuoj_submit.py solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp
+dry_run_result: no submission created
+submit_command: python3 tools/xpuoj_submit.py solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp --submit --no-archive --poll-seconds 10 --timeout-seconds 3600
+submission_id: 125585
+watch: same ID only; Pending -> Compiling -> Running -> Finished/Accepted
+submit_time: 2026-08-24T15:32:14.000Z
+status: Accepted
+total_score: 65.86
+time_used_ms: 1607
+memory_used_kb: 23060512
+
+case | status | display | user_ms | baseline_ms | speedup
+1 | Accepted | 92 | 0.003 | 0.038 | 12.667
+2 | Accepted | 90 | 0.004 | 0.038 | 9.500
+3 | Accepted | 82 | 0.010 | 0.046 | 4.600
+4 | Accepted | 72 | 0.023 | 0.060 | 2.609
+5 | Accepted | 73 | 0.017 | 0.046 | 2.706
+6 | Accepted | 63 | 0.028 | 0.049 | 1.750
+7 | Accepted | 55 | 0.227 | 0.281 | 1.238
+8 | Accepted | 54 | 0.093 | 0.111 | 1.194
+9 | Accepted | 56 | 0.244 | 0.317 | 1.299
+10 | Accepted | 62 | 0.038 | 0.064 | 1.684
+11 | Accepted | 52 | 0.224 | 0.249 | 1.112
+12 | Accepted | 60 | 0.375 | 0.572 | 1.525
+13 | Accepted | 56 | 0.182 | 0.241 | 1.324
+14 | Accepted | 55 | 0.139 | 0.172 | 1.237
+
+target_result: case9 56 points / 0.244 ms; target >=58 not met
+final_queue: #125585 and all listed earlier submissions terminal; no Pending/Running
+post_submit_candidate_sha256: 8efee54b8335ce391da7aab12f6607f685a58b01bacdbd6bb1a6982b54f472a8
+post_submit_workfile_sha256: 3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe (control unchanged)
+archive: disabled for this executor task; no results/raw file written

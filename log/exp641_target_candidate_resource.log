@@ -1,0 +1,4 @@
+140: maca info  : Function properties for  _Z39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+141-  0 bytes stack frame 
+142- maca info  : Used  18 MTregisters, 24 STregisters, 1024 bytes shared mem  
+143- maca info  : staticMaxWarps/PEU : 8

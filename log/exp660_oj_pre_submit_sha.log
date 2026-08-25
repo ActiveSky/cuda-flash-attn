@@ -1,0 +1,4 @@
+$ sha256sum solutions/archive/2026-08-24-experiments/cuda_case12_async_register_kv_rebase_exp660.cpp solutions/archive/2026-08-16-submissions/cuda_113889.cpp solutions/cuda_maca_optimized.cpp
+9d92c4383e17e1d073ff8452344417b2a548299c50a8f2fc67ef7c694daff51f  solutions/archive/2026-08-24-experiments/cuda_case12_async_register_kv_rebase_exp660.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+9d92c4383e17e1d073ff8452344417b2a548299c50a8f2fc67ef7c694daff51f  solutions/cuda_maca_optimized.cpp

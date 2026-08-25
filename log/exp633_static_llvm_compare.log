@@ -1,0 +1,102 @@
+=== diff single <8,4> ===
+--- /tmp/exp633_control_single84.ll	2026-08-22 09:52:12.579908107 +0000
++++ /tmp/exp633_candidate_single84.ll	2026-08-22 09:52:12.579908107 +0000
+@@ -27,7 +27,7 @@
+   %idxprom18 = zext nneg i32 %sub to i64
+   %arrayidx19 = getelementptr inbounds %struct.uint4.2, ptr addrspace(4) %add.ptr, i64 %idxprom18
+   %arrayidx21 = getelementptr inbounds %struct.uint4.2, ptr addrspace(1) %add.ptr17, i64 %idxprom18
+-  tail call void @llvm.memcpy.p1.p4.i64(ptr addrspace(1) noundef align 16 dereferenceable(16) %arrayidx21, ptr addrspace(4) noundef align 16 dereferenceable(16) %arrayidx19, i64 16, i1 false), !tbaa.struct !34, !call_argsrelate !35
++  tail call void @llvm.memcpy.p1.p4.i64(ptr addrspace(1) noundef align 16 dereferenceable(16) %arrayidx21, ptr addrspace(4) noundef align 16 dereferenceable(16) %arrayidx19, i64 16, i1 false), !tbaa.struct !35, !call_argsrelate !34
+   br label %cleanup
+ 
+ cleanup:                                          ; preds = %entry, %if.end
+=== diff two <8,4> ===
+=== target control body ===
+define protected metaxgpu_kernel void @_Z32paged_decode_single_token_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKii(ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch) local_unnamed_addr #7 comdat {
+entry:
+  %0 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.x(), !range !26
+  %cmp = icmp ugt i32 %0, 127
+  br i1 %cmp, label %cleanup, label %if.end
+
+if.end:                                           ; preds = %entry
+  %1 = tail call noundef range(i32 0, 2147483647) i32 @llvm.mxc.block.id.x(), !range !15
+  %div29 = lshr i32 %1, 2
+  %sub = and i32 %0, 15
+  %mul7 = mul nsw i32 %div29, %pages_per_batch
+  %idxprom = sext i32 %mul7 to i64
+  %arrayidx = getelementptr inbounds i32, ptr addrspace(1) %block_table.coerce, i64 %idxprom
+  %2 = load i32, ptr addrspace(1) %arrayidx, align 4, !tbaa !16
+  %3 = shl i32 %2, 13
+  %and = shl i32 %1, 7
+  %4 = and i32 %and, 384
+  %mul10 = or disjoint i32 %3, %4
+  %idx.ext = sext i32 %mul10 to i64
+  %add.ptr = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext
+  %5 = shl i32 %1, 10
+  %6 = shl nuw nsw i32 %0, 3
+  %7 = and i32 %6, 896
+  %mul15 = or disjoint i32 %7, %5
+  %idx.ext16 = zext nneg i32 %mul15 to i64
+  %add.ptr17 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %out.coerce, i64 %idx.ext16
+  %idxprom18 = zext nneg i32 %sub to i64
+  %arrayidx19 = getelementptr inbounds %struct.uint4.2, ptr addrspace(4) %add.ptr, i64 %idxprom18
+  %arrayidx21 = getelementptr inbounds %struct.uint4.2, ptr addrspace(1) %add.ptr17, i64 %idxprom18
+  tail call void @llvm.memcpy.p1.p4.i64(ptr addrspace(1) noundef align 16 dereferenceable(16) %arrayidx21, ptr addrspace(4) noundef align 16 dereferenceable(16) %arrayidx19, i64 16, i1 false), !tbaa.struct !34, !call_argsrelate !35
+  br label %cleanup
+
+cleanup:                                          ; preds = %entry, %if.end
+  ret void
+}
+=== target candidate body ===
+define protected metaxgpu_kernel void @_Z32paged_decode_single_token_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKii(ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch) local_unnamed_addr #7 comdat {
+entry:
+  %0 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.x(), !range !26
+  %cmp = icmp ugt i32 %0, 15
+  br i1 %cmp, label %cleanup, label %if.end
+
+if.end:                                           ; preds = %entry
+  %1 = tail call noundef range(i32 0, 2147483647) i32 @llvm.mxc.block.id.x(), !range !15
+  %div34 = lshr i32 %1, 2
+  %mul = mul nsw i32 %div34, %pages_per_batch
+  %idxprom = sext i32 %mul to i64
+  %arrayidx = getelementptr inbounds i32, ptr addrspace(1) %block_table.coerce, i64 %idxprom
+  %2 = load i32, ptr addrspace(1) %arrayidx, align 4, !tbaa !16
+  %3 = shl i32 %2, 13
+  %and = shl i32 %1, 7
+  %4 = and i32 %and, 384
+  %mul8 = or disjoint i32 %3, %4
+  %idx.ext = sext i32 %mul8 to i64
+  %add.ptr = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext
+  %idxprom9 = zext nneg i32 %0 to i64
+  %arrayidx10 = getelementptr inbounds %struct.uint4.2, ptr addrspace(4) %add.ptr, i64 %idxprom9
+  %5 = shl i32 %1, 10
+  %invariant.gep = getelementptr inbounds %struct.uint4.2, ptr addrspace(1) %out.coerce, i64 %idxprom9
+  %6 = zext i32 %5 to i64
+  %gep = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %invariant.gep, i64 %6
+  tail call void @llvm.memcpy.p1.p4.i64(ptr addrspace(1) noundef align 16 dereferenceable(16) %gep, ptr addrspace(4) noundef align 16 dereferenceable(16) %arrayidx10, i64 16, i1 false), !call_argsrelate !34
+  %7 = or disjoint i64 %6, 128
+  %gep.1 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %invariant.gep, i64 %7
+  tail call void @llvm.memcpy.p1.p4.i64(ptr addrspace(1) noundef align 16 dereferenceable(16) %gep.1, ptr addrspace(4) noundef align 16 dereferenceable(16) %arrayidx10, i64 16, i1 false), !call_argsrelate !34
+  %8 = or disjoint i64 %6, 256
+  %gep.2 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %invariant.gep, i64 %8
+  tail call void @llvm.memcpy.p1.p4.i64(ptr addrspace(1) noundef align 16 dereferenceable(16) %gep.2, ptr addrspace(4) noundef align 16 dereferenceable(16) %arrayidx10, i64 16, i1 false), !call_argsrelate !34
+  %9 = or disjoint i64 %6, 384
+  %gep.3 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %invariant.gep, i64 %9
+  tail call void @llvm.memcpy.p1.p4.i64(ptr addrspace(1) noundef align 16 dereferenceable(16) %gep.3, ptr addrspace(4) noundef align 16 dereferenceable(16) %arrayidx10, i64 16, i1 false), !call_argsrelate !34
+  %10 = or disjoint i64 %6, 512
+  %gep.4 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %invariant.gep, i64 %10
+  tail call void @llvm.memcpy.p1.p4.i64(ptr addrspace(1) noundef align 16 dereferenceable(16) %gep.4, ptr addrspace(4) noundef align 16 dereferenceable(16) %arrayidx10, i64 16, i1 false), !call_argsrelate !34
+  %11 = or disjoint i64 %6, 640
+  %gep.5 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %invariant.gep, i64 %11
+  tail call void @llvm.memcpy.p1.p4.i64(ptr addrspace(1) noundef align 16 dereferenceable(16) %gep.5, ptr addrspace(4) noundef align 16 dereferenceable(16) %arrayidx10, i64 16, i1 false), !call_argsrelate !34
+  %12 = or disjoint i64 %6, 768
+  %gep.6 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %invariant.gep, i64 %12
+  tail call void @llvm.memcpy.p1.p4.i64(ptr addrspace(1) noundef align 16 dereferenceable(16) %gep.6, ptr addrspace(4) noundef align 16 dereferenceable(16) %arrayidx10, i64 16, i1 false), !call_argsrelate !34
+  %13 = or disjoint i64 %6, 896
+  %gep.7 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %invariant.gep, i64 %13
+  tail call void @llvm.memcpy.p1.p4.i64(ptr addrspace(1) noundef align 16 dereferenceable(16) %gep.7, ptr addrspace(4) noundef align 16 dereferenceable(16) %arrayidx10, i64 16, i1 false), !call_argsrelate !34
+  br label %cleanup
+
+cleanup:                                          ; preds = %entry, %if.end
+  ret void
+}

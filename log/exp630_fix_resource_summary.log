@@ -1,0 +1,24 @@
+--- candidate resources
+118: maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi4ELi8ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+119-  0 bytes stack frame 
+120- maca info  : Used  22 MTregisters, 26 STregisters, 0 bytes shared mem  
+--
+122: maca info  : Function properties for  _Z50paged_decode_case2_source_owner_native_b128_kernelILi8ELi4EEvPK15__maca_bfloat16PS0_PKiS5_i 
+123-  0 bytes stack frame 
+124- maca info  : Used  12 MTregisters, 20 STregisters, 0 bytes shared mem  
+--
+126: maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi8ELi4ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+127-  0 bytes stack frame 
+128- maca info  : Used  22 MTregisters, 26 STregisters, 0 bytes shared mem  
+--
+130: maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi8ELi4ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+131-  0 bytes stack frame 
+132- maca info  : Used  22 MTregisters, 26 STregisters, 0 bytes shared mem  
+--- control resources
+118: maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+119-  0 bytes stack frame 
+120- maca info  : Used  22 MTregisters, 26 STregisters, 0 bytes shared mem  
+--
+122: maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+123-  0 bytes stack frame 
+124- maca info  : Used  22 MTregisters, 26 STregisters, 0 bytes shared mem  

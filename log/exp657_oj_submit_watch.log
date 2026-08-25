@@ -1,0 +1,33 @@
+exp657 OJ serial probe
+candidate=solutions/archive/2026-08-24-experiments/cuda_case6_separate_shortrow_owner_exp657.cpp
+candidate_sha256=b658d566d67a9822dcf8256eece1666c61f9f63858bb6bc5e0b348254aa0befc
+work_sha256_before_submit=b658d566d67a9822dcf8256eece1666c61f9f63858bb6bc5e0b348254aa0befc
+command=python3 tools/xpuoj_submit.py solutions/cuda_maca_optimized.cpp --submit
+created submission #124526
+submission=124526 progress=None status=Pending
+watch=original submit process only; no second --submit, no cancel, no parallel submission
+submission=124526 progress=Running status=Pending
+submission=124526 progress=Finished status=Accepted
+full result archive: results/raw/cuda_124526_raw.json
+id=124526 status=Accepted score=65.64 language=cuda.maca-c500 submit_time=2026-08-23T20:00:52.000Z time_used_ms=1597 memory_used_kb=23060788
+testcase status/time_us/display_score:
+1 Accepted 3 92
+2 Accepted 4 90
+3 Accepted 9 83
+4 Accepted 23 72
+5 Accepted 17 73
+6 Accepted 36 57
+7 Accepted 229 55
+8 Accepted 93 54
+9 Accepted 228 58
+10 Accepted 38 62
+11 Accepted 221 52
+12 Accepted 375 60
+13 Accepted 182 56
+14 Accepted 139 55
+target_case6=batch=16,seqlen_k_cap=362,heads=32,kv_heads=8,time_us=36,display_score=57
+control_case6=time_us=28,display_score=63
+raw_code_sha256=b658d566d67a9822dcf8256eece1666c61f9f63858bb6bc5e0b348254aa0befc
+immutable_source=solutions/archive/2026-08-24-submissions/cuda_124526.cpp
+immutable_source_sha256=b658d566d67a9822dcf8256eece1666c61f9f63858bb6bc5e0b348254aa0befc
+result=14/14 Accepted but target did not improve; exp657 closed and control retained

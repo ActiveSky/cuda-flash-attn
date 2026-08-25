@@ -1,0 +1,5 @@
+exp670 candidate resource recheck after unreachable scalar removal
+2026-08-24T00:16:26Z
+candidate source SHA256 before:
+c17355863c27caabd414d15497e7530fb6a9c597879e728304c55a9237d3e17e  solutions/archive/2026-08-24-experiments/cuda_control124611_case12_dual_token_short_fallback_exp670.cpp
+command: tools/build_local_maca.sh solutions/archive/2026-08-24-experiments/cuda_control124611_case12_dual_token_short_fallback_exp670.cpp build/exp670_candidate_recheck_resource.so -resource-usage

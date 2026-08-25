@@ -1,0 +1,8 @@
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3 | candidate=build/exp686_candidate_normal.so | control=build/exp686_control_normal.so | seed=20260824 | case14_capacity=61519 | n_split=257 | pages_per_split=15
+[INFO] case14 exact lengths (37): 0,1,15,16,17,239,240,241,254,255,256,479,480,481,719,720,721,959,960,961,3839,3840,3841,61423,61424,61425,61439,61440,61441,61455,61456,61457,61503,61504,61505,61518,61519
+[PASS] case14 exact-01/37 length=0 live_splits=0 candidate finite=True reference_finite=True within_tolerance=True max_error=0.000000e+00 max_tol_ratio=0.000 inputs_untouched=True guards=True
+[PASS] case14 exact-01/37 length=0 live_splits=0 control finite=True reference_finite=True within_tolerance=True max_error=0.000000e+00 max_tol_ratio=0.000 inputs_untouched=True guards=True
+[PASS] case14 exact-01/37 length=0 live_splits=0 require_control=True candidate_finite=True control_finite=True candidate_control_within_tolerance=True
+[FAIL] case14 exact-02/37 length=1 live_splits=1 candidate finite=True reference_finite=True within_tolerance=False max_error=3.484375e+00 max_tol_ratio=48.563 inputs_untouched=True guards=True
+[PASS] case14 exact-02/37 length=1 live_splits=1 control finite=True reference_finite=True within_tolerance=True max_error=0.000000e+00 max_tol_ratio=0.000 inputs_untouched=True guards=True
+[FAIL] case14 exact-02/37 length=1 live_splits=1 require_control=True candidate_finite=True control_finite=True candidate_control_within_tolerance=False

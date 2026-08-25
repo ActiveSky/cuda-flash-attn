@@ -1,0 +1,9 @@
+usage: c500_paged_decode_harness.py [-h] [--library LIBRARY] [--cases CASES]
+                                    [--seed SEED]
+                                    [--lengths {boundary,random,full}]
+                                    [--length-values LENGTH_VALUES]
+                                    [--full-length] [--benchmark]
+                                    [--warmup WARMUP]
+                                    [--iterations ITERATIONS]
+                                    [--samples SAMPLES]
+c500_paged_decode_harness.py: error: argument --length-values: length values must be comma-separated positive integers

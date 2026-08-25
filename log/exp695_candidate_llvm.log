@@ -1,0 +1,110 @@
+exp695 candidate LLVM build
+source_sha=8efee54b8335ce391da7aab12f6607f685a58b01bacdbd6bb1a6982b54f472a8
+Building solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp
+Compiler: /opt/maca/mxgpu_llvm/bin/mxcc
+MACA path: /opt/maca
+CUDA bridge: /opt/maca-3.7.1/tools/cu-bridge
+Target: xcore1000
+Output: build/exp695_candidate_device.ll
+mxcc: warning: argument unused during compilation: '-shared' [-Wunused-command-line-argument]
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  335 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  701 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:1249:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1249 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:1249:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:5750:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, true, false, false, false, false, false, true, false, false, false>' requested here
+ 5750 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:1249:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1249 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:5762:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false>' requested here
+ 5762 |                     paged_decode_token_parallel_kernel<4, 8, false><<<
+      |                     ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:1249:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1249 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:5903:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, false, false, false, false, false, true, false, false, false, false, true, true, true, true, false>' requested here
+ 5903 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:1249:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1249 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:5925:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, true, false, false, false, false, true, false, false, true, false, true, true, false, false, true>' requested here
+ 5925 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  701 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:5940:9: note: in instantiation of function template specialization 'paged_decode_split_qk_pair_kernel<8, 4>' requested here
+ 5940 |         paged_decode_split_qk_pair_kernel<8, 4><<<grid, 128>>>(
+      |         ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  335 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:5947:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<4, 8>' requested here
+ 5947 |             paged_decode_split_kernel<4, 8><<<grid, 256>>>(
+      |             ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  335 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:5953:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<8, 4>' requested here
+ 5953 |             paged_decode_split_kernel<8, 4><<<grid, 128>>>(
+      |             ^
+10 warnings generated when compiling for xcore1000.
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  335 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  701 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:1249:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1249 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:1249:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:5750:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, true, false, false, false, false, false, true, false, false, false>' requested here
+ 5750 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:1249:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1249 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:5762:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false>' requested here
+ 5762 |                     paged_decode_token_parallel_kernel<4, 8, false><<<
+      |                     ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:1249:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1249 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:5903:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, false, false, false, false, false, true, false, false, false, false, true, true, true, true, false>' requested here
+ 5903 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:1249:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1249 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:5925:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, true, false, false, false, false, true, false, false, true, false, true, true, false, false, true>' requested here
+ 5925 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  701 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:5940:9: note: in instantiation of function template specialization 'paged_decode_split_qk_pair_kernel<8, 4>' requested here
+ 5940 |         paged_decode_split_qk_pair_kernel<8, 4><<<grid, 128>>>(
+      |         ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  335 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:5947:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<4, 8>' requested here
+ 5947 |             paged_decode_split_kernel<4, 8><<<grid, 256>>>(
+      |             ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  335 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-24-experiments/cuda_control124611_case9_raw_wave_rebase_exp695.cpp:5953:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<8, 4>' requested here
+ 5953 |             paged_decode_split_kernel<8, 4><<<grid, 128>>>(
+      |             ^
+10 warnings generated when compiling for host.
+Built build/exp695_candidate_device.ll

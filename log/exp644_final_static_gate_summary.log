@@ -1,0 +1,38 @@
+exp644 FINAL STATIC GATE SUMMARY
+UTC 2026-08-22T21:55:53Z
+status=FAIL (strict full-TU reachability gate)
+stop_rule=resource tuple coverage failed; no C500, no A/B, no OJ; LLVM/stub semantic comparison stopped
+candidate=solutions/archive/2026-08-22-experiments/cuda_case12_pair_state_threepeer_fanin_exp644.cpp
+candidate_sha=871756b882bda577c31f9522cc5ef735f0fbfd051b22c21c448cf849e3c5a532
+control=solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+control_sha=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+commands:
+  tools/build_local_maca.sh <candidate> build/exp644_final_candidate_normal.so
+  tools/build_local_maca.sh <control> build/exp644_final_control_normal.so
+  tools/build_local_maca.sh <candidate> build/exp644_final_candidate_resource.so -resource-usage
+  tools/build_local_maca.sh <control> build/exp644_final_control_resource.so -resource-usage
+  tools/build_local_maca.sh <candidate> build/exp644_final_candidate_device.ll -c -emit-llvm -S
+  tools/build_local_maca.sh <control> build/exp644_final_control_device.ll -c -emit-llvm -S
+build_status=normal candidate PASS; normal control PASS; resource candidate PASS; resource control PASS; device LLVM candidate PASS; device LLVM control PASS
+resource:
+  candidate dedicated target=82 MTreg / 50 STreg / 8448 B shared / 0 B stack / 5 waves (PASS target gate)
+  candidate vec2 reducer=38 MTreg / 39 STreg / 0 B shared / 0 B stack / 8 waves (PASS)
+  control vec2 reducer=38 MTreg / 39 STreg / 0 B shared / 0 B stack / 8 waves (PASS)
+tuple reachability:
+  candidate total=31; dedicated target=1; candidate original control tuple count after dropping target=30
+  control total/original=31; control old case12 <true,false,false> tuple=1
+  allowed replacement common diff (drop candidate target and control old case12 tuple)=PASS
+  strict requirement (drop candidate target leaves all 31 control tuples)=FAIL
+  missing candidate reachable tuple=_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0EE... (control case12 old instance)
+LLVM body/stub comparison=NOT RUN AFTER FAILURE (device LLVM artifacts exist, but semantic comparison was stopped)
+evidence:
+  log/exp644_final_sha_before.log
+  log/exp644_final_sha_after.log
+  log/exp644_final_candidate_normal.log; log/exp644_final_control_normal.log
+  log/exp644_final_candidate_resource_rebuild_manifest.log; log/exp644_final_control_resource_rebuild_manifest.log
+  log/exp644_final_candidate_resource_stdout.log; log/exp644_final_control_resource_stdout.log
+  log/exp644_final_candidate_resource_stderr.log; log/exp644_final_control_resource_stderr.log
+  log/exp644_final_candidate_llvm.log; log/exp644_final_control_llvm.log
+  build/exp644_final_candidate_device.ll; build/exp644_final_control_device.ll
+  log/exp644_final_candidate_tuple_table.log; log/exp644_final_control_tuple_table.log; log/exp644_final_tuple_compare.log
+required correction=retain/reach the original case12 three-parameter specialization in addition to the dedicated target, or amend the gate explicitly; under the assigned strict rule this candidate is closed.

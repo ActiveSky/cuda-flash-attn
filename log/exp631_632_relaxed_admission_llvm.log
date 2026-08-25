@@ -1,0 +1,40 @@
+exp631/exp632 relaxed-admission LLVM audit
+2026-08-23
+
+Scope: immutable candidate sources only. No work-file change, C500 run, A/B run, or OJ submission.
+
+Sources and SHA-256:
+  exp631 solutions/archive/2026-08-22-experiments/cuda_case2_source_owner_native_b128_single_launch_exp631.cpp
+         a61ef873b62fe81fa96b714d1a4ce44cb10c9a7e0ade61d4487e23697dd222af
+  exp632 solutions/archive/2026-08-22-experiments/cuda_case2_source_owner_streaming_b32_exp632.cpp
+         d43be08ccec3ccbf6bb332870c15e69b70055440170fac352626d259fe87fc9b
+
+Build commands (both exit 0):
+  tools/build_local_maca.sh <exp631-source> /tmp/exp631_relaxed_candidate.ll -c -emit-llvm -S
+  tools/build_local_maca.sh <exp632-source> /tmp/exp632_relaxed_candidate.ll -c -emit-llvm -S
+
+LLVM artifact SHA-256:
+  d16ae44caad6fadcfecedb7e585ef21fcbe4c3fba8bf9551c9fbb3d63846599b  /tmp/exp631_relaxed_candidate.ll
+  def0fb06aa08cc81af566474559013b70a16a32309cb1974511f5148cae7f3a7  /tmp/exp632_relaxed_candidate.ll
+
+exp631 target: _Z29paged_decode_two_token_kernelILi8ELi4ELb1EE...
+  LLVM body branches on cache_seqlens == 1 and thread.id < 16, then calls
+  xpuoj_case2_source_owner_native_b128. The helper materializes exactly one
+  llvm.mxc.ldg.predicator.v4i32 followed by four llvm.mxc.stg.predicator.v4i32
+  calls using the same <4 x i32> payload. The non-target path remains the
+  ordinary two-token attention body. Evidence: candidate LLVM lines 1062-1413
+  (dispatch/body) and 307-350 (helper).
+
+exp632 target: _Z29paged_decode_two_token_kernelILi8ELi4ELb1EE...
+  LLVM body branches on cache_seqlens == 1 and thread.id < 16, then loops over
+  exactly four words. Each loop iteration materializes one
+  llvm.mxc.ldg.predicator.i32 and four llvm.mxc.stg.predicator.i32 calls with
+  word-indexed addresses; the loop exit is an exact four-iteration compare.
+  The non-target path remains the ordinary two-token attention body. Evidence:
+  candidate LLVM lines 1009-1080.
+
+Interpretation: both source-owner single-launch mechanisms are real in LLVM;
+they are not source-only or silently optimized away. Existing resource evidence
+still reports target increases (exp631 23/37/0/0/8, exp632 23/32/0/0/8 versus
+control 22/26/0/0/8). Those are local diagnostic facts, not online performance
+results; current OJ-first admission leaves probe approval to the main agent.

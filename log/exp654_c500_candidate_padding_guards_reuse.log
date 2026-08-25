@@ -1,0 +1,8 @@
+[PASS] full-0                   lengths=(4096,4096) finite=True match=1.000000 max_error=4.882812e-04 guards=True poison_pages=0
+[PASS] mixed-padding-poison     lengths=(1,3441) finite=True match=1.000000 max_error=7.812500e-03 guards=True poison_pages=5846
+[PASS] random-padding-poison    lengths=(350,3990) finite=True match=1.000000 max_error=1.953125e-03 guards=True poison_pages=3476
+[PASS] short-after-full         lengths=(1,1) finite=True match=1.000000 max_error=0.000000e+00 guards=True poison_pages=8160
+[PASS] full-after-short         lengths=(4096,4096) finite=True match=1.000000 max_error=4.882812e-04 guards=True poison_pages=0
+[PASS] short-full-reuse         lengths=(2,2) finite=True match=1.000000 max_error=1.562500e-02 guards=True poison_pages=8160
+[PASS] full-final-reuse         lengths=(4096,4096) finite=True match=1.000000 max_error=4.882812e-04 guards=True poison_pages=0
+[PASS] case9 padding poison, input/output guards, full-short-full and short-full reuse

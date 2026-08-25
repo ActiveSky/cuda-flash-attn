@@ -1,0 +1,2 @@
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+[FAIL] case  5 B=16 L=  141 KV=4 lengths=boundary match=0.250000 max_error=nan max_tol_ratio=nan finite=False

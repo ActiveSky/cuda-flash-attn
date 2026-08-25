@@ -1,0 +1,52 @@
+exp624 revalidation LLVM/resource audit
+2026-08-21T13:22:09Z
+artifacts=/tmp/exp624_revalidation.CFnpm9
+candidate_sha=8daf875522d473d4c19aa44e6f3523190e098ef22ec3036f6a7ef4320ff4cc43
+candidate_target_symbols:
+156: maca info  : Function properties for  void paged_decode_case13_kv8_headpair_z8_kernel<true, false, false>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float) 
+160: maca info  : Function properties for  void paged_decode_case13_kv8_headpair_z8_kernel<true, false, true>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float) 
+164: maca info  : Function properties for  void paged_decode_case13_kv8_headpair_z8_kernel<true, true, false>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float) 
+188: maca info  : Function properties for  void paged_decode_reduce_vec2_kernel<true, false, true, false, false>(float const*, float const*, float const*, __maca_bfloat16*, int const*, int, int, int) 
+212: maca info  : Function properties for  void paged_decode_reduce_vec2_kernel<true, false, true, true, true>(float const*, float const*, float const*, __maca_bfloat16*, int const*, int, int, int) 
+control_target_symbols:
+156: maca info  : Function properties for  void paged_decode_case13_kv8_headpair_z8_kernel<true, false, false>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float) 
+160: maca info  : Function properties for  void paged_decode_case13_kv8_headpair_z8_kernel<true, false, true>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float) 
+164: maca info  : Function properties for  void paged_decode_case13_kv8_headpair_z8_kernel<true, true, false>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float) 
+188: maca info  : Function properties for  void paged_decode_reduce_vec2_kernel<true, false, true, false, false>(float const*, float const*, float const*, __maca_bfloat16*, int const*, int, int, int) 
+212: maca info  : Function properties for  void paged_decode_reduce_vec2_kernel<true, false, true, true, true>(float const*, float const*, float const*, __maca_bfloat16*, int const*, int, int, int) 
+candidate_target_resource_context:
+ maca info  : Used  92 MTregisters, 48 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+ maca info  : Function properties for  _Z34paged_decode_token_parallel_kernelILi4ELi8ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  92 MTregisters, 48 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+ maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  76 MTregisters, 52 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 6
+ maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+ maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+control_target_resource_context:
+ maca info  : Used  92 MTregisters, 48 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+ maca info  : Function properties for  _Z34paged_decode_token_parallel_kernelILi4ELi8ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  92 MTregisters, 48 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+ maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+ maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+ maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+candidate_intrinsic_counts_total:
+llvm.mxc.bsm.bpermute 390
+llvm.mxc.ldg 21
+llvm.mxc.stg 0

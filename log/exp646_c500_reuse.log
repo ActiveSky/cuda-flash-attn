@@ -1,0 +1,4 @@
+method: same-process ephemeral Python harness; sequence case1 -> case8 -> case1, then repeated for control
+candidate: case1 PASS match=1.000000 max_error=0.000000e+00 finite=True; case8 PASS match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True; case1 PASS match=1.000000 max_error=0.000000e+00 finite=True
+control: case1 PASS match=1.000000 max_error=0.000000e+00 finite=True; case8 PASS match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True; case1 PASS match=1.000000 max_error=0.000000e+00 finite=True
+exit: 0

@@ -1,0 +1,13 @@
+exp611 candidate C500 case12 workspace reuse 32768->1->32768 and 1->32768
+UTC 2026-08-21T05:18:12Z
+candidate source SHA256: 27a2dbc6b44eee0d2016d6c6a2dc8a2ff40367b077118043d11603093952eec2  solutions/archive/2026-08-21-experiments/cuda_case12_q_bsm_partial_b128_stg_exp611.cpp
+command A: python3 tests/c500_paged_decode_harness.py --library build/exp611_candidate_test.so --cases 12 --length-values 32768,1,32768 --seed 20260809
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:32768 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:1  match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:32768 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True
+command B: python3 tests/c500_paged_decode_harness.py --library build/exp611_candidate_test.so --cases 12 --length-values 1,32768 --seed 20260809
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:1  match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:32768 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True
+exit_status=0

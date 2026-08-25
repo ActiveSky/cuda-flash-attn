@@ -1,0 +1,58 @@
+exp704 static audit (2026-08-24)
+
+Scope
+-----
+Parent control: solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+Parent SHA-256: 3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+Candidate: solutions/archive/2026-08-24-experiments/cuda_control124611_z8_all_async_register_kv_exp704.cpp
+Candidate SHA-256: 53cca7e99f7d43066a7beb53323c93c0ed2f249e0438f4398d18f8e7e6c75e78
+
+The candidate/control diff contains only the register-returning async K/V
+backend, its ASYNC_NEXT_GLD_WAIT template switch, and the switch enabled on
+the four existing z8 dispatches (case7/9/12/13).  Grid/block launch geometry,
+partial ABI, BF16 partial/reducer path, and all non-z8 dispatches are unchanged.
+
+Static builds
+-------------
+PASS: log/exp704_candidate_normal.log -> build/exp704_candidate_normal.so
+PASS: log/exp704_candidate_resource.log -> build/exp704_candidate_resource.so
+PASS: log/exp704_candidate_llvm.log -> build/exp704_candidate_device.ll
+PASS: log/exp704_control_normal.log -> build/exp704_control_normal.so
+PASS: log/exp704_control_resource.log -> build/exp704_control_resource.so
+PASS: log/exp704_control_llvm.log -> build/exp704_control_device.ll
+
+All six builds report only the existing ten -Wmaca-min-blocks-per-multiprocessor
+warnings; no compile error, spill, or nonzero stack frame was reported.  Both
+resource logs contain 33 function-property rows.
+
+Target producer resources (candidate / control)
+------------------------------------------------
+case12 (1,0,0,0,1) / (1,0,0,0): 82/82 MTreg, 52/50 STreg, 8448/8448 BSM,
+  0/0 stack, 5/5 staticMaxWarps/PEU.
+case7  (1,0,1,0,1) / (1,0,1,0): 82/82 MTreg, 52/50 STreg, 8448/8448 BSM,
+  0/0 stack, 5/5 staticMaxWarps/PEU.
+case9  (1,1,0,0,1) / (1,1,0,0): 82/82 MTreg, 50/48 STreg, 8448/8448 BSM,
+  0/0 stack, 5/5 staticMaxWarps/PEU.
+case13 (1,1,0,1,1) / (1,1,0,1): 82/82 MTreg, 50/48 STreg, 8448/8448 BSM,
+  0/0 stack, 5/5 staticMaxWarps/PEU.
+
+LLVM lowering
+-------------
+Each candidate producer specialization has two
+llvm.mxc.load.global.async.v4i32 calls (K and V), one
+llvm.mxc.arrive(i32 64), and one added llvm.mxc.barrier() before the existing
+warp synchronization and eight scalar i32 stores publishing the next K/V page
+to addrspace(3) shared memory.  The target function totals are async=2,
+arrive=1, barrier=8, warp=3, and 0 barrier.inst; the corresponding control
+functions are async=0, arrive=0, barrier=7, warp=3.  LLVM locations are:
+
+  case12: async 18441/18447, arrive/barrier 18618/18619, publish 18623-18630
+  case7:  async 20231/20237, arrive/barrier 20408/20409, publish 20413-20420
+  case9:  async 22000/22006, arrive/barrier 22177/22178, publish 22182-22189
+  case13: async 23769/23775, arrive/barrier 23946/23947, publish 23951-23958
+
+No obvious illegal launch/resource condition is present in static evidence:
+the four calls retain dim3(16,2,8) (256 threads) and __launch_bounds__(256),
+shared memory remains 8448 bytes, and all four candidate kernel stubs and
+registrations are present in device LLVM.  No C500/GPU/benchmark/OJ command
+was run.

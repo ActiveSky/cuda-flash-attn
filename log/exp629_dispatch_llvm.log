@@ -1,0 +1,71 @@
+
+kcall.configok46:                                 ; preds = %if.else
+  %conv47 = trunc i64 %div24 to i32
+  tail call void @_Z47__device_stub__paged_decode_single_token_kernelILi8ELi4EEvPK15__maca_bfloat16PS0_PKii(ptr noundef %v_cache_paged, ptr noundef %output, ptr noundef %block_table, i32 noundef %conv47) #9
+  br label %cleanup769
+
+if.then52:                                        ; preds = %if.end
+  %mul54 = mul nsw i64 %num_heads_k, %batch_size
+  %cmp56 = icmp eq i64 %num_heads_k, 4
+  br i1 %cmp56, label %if.then57, label %if.else65
+
+if.then57:                                        ; preds = %if.then52
+  %agg.tmp58.sroa.0.0.insert.ext = and i64 %mul54, 4294967292
+  %agg.tmp58.sroa.0.0.insert.insert = or disjoint i64 %agg.tmp58.sroa.0.0.insert.ext, 4294967296
+  %call60 = tail call i32 @__mcPushCallConfiguration(i64 %agg.tmp58.sroa.0.0.insert.insert, i32 1, i64 4294967552, i32 1, i64 noundef 0, ptr noundef null)
+  %tobool61.not = icmp eq i32 %call60, 0
+  br i1 %tobool61.not, label %kcall.configok62, label %cleanup769
+
+kcall.configok62:                                 ; preds = %if.then57
+  %conv63 = trunc i64 %div24 to i32
+  tail call void @_Z44__device_stub__paged_decode_two_token_kernelILi4ELi8ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr noundef %q, ptr noundef %k_cache_paged, ptr noundef %v_cache_paged, ptr noundef %output, ptr noundef %cache_seqlens, ptr noundef %block_table, i32 noundef %conv63, float noundef 0x3FB6A09E60000000) #9
+  br label %cleanup769
+
+if.else65:                                        ; preds = %if.then52
+  %cmp66 = icmp eq i64 %batch_size, 4
+  br i1 %cmp66, label %if.then67, label %if.else82
+
+if.then67:                                        ; preds = %if.else65
+  %agg.tmp68.sroa.0.0.insert.ext = and i64 %mul54, 4294967292
+  %agg.tmp68.sroa.0.0.insert.insert = or disjoint i64 %agg.tmp68.sroa.0.0.insert.ext, 4294967296
+  %call70 = tail call i32 @__mcPushCallConfiguration(i64 %agg.tmp68.sroa.0.0.insert.insert, i32 1, i64 4294967424, i32 1, i64 noundef 0, ptr noundef null)
+  %tobool71.not = icmp eq i32 %call70, 0
+  br i1 %tobool71.not, label %kcall.configok72, label %kcall.end74
+
+kcall.configok72:                                 ; preds = %if.then67
+  %conv73 = trunc i64 %div24 to i32
+  tail call void @_Z65__device_stub__paged_decode_case2_source_owner_native_b128_kernelILi8ELi4EEvPK15__maca_bfloat16PS0_PKiS5_i(ptr noundef %v_cache_paged, ptr noundef %output, ptr noundef %cache_seqlens, ptr noundef %block_table, i32 noundef %conv73) #9
+  br label %kcall.end74
+
+kcall.end74:                                      ; preds = %kcall.configok72, %if.then67
+  %call77 = tail call i32 @__mcPushCallConfiguration(i64 %agg.tmp68.sroa.0.0.insert.insert, i32 1, i64 4294967424, i32 1, i64 noundef 0, ptr noundef null)
+  %tobool78.not = icmp eq i32 %call77, 0
+  br i1 %tobool78.not, label %kcall.configok79, label %cleanup769
+
+kcall.configok79:                                 ; preds = %kcall.end74
+  %conv80 = trunc i64 %div24 to i32
+  tail call void @_Z44__device_stub__paged_decode_two_token_kernelILi8ELi4ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr noundef %q, ptr noundef %k_cache_paged, ptr noundef %v_cache_paged, ptr noundef %output, ptr noundef %cache_seqlens, ptr noundef %block_table, i32 noundef %conv80, float noundef 0x3FB6A09E60000000) #9
+  br label %cleanup769
+
+if.else82:                                        ; preds = %if.else65
+  %agg.tmp83.sroa.0.0.insert.ext = and i64 %mul54, 4294967295
+  %agg.tmp83.sroa.0.0.insert.insert = or disjoint i64 %agg.tmp83.sroa.0.0.insert.ext, 4294967296
+  %call85 = tail call i32 @__mcPushCallConfiguration(i64 %agg.tmp83.sroa.0.0.insert.insert, i32 1, i64 4294967424, i32 1, i64 noundef 0, ptr noundef null)
+  %tobool86.not = icmp eq i32 %call85, 0
+  br i1 %tobool86.not, label %kcall.configok87, label %cleanup769
+
+kcall.configok87:                                 ; preds = %if.else82
+  %conv88 = trunc i64 %div24 to i32
+  tail call void @_Z44__device_stub__paged_decode_two_token_kernelILi8ELi4ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr noundef %q, ptr noundef %k_cache_paged, ptr noundef %v_cache_paged, ptr noundef %output, ptr noundef %cache_seqlens, ptr noundef %block_table, i32 noundef %conv88, float noundef 0x3FB6A09E60000000) #9
+  br label %cleanup769
+
+if.end92:                                         ; preds = %if.end
+  %add93 = add nsw i64 %seqlen_k, 127
+  %div94 = sdiv i64 %add93, 128
+  %mul96 = mul nsw i64 %num_heads_k, %batch_size
+  %sub98 = add nsw i64 %mul96, 1023
+  %div100 = sdiv i64 %sub98, %mul96
+  %sext = shl i64 %div94, 32
+  %conv101 = ashr exact i64 %sext, 32
+  %cmp102 = icmp sgt i64 %conv101, %div100
+  %spec.select = select i1 %cmp102, i64 %div100, i64 %div94

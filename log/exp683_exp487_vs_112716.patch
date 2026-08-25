@@ -1,0 +1,114 @@
+--- solutions/archive/2026-08-15-submissions/cuda_112716.cpp	2026-08-24 09:06:07.797326930 +0000
++++ solutions/archive/2026-08-15-experiments/cuda_case12_async_register_gvm_wait_exp487.cpp	2026-08-14 18:38:11.952629803 +0000
+@@ -108,6 +108,19 @@
+ #define U32_PER_ROW 64       // 128 bf16 = 64 uint32（每行）
+ #define LOGIT_STRIDE 8       // 每页最多 8 个 query head（gqa_ratio <= 8）
+ 
++// MCTLASS consumes this register-returning async load only after an explicit
++// GVM-counter wait.  exp479 omitted that use-def boundary and trapped on
++// C500; exp487 keeps the vector payload live through PV, then uses the same
++// arrive(64)+barrier contract independently validated by the active probe.
++using XpuojAsyncLoadI4 = __NATIVE_VECTOR__(4, int);
++__device__ __forceinline__ uint4 xpuoj_load_global_async128(
++    const uint32_t* __restrict__ src)
++{
++    const XpuojAsyncLoadI4 raw = __builtin_mxc_load_global_async128(
++        reinterpret_cast<XpuojAsyncLoadI4*>(const_cast<uint32_t*>(src)));
++    return *reinterpret_cast<const uint4*>(&raw);
++}
++
+ __device__ __forceinline__ float bf16_lo(uint32_t u);
+ __device__ __forceinline__ float bf16_hi(uint32_t u);
+ 
+@@ -2481,7 +2494,8 @@
+ }
+ 
+ template <bool ALL_NATIVE_ROW_QK = false, bool NATIVE_HEAD_BIT1 = false,
+-          bool FIXED_LIVE_BUCKETS = false>
++          bool FIXED_LIVE_BUCKETS = false,
++          bool ASYNC_NEXT_GLD_WAIT = false>
+ __global__ void __launch_bounds__(256)
+ paged_decode_case13_kv8_headpair_z8_kernel(
+     const __nv_bfloat16* __restrict__ q,
+@@ -2638,6 +2652,8 @@
+             uint32_t next_v1 = 0;
+             uint32_t next_v2 = 0;
+             uint32_t next_v3 = 0;
++            uint4 async_next_k;
++            uint4 async_next_v;
+             if (has_next_page) {
+                 pid = bt_row[p + 1];
+                 const int next_token = tz * 2 + ty;
+@@ -2648,18 +2664,27 @@
+                     reinterpret_cast<const uint2*>(k_cache + next_row) + tx * 2;
+                 const uint2* next_v_src =
+                     reinterpret_cast<const uint2*>(v_cache + next_row) + tx * 2;
+-                const uint2 next_k01 = next_k_src[0];
+-                const uint2 next_k23 = next_k_src[1];
+-                const uint2 next_v01 = next_v_src[0];
+-                const uint2 next_v23 = next_v_src[1];
+-                next_k0 = next_k01.x;
+-                next_k1 = next_k01.y;
+-                next_k2 = next_k23.x;
+-                next_k3 = next_k23.y;
+-                next_v0 = next_v01.x;
+-                next_v1 = next_v01.y;
+-                next_v2 = next_v23.x;
+-                next_v3 = next_v23.y;
++                if constexpr (ASYNC_NEXT_GLD_WAIT) {
++                    // Do not extract a scalar before the GVM wait: the full
++                    // vector remains live while current-page softmax/PV runs.
++                    async_next_k = xpuoj_load_global_async128(
++                        reinterpret_cast<const uint32_t*>(next_k_src));
++                    async_next_v = xpuoj_load_global_async128(
++                        reinterpret_cast<const uint32_t*>(next_v_src));
++                } else {
++                    const uint2 next_k01 = next_k_src[0];
++                    const uint2 next_k23 = next_k_src[1];
++                    const uint2 next_v01 = next_v_src[0];
++                    const uint2 next_v23 = next_v_src[1];
++                    next_k0 = next_k01.x;
++                    next_k1 = next_k01.y;
++                    next_k2 = next_k23.x;
++                    next_k3 = next_k23.y;
++                    next_v0 = next_v01.x;
++                    next_v1 = next_v01.y;
++                    next_v2 = next_v23.x;
++                    next_v3 = next_v23.y;
++                }
+             }
+ 
+             const bool new_max0 = m_page0 > m0;
+@@ -2699,6 +2724,22 @@
+             m1 = m_new1;
+ 
+             if (has_next_page) {
++                if constexpr (ASYNC_NEXT_GLD_WAIT) {
++                    // MCTLASS's gvmcnt(0) wait and barrier make the async
++                    // register payload visible before scalar extraction.
++                    // All four 64-lane physical waves take this branch
++                    // uniformly for a given split/page iteration.
++                    __builtin_mxc_arrive(64);
++                    __builtin_mxc_barrier();
++                    next_k0 = async_next_k.x;
++                    next_k1 = async_next_k.y;
++                    next_k2 = async_next_k.z;
++                    next_k3 = async_next_k.w;
++                    next_v0 = async_next_v.x;
++                    next_v1 = async_next_v.y;
++                    next_v2 = async_next_v.z;
++                    next_v3 = async_next_v.w;
++                }
+                 __syncwarp();
+                 const int next_token = tz * 2 + ty;
+                 uint32_t* next_k_dst = &s_k[next_token][tx * 4];
+@@ -5501,7 +5542,8 @@
+                     // prescale, packed metadata, global partial count and vec2
+                     // reducer unchanged. exp428 changes only this z8
+                     // producer's QK exchange to the all-native row network.
+-                    paged_decode_case13_kv8_headpair_z8_kernel<true><<<
++                    paged_decode_case13_kv8_headpair_z8_kernel<
++                        true, false, false, true><<<
+                         grid, dim3(16, 2, 8)>>>(
+                         q, k_cache_paged, v_cache_paged, output,
+                         cache_seqlens, block_table,

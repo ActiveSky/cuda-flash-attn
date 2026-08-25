@@ -1,0 +1,27 @@
+exp701 isolated real C500 cross-dispatch workspace reuse
+date=2026-08-24T15:11:42Z
+case2= B=4 L=2 KV=8; mixed lengths=(1,2,1,2)
+case14= B=1 L=61519 KV=4; full length
+candidate_library_sha256=b04852a3d2c27d472dbdc3677738c7510fbdc281b6fe699ef99c9448f194d924
+control_library_sha256=4bbe97993b7ad219dc607e95a8a45a11c26c8c96042d857084f91098d00ea873
+
+Same-process sequence case2 -> case14 -> case2:
+[PASS] candidate case2 first finite=True tolerance=True guards=True max_error=1.562500e-02
+[PASS] candidate case14 after case2 finite=True tolerance=True guards=True max_error=1.220703e-04
+[PASS] candidate case2 after case14 finite=True tolerance=True guards=True max_error=1.562500e-02
+[PASS] candidate case2 state_invariant=True
+[PASS] control case2 first finite=True tolerance=True guards=True max_error=1.562500e-02
+[PASS] control case14 after case2 finite=True tolerance=True guards=True max_error=1.220703e-04
+[PASS] control case2 after case14 finite=True tolerance=True guards=True max_error=1.562500e-02
+[PASS] control case2 state_invariant=True
+
+Same-process sequence case14 -> case2:
+[PASS] candidate case14 reverse first finite=True tolerance=True guards=True max_error=1.220703e-04
+[PASS] candidate case2 after case14 reverse finite=True tolerance=True guards=True max_error=1.562500e-02
+[PASS] candidate reverse state invariant case14=True case2=True
+[PASS] control case14 reverse first finite=True tolerance=True guards=True max_error=1.220703e-04
+[PASS] control case2 after case14 reverse finite=True tolerance=True guards=True max_error=1.562500e-02
+[PASS] control reverse state invariant case14=True case2=True
+[PASS] candidate_control case2 reuse bits equal=True
+[PASS] candidate_control case14 reuse bits equal=True
+[PASS] C500 references finite=True; output guards stayed intact throughout.

@@ -1,0 +1,27 @@
+125- maca info  : staticMaxWarps/PEU : 8
+126: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb0ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+127-  0 bytes stack frame 
+128- maca info  : Used  86 MTregisters, 70 STregisters, 8320 bytes shared mem  
+129- maca info  : staticMaxWarps/PEU : 5
+130: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+131-  0 bytes stack frame 
+132- maca info  : Used  80 MTregisters, 60 STregisters, 8320 bytes shared mem  
+133- maca info  : staticMaxWarps/PEU : 6
+134: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+135-  0 bytes stack frame 
+136- maca info  : Used  82 MTregisters, 66 STregisters, 8320 bytes shared mem  
+137- maca info  : staticMaxWarps/PEU : 5
+138: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+139-  0 bytes stack frame 
+140- maca info  : Used  80 MTregisters, 58 STregisters, 8320 bytes shared mem  
+141- maca info  : staticMaxWarps/PEU : 6
+142: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb0ELb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+143-  0 bytes stack frame 
+144- maca info  : Used  74 MTregisters, 52 STregisters, 8320 bytes shared mem  
+145- maca info  : staticMaxWarps/PEU : 6
+--
+226- maca info  : staticMaxWarps/PEU : 8
+227: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+228-  0 bytes stack frame 
+229- maca info  : Used  82 MTregisters, 64 STregisters, 8320 bytes shared mem  
+230- maca info  : staticMaxWarps/PEU : 5

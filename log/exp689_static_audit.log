@@ -1,0 +1,220 @@
+exp689 static/risk audit
+UTC 2026-08-24T11:09:26Z
+parent control source and SHA:
+3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe  solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+candidate source and SHA:
+a316636d05dbc72965614842234b3e2bde45cc87260870b18722210c9cd170f0  solutions/archive/2026-08-24-experiments/cuda_control124611_case13_final_wave_merge_exp689.cpp
+source diff stat:
+ ...ntrol124611_case13_final_wave_merge_exp689.cpp} | 89 +++++++++++++++++++---
+ 1 file changed, 79 insertions(+), 10 deletions(-)
+source diff:
+diff --git a/solutions/archive/2026-08-24-submissions/cuda_124611.cpp b/solutions/archive/2026-08-24-experiments/cuda_control124611_case13_final_wave_merge_exp689.cpp
+index 0c740c7..8f3ba99 100644
+--- a/solutions/archive/2026-08-24-submissions/cuda_124611.cpp
++++ b/solutions/archive/2026-08-24-experiments/cuda_control124611_case13_final_wave_merge_exp689.cpp
+@@ -2402,6 +2402,62 @@ __device__ __forceinline__ void merge_case11_head_state(
+     packed_scale_acc(acc + 6, peer_acc + 6, w1);
+ }
+ 
++// exp689: case13's dim3(16,2,8) producer places logical z0/z1 in the two
++// halves of one physical 64-lane wave. Preserve the first two shared tree
++// stages, but replace only the final z1 -> z0 edge with a raw lane^32 BSM
++// exchange. All lanes participate so peer values remain live; z0 consumes
++// the peer and z1 is left untouched.
++__device__ __forceinline__ float raw_wave64_xor32(float value) {
++#if defined(__MACA_ARCH__) && (__MACA_ARCH__ == 1000)
++    union {
++        float f;
++        int i;
++    } bits;
++    bits.f = value;
++    const unsigned source_lane = __lane_id() ^ 32u;
++    bits.i = __builtin_mxc_bsm_bpermute(source_lane << 2, bits.i);
++    return bits.f;
++#else
++    return __shfl_xor_sync(~0ull, value, 32, 64);
++#endif
++}
++
++__device__ __forceinline__ void merge_case13_final_wave_acc2(
++    float* acc, float own_weight, float peer_weight, bool consume_peer)
++{
++    const float peer0 = raw_wave64_xor32(acc[0]);
++    const float peer1 = raw_wave64_xor32(acc[1]);
++    if (consume_peer) {
++        packed_scale(acc, acc, own_weight);
++        acc[0] = fmaf(peer0, peer_weight, acc[0]);
++        acc[1] = fmaf(peer1, peer_weight, acc[1]);
++    }
++}
++
++__device__ __forceinline__ void merge_case13_final_wave_state(
++    float& m, float& l, float* acc, bool consume_peer)
++{
++    const float peer_m = raw_wave64_xor32(m);
++    const float peer_l = raw_wave64_xor32(l);
++    float own_weight = 0.f;
++    float peer_weight = 0.f;
++    if (consume_peer) {
++        const float m_all = fmaxf(m, peer_m);
++        own_weight = l > 0.f ? __builtin_exp2f(m - m_all) : 0.f;
++        peer_weight = peer_l > 0.f
++            ? __builtin_exp2f(peer_m - m_all) : 0.f;
++        l = l * own_weight + peer_l * peer_weight;
++        m = m_all;
++    }
++    merge_case13_final_wave_acc2(acc, own_weight, peer_weight, consume_peer);
++    merge_case13_final_wave_acc2(
++        acc + 2, own_weight, peer_weight, consume_peer);
++    merge_case13_final_wave_acc2(
++        acc + 4, own_weight, peer_weight, consume_peer);
++    merge_case13_final_wave_acc2(
++        acc + 6, own_weight, peer_weight, consume_peer);
++}
++
+ // exp386: long-KV8 head-pair/z8 architecture probe.  A 256-thread
+ // dim3(16, 2, 8) CTA still owns one complete (batch, kv_head, split) tile,
+ // but every thread computes two query heads over two tokens.  Each shared K/V
+@@ -2546,7 +2602,8 @@ __device__ __forceinline__ void store_case13_headpair_state(
+ 
+ template <bool ALL_NATIVE_ROW_QK = false, bool NATIVE_HEAD_BIT1 = false,
+           bool FIXED_LIVE_BUCKETS = false,
+-          bool BF16_NORMALIZED_PARTIAL = false>
++          bool BF16_NORMALIZED_PARTIAL = false,
++          bool FINAL_WAVE_PEER_MERGE = false>
+ __global__ void __launch_bounds__(256)
+ paged_decode_case13_kv8_headpair_z8_kernel(
+     const __nv_bfloat16* __restrict__ q,
+@@ -2904,15 +2961,24 @@ paged_decode_case13_kv8_headpair_z8_kernel(
+     }
+     __syncthreads();
+ 
+-    if (tz == 1) {
+-        store_case13_headpair_state(
+-            s_acc, s_md, local_h0, tx, m0, l0, acc0);
+-        store_case13_headpair_state(
+-            s_acc, s_md, local_h1, tx, m1, l1, acc1);
+-    }
+-    __syncthreads();
++    if constexpr (FINAL_WAVE_PEER_MERGE) {
++        if (tz < 2) {
++            const bool consume_peer = tz == 0;
++            merge_case13_final_wave_state(
++                m0, l0, acc0, consume_peer);
++            merge_case13_final_wave_state(
++                m1, l1, acc1, consume_peer);
++        }
++    } else {
++        if (tz == 1) {
++            store_case13_headpair_state(
++                s_acc, s_md, local_h0, tx, m0, l0, acc0);
++            store_case13_headpair_state(
++                s_acc, s_md, local_h1, tx, m1, l1, acc1);
++        }
++        __syncthreads();
+ 
+-    if (tz == 0) {
++        if (tz == 0) {
+         merge_case11_head_state(
+             m0, l0, acc0,
+             s_md[local_h0][0], s_md[local_h0][1],
+@@ -2921,7 +2987,10 @@ paged_decode_case13_kv8_headpair_z8_kernel(
+             m1, l1, acc1,
+             s_md[local_h1][0], s_md[local_h1][1],
+             s_acc + local_h1 * HEAD_DIM + tx * 8);
++        }
++    }
+ 
++    if (tz == 0) {
+         const int idx0 = (split * batch_size + b) * 32 + h0;
+         const int idx1 = (split * batch_size + b) * 32 + h1;
+         if (tx == 0) {
+@@ -5782,7 +5851,7 @@ extern "C" void run_kernel(
+                     // exp434 maps the two heads through tx bit1 so tx bit0
+                     // directly owns this z partition's two tokens.
+                     paged_decode_case13_kv8_headpair_z8_kernel<
+-                        true, true, false, true><<<
++                        true, true, false, true, true><<<
+                         grid, dim3(16, 2, 8)>>>(
+                         q, k_cache_paged, v_cache_paged, output,
+                         cache_seqlens, block_table,
+whitespace check output:
+target LLVM candidate function:
+42:$_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif = comdat any
+candidate target raw_bsm_count=20
+candidate target_cta_barrier_count=6
+control target raw_bsm_count=0
+control target_cta_barrier_count=7
+candidate raw BSM lowering:
+1477:  %360 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1731, i32 %359)
+1483:  %364 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i, i32 %363)
+1514:  %373 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i19.i1782, i32 %372)
+1521:  %377 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i1786, i32 %376)
+1546:  %386 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i19.i1765, i32 %385)
+1553:  %390 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i1769, i32 %389)
+1578:  %399 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i19.i1748, i32 %398)
+1585:  %403 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i1752, i32 %402)
+1610:  %412 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i19.i, i32 %411)
+1617:  %416 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i, i32 %415)
+1641:  %425 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1737, i32 %424)
+1647:  %429 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1734, i32 %428)
+1678:  %438 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i19.i1850, i32 %437)
+1685:  %442 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i1854, i32 %441)
+1710:  %451 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i19.i1833, i32 %450)
+1717:  %455 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i1837, i32 %454)
+1742:  %464 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i19.i1816, i32 %463)
+1749:  %468 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i1820, i32 %467)
+1774:  %477 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i19.i1799, i32 %476)
+1781:  %481 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i1803, i32 %480)
+target resource candidate:
+ maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+ maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+ maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+ maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+target resource control:
+ maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+ maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+ maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+ maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+binary SHAs:
+ce9cfbf3f5b11ec0f67c3b86fae4ac5b215ad5c83809f220a19a2618a8fbcbda  build/exp689_candidate_normal.so
+05360cae586aca48fef29f497b166e40f1dcf9c476cbb56b0cf954c7538b12a1  build/exp689_candidate_resource.so
+c9d643f25e0e15193820b4809f53ce32ebe8cdfabf91505143ec169c61de137b  build/exp689_control_normal.so
+608c93c732180e8cb96db73586d9866918972b64e47907aaa415d4b54cdf2374  build/exp689_control_resource.so
+correctness logs:
+log/exp689_cpu_manifest.log manifest_exit=0
+log/exp689_cpu_logic.log logic_exit=0
+log/exp689_candidate_full.log candidate_full_exit=0
+log/exp689_control_full.log control_full_exit=0
+log/exp689_candidate_boundary.log candidate_boundary_exit=0
+log/exp689_control_boundary.log control_boundary_exit=0
+log/exp689_candidate_random.log candidate_random_exit=0
+log/exp689_control_random.log control_random_exit=0
+log/exp689_c500_special.log case13 exp656 special correctness: PASS finite=True no_nan=True no_inf=True guards=True
+special_exit=0
+timing_or_oj=not run
+gate_result=normal/resource/LLVM build PASS; target raw BSM lowering PASS; candidate/control C500 correctness and guards/reuse/poison PASS; no A/B, timing, or OJ

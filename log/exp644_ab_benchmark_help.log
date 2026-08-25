@@ -1,0 +1,30 @@
+usage: c500_benchmark.py [-h] [--control CONTROL] [--candidate CANDIDATE]
+                         [--cases CASES] [--seed SEED]
+                         [--lengths {full,random,boundary}] [--warmup WARMUP]
+                         [--iterations ITERATIONS] [--rounds ROUNDS]
+                         [--skip-correctness]
+
+Interleaved local C500 A/B benchmark for paged-KV decode candidates. Each
+round measures a control and candidate back-to-back on identical tensors,
+alternating their order to avoid a one-sided clock/power bias. It reports the
+per-round candidate/control ratio distribution; conclusions should use the
+ratio rather than separately collected absolute timings. Examples: python
+tests/c500_benchmark.py --control build/cuda_112302_control.so \ --candidate
+build/cuda_maca_optimized.so --cases 7,9,12,13
+
+options:
+  -h, --help            show this help message and exit
+  --control CONTROL
+  --candidate CANDIDATE
+  --cases CASES
+  --seed SEED
+  --lengths {full,random,boundary}
+                        cache_seqlens distribution used for both control and
+                        candidate
+  --warmup WARMUP
+  --iterations ITERATIONS
+  --rounds ROUNDS
+  --skip-correctness    timing-only mode for deliberately invalid phase-
+                        ablation probes; never use this option as candidate
+                        validation
+help_exit=0

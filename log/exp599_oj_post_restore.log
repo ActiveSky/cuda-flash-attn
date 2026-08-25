@@ -1,0 +1,25 @@
+exp599 OJ probe post-restore final verification
+UTC 2026-08-18T15:39:36Z
+active relevant processes:
+3706005 /bin/bash -c set -o pipefail {   set -e   printf '%s\n' 'exp599 OJ probe post-restore final verification'   date -u '+UTC %Y-%m-%dT%H:%M:%SZ'   printf '%s\n' 'active relevant processes:'   pgrep -af '[c]500|[m]aca|[x]puoj|[b]enchmark|[t]est_kernel' || true   printf '%s\n' 'command: python3 tools/xpuoj_submit.py --list'   python3 tools/xpuoj_submit.py --list   printf '%s\n' 'control/work/candidate/archive SHA256:'   sha256sum solutions/cuda_maca_optimized.cpp solutions/archive/2026-08-16-submissions/cuda_113889.cpp solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp solutions/archive/2026-08-18-submissions/cuda_116965.cpp   test "$(sha256sum solutions/cuda_maca_optimized.cpp | awk '{print $1}')" = 'a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972'   test "$(sha256sum solutions/archive/2026-08-18-submissions/cuda_116965.cpp | awk '{print $1}')" = '35013de595b082974e0b59de7b87b1f9bfd3476afb2affae1c8aeb8d73635da7'   printf '%s\n' 'manifest entry:'   rg -n '#116965|cuda_116965' solutions/archive/SUBMISSIONS.md   printf '%s\n' 'post_restore_queue_identity_guard=PASS' } 2>&1 | tee log/exp599_oj_post_restore.log rc=${PIPESTATUS[0]} printf 'exit_status=%s\n' "$rc" >> log/exp599_oj_post_restore.log exit "$rc"
+3706006 /bin/bash -c set -o pipefail {   set -e   printf '%s\n' 'exp599 OJ probe post-restore final verification'   date -u '+UTC %Y-%m-%dT%H:%M:%SZ'   printf '%s\n' 'active relevant processes:'   pgrep -af '[c]500|[m]aca|[x]puoj|[b]enchmark|[t]est_kernel' || true   printf '%s\n' 'command: python3 tools/xpuoj_submit.py --list'   python3 tools/xpuoj_submit.py --list   printf '%s\n' 'control/work/candidate/archive SHA256:'   sha256sum solutions/cuda_maca_optimized.cpp solutions/archive/2026-08-16-submissions/cuda_113889.cpp solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp solutions/archive/2026-08-18-submissions/cuda_116965.cpp   test "$(sha256sum solutions/cuda_maca_optimized.cpp | awk '{print $1}')" = 'a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972'   test "$(sha256sum solutions/archive/2026-08-18-submissions/cuda_116965.cpp | awk '{print $1}')" = '35013de595b082974e0b59de7b87b1f9bfd3476afb2affae1c8aeb8d73635da7'   printf '%s\n' 'manifest entry:'   rg -n '#116965|cuda_116965' solutions/archive/SUBMISSIONS.md   printf '%s\n' 'post_restore_queue_identity_guard=PASS' } 2>&1 | tee log/exp599_oj_post_restore.log rc=${PIPESTATUS[0]} printf 'exit_status=%s\n' "$rc" >> log/exp599_oj_post_restore.log exit "$rc"
+command: python3 tools/xpuoj_submit.py --list
+| #116965 | Accepted | 66.14 | cuda.maca-c500 | 2026-08-18T15:30:13.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #116797 | Accepted | 66 | cuda.maca-c500 | 2026-08-18T12:57:22.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #116723 | Accepted | 66 | cuda.maca-c500 | 2026-08-18T11:57:04.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #116571 | Accepted | 66 | cuda.maca-c500 | 2026-08-18T09:13:48.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #116314 | Accepted | 66 | cuda.maca-c500 | 2026-08-18T04:19:51.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #115902 | Accepted | 66 | cuda.maca-c500 | 2026-08-17T16:08:27.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #115744 | Accepted | 66.07 | cuda.maca-c500 | 2026-08-17T13:47:08.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #115685 | Accepted | 66.07 | cuda.maca-c500 | 2026-08-17T12:54:34.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #115590 | Accepted | 66 | cuda.maca-c500 | 2026-08-17T11:21:57.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #115574 | Accepted | 66.14 | cuda.maca-c500 | 2026-08-17T10:54:57.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+control/work/candidate/archive SHA256:
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/cuda_maca_optimized.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+35013de595b082974e0b59de7b87b1f9bfd3476afb2affae1c8aeb8d73635da7  solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp
+35013de595b082974e0b59de7b87b1f9bfd3476afb2affae1c8aeb8d73635da7  solutions/archive/2026-08-18-submissions/cuda_116965.cpp
+manifest entry:
+7:| #116965 | 2026-08-18 23:30:13 | Accepted | 66.14 | `35013de595b082974e0b59de7b87b1f9bfd3476afb2affae1c8aeb8d73635da7` | [cuda_116965.cpp](2026-08-18-submissions/cuda_116965.cpp) | [cuda_116965_raw.json](../../results/raw/cuda_116965_raw.json) |
+post_restore_queue_identity_guard=PASS
+exit_status=0

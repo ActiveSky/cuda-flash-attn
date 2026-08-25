@@ -1,0 +1,115 @@
+candidate_sha eaac9b90ef88081cea615639cef27f7fad57f45bd11114edef47ba1cf7eef8ed  solutions/archive/2026-08-24-experiments/cuda_control124611_case11_fixed20_mma_exp693.cpp
+control_sha 3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe  solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+source_diff_hunks 5
+source_diff_summary
+@@ -3263,7 +3263,8 @@
+-          bool SYMMETRIC_FINALIZER = false>
++          bool SYMMETRIC_FINALIZER = false,
++          bool CASE11_FIXED_20_PAGES = false>
+@@ -3332,6 +3333,15 @@
++    static_assert(!CASE11_FIXED_20_PAGES ||
++                      (SYNC_COPY && FULL_PAGES_ONLY &&
++                       FUSE_TAIL_IN_LAST_SPLIT &&
++                       REGISTER_PREFETCH_NEXT && PREFETCH_NEXT_PID &&
++                       PRESCALE_Q && NATIVE_ROW16_QK &&
++                       DISTRIBUTED_ROW_EXP && DISTRIBUTED_SCORE_STATE &&
++                       DISTRIBUTED_HEAD_MAX && SKIP_EMPTY_RESCALE &&
++                       BF16_MMA_QK && SYMMETRIC_FINALIZER),
++                  "case11 fixed trip requires the current MMA state flow");
+@@ -3446,6 +3456,8 @@
++    const bool use_case11_fixed_20 = CASE11_FIXED_20_PAGES &&
++        p_beg + 20 <= full_pages;
+@@ -3497,6 +3509,30 @@
++    } else if (use_case11_fixed_20) {
++        // exp693: case11's B16/KV4 full owners contain exactly 20 pages.
++        // Rebase exp565's fixed trip onto the current control's BF16-MMA QK
++        // and symmetric z4 finalizer.  The 19 lookaheads and final page are
++        // compile-time constants; short/fused-tail owners stay generic.
++        int32_t pid = bt_row[p_beg];
++        issue_case11_headpair_z4_page<true>(
++            k_cache, s_k, pid, kv_head, tx, ty, tz);
++        issue_case11_headpair_z4_page<true>(
++            v_cache, s_v, pid, kv_head, tx, ty, tz);
++#pragma unroll 2
++        for (int page_i = 0; page_i < 19; ++page_i) {
++            process_case8_fixed_full_page<true, true, true, BF16_MMA_QK>(
++                k_cache, v_cache, s_k, s_v, bt_row, pid,
++                p_beg + page_i, kv_head, tx, ty, tz,
++                q0, q1, mma_q_frag_bits, sm_scale,
++                m0, m1, l0, l1, acc0, acc1);
++        }
++        process_case8_fixed_full_page<false, true, true, BF16_MMA_QK>(
++            k_cache, v_cache, s_k, s_v, bt_row, pid,
++            p_beg + 19, kv_head, tx, ty, tz,
++            q0, q1, mma_q_frag_bits, sm_scale,
++            m0, m1, l0, l1, acc0, acc1);
+@@ -5561,7 +5597,7 @@
+-                            true, true, true><<<
++                            true, true, true, true><<<
+case11_shape full_pages=765 max_pages=766 n_split=39 pages_per_split=20 fixed_owner_count=38 last_p_beg=760 last_full_pages=5 tail_tokens=11
+fixed_block_true_calls 1
+fixed_block_false_calls 1
+fixed_block_dynamic_page_loop PASS
+fixed_block_predicate PASS
+fixed_block_static_gate PASS
+fixed_block_last_iteration PASS
+target_dispatch_case11_last_template_arg PASS
+target_dispatch_scope
+5393:    if (num_heads_k == 4 && batch_size == 16 && seqlen_k == 12251) {
+5502:            const bool sync_kv4 = batch_size == 16 &&
+5503:                (seqlen_k == 4096 || seqlen_k == 12251);
+5600:                            true, true, true, true><<<
+5840:                        false, false, false, false, true, true, true, true><<<
+6043:                       seqlen_k == 12251) {
+abi_run_kernel_signature PASS
+forbidden_device_sync_count 0
+new_launch_syntax_in_fixed_source_branch normal_build_log exit=0
+llvm_build_log exit=0
+resource_build_log exit=0
+target_resource_candidate
+ maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  102 MTregisters, 62 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 4
+target_resource_control
+ maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  80 MTregisters, 58 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 6
+resource_zero_stack_count 33
+resource_spill_diagnostics_count resource_nonzero_shared_records
+ maca info  : Used  102 MTregisters, 62 STregisters, 8320 bytes shared mem  
+ maca info  : Used  104 MTregisters, 74 STregisters, 8192 bytes shared mem  
+ maca info  : Used  118 MTregisters, 50 STregisters, 8192 bytes shared mem  
+ maca info  : Used  22 MTregisters, 26 STregisters, 0 bytes shared mem  
+ maca info  : Used  28 MTregisters, 50 STregisters, 0 bytes shared mem  
+ maca info  : Used  36 MTregisters, 33 STregisters, 0 bytes shared mem  
+ maca info  : Used  38 MTregisters, 36 STregisters, 0 bytes shared mem  
+ maca info  : Used  38 MTregisters, 39 STregisters, 0 bytes shared mem  
+ maca info  : Used  40 MTregisters, 28 STregisters, 0 bytes shared mem  
+ maca info  : Used  40 MTregisters, 36 STregisters, 0 bytes shared mem  
+ maca info  : Used  54 MTregisters, 25 STregisters, 0 bytes shared mem  
+ maca info  : Used  6 MTregisters, 18 STregisters, 0 bytes shared mem  
+ maca info  : Used  64 MTregisters, 35 STregisters, 0 bytes shared mem  
+ maca info  : Used  66 MTregisters, 24 STregisters, 0 bytes shared mem  
+ maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+ maca info  : Used  74 MTregisters, 44 STregisters, 8320 bytes shared mem  
+ maca info  : Used  74 MTregisters, 52 STregisters, 8320 bytes shared mem  
+ maca info  : Used  80 MTregisters, 44 STregisters, 8320 bytes shared mem  
+ maca info  : Used  80 MTregisters, 58 STregisters, 8320 bytes shared mem  
+ maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+ maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+ maca info  : Used  82 MTregisters, 64 STregisters, 8320 bytes shared mem  
+ maca info  : Used  82 MTregisters, 66 STregisters, 8320 bytes shared mem  
+ maca info  : Used  86 MTregisters, 70 STregisters, 8320 bytes shared mem  
+ maca info  : Used  92 MTregisters, 48 STregisters, 8320 bytes shared mem  
+llvm_target_kernel 5142:define protected metaxgpu_kernel void @_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+llvm_fixed_loop_bound
+  %exitcond.not = icmp eq i64 %indvars.iv, 18
+  br i1 %exitcond.not, label %for.cond.cleanup65, label %for.body66.1, !llvm.loop !107
+for.body66.1:                                     ; preds = %_Z29process_case8_fixed_full_pageILb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_PA64_jS4_PKiRiiiiiiPKfS9_PK5uint2fRfSD_SD_SD_PfSE_.exit
+llvm_mma_intrinsic_count_in_target 41
+illegal_launch_static_check PASS
+generic_tail_path_diff PASS
+new_launch_syntax_in_fixed_source_branch 0
+resource_spill_diagnostics_count 0

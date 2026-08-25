@@ -1,0 +1,87 @@
+exp661 static target/dispatch audit
+2026-08-23T21:10:46Z
+candidate SHA:
+25fed14d39148f013533225a317696a983197e964a8a007cb2e3a31f167b04b5  solutions/archive/2026-08-24-experiments/cuda_case14_single_lse_tailmask_exp661.cpp
+parent SHA:
+c356c76e543d822f020b9db955884963afb7a012effa5056846131567ce4e6e1  solutions/archive/2026-08-24-experiments/cuda_case14_single_lse_state_rebase_exp659.cpp
+
+source helper references (definition plus case14 tail calls only):
+2389:__device__ __forceinline__ void owned_score_tail_pv(
+2977:__device__ __forceinline__ void issue_case14_tail_headpair_z4_page(
+3746:                issue_case14_tail_headpair_z4_page(
+3748:                issue_case14_tail_headpair_z4_page(
+3826:                    owned_score_tail_pv<8>(
+
+source diff hunk headers (no dispatch-region hunk):
+@@ -2381,6 +2381,76 @@
+@@ -2900,6 +2970,36 @@
+@@ -3641,10 +3741,18 @@
+@@ -3653,7 +3761,6 @@
+@@ -3716,8 +3823,9 @@
+
+candidate target function definition:
+6970:define protected metaxgpu_kernel void @_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+direct helper definitions in candidate LLVM (expected none; helpers inlined):
+none
+
+target body counts versus exp659:
+build/exp661_candidate_device.ll
+start=6970 end=9779 body_lines=2808 issue_tail_labels=22 zero_shared_stores=8 cmp58_guards=2 exp2=26 branches=49
+build/exp659_candidate_device.ll
+start=6904 end=9608 body_lines=2703 issue_tail_labels=0 zero_shared_stores=0 cmp58_guards=0 exp2=23 branches=43
+
+target loader IR evidence (tail-only branch materialized in target):
+6122-  %add57.i = or disjoint i32 %mul.i864, 3
+6123:  %cmp58.i = icmp ult i32 %add57.i, %and19
+6124:  br i1 %cmp58.i, label %if.then59.i, label %if.end274
+6125-
+--
+8672-if.then.i2226:                                    ; preds = %if.then215
+8673:  store i32 0, ptr addrspace(3) %arrayidx3.i2224, align 16, !tbaa !16, !noalias !143
+8674-  %arrayidx5.i2227 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx3.i2224, i32 4
+8675:  store i32 0, ptr addrspace(3) %arrayidx5.i2227, align 4, !tbaa !16, !noalias !143
+8676-  %arrayidx6.i2228 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx3.i2224, i32 8
+8677:  store i32 0, ptr addrspace(3) %arrayidx6.i2228, align 8, !tbaa !16, !noalias !143
+8678-  %arrayidx7.i2229 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx3.i2224, i32 12
+8679:  store i32 0, ptr addrspace(3) %arrayidx7.i2229, align 4, !tbaa !16, !noalias !143
+8680:  br label %_Z34issue_case14_tail_headpair_z4_pagePK15__maca_bfloat16PA64_jiiiiii.exit2239
+8681-
+--
+8691-  tail call void @llvm.memcpy.p3.p4.i64(ptr addrspace(3) noundef align 16 dereferenceable(16) %arrayidx3.i2224, ptr addrspace(4) noundef align 16 dereferenceable(16) %add.ptr16.i2238, i64 16, i1 false), !tbaa.struct !34, !call_argsrelate !64
+8692:  br label %_Z34issue_case14_tail_headpair_z4_pagePK15__maca_bfloat16PA64_jiiiiii.exit2239
+8693-
+8694:_Z34issue_case14_tail_headpair_z4_pagePK15__maca_bfloat16PA64_jiiiiii.exit2239: ; preds = %if.then.i2226, %if.end.i2230
+8695-  %arrayidx3.i = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %add.i2220, i32 %mul1.i2222
+--
+8697-
+8698:if.then.i2211:                                    ; preds = %_Z34issue_case14_tail_headpair_z4_pagePK15__maca_bfloat16PA64_jiiiiii.exit2239
+8699:  store i32 0, ptr addrspace(3) %arrayidx3.i, align 16, !tbaa !16, !noalias !146
+8700-  %arrayidx5.i2212 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx3.i, i32 4
+8701:  store i32 0, ptr addrspace(3) %arrayidx5.i2212, align 4, !tbaa !16, !noalias !146
+8702-  %arrayidx6.i = getelementptr inbounds i8, ptr addrspace(3) %arrayidx3.i, i32 8
+8703:  store i32 0, ptr addrspace(3) %arrayidx6.i, align 8, !tbaa !16, !noalias !146
+8704-  %arrayidx7.i2213 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx3.i, i32 12
+8705:  store i32 0, ptr addrspace(3) %arrayidx7.i2213, align 4, !tbaa !16, !noalias !146
+8706:  br label %_Z34issue_case14_tail_headpair_z4_pagePK15__maca_bfloat16PA64_jiiiiii.exit
+8707-
+8708:if.end.i2214:                                     ; preds = %_Z34issue_case14_tail_headpair_z4_pagePK15__maca_bfloat16PA64_jiiiiii.exit2239
+8709-  %mul9.i = shl nsw i32 %499, 6
+--
+8717-  tail call void @llvm.memcpy.p3.p4.i64(ptr addrspace(3) noundef align 16 dereferenceable(16) %arrayidx3.i, ptr addrspace(4) noundef align 16 dereferenceable(16) %add.ptr16.i2218, i64 16, i1 false), !tbaa.struct !34, !call_argsrelate !65
+8718:  br label %_Z34issue_case14_tail_headpair_z4_pagePK15__maca_bfloat16PA64_jiiiiii.exit
+8719-
+8720:_Z34issue_case14_tail_headpair_z4_pagePK15__maca_bfloat16PA64_jiiiiii.exit: ; preds = %if.then.i2211, %if.end.i2214
+8721-  fence syncscope("warp") release
+--
+8779-
+8780:if.then240:                                       ; preds = %_Z34issue_case14_tail_headpair_z4_pagePK15__maca_bfloat16PA64_jiiiiii.exit
+8781-  %520 = bitcast i32 %519 to float
+--
+9063-  %add57.i = or disjoint i32 %mul.i2219, 3
+9064:  %cmp58.i = icmp ult i32 %add57.i, %and19
+
+helper labels in other kernel bodies:
+target_kernel_hits=22
+other_kernel_hits=0
+other_kernel_bodies_with_helper_labels=0
+note=the earlier other-kernel count was an audit-state reset false positive from LLVM metadata; raw rg confirms helper labels occur only in the target body.

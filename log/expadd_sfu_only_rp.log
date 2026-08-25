@@ -1,0 +1,112 @@
+---
+name: __cxa_pure_virtual
+body:             |
+  bb.0.entry:
+    Live-in: 
+    Live-out: 
+    STReg  MTReg
+    0     0    
+    0     0      	TRAP 2
+    0     0    
+    Live-out:
+    Live-thr:
+    0     0    
+...
+---
+name: __cxa_deleted_virtual
+body:             |
+  bb.0.entry:
+    Live-in: 
+    Live-out: 
+    STReg  MTReg
+    0     0    
+    0     0      	TRAP 2
+    0     0    
+    Live-out:
+    Live-thr:
+    0     0    
+...
+---
+name: _Z23expadd_sfu_probe_kernelPKfPKiPfi
+body:             |
+  bb.0.entry:
+    Live-in: 
+    Live-out:  %0:0000000000000003 %1:000000000000000F %10:000000000000000F %31:00000000000000FF
+    STReg  MTReg
+    0     0    
+    1     0      	%6:str_32 = COPY $streg_32bit_6
+    1     0    
+    3     0      	%3:str_64 = COPY $streg_64bits_0
+    3     0    
+    5     0      	%4:str_64(p4) = COPY $streg_64bits_2
+    5     0    
+    5     1      	%2:mtr_32(s32) = COPY $mtreg_32bit_0
+    5     1    
+    6     1      	%12:str_32 = LDU_B32 %3:str_64, 4 :: (dereferenceable invariant load (s32) from %ir.2, addrspace 4)
+    4     1    
+    5     1      	%11:str_32 = LDU_B32 %4:str_64(p4), 24 :: (dereferenceable invariant load (s32) from %ir.count.kernarg.offset, align 8, addrspace 4)
+    5     1    
+    7     1      	%10:str_64 = LDU_B64 %4:str_64(p4), 16 :: (dereferenceable invariant load (s64), align 16, addrspace 4)
+    7     1    
+    11    1      	%31:str_128 = LDU_B128 %4:str_64(p4), 0 :: (dereferenceable invariant load (s128), addrspace 4)
+    9     1    
+    10    1      	%14:str_32 = SAND_B32 65535, %12:str_32, implicit-def dead $smsk
+    9     1    
+    10    1      	%15:str_32 = SMUL_I32 %6:str_32, %14:str_32
+    8     1    
+    8     2      	%17:mtr_32 = AND_B32 1023, %2:mtr_32(s32), implicit $xmsk
+    8     1    
+    8     2      	%0:mtr_32 = ADD_U32 %15:str_32, %17:mtr_32, 0, implicit $xmsk
+    7     1    
+    9     1      	%18:str_64 = CMP_LT_I32 %0:mtr_32, %11:str_32, implicit $xmsk
+    8     1    
+    10    1      	%1:str_64 = COPY $xmsk, implicit-def $xmsk
+    10    1    
+    12    1      	%36:str_64 = SAND_B64 %1:str_64, %18:str_64, implicit-def dead $smsk
+    10    1    
+    10    1      	$xmsk = SMOV_B64_term %36:str_64
+    8     1    
+    8     1      	BRA_XMSKZ %bb.2, implicit $xmsk
+    8     1    
+    8     1      	BRA %bb.1
+    8     1    
+    Live-out: %0:0000000000000003 %1:000000000000000F %10:000000000000000F %31:00000000000000FF
+    Live-thr:
+    0     0    
+  bb.1.if.end:
+    Live-in:  %0:0000000000000003 %1:000000000000000F %10:000000000000000F %31:00000000000000FF
+    Live-out:  %1:000000000000000F %20:000000000000000F %27:0000000000000003
+    STReg  MTReg
+    8     1    
+    8     3      	%21:mtr_64 = COPY %10:str_64
+    6     3    
+    6     5      	%20:mtr_64 = MAD_I32 %0:mtr_32, 32, %21:mtr_64, 0, implicit-def dead $cmsk, implicit $xmsk
+    6     3    
+    6     5      	%23:mtr_64 = MAD_I32 %0:mtr_32, 4, %31.sub_32bit_2_sub_32bit_3:str_128, 0, implicit-def dead $cmsk, implicit $xmsk
+    4     5    
+    4     7      	%24:mtr_64 = MAD_I32 %0:mtr_32, 4, %31.sub_32bit_0_sub_32bit_1:str_128, 0, implicit-def dead $cmsk, implicit $xmsk
+    2     6    
+    2     7      	%26:mtr_32 = LDG_B32 %23:mtr_64, 0, 0, 0, 0, 0, 0, 124, 0, implicit $xmsk :: (load (s32) from %ir.arrayidx7, !tbaa !10, addrspace 1)
+    2     5    
+    2     6      	%25:mtr_32 = LDG_B32 %24:mtr_64, 0, 0, 0, 0, 0, 0, 124, 0, implicit $xmsk :: (load (s32) from %ir.arrayidx, !tbaa !6, addrspace 1)
+    2     4    
+    2     5      	%27:mtr_32 = EXPADD_F32 0, %25:mtr_32, 0, %26:mtr_32, 0, implicit $xmsk, implicit $mode
+    2     3    
+    2     3      	STG_B32 %20:mtr_64, 0, %27:mtr_32, 0, 1, 0, 0, 124, 0, implicit $xmsk :: (store (s32) into %ir.add.ptr, !tbaa !6, addrspace 1)
+    2     3    
+    Live-out: %1:000000000000000F %20:000000000000000F %27:0000000000000003
+    Live-thr: %1:000000000000000F
+    2     0    
+  bb.2.cleanup:
+    Live-in:  %1:000000000000000F
+    Live-out: 
+    STReg  MTReg
+    2     0    
+    2     0      	$xmsk = SOR_B64 $xmsk, %1:str_64, implicit-def dead $smsk
+    0     0    
+    0     0      	ENDK
+    0     0    
+    Live-out:
+    Live-thr:
+    0     0    
+...

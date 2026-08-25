@@ -1,0 +1,15 @@
+exp601 strict interleaved C500 A/B case12 boundary
+UTC 17:32:39Z
+command: python3 tests/c500_benchmark.py --control build/exp601_c500_control.so --candidate build/exp601_c500_candidate.so --cases 12 --lengths boundary --seed 20260809 --warmup 5 --iterations 20 --rounds 9
+candidate source SHA256:
+2eb8cbdcbc8727f4d9d1fd2861663c37d02b3402ad341829a2f786d4b032e4bf  solutions/archive/2026-08-18-experiments/cuda_case12_partial_b128_stg_exp601.cpp
+control source SHA256:
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+candidate/control binary SHA256:
+a3a2898f2f384c74085d430d60bd15ff0f01e9d6e147f3f4ee3a3e2e7d42e95c  build/exp601_c500_candidate.so
+4bbe97993b7ad219dc607e95a8a45a11c26c8c96042d857084f91098d00ea873  build/exp601_c500_control.so
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+control:   build/exp601_c500_control.so
+candidate: build/exp601_c500_candidate.so
+case 12 B= 8 L=32768 KV=8 | control p50=0.2355 ms | candidate p50=0.2345 ms | candidate/control p10/p50/p90=0.9888/0.9979/1.0004 | speedup=1.002x
+exit_status=0

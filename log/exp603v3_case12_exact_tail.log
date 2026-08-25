@@ -1,0 +1,9 @@
+exp603v3 C500 candidate case12 exact final capacity tail
+UTC 
+command: python3 tests/c500_paged_decode_harness.py --library build/exp603v3_candidate.so --cases 12 --length-values 32767,32768 --seed 20260809
+candidate source SHA256: d27f5e5cfb17562baacbc4f4393c3513bc501cae283d222d718719abd251df28  solutions/archive/2026-08-20-experiments/cuda_case12_wave_local_q_bsm_exp603.cpp
+candidate binary SHA256: 61ecb650b68ac181fbc17795c0df200b2431cfc69b4c48911890f421e61c65c5  build/exp603v3_candidate.so
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:32767 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:32768 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True
+exit_status=0

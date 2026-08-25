@@ -1,0 +1,16 @@
+GPU=MetaX C500 torch=2.8.0+metax3.7.1.3
+
+blocks=1
+32->64 delta p10/p50/p90=73.472/95.488/115.200 us per-launch=2.9840 low_p50=151.552 high_p50=262.144
+64->128 delta p10/p50/p90=162.816/186.368/216.576 us per-launch=2.9120 low_p50=267.008 high_p50=455.936
+128->256 delta p10/p50/p90=325.632/354.048/363.264 us per-launch=2.7660 low_p50=471.808 high_p50=824.064
+
+blocks=32
+32->64 delta p10/p50/p90=84.736/95.744/115.712 us per-launch=2.9920 low_p50=165.888 high_p50=262.400
+64->128 delta p10/p50/p90=167.680/189.696/202.752 us per-launch=2.9640 low_p50=268.288 high_p50=455.424
+128->256 delta p10/p50/p90=351.232/362.496/381.952 us per-launch=2.8320 low_p50=474.624 high_p50=834.048
+
+blocks=256
+32->64 delta p10/p50/p90=99.328/105.216/124.928 us per-launch=3.2880 low_p50=163.584 high_p50=279.808
+64->128 delta p10/p50/p90=192.256/204.288/227.328 us per-launch=3.1920 low_p50=285.184 high_p50=491.520
+128->256 delta p10/p50/p90=369.664/392.448/414.976 us per-launch=3.0660 low_p50=510.208 high_p50=899.584

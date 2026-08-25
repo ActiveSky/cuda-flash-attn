@@ -1,0 +1,101 @@
+mxcc: warning: argument unused during compilation: '-shared' [-Wunused-command-line-argument]
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  335 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  701 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1229 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:5584:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, true, false, false, false, false, false, true, false, false, false>' requested here
+ 5584 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1229 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:5596:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false>' requested here
+ 5596 |                     paged_decode_token_parallel_kernel<4, 8, false><<<
+      |                     ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1229 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:5735:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, false, false, false, false, false, true, false, false, false, false, true, true, true, true, false>' requested here
+ 5735 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1229 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:5757:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, true, false, false, false, false, true, false, false, true, false, true, true, false, false, true>' requested here
+ 5757 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  701 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:5772:9: note: in instantiation of function template specialization 'paged_decode_split_qk_pair_kernel<8, 4>' requested here
+ 5772 |         paged_decode_split_qk_pair_kernel<8, 4><<<grid, 128>>>(
+      |         ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  335 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:5779:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<4, 8>' requested here
+ 5779 |             paged_decode_split_kernel<4, 8><<<grid, 256>>>(
+      |             ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  335 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:5785:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<8, 4>' requested here
+ 5785 |             paged_decode_split_kernel<8, 4><<<grid, 128>>>(
+      |             ^
+10 warnings generated when compiling for xcore1000.
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  335 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  701 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1229 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:5584:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, true, false, false, false, false, false, true, false, false, false>' requested here
+ 5584 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1229 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:5596:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false>' requested here
+ 5596 |                     paged_decode_token_parallel_kernel<4, 8, false><<<
+      |                     ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1229 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:5735:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, false, false, false, false, false, true, false, false, false, false, true, true, true, true, false>' requested here
+ 5735 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1229 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:5757:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, true, false, false, false, false, true, false, false, true, false, true, true, false, false, true>' requested here
+ 5757 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  701 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:5772:9: note: in instantiation of function template specialization 'paged_decode_split_qk_pair_kernel<8, 4>' requested here
+ 5772 |         paged_decode_split_qk_pair_kernel<8, 4><<<grid, 128>>>(
+      |         ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  335 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:5779:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<4, 8>' requested here
+ 5779 |             paged_decode_split_kernel<4, 8><<<grid, 256>>>(
+      |             ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  335 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-17-experiments/cuda_case12_pid_b32_readlane_exp585.cpp:5785:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<8, 4>' requested here
+ 5785 |             paged_decode_split_kernel<8, 4><<<grid, 128>>>(
+      |             ^
+10 warnings generated when compiling for host.

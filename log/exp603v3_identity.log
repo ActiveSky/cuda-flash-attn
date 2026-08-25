@@ -1,0 +1,197 @@
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+d27f5e5cfb17562baacbc4f4393c3513bc501cae283d222d718719abd251df28  solutions/archive/2026-08-20-experiments/cuda_case12_wave_local_q_bsm_exp603.cpp
+
+source diff stat:
+
+WAVE_LOCAL_Q occurrences:
+1028-        float f;
+1029-        int i;
+1030-    } bits;
+1031-    bits.f = value;
+1032-    const unsigned source_lane = __lane_id() ^ static_cast<unsigned>(offset);
+1033:    bits.i = __builtin_mxc_bsm_bpermute(source_lane << 2, bits.i);
+1034-    return bits.f;
+1035-#else
+1036-    return __shfl_xor_sync(0xffffffffu, value, offset, 16);
+1037-#endif
+1038-}
+--
+1064-}
+1065-
+1066-// exp177: the native mov_shfl instruction operates independently in each
+1067-// xcore1000 16-lane row.  Rotate-right 8/4 followed by the two quad
+1068-// permutations forms the same full-row sum as XOR 8/4/2/1, but avoids the
+1069:// full-wave BSM bpermute path.  The exact four-mode network is runtime-checked
+1070:// by tests/c500_bpermute_probe.py before it is enabled in attention code.
+1071-__device__ __forceinline__ float native_row16_allreduce(float value) {
+1072-#if defined(__MACA_ARCH__) && (__MACA_ARCH__ == 1000)
+1073-    value += native_row16_shuffle<0x128>(value);
+1074-    value += native_row16_shuffle<0x124>(value);
+1075-    value += native_row16_shuffle<0x04e>(value);
+--
+1270-    constexpr int Z_PARTS = PAGE_TOKENS / GQA;
+1271-    constexpr bool REGISTER_Z0 =
+1272-        KV_HEADS == 8 && (FULL_PAGES_ONLY || TAIL_PAGE_ONLY);
+1273-    // exp367: all three shapes that use the existing vec2 reducer now share
+1274-    // one packed metadata contract.  Case10 and case13 are unique producer
+1275:    // instances; case12 shares its producer instance with case7/9, so only
+1276-    // its cold post-loop writeback uses the runtime B8/split128 identity.
+1277-    constexpr bool VEC2_PACKED_ML_STATIC =
+1278-        FULL_PAGES_ONLY && FUSE_TAIL_IN_LAST_SPLIT &&
+1279-        ((KV_HEADS == 4 && GQA == 8 && REGISTER_KV_LOOKAHEAD) ||
+1280-         (KV_HEADS == 8 && GQA == 4 && KV8_SCALAR_K_LOOKAHEAD &&
+--
+2426-// exp603: exchange one aligned raw-BF16 Q fragment between the two adjacent
+2427-// z partitions in a physical 64-lane wave.  Only the even-z partition reads
+2428-// Q from global memory; the odd-z partition consumes the peer's register
+2429-// payload.  This is a Q-specific producer/consumer ownership contract and
+2430-// does not alter the K/V page loader or any page lifetime.
+2431:__device__ __forceinline__ uint32_t case12_wave64_xor32_u32(
+2432-    uint32_t value)
+2433-{
+2434-#if defined(__MACA_ARCH__) && (__MACA_ARCH__ == 1000)
+2435-    union {
+2436-        uint32_t u;
+2437-        int i;
+2438-    } bits;
+2439-    bits.u = value;
+2440:    bits.i = __builtin_mxc_bsm_bpermute(
+2441-        (__lane_id() ^ 32u) << 2, bits.i);
+2442-    return bits.u;
+2443-#else
+2444-    return __shfl_xor_sync(~0ull, value, 32, 64);
+2445-#endif
+--
+2501-        s_md[row][1] = l;
+2502-    }
+2503-}
+2504-
+2505-template <bool ALL_NATIVE_ROW_QK = false, bool NATIVE_HEAD_BIT1 = false,
+2506:          bool FIXED_LIVE_BUCKETS = false, bool WAVE_LOCAL_Q = false>
+2507-__global__ void __launch_bounds__(256)
+2508-paged_decode_case13_kv8_headpair_z8_kernel(
+2509-    const __nv_bfloat16* __restrict__ q,
+2510-    const __nv_bfloat16* __restrict__ k_cache,
+2511-    const __nv_bfloat16* __restrict__ v_cache,
+--
+2582-        reinterpret_cast<uint32_t (*)[U32_PER_ROW]>(
+2583-            s_storage + KV_BUFFER_BYTES / 2);
+2584-
+2585-    uint4 qpack0;
+2586-    uint4 qpack1;
+2587:    if constexpr (WAVE_LOCAL_Q) {
+2588-        // Each physical wave is z-paired (0/1, 2/3, 4/5, 6/7).  Keep the
+2589-        // exchange instruction converged: source lanes own valid qpack values,
+2590-        // while the odd-z lanes provide a harmless zero input of their own.
+2591-        const bool q_owner = (tz & 1) == 0;
+2592-        qpack0 = {0u, 0u, 0u, 0u};
+--
+2597-            const uint32_t* q1_src = reinterpret_cast<const uint32_t*>(
+2598-                q + (b * 32 + h1) * HEAD_DIM) + tx * 4;
+2599-            qpack0 = *reinterpret_cast<const uint4*>(q0_src);
+2600-            qpack1 = *reinterpret_cast<const uint4*>(q1_src);
+2601-        }
+2602:        const uint32_t qpeer0x = case12_wave64_xor32_u32(qpack0.x);
+2603:        const uint32_t qpeer0y = case12_wave64_xor32_u32(qpack0.y);
+2604:        const uint32_t qpeer0z = case12_wave64_xor32_u32(qpack0.z);
+2605:        const uint32_t qpeer0w = case12_wave64_xor32_u32(qpack0.w);
+2606:        const uint32_t qpeer1x = case12_wave64_xor32_u32(qpack1.x);
+2607:        const uint32_t qpeer1y = case12_wave64_xor32_u32(qpack1.y);
+2608:        const uint32_t qpeer1z = case12_wave64_xor32_u32(qpack1.z);
+2609:        const uint32_t qpeer1w = case12_wave64_xor32_u32(qpack1.w);
+2610-        if (!q_owner) {
+2611-            qpack0.x = qpeer0x;
+2612-            qpack0.y = qpeer0y;
+2613-            qpack0.z = qpeer0z;
+2614-            qpack0.w = qpeer0w;
+--
+5282-         (batch_size == 32 && seqlen_k == 4096))) {
+5283-        n_split *= 8;
+5284-    }
+5285-    // Case 12 boundary test: eight pages per partial, matching the proven
+5286-    // granularity of cases 7/9 and exposing 16384 total split CTAs.
+5287:    if (num_heads_k == 8 && batch_size == 8 && seqlen_k == 32768) {
+5288-        n_split *= 16;
+5289-    }
+5290-    // exp422: lane-local BF16 MMA shifts case 11's producer/reducer balance.
+5291-    // Use 39 slots (20 cache pages per live partial); split 39/40 were the
+5292-    // only sweep points that improved full, random and boundary distributions.
+--
+5311-    // Case 10 is a B=1 KV4 scalar path with only 256 generic CTAs. Halve
+5312-    // its cap-derived page chunk from eight to four before testing more work.
+5313-    if (num_heads_k == 4 && batch_size == 1 && seqlen_k == 8192) {
+5314-        n_split *= 2;
+5315-    }
+5316:    // exp414: case12 now shares the five-wave head-pair/z8 producer. split40
+5317-    // retains 2560 producer CTAs while cutting workspace and vec2-reducer
+5318-    // input to 31.25% of the former split128 policy. Splits 39 and 41 are
+5319-    // both slower, so keep this isolated discrete optimum.
+5320:    if (num_heads_k == 8 && batch_size == 8 && seqlen_k == 32768) n_split = 40;
+5321-    // exp421/431: split65 remains the discrete optimum after the all-native
+5322-    // QK network; adjacent split64 is ~0.99% slower and split66 crosses a
+5323-    // 56-page critical-path cliff (~13.8% slower).
+5324-    if (num_heads_k == 8 && batch_size == 1 && seqlen_k == 58966) n_split = 65;
+5325-    // exp417: retain three-way split parallelism for variable per-batch
+--
+5393-    // identical layout to the other long KV8 shapes to measure its split-KV behavior.
+5394-    const bool use_qk_pair =
+5395-        num_heads_k == 8 &&
+5396-        ((batch_size == 64 && seqlen_k == 2048) ||
+5397-         (batch_size == 32 && seqlen_k == 4096) ||
+5398:         (batch_size == 8 && seqlen_k == 32768) ||
+5399-         (batch_size == 1 && seqlen_k == 58966));
+5400-    if (use_token_parallel) {
+5401-        if (num_heads_k == 4) {
+5402-            const bool sync_kv4 = batch_size == 16 &&
+5403-                (seqlen_k == 4096 || seqlen_k == 12251);
+--
+5613-        } else {
+5614-            if constexpr (separate_tail) {
+5615-#if 0  // exp384: unreachable since exp109; avoid dead template instances.
+5616-                if ((batch_size == 32 && seqlen_k == 4096) ||
+5617-                    (batch_size == 64 && seqlen_k == 2048) ||
+5618:                    (batch_size == 8 && seqlen_k == 32768) ||
+5619-                    (batch_size == 1 && seqlen_k == 58966)) {
+5620-                    // exp72-75: add raw fixed-row16 QK exchange one shape at
+5621-                    // a time across cases9/7/12/13, retaining an independently
+5622-                    // measured control at every step.
+5623-                    paged_decode_token_parallel_kernel<
+--
+5656-                        (int)pages_per_split, partial_split_count,
+5657-                        sm_scale * 1.4426950408889634f);
+5658-                }
+5659-#endif
+5660-            } else {
+5661:                if (batch_size == 8 && seqlen_k == 32768) {
+5662-                    // exp387: extend exp386's head-pair/z8 producer ownership
+5663:                    // only to case12. exp414 uses split40/52 pages per partial,
+5664-                    // fused-tail ownership, synchronous K+V-over-PV, Q
+5665-                    // prescale, packed metadata, global partial count and vec2
+5666-                    // reducer unchanged. exp428 changes only this z8
+5667-                    // producer's QK exchange to the all-native row network.
+5668-                    paged_decode_case13_kv8_headpair_z8_kernel<
+--
+5813-        const int reduce_splits = partial_split_count;
+5814-        // 一个 CTA 协作合并一个 (batch, head)；两个 split 标量数组与
+5815-        // 4 个 warp 临时值存于动态 shared memory。
+5816-        if (num_heads_k == 8 && batch_size == 32 && seqlen_k == 4096) {
+5817-            // exp389: the head-pair/z8 producer packs (m,l) as FP16x2 in
+5818:            // partial_m, matching the already-validated case12/13 producer
+5819-            // contract. Use the packed-aware full-wave vec2 reducer while
+5820-            // retaining case9's fused-tail partial slots and owner count.
+5821-            const int rgrid = (int)(batch_size * 32);
+5822-            const size_t vec2_smem =
+5823-                ((size_t)2 * (size_t)reduce_splits + 2) * sizeof(float);
+--
+5950-                    rgrid, 32, vec4_smem>>>(
+5951-                    s_partial_m, s_partial_l, s_partial_acc, output,
+5952-                    cache_seqlens, (int)batch_size,
+5953-                    (int)pages_per_split, reduce_splits);
+5954-            } else if (num_heads_k == 8 && batch_size == 8 &&
+5955:                       seqlen_k == 32768) {
+5956:                // exp149: case12 shares case10's 128-partial one-head
+5957-                // reducer shape. Preserve exp109's fused-tail owner count,
+5958-                // but fill one complete C500 wave and own two dimensions per
+5959-                // thread; producer, CTA count, workspace, and math stay fixed.
+5960-                const size_t vec2_smem =
+5961-                    ((size_t)2 * (size_t)reduce_splits + 2) * sizeof(float);

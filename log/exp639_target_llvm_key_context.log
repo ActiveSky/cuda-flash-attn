@@ -1,0 +1,93 @@
+[candidate] target_file_line=6904
+shared_i16_store=48
+shared_i16_load=0
+shared_i32_store=24
+shared_i32_load=104
+shared_float_store=4
+shared_float_load=12
+barrier_block=4
+barrier_warp=8
+bf16_to_f32=208
+mxc_mma=40
+KEY_SHARED_I16_STORES
+9028:   store i16 %conv.i.i.i.i.i, ptr addrspace(3) %add.ptr3.i2447, align 16, !tbaa !27
+9030:   store i16 %conv.i.i.i7.i.i, ptr addrspace(3) %y3.i, align 2, !tbaa !27
+9056:   store i16 0, ptr addrspace(3) %add.ptr3.i2447, align 16, !tbaa !27
+9058:   store i16 0, ptr addrspace(3) %y3.i.c, align 2, !tbaa !27
+9065:   store i16 %ref.tmp.i2440.sroa.0.0.1, ptr addrspace(3) %arrayidx16.i2471.1, align 4, !tbaa !27
+9067:   store i16 %ref.tmp.i2440.sroa.5.0.1, ptr addrspace(3) %y3.i.1, align 2, !tbaa !27
+9094:   store i16 %conv.i.i.i.i.i.2, ptr addrspace(3) %arrayidx16.i2471.2, align 8, !tbaa !27
+9096:   store i16 %conv.i.i.i7.i.i.2, ptr addrspace(3) %y3.i.2, align 2, !tbaa !27
+9123:   store i16 0, ptr addrspace(3) %arrayidx16.i2471.2.c, align 8, !tbaa !27
+9125:   store i16 0, ptr addrspace(3) %y3.i.2.c, align 2, !tbaa !27
+9132:   store i16 %ref.tmp.i2440.sroa.0.0.3, ptr addrspace(3) %arrayidx16.i2471.3, align 4, !tbaa !27
+9134:   store i16 %ref.tmp.i2440.sroa.5.0.3, ptr addrspace(3) %y3.i.3, align 2, !tbaa !27
+9180:   store i16 %conv.i.i.i.i.i3191, ptr addrspace(3) %add.ptr3.i2403, align 16, !tbaa !27
+9182:   store i16 %conv.i.i.i7.i.i3198, ptr addrspace(3) %y3.i3202, align 2, !tbaa !27
+9208:   store i16 0, ptr addrspace(3) %add.ptr3.i2403, align 16, !tbaa !27
+9210:   store i16 0, ptr addrspace(3) %y3.i3202.c, align 2, !tbaa !27
+9217:   store i16 %ref.tmp.i2396.sroa.0.0.1, ptr addrspace(3) %arrayidx16.i2427.1, align 4, !tbaa !27
+9219:   store i16 %ref.tmp.i2396.sroa.5.0.1, ptr addrspace(3) %y3.i3202.1, align 2, !tbaa !27
+9246:   store i16 %conv.i.i.i.i.i3191.2, ptr addrspace(3) %arrayidx16.i2427.2, align 8, !tbaa !27
+9248:   store i16 %conv.i.i.i7.i.i3198.2, ptr addrspace(3) %y3.i3202.2, align 2, !tbaa !27
+9275:   store i16 0, ptr addrspace(3) %arrayidx16.i2427.2.c, align 8, !tbaa !27
+9277:   store i16 0, ptr addrspace(3) %y3.i3202.2.c, align 2, !tbaa !27
+9284:   store i16 %ref.tmp.i2396.sroa.0.0.3, ptr addrspace(3) %arrayidx16.i2427.3, align 4, !tbaa !27
+9286:   store i16 %ref.tmp.i2396.sroa.5.0.3, ptr addrspace(3) %y3.i3202.3, align 2, !tbaa !27
+9332:   store i16 %conv.i.i.i.i.i3209, ptr addrspace(3) %add.ptr3.i2359, align 16, !tbaa !27
+9334:   store i16 %conv.i.i.i7.i.i3216, ptr addrspace(3) %y3.i3220, align 2, !tbaa !27
+9360:   store i16 0, ptr addrspace(3) %add.ptr3.i2359, align 16, !tbaa !27
+9362:   store i16 0, ptr addrspace(3) %y3.i3220.c, align 2, !tbaa !27
+9369:   store i16 %ref.tmp.i2352.sroa.0.0.1, ptr addrspace(3) %arrayidx16.i2383.1, align 4, !tbaa !27
+9371:   store i16 %ref.tmp.i2352.sroa.5.0.1, ptr addrspace(3) %y3.i3220.1, align 2, !tbaa !27
+9398:   store i16 %conv.i.i.i.i.i3209.2, ptr addrspace(3) %arrayidx16.i2383.2, align 8, !tbaa !27
+9400:   store i16 %conv.i.i.i7.i.i3216.2, ptr addrspace(3) %y3.i3220.2, align 2, !tbaa !27
+9427:   store i16 0, ptr addrspace(3) %arrayidx16.i2383.2.c, align 8, !tbaa !27
+9429:   store i16 0, ptr addrspace(3) %y3.i3220.2.c, align 2, !tbaa !27
+9436:   store i16 %ref.tmp.i2352.sroa.0.0.3, ptr addrspace(3) %arrayidx16.i2383.3, align 4, !tbaa !27
+9438:   store i16 %ref.tmp.i2352.sroa.5.0.3, ptr addrspace(3) %y3.i3220.3, align 2, !tbaa !27
+9480:   store i16 %conv.i.i.i.i.i3227, ptr addrspace(3) %add.ptr3.i, align 16, !tbaa !27
+9482:   store i16 %conv.i.i.i7.i.i3234, ptr addrspace(3) %y3.i3238, align 2, !tbaa !27
+9508:   store i16 0, ptr addrspace(3) %add.ptr3.i, align 16, !tbaa !27
+9510:   store i16 0, ptr addrspace(3) %y3.i3238.c, align 2, !tbaa !27
+9517:   store i16 %ref.tmp.i.sroa.0.0.1, ptr addrspace(3) %arrayidx16.i.1, align 4, !tbaa !27
+9519:   store i16 %ref.tmp.i.sroa.5.0.1, ptr addrspace(3) %y3.i3238.1, align 2, !tbaa !27
+9546:   store i16 %conv.i.i.i.i.i3227.2, ptr addrspace(3) %arrayidx16.i.2, align 8, !tbaa !27
+9548:   store i16 %conv.i.i.i7.i.i3234.2, ptr addrspace(3) %y3.i3238.2, align 2, !tbaa !27
+9575:   store i16 0, ptr addrspace(3) %arrayidx16.i.2.c, align 8, !tbaa !27
+9577:   store i16 0, ptr addrspace(3) %y3.i3238.2.c, align 2, !tbaa !27
+9584:   store i16 %ref.tmp.i.sroa.0.0.3, ptr addrspace(3) %arrayidx16.i.3, align 4, !tbaa !27
+9586:   store i16 %ref.tmp.i.sroa.5.0.3, ptr addrspace(3) %y3.i3238.3, align 2, !tbaa !27
+KEY_METADATA_OFFSET_6144
+7417:   tail call void @llvm.mxc.barrier(), !noalias !88
+8571:   tail call void @llvm.mxc.barrier()
+8971:   tail call void @llvm.mxc.barrier()
+9142:   %arrayidx25.i2465 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 6144), i32 %add328
+9599:   %arrayidx25.i = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 6144), i32 %add341.sink
+9607:   tail call void @llvm.mxc.barrier()
+9616:   %arrayidx350 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 6144), i32 %add348
+9691:   %arrayidx362 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 6144), i32 %1
+9767:   %arrayidx373 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 6144), i32 %add371
+9897:   %arrayidx473 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 6144), i32 %add471
+9972:   %arrayidx487 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 6144), i32 %add323
+10048:   %arrayidx498 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 6144), i32 %add496
+
+[control] target_file_line=6904
+shared_i16_store=0
+shared_i16_load=0
+shared_i32_store=24
+shared_i32_load=80
+shared_float_store=38
+shared_float_load=40
+barrier_block=5
+barrier_warp=8
+bf16_to_f32=160
+mxc_mma=40
+KEY_SHARED_I16_STORES
+KEY_METADATA_OFFSET_6144
+7417:   tail call void @llvm.mxc.barrier(), !noalias !88
+8571:   tail call void @llvm.mxc.barrier()
+8971:   tail call void @llvm.mxc.barrier()
+9066:   tail call void @llvm.mxc.barrier()
+9281:   tail call void @llvm.mxc.barrier()
+

@@ -1,0 +1,9 @@
+exp654 watch history
+watch command: python3 tools/xpuoj_submit.py --watch 124440 --poll-seconds 30 --timeout-seconds 900
+watch 1: Pending, then Running/Pending, timed out after 900s; no cancel.
+watch 2: Running/Pending, then Finished/Accepted; archived results/raw/cuda_124440_raw.json.
+submission_id: 124440
+status: Accepted
+score: 66.07
+case_times_us: 3/4/9/22/17/28/226/93/236/39/223/372/182/139
+case_scores: 92/90/83/73/73/63/55/54/57/62/52/60/56/55

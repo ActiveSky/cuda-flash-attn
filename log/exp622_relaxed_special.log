@@ -1,0 +1,5 @@
+GPU: MetaX C500
+library: build/exp622_relaxed_candidate.so
+case14: B=1 L=61519 KV=4 pages=3845
+[PASS] padding/tail baseline length=241 match=1.000000 max_error=1.953125e-03 max_tol_ratio=0.098 reference_finite=True finite=True guards=True inputs_untouched=True
+[FAIL] padding/tail poison length=241 match=0.000000 max_error=nan max_tol_ratio=nan reference_finite=True finite=False guards=True inputs_untouched=True

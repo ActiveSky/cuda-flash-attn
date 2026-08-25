@@ -1,0 +1,176 @@
+exp599 C500 correctness gate fresh candidate build
+UTC 2026-08-18T15:06:16Z
+candidate source SHA256:
+35013de595b082974e0b59de7b87b1f9bfd3476afb2affae1c8aeb8d73635da7  solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp
+control/work source SHA256:
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/cuda_maca_optimized.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+active relevant processes before build:
+3699609 /bin/bash -c set -o pipefail {   printf '%s\n' 'exp599 C500 correctness gate fresh candidate build'   date -u '+UTC %Y-%m-%dT%H:%M:%SZ'   printf '%s\n' 'candidate source SHA256:'   sha256sum solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp   printf '%s\n' 'control/work source SHA256:'   sha256sum solutions/cuda_maca_optimized.cpp solutions/archive/2026-08-16-submissions/cuda_113889.cpp   printf '%s\n' 'active relevant processes before build:'   pgrep -af '[c]500|[m]aca|[x]puoj|[b]enchmark|[t]est_kernel' || true   printf '%s\n' 'command: tools/build_local_maca.sh solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp build/exp599_c500_candidate.so'   tools/build_local_maca.sh solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp build/exp599_c500_candidate.so   printf '%s\n' 'binary SHA256:'   sha256sum build/exp599_c500_candidate.so   printf '%s\n' 'active relevant processes after build:'   pgrep -af '[c]500|[m]aca|[x]puoj|[b]enchmark|[t]est_kernel' || true } 2>&1 | tee log/exp599_c500_candidate_build.log rc=${PIPESTATUS[0]} printf 'build_exit_status=%s\n' "$rc" >> log/exp599_c500_candidate_build.log exit "$rc"
+3699611 /bin/bash -c set -o pipefail {   printf '%s\n' 'exp599 C500 correctness gate fresh candidate build'   date -u '+UTC %Y-%m-%dT%H:%M:%SZ'   printf '%s\n' 'candidate source SHA256:'   sha256sum solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp   printf '%s\n' 'control/work source SHA256:'   sha256sum solutions/cuda_maca_optimized.cpp solutions/archive/2026-08-16-submissions/cuda_113889.cpp   printf '%s\n' 'active relevant processes before build:'   pgrep -af '[c]500|[m]aca|[x]puoj|[b]enchmark|[t]est_kernel' || true   printf '%s\n' 'command: tools/build_local_maca.sh solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp build/exp599_c500_candidate.so'   tools/build_local_maca.sh solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp build/exp599_c500_candidate.so   printf '%s\n' 'binary SHA256:'   sha256sum build/exp599_c500_candidate.so   printf '%s\n' 'active relevant processes after build:'   pgrep -af '[c]500|[m]aca|[x]puoj|[b]enchmark|[t]est_kernel' || true } 2>&1 | tee log/exp599_c500_candidate_build.log rc=${PIPESTATUS[0]} printf 'build_exit_status=%s\n' "$rc" >> log/exp599_c500_candidate_build.log exit "$rc"
+3699612 tee log/exp599_c500_candidate_build.log
+command: tools/build_local_maca.sh solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp build/exp599_c500_candidate.so
+Building solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp
+Compiler: /opt/maca/mxgpu_llvm/bin/mxcc
+MACA path: /opt/maca
+CUDA bridge: /opt/maca-3.7.1/tools/cu-bridge
+Target: xcore1000
+Output: build/exp599_c500_candidate.so
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:346:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  346 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:712:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  712 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:1240:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1240 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:1240:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:5551:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, true, false, false, false, false, false, true, false, false, false>' requested here
+ 5551 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:1240:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1240 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:5563:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false>' requested here
+ 5563 |                     paged_decode_token_parallel_kernel<4, 8, false><<<
+      |                     ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:1240:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1240 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:5698:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, false, false, false, false, false, true, false, false, false, false, true, true, true, true, false>' requested here
+ 5698 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:1240:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1240 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:5720:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, true, false, false, false, false, true, false, false, true, false, true, true, false, false, true>' requested here
+ 5720 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:712:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  712 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:5735:9: note: in instantiation of function template specialization 'paged_decode_split_qk_pair_kernel<8, 4>' requested here
+ 5735 |         paged_decode_split_qk_pair_kernel<8, 4><<<grid, 128>>>(
+      |         ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:346:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  346 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:5742:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<4, 8>' requested here
+ 5742 |             paged_decode_split_kernel<4, 8><<<grid, 256>>>(
+      |             ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:346:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  346 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:5748:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<8, 4>' requested here
+ 5748 |             paged_decode_split_kernel<8, 4><<<grid, 128>>>(
+      |             ^
+10 warnings generated when compiling for xcore1000.
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:346:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  346 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:712:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  712 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:1240:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1240 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:1240:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:5551:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, true, false, false, false, false, false, true, false, false, false>' requested here
+ 5551 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:1240:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1240 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:5563:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false>' requested here
+ 5563 |                     paged_decode_token_parallel_kernel<4, 8, false><<<
+      |                     ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:1240:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1240 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:5698:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, false, false, false, false, false, true, false, false, false, false, true, true, true, true, false>' requested here
+ 5698 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:1240:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1240 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:5720:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, true, false, false, false, false, true, false, false, true, false, true, true, false, false, true>' requested here
+ 5720 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:712:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  712 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:5735:9: note: in instantiation of function template specialization 'paged_decode_split_qk_pair_kernel<8, 4>' requested here
+ 5735 |         paged_decode_split_qk_pair_kernel<8, 4><<<grid, 128>>>(
+      |         ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:346:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  346 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:5742:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<4, 8>' requested here
+ 5742 |             paged_decode_split_kernel<4, 8><<<grid, 256>>>(
+      |             ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:346:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  346 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:5748:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<8, 4>' requested here
+ 5748 |             paged_decode_split_kernel<8, 4><<<grid, 128>>>(
+      |             ^
+10 warnings generated when compiling for xcore1000.
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:346:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  346 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:712:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  712 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:1240:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1240 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:1240:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:5551:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, true, false, false, false, false, false, true, false, false, false>' requested here
+ 5551 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:1240:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1240 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:5563:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false>' requested here
+ 5563 |                     paged_decode_token_parallel_kernel<4, 8, false><<<
+      |                     ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:1240:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1240 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:5698:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, false, false, false, false, false, true, false, false, false, false, true, true, true, true, false>' requested here
+ 5698 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:1240:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1240 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:5720:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, true, false, false, false, false, true, false, false, true, false, true, true, false, false, true>' requested here
+ 5720 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:712:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  712 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:5735:9: note: in instantiation of function template specialization 'paged_decode_split_qk_pair_kernel<8, 4>' requested here
+ 5735 |         paged_decode_split_qk_pair_kernel<8, 4><<<grid, 128>>>(
+      |         ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:346:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  346 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:5742:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<4, 8>' requested here
+ 5742 |             paged_decode_split_kernel<4, 8><<<grid, 256>>>(
+      |             ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:346:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  346 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp:5748:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<8, 4>' requested here
+ 5748 |             paged_decode_split_kernel<8, 4><<<grid, 128>>>(
+      |             ^
+10 warnings generated when compiling for host.
+Built build/exp599_c500_candidate.so
+binary SHA256:
+2b720311e9a25c7c850d858793884b5c682c58f57f14006fe1f442c4f9c48893  build/exp599_c500_candidate.so
+active relevant processes after build:
+3699609 /bin/bash -c set -o pipefail {   printf '%s\n' 'exp599 C500 correctness gate fresh candidate build'   date -u '+UTC %Y-%m-%dT%H:%M:%SZ'   printf '%s\n' 'candidate source SHA256:'   sha256sum solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp   printf '%s\n' 'control/work source SHA256:'   sha256sum solutions/cuda_maca_optimized.cpp solutions/archive/2026-08-16-submissions/cuda_113889.cpp   printf '%s\n' 'active relevant processes before build:'   pgrep -af '[c]500|[m]aca|[x]puoj|[b]enchmark|[t]est_kernel' || true   printf '%s\n' 'command: tools/build_local_maca.sh solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp build/exp599_c500_candidate.so'   tools/build_local_maca.sh solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp build/exp599_c500_candidate.so   printf '%s\n' 'binary SHA256:'   sha256sum build/exp599_c500_candidate.so   printf '%s\n' 'active relevant processes after build:'   pgrep -af '[c]500|[m]aca|[x]puoj|[b]enchmark|[t]est_kernel' || true } 2>&1 | tee log/exp599_c500_candidate_build.log rc=${PIPESTATUS[0]} printf 'build_exit_status=%s\n' "$rc" >> log/exp599_c500_candidate_build.log exit "$rc"
+3699611 /bin/bash -c set -o pipefail {   printf '%s\n' 'exp599 C500 correctness gate fresh candidate build'   date -u '+UTC %Y-%m-%dT%H:%M:%SZ'   printf '%s\n' 'candidate source SHA256:'   sha256sum solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp   printf '%s\n' 'control/work source SHA256:'   sha256sum solutions/cuda_maca_optimized.cpp solutions/archive/2026-08-16-submissions/cuda_113889.cpp   printf '%s\n' 'active relevant processes before build:'   pgrep -af '[c]500|[m]aca|[x]puoj|[b]enchmark|[t]est_kernel' || true   printf '%s\n' 'command: tools/build_local_maca.sh solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp build/exp599_c500_candidate.so'   tools/build_local_maca.sh solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp build/exp599_c500_candidate.so   printf '%s\n' 'binary SHA256:'   sha256sum build/exp599_c500_candidate.so   printf '%s\n' 'active relevant processes after build:'   pgrep -af '[c]500|[m]aca|[x]puoj|[b]enchmark|[t]est_kernel' || true } 2>&1 | tee log/exp599_c500_candidate_build.log rc=${PIPESTATUS[0]} printf 'build_exit_status=%s\n' "$rc" >> log/exp599_c500_candidate_build.log exit "$rc"
+3699612 tee log/exp599_c500_candidate_build.log
+build_exit_status=0

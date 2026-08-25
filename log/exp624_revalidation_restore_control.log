@@ -1,0 +1,9 @@
+exp624 revalidation restore control
+2026-08-21T13:38:35Z
+candidate_sha=8daf875522d473d4c19aa44e6f3523190e098ef22ec3036f6a7ef4320ff4cc43 solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp
+control_sha=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972 solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+work_final_sha=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972 solutions/cuda_maca_optimized.cpp
+oj_submit=NOT RUN
+oj_queue=NOT TOUCHED
+recommendation=DO NOT FREEZE OR PROBE OJ; local A/B has clear coverage-consistent regression
+status=PASS

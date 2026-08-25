@@ -1,0 +1,16 @@
+exp644 final resource tuple replacement audit
+Allowed replacement: control case12 old case13<true,false,false> tuple -> candidate dedicated case12 target tuple.
+candidate_total_tuples=31
+control_total_tuples=31
+candidate_target_tuples=1
+control_replaced_case12_tuples=1
+candidate target resource:
+_Z60paged_decode_case12_kv8_headpair_z8_direct_three_peer_kernelILb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif	82	50	8448	  0 bytes stack frame 	5
+control replaced case12 resource:
+_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif	82	50	8448	  0 bytes stack frame 	5
+candidate vec2 reducer:
+_Z31paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii	38	39	0	  0 bytes stack frame 	8
+control vec2 reducer:
+_Z31paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii	38	39	0	  0 bytes stack frame 	8
+common tuple diff after allowed replacement (empty = PASS):
+tuple_common_status=PASS

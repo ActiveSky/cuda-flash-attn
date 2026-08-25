@@ -1,0 +1,8 @@
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+control:   build/c500_phase_measure12_ctl_113889.so
+candidate: build/c500_phase_measure12_reduce_ablate.so
+case  7 B=64 L= 2048 KV=8 | control p50=0.1534 ms | candidate p50=0.1459 ms | candidate/control p10/p50/p90=0.9456/0.9537/0.9594 | speedup=1.049x
+case  9 B=32 L= 4096 KV=8 | control p50=0.1493 ms | candidate p50=0.1401 ms | candidate/control p10/p50/p90=0.9355/0.9388/0.9425 | speedup=1.065x
+case 12 B= 8 L=32768 KV=8 | control p50=0.2357 ms | candidate p50=0.2273 ms | candidate/control p10/p50/p90=0.9544/0.9680/0.9754 | speedup=1.033x
+case 13 B= 1 L=58966 KV=8 | control p50=0.0168 ms | candidate p50=0.0138 ms | candidate/control p10/p50/p90=0.7664/0.8240/0.8425 | speedup=1.214x
+case 14 B= 1 L=61519 KV=4 | control p50=0.0166 ms | candidate p50=0.0139 ms | candidate/control p10/p50/p90=0.7636/0.8332/0.8498 | speedup=1.200x

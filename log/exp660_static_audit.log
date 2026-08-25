@@ -1,0 +1,38 @@
+exp660 static audit
+Audit date: 2026-08-23 (candidate path is dated 2026-08-24)
+Candidate: solutions/archive/2026-08-24-experiments/cuda_case12_async_register_kv_rebase_exp660.cpp
+Candidate SHA-256: 9d92c4383e17e1d073ff8452344417b2a548299c50a8f2fc67ef7c694daff51f
+Control: solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+Control SHA-256: a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+
+Decision: STATIC BLOCKED; NO C500, NO A/B, NO OJ.
+
+Build and semantic checks
+- Candidate and control normal, resource-usage, and device LLVM builds completed.
+- case manifest completed successfully.
+- test_kernel_logic.py: 14/14 PASS.
+- These CPU/tooling checks are not C500, GPU, or OJ validation.
+
+Resource comparison
+- Each build exposes 31 resource tuples.
+- The target candidate tuple is 82 MTreg / 52 STreg / 8448 B shared / 0 B stack / 5 waves.
+- The corresponding control tuple is 82 MTreg / 50 STreg / 8448 B shared / 0 B stack / 5 waves.
+- All other resource rows match. No stack or spill was observed; the target has a two-STreg increase without a wave-count change.
+
+LLVM dispatch-order gate
+- Target specialization: paged_decode_case13_kv8_headpair_z8_kernel<true,false,false,true>.
+- Candidate device LLVM contains register-returning async loads at lines 18434 and 18440:
+  llvm.mxc.load.global.async.v4i32.
+- Payload scalar extraction immediately follows those calls at lines 18435-18438 and 18441-18444.
+- The target arrive/barrier sequence is only at lines 18611-18614; shared stores follow at lines 18616-18623.
+- Therefore the generated order does not satisfy the required dispatch contract: wait/arrival must precede every payload scalar extraction and shared store. The async values are materialized before the barrier, so the intended register-returning async overlap is not established by the lowering.
+
+Other dispatch facts
+- The target kernel, mcLaunchKernel call, and registration are present in the candidate.
+- The candidate has two async-load call sites plus one declaration; the control has no async-load intrinsic.
+- ASYNC_NEXT_GLD_WAIT is enabled only for case12 (batch=8, seqlen=32768); case7/9/13 and fallback remain disabled.
+- Next-page loads are guarded by p + 1 < p_end; tail, partial, and reducer code are unchanged.
+
+Conclusion
+- Do not run real C500, benchmark, A/B, or OJ for exp660.
+- Preserve this candidate and its build/LLVM artifacts as evidence. A future re-open requires a changed lowering/backend or storage-lifetime precondition, not a parameter-only rescan.

@@ -1,0 +1,6 @@
+exp608 relaxed OJ dry-run
+command: python3 tools/xpuoj_submit.py solutions/cuda_maca_optimized.cpp
+target: contest #11, problem #1
+language: cuda.maca-c500
+code: solutions/cuda_maca_optimized.cpp (268543 bytes)
+dry-run: no submission created; use --submit to submit

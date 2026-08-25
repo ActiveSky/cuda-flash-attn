@@ -1,0 +1,20 @@
+5f9d7631a48dd8e63a51c5692887f0df17fdddd90f593e28dafc79f4af279d12  solutions/archive/2026-08-18-experiments/cuda_case11_partial_fp32_native_stg_exp598.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/cuda_maca_optimized.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+
+FINAL_IDENTITY
+5f9d7631a48dd8e63a51c5692887f0df17fdddd90f593e28dafc79f4af279d12  solutions/archive/2026-08-18-experiments/cuda_case11_partial_fp32_native_stg_exp598.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/cuda_maca_optimized.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+01307b312a317d35b5f426e265dbaf79473bc2dd535df20a3270c1bca06fca85  build/exp598_c500_candidate.so
+
+LOG_STATUS
+log/exp598_correctness_kernel_quick.log: EXIT=0
+log/exp598_correctness_kernel_exhaustive.log: EXIT=0
+log/exp598_c500_build.log: BUILD_EXIT=0
+log/exp598_c500_full.log: EXIT=0
+log/exp598_c500_random.log: EXIT=0
+log/exp598_c500_boundary.log: EXIT=0
+log/exp598_c500_case11_boundaries.log: RETRY_EXIT=0
+log/exp598_c500_reuse_full_short_full.log: EXIT=0
+log/exp598_c500_reuse_short_full.log: EXIT=0

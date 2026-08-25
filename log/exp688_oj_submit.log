@@ -1,0 +1,14 @@
+exp688 OJ executor
+candidate: solutions/archive/2026-08-24-experiments/cuda_control124611_case13_native_partial_stg_exp688.cpp
+candidate_sha256: b7793a4e9b160179f9e142c3c4076781eebf617e798d81fd35cdcb74286a1cec
+parent_control: #124611 / exp666 / 3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+preflight: sha256 verified; --list 10 had no Pending/Running; dry-run passed; post-dry-run sha256/list recheck passed
+submit_command: python3 tools/xpuoj_submit.py solutions/archive/2026-08-24-experiments/cuda_control124611_case13_native_partial_stg_exp688.cpp --submit --poll-seconds 10 --timeout-seconds 3600
+submission_id: #125281
+status_at_log_creation: Pending
+policy: one POST only; watch the same submission id; no cancel or resubmit
+terminal: #125281 Accepted score=66; 14/14 Accepted
+case_results: 1=3us/92 2=4us/90 3=10us/82 4=23us/72 5=17us/73 6=28us/63 7=225us/55 8=93us/54 9=233us/57 10=38us/62 11=221us/52 12=375us/60 13=181us/57 14=140us/55
+raw: results/raw/cuda_125281_raw.json
+raw_embedded_code_sha256: b7793a4e9b160179f9e142c3c4076781eebf617e798d81fd35cdcb74286a1cec
+final_list: #125281 Accepted; no Pending/Running entries

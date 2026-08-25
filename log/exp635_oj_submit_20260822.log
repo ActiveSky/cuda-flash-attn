@@ -1,0 +1,23 @@
+# exp635 OJ submission/watch record
+
+Submission command (exactly once):
+python3 tools/xpuoj_submit.py --submit solutions/cuda_maca_optimized.cpp
+
+Submission output:
+target: contest #11, problem #1
+language: cuda.maca-c500
+code: solutions/cuda_maca_optimized.cpp (266871 bytes)
+created submission #122490
+submission=122490 progress=None status=Pending
+
+Watch commands (no archive):
+python3 tools/xpuoj_submit.py --watch 122490 --no-archive --poll-seconds 0 --timeout-seconds 30
+
+Observed responses, in order:
+submission=122490 progress=None status=Pending
+submission=122490 progress=None status=Pending
+submission=122490 progress=None status=Pending
+submission=122490 progress=None status=Pending
+error: XPUOJ returned non-JSON HTTP 429 from submission/getSubmissionDetail
+
+Per OJ lock rule, no cancel, resubmit, work-file rewrite, or speculative retry was made after the network error. Work file remains the frozen exp635 candidate pending terminal status.

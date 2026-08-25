@@ -1,0 +1,9 @@
+exp607 relaxed C500 identity
+source:
+bac7e4727f490224af6d1b30cc0165131203181a5b7950ca09f40a13927df655  solutions/archive/2026-08-20-experiments/cuda_case11_last_live_split_finalizer_exp607.cpp
+binary:
+e4ebbaf3fedba09f1e73185ee3744f427e82f2342cc69586eabe77bf76a9155e  build/exp607_relaxed_audit_normal.so
+build-log identity lines:
+Building solutions/archive/2026-08-20-experiments/cuda_case11_last_live_split_finalizer_exp607.cpp
+Output: build/exp607_relaxed_audit_normal.so
+Built build/exp607_relaxed_audit_normal.so

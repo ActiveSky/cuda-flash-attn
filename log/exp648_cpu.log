@@ -1,0 +1,14 @@
+exp648 CPU semantic checks (2026-08-23)
+candidate_sha=a708993cb5bb10cea02f46b297d8880173c090eb8f08f370070f10863a2f6afd
+
+command: python3 tests/test_kernel_logic.py
+result: PASS, 14/14 CPU attention logic cases.
+
+command: inline normalized peer-merge model, 1000 random four-state groups,
+three peers, BF16 round-to-nearest emulation, 766 empty peer states
+result: fixed tx-offset implementation vs full 128-d scalar reference:
+wrong=0/1000, max_abs_err=0, PASS.
+
+The model covers empty peer metadata (m=-Inf,l=0,zero payload) and verifies
+that each tx consumes its own eight BF16 dimensions after the tx*4 uint32
+offset. This is CPU/static evidence only; no C500 was used.

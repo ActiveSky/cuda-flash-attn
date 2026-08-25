@@ -1,0 +1,9 @@
+[PASS] case1 pid=2 raw BF16 equality, GQA8 mapping, output guards, padding trap
+[PASS] case1 pid=0 raw BF16 equality, GQA8 mapping, output guards, padding trap
+[PASS] case1 pid=1 raw BF16 equality, GQA8 mapping, output guards, padding trap
+[PASS] case1 pid=2 raw BF16 equality, GQA8 mapping, output guards, padding trap
+[PASS] interposed long case12 full correctness match=1.000000
+[PASS] case1 pid=2 raw BF16 equality, GQA8 mapping, output guards, padding trap
+[PASS] case1 -> case12 -> case1 same-process reuse and raw output stability
+SPECIAL_CASE1_RC=0
+SHELL_RC=0

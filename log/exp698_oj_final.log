@@ -1,0 +1,48 @@
+UTC 2026-08-24T16:08:53Z
+final queue:
+| #125625 | Accepted | 66 | cuda.maca-c500 | 2026-08-24T15:57:15.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125585 | Accepted | 65.86 | cuda.maca-c500 | 2026-08-24T15:32:14.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125561 | Accepted | 65.86 | cuda.maca-c500 | 2026-08-24T15:11:40.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125434 | Accepted | 66.14 | cuda.maca-c500 | 2026-08-24T13:11:30.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125388 | Accepted | 65.71 | cuda.maca-c500 | 2026-08-24T12:25:57.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125367 | Accepted | 65.93 | cuda.maca-c500 | 2026-08-24T12:03:18.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125311 | Accepted | 65.86 | cuda.maca-c500 | 2026-08-24T11:12:03.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125281 | Accepted | 66 | cuda.maca-c500 | 2026-08-24T10:49:21.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125268 | Accepted | 64.43 | cuda.maca-c500 | 2026-08-24T10:35:51.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125236 | Accepted | 66 | cuda.maca-c500 | 2026-08-24T10:06:28.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+candidate/workfile SHA256:
+716c620f804c39086c1873aa50696d3a09ec91be4e639fcb701670f2797826f6  solutions/archive/2026-08-24-experiments/cuda_control124611_case5_single_live_direct_output_exp698.cpp
+3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe  solutions/cuda_maca_optimized.cpp
+raw files:
+6b3329c445f83e6d92699fa7d747419b97264c77d859a6f29f56e7f83766c0fc  results/raw/cuda_125625_raw.json
+107727616ccca83b1a846608b1930229f6dbda171bd764ba56baa2a4e20d025b  results/raw/cuda_125585_raw.json
+raw metadata:
+/bin/bash: line 11: jq: command not found
+exit_status=127
+UTC 2026-08-24T16:09:25Z
+final queue recheck:
+| #125625 | Accepted | 66 | cuda.maca-c500 | 2026-08-24T15:57:15.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125585 | Accepted | 65.86 | cuda.maca-c500 | 2026-08-24T15:32:14.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125561 | Accepted | 65.86 | cuda.maca-c500 | 2026-08-24T15:11:40.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125434 | Accepted | 66.14 | cuda.maca-c500 | 2026-08-24T13:11:30.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125388 | Accepted | 65.71 | cuda.maca-c500 | 2026-08-24T12:25:57.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125367 | Accepted | 65.93 | cuda.maca-c500 | 2026-08-24T12:03:18.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125311 | Accepted | 65.86 | cuda.maca-c500 | 2026-08-24T11:12:03.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125281 | Accepted | 66 | cuda.maca-c500 | 2026-08-24T10:49:21.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125268 | Accepted | 64.43 | cuda.maca-c500 | 2026-08-24T10:35:51.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125236 | Accepted | 66 | cuda.maca-c500 | 2026-08-24T10:06:28.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+candidate/workfile SHA256 recheck:
+716c620f804c39086c1873aa50696d3a09ec91be4e639fcb701670f2797826f6  solutions/archive/2026-08-24-experiments/cuda_control124611_case5_single_live_direct_output_exp698.cpp
+3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe  solutions/cuda_maca_optimized.cpp
+raw SHA256:
+6b3329c445f83e6d92699fa7d747419b97264c77d859a6f29f56e7f83766c0fc  results/raw/cuda_125625_raw.json
+107727616ccca83b1a846608b1930229f6dbda171bd764ba56baa2a4e20d025b  results/raw/cuda_125585_raw.json
+raw 125625 id/status/score:
+2:  "id": 125625,
+3:  "status": "Accepted",
+4:  "score": 66,
+raw 125585 id/status/score:
+2:  "id": 125585,
+3:  "status": "Accepted",
+4:  "score": 65.86,
+final_recheck_exit_status=0

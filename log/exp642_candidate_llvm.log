@@ -1,0 +1,112 @@
+command: tools/build_local_maca.sh solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp build/exp642_candidate_device.ll -c -emit-llvm -S
+3950d999d281032a7c40385cf041e9691cf13ec056b068bdae2c4ae31915e760  solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp
+Building solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp
+Compiler: /opt/maca/mxgpu_llvm/bin/mxcc
+MACA path: /opt/maca
+CUDA bridge: /opt/maca-3.7.1/tools/cu-bridge
+Target: xcore1000
+Output: build/exp642_candidate_device.ll
+mxcc: warning: argument unused during compilation: '-shared' [-Wunused-command-line-argument]
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:380:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  380 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:746:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  746 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:1274:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1274 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:1274:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:5582:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, true, false, false, false, false, false, true, false, false, false>' requested here
+ 5582 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:1274:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1274 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:5594:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false>' requested here
+ 5594 |                     paged_decode_token_parallel_kernel<4, 8, false><<<
+      |                     ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:1274:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1274 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:5729:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, false, false, false, false, false, true, false, false, false, false, true, true, true, true, false>' requested here
+ 5729 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:1274:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1274 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:5751:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, true, false, false, false, false, true, false, false, true, false, true, true, false, false, true>' requested here
+ 5751 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:746:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  746 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:5766:9: note: in instantiation of function template specialization 'paged_decode_split_qk_pair_kernel<8, 4>' requested here
+ 5766 |         paged_decode_split_qk_pair_kernel<8, 4><<<grid, 128>>>(
+      |         ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:380:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  380 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:5773:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<4, 8>' requested here
+ 5773 |             paged_decode_split_kernel<4, 8><<<grid, 256>>>(
+      |             ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:380:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  380 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:5779:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<8, 4>' requested here
+ 5779 |             paged_decode_split_kernel<8, 4><<<grid, 128>>>(
+      |             ^
+10 warnings generated when compiling for xcore1000.
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:380:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  380 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:746:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  746 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:1274:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1274 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:1274:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:5582:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, true, false, false, false, false, false, true, false, false, false>' requested here
+ 5582 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:1274:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1274 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:5594:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false>' requested here
+ 5594 |                     paged_decode_token_parallel_kernel<4, 8, false><<<
+      |                     ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:1274:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1274 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:5729:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, false, false, false, false, false, true, false, false, false, false, true, true, true, true, false>' requested here
+ 5729 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:1274:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1274 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:5751:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, true, false, false, false, false, true, false, false, true, false, true, true, false, false, true>' requested here
+ 5751 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:746:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  746 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:5766:9: note: in instantiation of function template specialization 'paged_decode_split_qk_pair_kernel<8, 4>' requested here
+ 5766 |         paged_decode_split_qk_pair_kernel<8, 4><<<grid, 128>>>(
+      |         ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:380:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  380 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:5773:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<4, 8>' requested here
+ 5773 |             paged_decode_split_kernel<4, 8><<<grid, 256>>>(
+      |             ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:380:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  380 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp:5779:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<8, 4>' requested here
+ 5779 |             paged_decode_split_kernel<8, 4><<<grid, 128>>>(
+      |             ^
+10 warnings generated when compiling for host.
+Built build/exp642_candidate_device.ll
+build_rc=0
+3950d999d281032a7c40385cf041e9691cf13ec056b068bdae2c4ae31915e760  solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp

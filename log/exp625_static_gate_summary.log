@@ -1,0 +1,7 @@
+exp625 case12 distributed-weight exp2 ownership
+parent: #113889 / exp559, sha256 a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+candidate: solutions/archive/2026-08-22-experiments/cuda_case12_distributed_weight_exp625.cpp
+candidate_sha256: ba5635cf0b62441587edc893fcf80feafed2228b70b13aa62eac693506b07026
+target: case12 B8/KV8/L32768, z8 producer, 40 split
+gate: FAILED; candidate 82/52/8448/0/5 vs control 82/50/8448/0/5
+decision: CLOSED; NO C500 / NO A-B / NO OJ

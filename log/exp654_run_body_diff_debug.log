@@ -1,0 +1,6 @@
+control block target:
+ ['         (batch_size == 32 && seqlen_k == 4096))) {', '    if (num_heads_k == 8 && batch_size == 32 && seqlen_k == 4096) n_split = 6;', '         (batch_size == 32 && seqlen_k == 4096) ||', '                if ((batch_size == 32 && seqlen_k == 4096) ||', '                } else if (batch_size == 32 && seqlen_k == 4096) {', '                    paged_decode_case13_kv8_headpair_z8_kernel<true, true><<<', '                    paged_decode_case13_kv8_headpair_z8_kernel<true, true><<<', '        if (num_heads_k == 8 && batch_size == 32 && seqlen_k == 4096) {']
+candidate block target:
+ ['         (batch_size == 32 && seqlen_k == 4096))) {', '    if (num_heads_k == 8 && batch_size == 32 && seqlen_k == 4096) n_split = 6;', '         (batch_size == 32 && seqlen_k == 4096) ||', '                if ((batch_size == 32 && seqlen_k == 4096) ||', '                } else if (batch_size == 32 && seqlen_k == 4096) {', '                    paged_decode_case9_kv8_headpair_z8_direct_three_peer_kernel<', '                    paged_decode_case13_kv8_headpair_z8_kernel<true, true><<<', '        if (num_heads_k == 8 && batch_size == 32 && seqlen_k == 4096) {']
+pattern_matches 1
+equal True

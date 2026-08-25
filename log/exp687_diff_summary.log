@@ -1,0 +1,6 @@
+parent=solutions/archive/2026-08-24-experiments/cuda_control124611_case14_pair_aggregate_exp686.cpp
+candidate=solutions/archive/2026-08-24-experiments/cuda_control124611_case14_pair_aggregate_fix_exp687.cpp
+core_mechanism_unchanged=257 logical 15-page splits -> 129 aggregate owners; same pair state/partial ABI and case14 dispatch
+fix1=generic short/tail page consumes q-pre-scaled base-2 dot directly; removes duplicate log2(e) multiplication
+fix2=keep local_head 0..7 for pair scratch, add kv_head*8 only to global partial idx
+no_timing=no_A/B=no_OJ

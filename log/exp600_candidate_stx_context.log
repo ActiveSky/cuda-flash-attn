@@ -1,0 +1,87 @@
+9513-  %shr2.i.i.i6.i.i2733 = lshr i32 %add1.i.i.i5.i.i2732, 16
+9514-  %conv.i.i.i7.i.i2734 = trunc nuw i32 %shr2.i.i.i6.i.i2733 to i16
+9515-  %705 = addrspacecast ptr addrspace(1) %add.ptr552 to ptr
+9516:  tail call void @llvm.mxc.stx.devc.i16(ptr %705, i32 0, i16 %conv.i.i.i.i.i2727), !alias.scope !149, !call_argsrelate !152
+9517-  %add.ptr573 = getelementptr inbounds i8, ptr %705, i64 2
+9518:  tail call void @llvm.mxc.stx.devc.i16(ptr nonnull %add.ptr573, i32 0, i16 %conv.i.i.i7.i.i2734), !alias.scope !153, !call_argsrelate !152
+9519-  %acc0.sroa.83.8.vec.extract3747 = extractelement <2 x float> %672, i64 0
+9520-  %mul561.1 = fmul contract float %cond546, %acc0.sroa.83.8.vec.extract3747
+9521-  %acc0.sroa.83.12.vec.extract3801 = extractelement <2 x float> %672, i64 1
+--
+9540-  %conv.i.i.i7.i.i2734.1 = trunc nuw i32 %shr2.i.i.i6.i.i2733.1 to i16
+9541-  %add.ptr569.1 = getelementptr inbounds i8, ptr addrspace(1) %add.ptr552, i64 4
+9542-  %710 = addrspacecast ptr addrspace(1) %add.ptr569.1 to ptr
+9543:  tail call void @llvm.mxc.stx.devc.i16(ptr %710, i32 0, i16 %conv.i.i.i.i.i2727.1), !alias.scope !149, !call_argsrelate !152
+9544-  %add.ptr573.1 = getelementptr inbounds i8, ptr %710, i64 2
+9545:  tail call void @llvm.mxc.stx.devc.i16(ptr nonnull %add.ptr573.1, i32 0, i16 %conv.i.i.i7.i.i2734.1), !alias.scope !153, !call_argsrelate !152
+9546-  %acc0.sroa.163.16.vec.extract3855 = extractelement <2 x float> %675, i64 0
+9547-  %mul561.2 = fmul contract float %cond546, %acc0.sroa.163.16.vec.extract3855
+9548-  %acc0.sroa.163.20.vec.extract3909 = extractelement <2 x float> %675, i64 1
+--
+9567-  %conv.i.i.i7.i.i2734.2 = trunc nuw i32 %shr2.i.i.i6.i.i2733.2 to i16
+9568-  %add.ptr569.2 = getelementptr inbounds i8, ptr addrspace(1) %add.ptr552, i64 8
+9569-  %715 = addrspacecast ptr addrspace(1) %add.ptr569.2 to ptr
+9570:  tail call void @llvm.mxc.stx.devc.i16(ptr %715, i32 0, i16 %conv.i.i.i.i.i2727.2), !alias.scope !149, !call_argsrelate !152
+9571-  %add.ptr573.2 = getelementptr inbounds i8, ptr %715, i64 2
+9572:  tail call void @llvm.mxc.stx.devc.i16(ptr nonnull %add.ptr573.2, i32 0, i16 %conv.i.i.i7.i.i2734.2), !alias.scope !153, !call_argsrelate !152
+9573-  %acc0.sroa.243.24.vec.extract3963 = extractelement <2 x float> %678, i64 0
+9574-  %mul561.3 = fmul contract float %cond546, %acc0.sroa.243.24.vec.extract3963
+9575-  %acc0.sroa.243.28.vec.extract4017 = extractelement <2 x float> %678, i64 1
+--
+9594-  %conv.i.i.i7.i.i2734.3 = trunc nuw i32 %shr2.i.i.i6.i.i2733.3 to i16
+9595-  %add.ptr569.3 = getelementptr inbounds i8, ptr addrspace(1) %add.ptr552, i64 12
+9596-  %720 = addrspacecast ptr addrspace(1) %add.ptr569.3 to ptr
+9597:  tail call void @llvm.mxc.stx.devc.i16(ptr %720, i32 0, i16 %conv.i.i.i.i.i2727.3), !alias.scope !149, !call_argsrelate !152
+9598-  %add.ptr573.3 = getelementptr inbounds i8, ptr %720, i64 2
+9599:  tail call void @llvm.mxc.stx.devc.i16(ptr nonnull %add.ptr573.3, i32 0, i16 %conv.i.i.i7.i.i2734.3), !alias.scope !153, !call_argsrelate !152
+9600-  br label %cleanup
+9601-
+9602-if.else580:                                       ; preds = %if.end473
+--
+9833-  %shr2.i.i.i6.i.i2766 = lshr i32 %add1.i.i.i5.i.i2765, 16
+9834-  %conv.i.i.i7.i.i2767 = trunc nuw i32 %shr2.i.i.i6.i.i2766 to i16
+9835-  %768 = addrspacecast ptr addrspace(1) %add.ptr658 to ptr
+9836:  tail call void @llvm.mxc.stx.devc.i16(ptr %768, i32 0, i16 %conv.i.i.i.i.i2760), !alias.scope !159, !call_argsrelate !152
+9837-  %add.ptr683 = getelementptr inbounds i8, ptr %768, i64 2
+9838:  tail call void @llvm.mxc.stx.devc.i16(ptr nonnull %add.ptr683, i32 0, i16 %conv.i.i.i7.i.i2767), !alias.scope !162, !call_argsrelate !152
+9839-  %acc1.sroa.83.8.vec.extract3315 = extractelement <2 x float> %735, i64 0
+9840-  %mul668.1 = fmul contract float %cond652, %acc1.sroa.83.8.vec.extract3315
+9841-  %acc1.sroa.83.12.vec.extract3369 = extractelement <2 x float> %735, i64 1
+--
+9860-  %conv.i.i.i7.i.i2767.1 = trunc nuw i32 %shr2.i.i.i6.i.i2766.1 to i16
+9861-  %add.ptr676.1 = getelementptr inbounds i8, ptr addrspace(1) %add.ptr658, i64 4
+9862-  %773 = addrspacecast ptr addrspace(1) %add.ptr676.1 to ptr
+9863:  tail call void @llvm.mxc.stx.devc.i16(ptr %773, i32 0, i16 %conv.i.i.i.i.i2760.1), !alias.scope !159, !call_argsrelate !152
+9864-  %add.ptr683.1 = getelementptr inbounds i8, ptr %773, i64 2
+9865:  tail call void @llvm.mxc.stx.devc.i16(ptr nonnull %add.ptr683.1, i32 0, i16 %conv.i.i.i7.i.i2767.1), !alias.scope !162, !call_argsrelate !152
+9866-  %acc1.sroa.163.16.vec.extract3423 = extractelement <2 x float> %738, i64 0
+9867-  %mul668.2 = fmul contract float %cond652, %acc1.sroa.163.16.vec.extract3423
+9868-  %acc1.sroa.163.20.vec.extract3477 = extractelement <2 x float> %738, i64 1
+--
+9887-  %conv.i.i.i7.i.i2767.2 = trunc nuw i32 %shr2.i.i.i6.i.i2766.2 to i16
+9888-  %add.ptr676.2 = getelementptr inbounds i8, ptr addrspace(1) %add.ptr658, i64 8
+9889-  %778 = addrspacecast ptr addrspace(1) %add.ptr676.2 to ptr
+9890:  tail call void @llvm.mxc.stx.devc.i16(ptr %778, i32 0, i16 %conv.i.i.i.i.i2760.2), !alias.scope !159, !call_argsrelate !152
+9891-  %add.ptr683.2 = getelementptr inbounds i8, ptr %778, i64 2
+9892:  tail call void @llvm.mxc.stx.devc.i16(ptr nonnull %add.ptr683.2, i32 0, i16 %conv.i.i.i7.i.i2767.2), !alias.scope !162, !call_argsrelate !152
+9893-  %acc1.sroa.243.24.vec.extract3531 = extractelement <2 x float> %741, i64 0
+9894-  %mul668.3 = fmul contract float %cond652, %acc1.sroa.243.24.vec.extract3531
+9895-  %acc1.sroa.243.28.vec.extract3585 = extractelement <2 x float> %741, i64 1
+--
+9914-  %conv.i.i.i7.i.i2767.3 = trunc nuw i32 %shr2.i.i.i6.i.i2766.3 to i16
+9915-  %add.ptr676.3 = getelementptr inbounds i8, ptr addrspace(1) %add.ptr658, i64 12
+9916-  %783 = addrspacecast ptr addrspace(1) %add.ptr676.3 to ptr
+9917:  tail call void @llvm.mxc.stx.devc.i16(ptr %783, i32 0, i16 %conv.i.i.i.i.i2760.3), !alias.scope !159, !call_argsrelate !152
+9918-  %add.ptr683.3 = getelementptr inbounds i8, ptr %783, i64 2
+9919:  tail call void @llvm.mxc.stx.devc.i16(ptr nonnull %add.ptr683.3, i32 0, i16 %conv.i.i.i7.i.i2767.3), !alias.scope !162, !call_argsrelate !152
+9920-  br label %cleanup
+9921-
+9922-cleanup:                                          ; preds = %if.else580, %if.then492, %if.end539, %if.then598, %if.end645, %land.end
+--
+9924-}
+9925-
+9926-; Function Attrs: mustprogress nounwind willreturn memory(argmem: write)
+9927:declare void @llvm.mxc.stx.devc.i16(ptr noalias nocapture, i32 immarg, i16) #14
+9928-
+9929-; Function Attrs: convergent mustprogress norecurse nounwind
+9930-define protected metaxgpu_kernel void @_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {

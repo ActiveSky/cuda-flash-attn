@@ -1,0 +1,10 @@
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+library: build/exp587_relaxed_candidate.so
+case11: B=16 cap=12251 KV=4 pages=766
+[PASS] mixed baseline lengths=(1, 16, 17, 319, 320, 321, 335, 336, 337, 639, 640, 641, 12250, 12251, 12251, 1) match=1.000000 max_error=7.812500e-03 max_tol_ratio=0.243 reference_finite=True finite=True guards=True metadata_untouched=True
+[FAIL] mixed NaN padding/tail poison pages=9707 tail_rows=109 match=0.250000 max_error=7.812500e-03 max_tol_ratio=nan reference_finite=True finite=False guards=True metadata_untouched=True
+Traceback (most recent call last):
+  File "<stdin>", line 119, in <module>
+  File "<stdin>", line 113, in mixed_poison_check
+  File "<stdin>", line 99, in run_check
+AssertionError: mixed NaN padding/tail poison pages=9707 tail_rows=109: safety/correctness failure

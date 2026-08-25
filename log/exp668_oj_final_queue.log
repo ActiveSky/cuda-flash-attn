@@ -1,0 +1,5 @@
+exp668 final queue check
+command: python3 tools/xpuoj_submit.py --list
+observed: #124621 and all listed submissions are terminal Accepted records
+nonterminal_entries: none
+parallel_or_duplicate_submission: none

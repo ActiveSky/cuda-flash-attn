@@ -1,0 +1,61 @@
+exp624 revalidation comprehensive gate summary
+2026-08-21T13:39:50Z
+candidate=solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp
+candidate_sha=8daf875522d473d4c19aa44e6f3523190e098ef22ec3036f6a7ef4320ff4cc43
+expected_candidate_sha=8daf875522d473d4c19aa44e6f3523190e098ef22ec3036f6a7ef4320ff4cc43
+control=solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+control_sha=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+expected_control_sha=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+work_final_sha=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+
+compile_artifacts=/tmp/exp624_revalidation.CFnpm9
+exp624_revalidation_candidate_normal_build.log built=1 errors=
+exp624_revalidation_control_normal_build.log built=1 errors=
+exp624_revalidation_candidate_resource.log built=1 errors=
+exp624_revalidation_control_resource.log built=1 errors=
+exp624_revalidation_candidate_llvm.log built=1 errors=
+exp624_revalidation_control_llvm.log built=1 errors=
+
+target_candidate_resource_candidate=76 MTreg / 52 STreg / 8448 B shared / 0 B stack / 6 waves
+target_candidate_resource_control=82 MTreg / 50 STreg / 8448 B shared / 0 B stack / 5 waves
+target_reducer_candidate_control=38 MTreg / 39 STreg / 0 B shared / 0 B stack / 8 waves
+target_resource_note=STreg +2 versus control; no spill/stack; residency improves 5->6
+
+candidate_llvm=/tmp/exp624_revalidation.CFnpm9/candidate.ll
+candidate_target_function_count=1
+candidate_target_llvm.mxc.bsm.bpermute_count=8
+candidate_target_llvm.mxc.ldg.predicator.bsm_count=0
+candidate_target_llvm.mxc.ldg.predicator.v4i32_count=0
+candidate_target_llvm.mxc.stg.predicator.v4i32_count=0
+candidate_target_llvm.mxc.arrive_count=0
+candidate_target_llvm.mxc.barrier_count=10
+control_llvm=/tmp/exp624_revalidation.CFnpm9/control.ll
+control_target_function_count=1
+control_target_llvm.mxc.bsm.bpermute_count=0
+control_target_llvm.mxc.ldg.predicator.bsm_count=0
+control_target_llvm.mxc.ldg.predicator.v4i32_count=0
+control_target_llvm.mxc.stg.predicator.v4i32_count=0
+control_target_llvm.mxc.arrive_count=0
+control_target_llvm.mxc.barrier_count=10
+
+correctness_cpu=exit_status=0
+exp624_revalidation_candidate_full.log 14 case-pass-lines; exit_status=0
+exp624_revalidation_control_full.log 14 case-pass-lines; exit_status=0
+exp624_revalidation_candidate_random.log 14 case-pass-lines; exit_status=0
+exp624_revalidation_control_random.log 14 case-pass-lines; exit_status=0
+exp624_revalidation_candidate_boundary.log 14 case-pass-lines; exit_status=0
+exp624_revalidation_control_boundary.log 14 case-pass-lines; exit_status=0
+candidate_exact241=241
+control_exact241=241
+exit_status=0
+exit_status=0
+exit_status=0
+
+exp624_revalidation_ab_case12_full.log case 12 B= 8 L=32768 KV=8 | control p50=0.7224 ms | candidate p50=0.7717 ms | candidate/control p10/p50/p90=1.0676/1.0680/1.0691 | speedup=0.936x
+exp624_revalidation_ab_case12_random.log case 12 B= 8 L=32768 KV=8 | control p50=0.4865 ms | candidate p50=0.5266 ms | candidate/control p10/p50/p90=1.0813/1.0832/1.0841 | speedup=0.923x
+exp624_revalidation_ab_case12_boundary.log case 12 B= 8 L=32768 KV=8 | control p50=0.2325 ms | candidate p50=0.2350 ms | candidate/control p10/p50/p90=1.0057/1.0105/1.0142 | speedup=0.990x
+
+oj_submit=NOT RUN
+oj_queue=NOT TOUCHED
+decision=NO OJ PROBE: full/random narrow, repeatable candidate regression; restore control
+work_restore=status=PASS

@@ -1,0 +1,25 @@
+exp586 relaxed C500 correctness/safety smoke (2026-08-23)
+
+Candidate:
+  source: solutions/archive/2026-08-18-experiments/cuda_case8_single_live_direct_output_exp586.cpp
+  source SHA-256: a5e7b9a3f41a71747478417ab2f8b1cf9288d594367567a1405e4c06f36ee1ad
+  isolated build: build/exp586_relaxed_candidate.so
+  binary SHA-256 is recorded in log/exp586_relaxed_identity.log
+
+Correctness passes before the safety failure:
+  full: match=1.000000, max_tol_ratio=0.029, finite=True
+  random seed 20260823: match=1.000000, max_tol_ratio=0.054, finite=True
+  boundary seed 20260824: match=1.000000, max_tol_ratio=0.244, finite=True
+  exact lengths 1,2,15,16,17,303,304,305,319,320,321,4095,4096: 13/13 PASS
+
+Safety failure (stop immediately):
+  Mixed B16 lengths (1,16,17,303,304,305,319,320,321,639,640,641,
+  4095,4096,4096,1) baseline passed with match=1.000000, finite=True,
+  guards intact and metadata unchanged. After filling all per-row padding
+  pages and invalid tail tokens with BF16 NaN, reference remained finite but
+  candidate became nonfinite: match=0.375000, max_error=nan,
+  max_tol_ratio=nan. Guards and metadata remained intact.
+
+No workspace reuse or length=0 probe was run after this determined candidate
+tail/padding read or mask failure. The standard harness rejects length 0.
+No resource audit, A/B, OJ, work-file, or project-document operation was performed.

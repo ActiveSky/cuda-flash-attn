@@ -1,0 +1,4 @@
+method: ephemeral Python ABI smoke with identical tagged case1 input; one correctness call plus two repeated same-process kernel calls
+candidate: initial_pass=True initial_match=1.000000 finite=True repeated_bitwise=True
+control: initial_pass=True initial_match=1.000000 finite=True repeated_bitwise=True
+exit: 0; no timeout/hang

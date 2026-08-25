@@ -1,0 +1,9 @@
+exp608 relaxed OJ terminal queue check
+command: python3 tools/xpuoj_submit.py --list 5
+captured: 2026-08-23T11:26:45Z
+
+| #123872 | Accepted | 66 | cuda.maca-c500 | 2026-08-23T11:09:24.000Z |
+| #123848 | Accepted | 65.79 | cuda.maca-c500 | 2026-08-23T10:43:47.000Z |
+| #122987 | Accepted | 66.07 | cuda.maca-c500 | 2026-08-22T22:43:56.000Z |
+
+No Pending/Running submission remains; the OJ queue is empty.

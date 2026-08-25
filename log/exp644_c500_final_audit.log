@@ -1,0 +1,37 @@
+exp644 C500 correctness final audit
+candidate_source_sha256=8600495c01a8bf16f69cd14a1c12945abca976dc93e38ff793ba57f64d2902ec
+control_source_sha256=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+workfile_sha256=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+special_script_sha256=d89757551edb072763c5a0cc614fa43b0ad5410b0c888ad7c95c45f653dc9707
+candidate_so_sha256=15b8370dee4dd78945c3151bd1a80ce31c5bd0605035a360a4fe03612027c7fe
+control_so_sha256=4bbe97993b7ad219dc607e95a8a45a11c26c8c96042d857084f91098d00ea873
+1 CPU direct-tree: PASS
+  COMMAND: python3 inline raw-FP32 online-softmax direct-tree replay | tee log/exp644_c500_cpu_direct_tree.log
+2 candidate stage: PASS
+  COMMAND: cp candidate -> solutions/cuda_maca_optimized.cpp; sha256sum; tee log/exp644_c500_candidate_stage_sha.log
+2 candidate fresh build: PASS
+  COMMAND: tools/build_local_maca.sh solutions/cuda_maca_optimized.cpp build/exp644_c500_candidate.so | tee log/exp644_c500_candidate_build.log
+2 candidate full: PASS 14/14 finite
+  COMMAND: python3 tests/c500_paged_decode_harness.py --library build/exp644_c500_candidate.so --cases all --full-length --seed 20260822 | tee log/exp644_c500_candidate_full.log
+2 candidate boundary: PASS 14/14 finite
+  COMMAND: python3 tests/c500_paged_decode_harness.py --library build/exp644_c500_candidate.so --cases all --lengths boundary --seed 20260822 | tee log/exp644_c500_candidate_boundary.log
+2 candidate random: PASS 14/14 finite
+  COMMAND: python3 tests/c500_paged_decode_harness.py --library build/exp644_c500_candidate.so --cases all --lengths random --seed 20260822 | tee log/exp644_c500_candidate_random.log
+3 case12 special: PASS final run
+  COMMAND: python3 tests/exp644_case12_threepeer_special.py --candidate build/exp644_c500_candidate.so --control build/exp644_c500_control.so --seed 20260822 | tee log/exp644_c500_special_run.log
+4 control fresh build: PASS
+  COMMAND: tools/build_local_maca.sh solutions/archive/2026-08-16-submissions/cuda_113889.cpp build/exp644_c500_control.so | tee log/exp644_c500_control_build.log
+4 control full: PASS 14/14 finite
+  COMMAND: python3 tests/c500_paged_decode_harness.py --library build/exp644_c500_control.so --cases all --full-length --seed 20260822 | tee log/exp644_c500_control_full.log
+4 control boundary: PASS 14/14 finite
+  COMMAND: python3 tests/c500_paged_decode_harness.py --library build/exp644_c500_control.so --cases all --lengths boundary --seed 20260822 | tee log/exp644_c500_control_boundary.log
+4 control random: PASS 14/14 finite
+  COMMAND: python3 tests/c500_paged_decode_harness.py --library build/exp644_c500_control.so --cases all --lengths random --seed 20260822 | tee log/exp644_c500_control_random.log
+4 candidate case12 exact: PASS
+  COMMAND: python3 tests/c500_paged_decode_harness.py --library build/exp644_c500_candidate.so --cases 12 --length-values 1,2,15,16,17 --seed 20260822 | tee log/exp644_c500_candidate_case12_exact_1_2_15_16_17.log
+4 control case12 exact: PASS
+  COMMAND: python3 tests/c500_paged_decode_harness.py --library build/exp644_c500_control.so --cases 12 --length-values 1,2,15,16,17 --seed 20260822 | tee log/exp644_c500_control_case12_exact_1_2_15_16_17.log
+5 restore control: PASS
+  COMMAND: cp control -> solutions/cuda_maca_optimized.cpp; sha256sum; tee log/exp644_c500_restored_control_sha.log
+A/B benchmark: NOT RUN
+OJ submission: NOT RUN

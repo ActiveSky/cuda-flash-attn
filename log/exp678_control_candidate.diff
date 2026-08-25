@@ -1,0 +1,56 @@
+--- solutions/archive/2026-08-24-submissions/cuda_124611.cpp	2026-08-24 02:33:24.198669902 +0000
++++ solutions/archive/2026-08-24-experiments/cuda_control124611_case8_runtime_row16_exp678.cpp	2026-08-24 03:08:32.830045595 +0000
+@@ -5008,7 +5008,8 @@
+           bool FUSE_TAIL_IN_LAST_SPLIT = false,
+           bool NATIVE_ROW16_REDUCE = false,
+           bool PACKED_ML = false,
+-          int STATIC_WEIGHT_SPLITS = 0>
++          int STATIC_WEIGHT_SPLITS = 0,
++          bool RUNTIME_ROW16_WEIGHT_SHUFFLE = false>
+ __global__ void __launch_bounds__(128)
+ paged_decode_reduce_group8_kernel(
+     const float* __restrict__ partial_m,
+@@ -5022,6 +5023,9 @@
+ {
+     static_assert(STATIC_WEIGHT_SPLITS == 0 || SHUFFLE_WEIGHTS,
+                   "static group8 weights require shuffle-owned metadata");
++    static_assert(!RUNTIME_ROW16_WEIGHT_SHUFFLE ||
++                      (SHUFFLE_WEIGHTS && STATIC_WEIGHT_SPLITS == 0),
++                  "runtime row16 weights require dynamic shuffle metadata");
+     constexpr int HEADS_PER_CTA = 8;
+     const int tx = threadIdx.x;
+     const int ty = threadIdx.y;
+@@ -5165,7 +5169,11 @@
+         float w;
+         if constexpr (SHUFFLE_WEIGHTS) {
+             if constexpr (STATIC_WEIGHT_SPLITS == 0) {
+-                w = __shfl_sync(0xffffffffu, w_lane, s, 16);
++                if constexpr (RUNTIME_ROW16_WEIGHT_SHUFFLE) {
++                    w = __shfl_sync_16(0xffffffffu, w_lane, s);
++                } else {
++                    w = __shfl_sync(0xffffffffu, w_lane, s, 16);
++                }
+             } else {
+                 w = group8_static_weight_handoff<STATIC_WEIGHT_SPLITS>(
+                     w_lane, s);
+@@ -5896,6 +5904,10 @@
+             if (reduce_splits <= 16) {
+                 if (num_heads_k == 4 && batch_size == 16 &&
+                     seqlen_k == 4096) {
++                    // exp678: retain case8's current producer, partial ABI,
++                    // metadata, grid and output ownership, but route its
++                    // dynamic row16 weight handoff through the native
++                    // __shfl_sync_16 lowering.
+                     // exp261: exp208's grouped reducer used the generic
+                     // ceil(valid_pages/pages_per_split) live count even
+                     // though case 8 folds a tail into its last full-page
+@@ -5903,7 +5915,8 @@
+                     // no unwritten partial is read, while reducing the final
+                     // grid from 512 one-head CTAs to 64 eight-head CTAs.
+                     paged_decode_reduce_group8_kernel<
+-                        (XPUOJ_USE_BASE2 != 0), false, true, true, true><<<
++                        (XPUOJ_USE_BASE2 != 0), false, true, true, true,
++                        false, 0, true><<<
+                         rgrid, dim3(16, 8), 0>>>(
+                         s_partial_m, s_partial_l, s_partial_acc, output,
+                         cache_seqlens, (int)batch_size,

@@ -1,0 +1,5 @@
+CPU peer-merge mapping/model: PASS
+seed=650 checks=32000 empty_peer_states=733
+fixed tx*4 vs scalar normalized-BF16 reference: wrong=0 max_abs_error=0.00000000
+exp640 origin-row read vs scalar reference: wrong=235891 max_abs_error=10.33625907
+mapping: row[tx*4:tx*4+4] -> four uint32 words -> eight BF16 dims

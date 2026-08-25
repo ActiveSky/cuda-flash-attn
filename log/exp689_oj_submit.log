@@ -1,0 +1,19 @@
+exp689 OJ execution
+date: 2026-08-24
+candidate: solutions/archive/2026-08-24-experiments/cuda_control124611_case13_final_wave_merge_exp689.cpp
+candidate_sha256: a316636d05dbc72965614842234b3e2bde45cc87260870b18722210c9cd170f0
+parent_control: #124611 / exp666
+parent_control_sha256: 3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+preflight: --list 10 showed no non-terminal submissions
+dry_run: python3 tools/xpuoj_submit.py solutions/archive/2026-08-24-experiments/cuda_control124611_case13_final_wave_merge_exp689.cpp
+submit_command: python3 tools/xpuoj_submit.py solutions/archive/2026-08-24-experiments/cuda_control124611_case13_final_wave_merge_exp689.cpp --submit --poll-seconds 10 --timeout-seconds 3600
+submission: #125311
+status: Accepted
+score: 65.86
+testcases: 14/14 Accepted
+case_times_us: 3,4,9,23,17,29,226,93,233,38,224,375,182,139
+case_scores: 92,90,82,72,73,62,55,54,57,62,52,60,56,55
+target: case13 <=174.5 us or >=58 points
+target_result: not met
+raw: results/raw/cuda_125311_raw.json
+postflight: --list 10 showed #125311 Accepted and no non-terminal submissions

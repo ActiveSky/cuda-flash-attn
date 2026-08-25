@@ -1,0 +1,24 @@
+candidate_sha=655996d41d65e82e89817675fa10bd96f4b573f9cbd51c1aa5c9eb1df0571595
+control_sha=3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+candidate_bytes=286862
+control_bytes=269538
+source_diff_hunks=3
+source_code_deletions=0
+pair_kernel_additions=1
+workfile_matches_control=yes
+diff_check=clean
+target_markers:
+3259:constexpr int CASE14_PAIR_LOGICAL_PAGES = 15;
+3260:constexpr int CASE14_PAIR_STATE_BYTES =
+3369:    const int p_beg = logical_split * CASE14_PAIR_LOGICAL_PAGES;
+3370:    const int p_end = min(p_beg + CASE14_PAIR_LOGICAL_PAGES, full_pages);
+3373:    if (full_count == CASE14_PAIR_LOGICAL_PAGES) {
+3406:        ? (full_pages - 1) / CASE14_PAIR_LOGICAL_PAGES : 0;
+3516:paged_decode_case14_pair_aggregate_kernel(
+3543:        ? (full_pages + CASE14_PAIR_LOGICAL_PAGES - 1) /
+3544:              CASE14_PAIR_LOGICAL_PAGES
+3555:        KV_BUFFER_BYTES + MD_BYTES + CASE14_PAIR_STATE_BYTES];
+5828:    const bool use_case14_pair_aggregate =
+5830:    if (use_case14_pair_aggregate) n_split = 129;
+6022:                } else if (use_case14_pair_aggregate) {
+6028:                    paged_decode_case14_pair_aggregate_kernel<<<

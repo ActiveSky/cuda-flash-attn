@@ -1,0 +1,30 @@
+exp605 relaxed static audit result (2026-08-23)
+
+Result: PASS for the relaxed exploratory-OJ compile/identity/target-contract
+gate, with a mandatory resource-risk warning. The historical strict resource
+gate is FAIL because the active target is 90/54 registers rather than the
+control 82/50. This report does not authorize an OJ submission or control
+switch; those decisions remain with the main Agent.
+
+Evidence:
+  * Candidate SHA, parent SHA, normal/resource/LLVM build exits and artifact
+    hashes: log/exp605_relaxed_build.log.
+  * Exact target resource comparison and no-stack/no-spill result:
+    log/exp605_relaxed_resource.log.
+  * Target-only real BSM count, V global/shared access contract, no duplicate
+    V ownership, unchanged dispatch and no illegal launch/sync additions:
+    log/exp605_relaxed_llvm.log.
+  * No real C500 or OJ was run in this audit. The existing independent
+    lane^16 capability probe is not a candidate correctness result.
+
+Minimum C500 smoke before any serial OJ probe:
+  1. Build/use build/exp605_relaxed_normal.so with
+     python tests/c500_paged_decode_harness.py --library ... --cases 12
+     --lengths full; require finite output and reference match.
+  2. In the same process run case12 exact lengths
+     1,2,15,16,17,831,832,833,16383,16384,16385,32767,32768. This covers
+     tail, page, and split-boundary ownership; retain the harness padding-page
+     poison/trap checks.
+  3. Run same-process workspace reuse 32768,1,32768 and 1,32768,1,32768,
+     plus one random case12 pass. Any NaN/Inf, padding read, stale partial, or
+     mismatch blocks the probe.

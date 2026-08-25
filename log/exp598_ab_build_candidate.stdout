@@ -1,0 +1,7 @@
+Building solutions/archive/2026-08-18-experiments/cuda_case11_partial_fp32_native_stg_exp598.cpp
+Compiler: /opt/maca/mxgpu_llvm/bin/mxcc
+MACA path: /opt/maca
+CUDA bridge: /opt/maca-3.7.1/tools/cu-bridge
+Target: xcore1000
+Output: build/exp598_ab_candidate.so
+Built build/exp598_ab_candidate.so

@@ -1,0 +1,104 @@
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3 | candidate=build/exp652_normal.so | control=build/exp652_control.so | seed=20260823
+[INFO] case11 exact lengths=0,1,2,15,16,17,319,320,321,12250,12251 B=16 KV=4
+[PASS] case11 exact-01/11 length=0 candidate finite=True reference_finite=True within_tolerance=True max_error=0.000000e+00 max_tol_ratio=0.000 guards=True
+[PASS] case11 exact-01/11 length=0 control finite=True reference_finite=True within_tolerance=True max_error=0.000000e+00 max_tol_ratio=0.000 guards=True
+[PASS] case11 exact-01/11 length=0 require_control=True candidate_error=0.000000e+00 candidate_tol_ratio=0.000 control_error=0.000000e+00 control_tol_ratio=0.000 candidate_finite=True control_finite=True candidate_control_within_tolerance=True
+[PASS] case11 exact-02/11 length=1 candidate finite=True reference_finite=True within_tolerance=True max_error=0.000000e+00 max_tol_ratio=0.000 guards=True
+[PASS] case11 exact-02/11 length=1 control finite=True reference_finite=True within_tolerance=True max_error=0.000000e+00 max_tol_ratio=0.000 guards=True
+[PASS] case11 exact-02/11 length=1 require_control=True candidate_error=0.000000e+00 candidate_tol_ratio=0.000 control_error=0.000000e+00 control_tol_ratio=0.000 candidate_finite=True control_finite=True candidate_control_within_tolerance=True
+[PASS] case11 exact-03/11 length=2 candidate finite=True reference_finite=True within_tolerance=True max_error=1.562500e-02 max_tol_ratio=0.322 guards=True
+[PASS] case11 exact-03/11 length=2 control finite=True reference_finite=True within_tolerance=True max_error=1.562500e-02 max_tol_ratio=0.322 guards=True
+[PASS] case11 exact-03/11 length=2 require_control=True candidate_error=1.562500e-02 candidate_tol_ratio=0.322 control_error=1.562500e-02 control_tol_ratio=0.322 candidate_finite=True control_finite=True candidate_control_within_tolerance=True
+[PASS] case11 exact-04/11 length=15 candidate finite=True reference_finite=True within_tolerance=True max_error=7.812500e-03 max_tol_ratio=0.243 guards=True
+[PASS] case11 exact-04/11 length=15 control finite=True reference_finite=True within_tolerance=True max_error=7.812500e-03 max_tol_ratio=0.243 guards=True
+[PASS] case11 exact-04/11 length=15 require_control=True candidate_error=7.812500e-03 candidate_tol_ratio=0.243 control_error=7.812500e-03 control_tol_ratio=0.243 candidate_finite=True control_finite=True candidate_control_within_tolerance=True
+[PASS] case11 exact-05/11 length=16 candidate finite=True reference_finite=True within_tolerance=True max_error=7.812500e-03 max_tol_ratio=0.244 guards=True
+[PASS] case11 exact-05/11 length=16 control finite=True reference_finite=True within_tolerance=True max_error=7.812500e-03 max_tol_ratio=0.244 guards=True
+[PASS] case11 exact-05/11 length=16 require_control=True candidate_error=7.812500e-03 candidate_tol_ratio=0.244 control_error=7.812500e-03 control_tol_ratio=0.244 candidate_finite=True control_finite=True candidate_control_within_tolerance=True
+[PASS] case11 exact-06/11 length=17 candidate finite=True reference_finite=True within_tolerance=True max_error=7.812500e-03 max_tol_ratio=0.244 guards=True
+[PASS] case11 exact-06/11 length=17 control finite=True reference_finite=True within_tolerance=True max_error=7.812500e-03 max_tol_ratio=0.244 guards=True
+[PASS] case11 exact-06/11 length=17 require_control=True candidate_error=7.812500e-03 candidate_tol_ratio=0.244 control_error=7.812500e-03 control_tol_ratio=0.244 candidate_finite=True control_finite=True candidate_control_within_tolerance=True
+[PASS] case11 exact-07/11 length=319 candidate finite=True reference_finite=True within_tolerance=True max_error=1.953125e-03 max_tol_ratio=0.098 guards=True
+[PASS] case11 exact-07/11 length=319 control finite=True reference_finite=True within_tolerance=True max_error=1.953125e-03 max_tol_ratio=0.098 guards=True
+[PASS] case11 exact-07/11 length=319 require_control=True candidate_error=1.953125e-03 candidate_tol_ratio=0.098 control_error=1.953125e-03 control_tol_ratio=0.098 candidate_finite=True control_finite=True candidate_control_within_tolerance=True
+[PASS] case11 exact-08/11 length=320 candidate finite=True reference_finite=True within_tolerance=True max_error=1.953125e-03 max_tol_ratio=0.098 guards=True
+[PASS] case11 exact-08/11 length=320 control finite=True reference_finite=True within_tolerance=True max_error=1.953125e-03 max_tol_ratio=0.098 guards=True
+[PASS] case11 exact-08/11 length=320 require_control=True candidate_error=1.953125e-03 candidate_tol_ratio=0.098 control_error=1.953125e-03 control_tol_ratio=0.098 candidate_finite=True control_finite=True candidate_control_within_tolerance=True
+[PASS] case11 exact-09/11 length=321 candidate finite=True reference_finite=True within_tolerance=True max_error=1.953125e-03 max_tol_ratio=0.098 guards=True
+[PASS] case11 exact-09/11 length=321 control finite=True reference_finite=True within_tolerance=True max_error=1.953125e-03 max_tol_ratio=0.098 guards=True
+[PASS] case11 exact-09/11 length=321 require_control=True candidate_error=1.953125e-03 candidate_tol_ratio=0.098 control_error=1.953125e-03 control_tol_ratio=0.098 candidate_finite=True control_finite=True candidate_control_within_tolerance=True
+[PASS] case11 exact-10/11 length=12250 candidate finite=True reference_finite=True within_tolerance=True max_error=2.441406e-04 max_tol_ratio=0.015 guards=True
+[PASS] case11 exact-10/11 length=12250 control finite=True reference_finite=True within_tolerance=True max_error=2.441406e-04 max_tol_ratio=0.015 guards=True
+[PASS] case11 exact-10/11 length=12250 require_control=True candidate_error=2.441406e-04 candidate_tol_ratio=0.015 control_error=2.441406e-04 control_tol_ratio=0.015 candidate_finite=True control_finite=True candidate_control_within_tolerance=True
+[PASS] case11 exact-11/11 length=12251 candidate finite=True reference_finite=True within_tolerance=True max_error=2.441406e-04 max_tol_ratio=0.015 guards=True
+[PASS] case11 exact-11/11 length=12251 control finite=True reference_finite=True within_tolerance=True max_error=2.441406e-04 max_tol_ratio=0.015 guards=True
+[PASS] case11 exact-11/11 length=12251 require_control=True candidate_error=2.441406e-04 candidate_tol_ratio=0.015 control_error=2.441406e-04 control_tol_ratio=0.015 candidate_finite=True control_finite=True candidate_control_within_tolerance=True
+[PASS] case11 exact-length coverage checks=11
+[PASS] case11 raw-BF16 mode=none pages=0 tails=0 candidate finite=True reference_finite=True within_tolerance=True max_error=0.000000e+00 max_tol_ratio=0.000 guards=True
+[PASS] case11 raw-BF16 mode=none pages=0 tails=0 control finite=True reference_finite=True within_tolerance=True max_error=0.000000e+00 max_tol_ratio=0.000 guards=True
+[PASS] case11 raw-BF16 mode=none pages=0 tails=0 require_control=True candidate_error=0.000000e+00 candidate_tol_ratio=0.000 control_error=0.000000e+00 control_tol_ratio=0.000 candidate_finite=True control_finite=True candidate_control_within_tolerance=True
+[PASS] case11 raw-BF16 candidate mode=none word_order=True even_lane_B128_slices=True
+[PASS] case11 raw-BF16 control mode=none word_order=True even_lane_B128_slices=True
+[PASS] case11 raw-BF16 mode=none reference_unchanged=True candidate_unchanged=True candidate_reference_bits_equal=True control_word_order_diagnostic=True
+[PASS] case11 raw-BF16 mode=pages-only pages=12240 tails=0 candidate finite=True reference_finite=True within_tolerance=True max_error=0.000000e+00 max_tol_ratio=0.000 guards=True
+[PASS] case11 raw-BF16 mode=pages-only pages=12240 tails=0 control finite=True reference_finite=True within_tolerance=True max_error=0.000000e+00 max_tol_ratio=0.000 guards=True
+[PASS] case11 raw-BF16 mode=pages-only pages=12240 tails=0 require_control=True candidate_error=0.000000e+00 candidate_tol_ratio=0.000 control_error=0.000000e+00 control_tol_ratio=0.000 candidate_finite=True control_finite=True candidate_control_within_tolerance=True
+[PASS] case11 raw-BF16 candidate mode=pages-only word_order=True even_lane_B128_slices=True
+[PASS] case11 raw-BF16 control mode=pages-only word_order=True even_lane_B128_slices=True
+[PASS] case11 raw-BF16 mode=pages-only reference_unchanged=True candidate_unchanged=True candidate_reference_bits_equal=True control_word_order_diagnostic=True
+[PASS] case11 raw-BF16 mode=tails-only pages=0 tails=240 candidate finite=True reference_finite=True within_tolerance=True max_error=0.000000e+00 max_tol_ratio=0.000 guards=True
+[FAIL] case11 raw-BF16 mode=tails-only pages=0 tails=240 control finite=False reference_finite=True within_tolerance=False max_error=inf max_tol_ratio=inf guards=True
+[PASS] case11 raw-BF16 mode=tails-only pages=0 tails=240 require_control=False candidate_error=0.000000e+00 candidate_tol_ratio=0.000 control_error=inf control_tol_ratio=inf candidate_finite=True control_finite=False candidate_control_within_tolerance=False
+[INFO] case11 raw-BF16 mode=tails-only pages=0 tails=240 control_diagnostic_tail_nonfinite=True control_pass=False
+[PASS] case11 raw-BF16 candidate mode=tails-only word_order=True even_lane_B128_slices=True
+[FAIL] case11 raw-BF16 control mode=tails-only word_order=False even_lane_B128_slices=False
+[PASS] case11 raw-BF16 mode=tails-only reference_unchanged=True candidate_unchanged=True candidate_reference_bits_equal=True control_word_order_diagnostic=False
+[PASS] case11 raw-BF16 mode=pages+tails pages=12240 tails=240 candidate finite=True reference_finite=True within_tolerance=True max_error=0.000000e+00 max_tol_ratio=0.000 guards=True
+[FAIL] case11 raw-BF16 mode=pages+tails pages=12240 tails=240 control finite=False reference_finite=True within_tolerance=False max_error=inf max_tol_ratio=inf guards=True
+[PASS] case11 raw-BF16 mode=pages+tails pages=12240 tails=240 require_control=False candidate_error=0.000000e+00 candidate_tol_ratio=0.000 control_error=inf control_tol_ratio=inf candidate_finite=True control_finite=False candidate_control_within_tolerance=False
+[INFO] case11 raw-BF16 mode=pages+tails pages=12240 tails=240 control_diagnostic_tail_nonfinite=True control_pass=False
+[PASS] case11 raw-BF16 candidate mode=pages+tails word_order=True even_lane_B128_slices=True
+[FAIL] case11 raw-BF16 control mode=pages+tails word_order=False even_lane_B128_slices=False
+[PASS] case11 raw-BF16 mode=pages+tails reference_unchanged=True candidate_unchanged=True candidate_reference_bits_equal=True control_word_order_diagnostic=False
+[PASS] case11 mixed-B16 mode=baseline pages=0 tails=0 candidate finite=True reference_finite=True within_tolerance=True max_error=1.562500e-02 max_tol_ratio=0.322 guards=True
+[PASS] case11 mixed-B16 mode=baseline pages=0 tails=0 control finite=True reference_finite=True within_tolerance=True max_error=1.562500e-02 max_tol_ratio=0.322 guards=True
+[PASS] case11 mixed-B16 mode=baseline pages=0 tails=0 require_control=True candidate_error=1.562500e-02 candidate_tol_ratio=0.322 control_error=1.562500e-02 control_tol_ratio=0.322 candidate_finite=True control_finite=True candidate_control_within_tolerance=True
+[PASS] case11 mixed-B16 mode=baseline reference_unchanged=True candidate_unchanged=True control_unchanged_diagnostic=True
+[PASS] case11 mixed-B16 mode=pages-only pages=10653 tails=0 candidate finite=True reference_finite=True within_tolerance=True max_error=1.562500e-02 max_tol_ratio=0.322 guards=True
+[PASS] case11 mixed-B16 mode=pages-only pages=10653 tails=0 control finite=True reference_finite=True within_tolerance=True max_error=1.562500e-02 max_tol_ratio=0.322 guards=True
+[PASS] case11 mixed-B16 mode=pages-only pages=10653 tails=0 require_control=True candidate_error=1.562500e-02 candidate_tol_ratio=0.322 control_error=1.562500e-02 control_tol_ratio=0.322 candidate_finite=True control_finite=True candidate_control_within_tolerance=True
+[PASS] case11 mixed-B16 mode=pages-only reference_unchanged=True candidate_unchanged=True control_unchanged_diagnostic=True
+[PASS] case11 mixed-B16 mode=tails-only pages=0 tails=102 candidate finite=True reference_finite=True within_tolerance=True max_error=1.562500e-02 max_tol_ratio=0.322 guards=True
+[FAIL] case11 mixed-B16 mode=tails-only pages=0 tails=102 control finite=False reference_finite=True within_tolerance=False max_error=inf max_tol_ratio=inf guards=True
+[PASS] case11 mixed-B16 mode=tails-only pages=0 tails=102 require_control=False candidate_error=1.562500e-02 candidate_tol_ratio=0.322 control_error=inf control_tol_ratio=inf candidate_finite=True control_finite=False candidate_control_within_tolerance=False
+[INFO] case11 mixed-B16 mode=tails-only pages=0 tails=102 control_diagnostic_tail_nonfinite=True control_pass=False
+[PASS] case11 mixed-B16 mode=tails-only reference_unchanged=True candidate_unchanged=True control_unchanged_diagnostic=False
+[PASS] case11 mixed-B16 mode=pages+tails pages=10653 tails=102 candidate finite=True reference_finite=True within_tolerance=True max_error=1.562500e-02 max_tol_ratio=0.322 guards=True
+[FAIL] case11 mixed-B16 mode=pages+tails pages=10653 tails=102 control finite=False reference_finite=True within_tolerance=False max_error=inf max_tol_ratio=inf guards=True
+[PASS] case11 mixed-B16 mode=pages+tails pages=10653 tails=102 require_control=False candidate_error=1.562500e-02 candidate_tol_ratio=0.322 control_error=inf control_tol_ratio=inf candidate_finite=True control_finite=False candidate_control_within_tolerance=False
+[INFO] case11 mixed-B16 mode=pages+tails pages=10653 tails=102 control_diagnostic_tail_nonfinite=True control_pass=False
+[PASS] case11 mixed-B16 mode=pages+tails reference_unchanged=True candidate_unchanged=True control_unchanged_diagnostic=False
+[PASS] case11 mixed-B16 baseline/pages-only/tails-only/pages+tails candidate gate
+[PASS] case11 workspace full->short->full step=1/3 poison_pages=0 poison_tails=0 candidate finite=True reference_finite=True within_tolerance=True max_error=2.441406e-04 max_tol_ratio=0.015 guards=True
+[PASS] case11 workspace full->short->full step=1/3 poison_pages=0 poison_tails=0 control finite=True reference_finite=True within_tolerance=True max_error=2.441406e-04 max_tol_ratio=0.015 guards=True
+[PASS] case11 workspace full->short->full step=1/3 poison_pages=0 poison_tails=0 require_control=True candidate_error=2.441406e-04 candidate_tol_ratio=0.015 control_error=2.441406e-04 control_tol_ratio=0.015 candidate_finite=True control_finite=True candidate_control_within_tolerance=True
+[PASS] case11 workspace full->short->full step=2/3 poison_pages=12163 poison_tails=107 candidate finite=True reference_finite=True within_tolerance=True max_error=1.562500e-02 max_tol_ratio=0.322 guards=True
+[FAIL] case11 workspace full->short->full step=2/3 poison_pages=12163 poison_tails=107 control finite=False reference_finite=True within_tolerance=False max_error=inf max_tol_ratio=inf guards=True
+[PASS] case11 workspace full->short->full step=2/3 poison_pages=12163 poison_tails=107 require_control=False candidate_error=1.562500e-02 candidate_tol_ratio=0.322 control_error=inf control_tol_ratio=inf candidate_finite=True control_finite=False candidate_control_within_tolerance=False
+[INFO] case11 workspace full->short->full step=2/3 poison_pages=12163 poison_tails=107 control_diagnostic_tail_nonfinite=True control_pass=False
+[PASS] case11 workspace full->short->full step=3/3 poison_pages=0 poison_tails=0 candidate finite=True reference_finite=True within_tolerance=True max_error=2.441406e-04 max_tol_ratio=0.015 guards=True
+[PASS] case11 workspace full->short->full step=3/3 poison_pages=0 poison_tails=0 control finite=True reference_finite=True within_tolerance=True max_error=2.441406e-04 max_tol_ratio=0.015 guards=True
+[PASS] case11 workspace full->short->full step=3/3 poison_pages=0 poison_tails=0 require_control=True candidate_error=2.441406e-04 candidate_tol_ratio=0.015 control_error=2.441406e-04 control_tol_ratio=0.015 candidate_finite=True control_finite=True candidate_control_within_tolerance=True
+[PASS] case11 workspace full->short->full full-state invariant=True
+[PASS] case11 workspace sequence full->short->full
+[PASS] case11 workspace short->full step=1/2 poison_pages=12163 poison_tails=107 candidate finite=True reference_finite=True within_tolerance=True max_error=1.562500e-02 max_tol_ratio=0.322 guards=True
+[FAIL] case11 workspace short->full step=1/2 poison_pages=12163 poison_tails=107 control finite=False reference_finite=True within_tolerance=False max_error=inf max_tol_ratio=inf guards=True
+[PASS] case11 workspace short->full step=1/2 poison_pages=12163 poison_tails=107 require_control=False candidate_error=1.562500e-02 candidate_tol_ratio=0.322 control_error=inf control_tol_ratio=inf candidate_finite=True control_finite=False candidate_control_within_tolerance=False
+[INFO] case11 workspace short->full step=1/2 poison_pages=12163 poison_tails=107 control_diagnostic_tail_nonfinite=True control_pass=False
+[PASS] case11 workspace short->full step=2/2 poison_pages=0 poison_tails=0 candidate finite=True reference_finite=True within_tolerance=True max_error=2.441406e-04 max_tol_ratio=0.015 guards=True
+[PASS] case11 workspace short->full step=2/2 poison_pages=0 poison_tails=0 control finite=True reference_finite=True within_tolerance=True max_error=2.441406e-04 max_tol_ratio=0.015 guards=True
+[PASS] case11 workspace short->full step=2/2 poison_pages=0 poison_tails=0 require_control=True candidate_error=2.441406e-04 candidate_tol_ratio=0.015 control_error=2.441406e-04 control_tol_ratio=0.015 candidate_finite=True control_finite=True candidate_control_within_tolerance=True
+[PASS] case11 workspace short->full full-state invariant=True
+[PASS] case11 workspace sequence short->full
+[PASS] case11 workspace reuse full->short->full and short->full
+case11 exp652 special correctness: PASS finite=True no_nan=True no_inf=True tolerance=True raw_word_lane_order=True guards=True lengths=0,1,2,15,16,17,319,320,321,12250,12251 reuse=full->short->full,short->full

@@ -1,0 +1,22 @@
+exp671 OJ terminal archive and control restoration
+date_utc=2026-08-24
+submission=124647
+status=Accepted
+raw=results/raw/cuda_124647_raw.json
+raw_sha256=3403b0198271820e06ecba1f840cb5c22f06e9ba111e11a0b793fcce27e2928a
+candidate=solutions/archive/2026-08-24-experiments/cuda_control124611_case12_bf16_normalized_row16_exp671.cpp
+candidate_sha256=ef83ee20dca76b3a1cfaa8b734115b264b6f1acc98423a5bffbf832b619c5bd1
+archive_command=python3 tools/archive_cuda_submissions.py
+archive_output=archived 371 submissions; manifest: /data/cuda-flash-attn/solutions/archive/SUBMISSIONS.md
+immutable_source=solutions/archive/2026-08-24-submissions/cuda_124647.cpp
+immutable_sha256=ef83ee20dca76b3a1cfaa8b734115b264b6f1acc98423a5bffbf832b619c5bd1
+manifest_entry=| #124647 | 2026-08-24 08:42:12 | Accepted | 66.00 | `ef83ee20dca76b3a1cfaa8b734115b264b6f1acc98423a5bffbf832b619c5bd1` | [cuda_124647.cpp](2026-08-24-submissions/cuda_124647.cpp) | [cuda_124647_raw.json](../../results/raw/cuda_124647_raw.json) |
+restore_command=apply_patch two case12 dispatch hunks from exp671 to #124611 control
+control=solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+control_sha256=3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+workfile=solutions/cuda_maca_optimized.cpp
+workfile_sha256=3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+workfile_equals_control=yes
+queue_command=python3 tools/xpuoj_submit.py --list
+queue_result=#124647 Accepted; all listed submissions terminal; no Pending/Running submission
+diff_check=git diff --check passed

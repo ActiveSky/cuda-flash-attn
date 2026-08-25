@@ -1,0 +1,11 @@
+old tuples=31 new tuples=31 unique_old=31 unique_new=31
+changed_symbols=2
+None -> (40, 36, 0, 0, 8) _Z26paged_d10 warnings generated when compiling for xcore1000.
+(40, 36, 0, 0, 8) -> None _Z26paged_decode_reduce_kernelILb1ELb0ELb1ELb1ELb1ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii
+exp649 case14-looking z4 tuples:
+(80, 58, 8320, 0, 6) _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif
+(84, 66, 8320, 0, 5) _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif
+(80, 58, 8320, 0, 6) _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif
+(74, 52, 8320, 0, 6) _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif
+(92, 48, 8320, 0, 5) _Z38paged_decode_case11_headpair_z4_kernelILb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif
+(82, 64, 8320, 0, 5) _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif

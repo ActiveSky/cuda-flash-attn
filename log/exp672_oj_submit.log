@@ -1,0 +1,28 @@
+exp672 OJ submission log
+started_utc: 2026-08-24T01:16:26Z
+candidate: solutions/archive/2026-08-24-experiments/cuda_control124611_case8_bf16_group8_exp672.cpp
+workfile: solutions/cuda_maca_optimized.cpp
+candidate_sha256: 2956d31cbc3ff45a80605bcfa766632f68e64cb36a8a3f04e8b5332cb1973b98
+control_sha256: 3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+initial_workfile_sha256: 3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+candidate_applied_with: apply_patch (exact candidate/control diff)
+post_apply_workfile_sha256: 2956d31cbc3ff45a80605bcfa766632f68e64cb36a8a3f04e8b5332cb1973b98
+preflight_queue: all 10 listed submissions were terminal Accepted
+dry_run_command: python3 tools/xpuoj_submit.py solutions/cuda_maca_optimized.cpp
+dry_run_result: target contest #11 problem #1; language cuda.maca-c500; 272264 bytes; no submission created
+pre_submit_sha256: 2956d31cbc3ff45a80605bcfa766632f68e64cb36a8a3f04e8b5332cb1973b98
+pre_submit_queue: all 10 listed submissions were terminal Accepted
+submit_command: python3 tools/xpuoj_submit.py solutions/cuda_maca_optimized.cpp --submit --poll-seconds 30 --timeout-seconds 900
+submit_invocation: exactly once authorized; submission ID and terminal watch output follow
+submission_id: 124660
+submit_time_utc: 2026-08-24T01:17:06.000Z
+terminal_status: Accepted
+progress_type: Finished
+total_score: 66
+time_used_ms: 1596
+case_results: 1=3ms/92, 2=4ms/90, 3=10ms/82, 4=23ms/72, 5=17ms/73, 6=28ms/63, 7=227ms/55, 8=94ms/54, 9=236ms/57, 10=38ms/62, 11=224ms/52, 12=372ms/60, 13=181ms/57, 14=139ms/55
+target_case8: 94ms/54 (control 94us/54; target threshold >=55 not reached)
+raw_archive: results/raw/cuda_124660_raw.json (generated, 345893 bytes)
+final_queue: #124660 Accepted 66; no nonterminal submissions in --list 10
+final_workfile_sha256: 2956d31cbc3ff45a80605bcfa766632f68e64cb36a8a3f04e8b5332cb1973b98
+final_candidate_sha256: 2956d31cbc3ff45a80605bcfa766632f68e64cb36a8a3f04e8b5332cb1973b98

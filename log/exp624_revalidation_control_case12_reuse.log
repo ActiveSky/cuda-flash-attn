@@ -1,0 +1,13 @@
+exp624 control C500 case12 workspace reuse
+2026-08-21T13:30:59Z
+control_sha=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+command A: python3 tests/c500_paged_decode_harness.py --library /tmp/exp624_revalidation.CFnpm9/control_normal.so --cases 12 --length-values 32768,1,32768 --seed 20260809
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:32768 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:1  match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:32768 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True
+command B: python3 tests/c500_paged_decode_harness.py --library /tmp/exp624_revalidation.CFnpm9/control_normal.so --cases 12 --length-values 1,32768 --seed 20260809
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:1  match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:32768 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True
+exit_status=0

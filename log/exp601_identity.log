@@ -1,0 +1,30 @@
+exp601 validation identity and gate summary
+UTC 2026-08-18T17:33:35Z
+candidate source SHA256:
+2eb8cbdcbc8727f4d9d1fd2861663c37d02b3402ad341829a2f786d4b032e4bf  solutions/archive/2026-08-18-experiments/cuda_case12_partial_b128_stg_exp601.cpp
+control/work source SHA256:
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+2eb8cbdcbc8727f4d9d1fd2861663c37d02b3402ad341829a2f786d4b032e4bf  solutions/cuda_maca_optimized.cpp
+candidate/control binary SHA256:
+a3a2898f2f384c74085d430d60bd15ff0f01e9d6e147f3f4ee3a3e2e7d42e95c  build/exp601_c500_candidate.so
+4bbe97993b7ad219dc607e95a8a45a11c26c8c96042d857084f91098d00ea873  build/exp601_c500_control.so
+expected candidate source: 2eb8cbdcbc8727f4d9d1fd2861663c37d02b3402ad341829a2f786d4b032e4bf
+expected control/work source: control=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972 workfile currently candidate=2eb8cbdcbc8727f4d9d1fd2861663c37d02b3402ad341829a2f786d4b032e4bf
+correctness pass counts:
+log/exp601_cpu_logic.log pass_lines=14 exit_status=0
+log/exp601_c500_full.log pass_lines=14 exit_status=0
+log/exp601_c500_random.log pass_lines=14 exit_status=0
+log/exp601_c500_boundary.log pass_lines=14 exit_status=0
+log/exp601_c500_case12_exact.log pass_lines=241 exit_status=0\n
+log/exp601_c500_reuse_32768_1_32768.log pass_lines=3 exit_status=0
+log/exp601_c500_reuse_1_32768.log pass_lines=2 exit_status=0
+log/exp601_c500_bit_compare.log pass_lines=241 exit_status=0
+A/B exit and stderr checks:
+full stdout_exit=exit_status=0 stderr_bytes=0
+exit_status=0
+random stdout_exit=exit_status=0 stderr_bytes=0
+exit_status=0
+boundary stdout_exit=exit_status=0 stderr_bytes=0
+exit_status=0
+gate_result=PASS; candidate eligible for one online OJ probe; no OJ action performed by this executor
+exit_status=0

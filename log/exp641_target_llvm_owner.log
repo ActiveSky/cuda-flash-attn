@@ -1,0 +1,92 @@
+define protected metaxgpu_kernel void @_Z39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch, float noundef %sm_scale) local_unnamed_addr #8 comdat {
+entry:
+  %0 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.x(), !range !26
+  %1 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.z(), !range !26
+  %2 = tail call noundef range(i32 0, 2147483647) i32 @llvm.mxc.block.id.x(), !range !15
+  %div324 = lshr i32 %2, 3
+  %and = and i32 %2, 7
+  %idxprom = zext nneg i32 %div324 to i64
+  %arrayidx = getelementptr inbounds i32, ptr addrspace(1) %cache_seqlens.coerce, i64 %idxprom
+  %3 = load i32, ptr addrspace(1) %arrayidx, align 4, !tbaa !16
+  %cmp = icmp eq i32 %1, 0
+  br i1 %cmp, label %if.then, label %if.end68
+
+if.then:                                          ; preds = %entry
+  %mul = mul nsw i32 %div324, %pages_per_batch
+  %idxprom10 = sext i32 %mul to i64
+  %arrayidx11 = getelementptr inbounds i32, ptr addrspace(1) %block_table.coerce, i64 %idxprom10
+  %4 = load i32, ptr addrspace(1) %arrayidx11, align 4, !tbaa !16
+  %5 = shl i32 %4, 14
+  %6 = shl nuw nsw i32 %and, 7
+  %mul14 = or disjoint i32 %5, %6
+  %idx.ext = sext i32 %mul14 to i64
+  %add.ptr = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext
+  %add.ptr20 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext
+  %cmp21 = icmp sgt i32 %3, 0
+  br i1 %cmp21, label %if.then22, label %if.end
+
+if.then22:                                        ; preds = %if.then
+  %idxprom23 = zext nneg i32 %0 to i64
+  %arrayidx24 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr, i64 %idxprom23
+  %7 = load i32, ptr addrspace(4) %arrayidx24, align 4, !tbaa !16
+  %arrayidx26 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_k, i32 0, i32 %0
+  store i32 %7, ptr addrspace(3) %arrayidx26, align 4, !tbaa !16
+  %add27 = add nuw nsw i32 %0, 32
+  %idxprom28 = zext nneg i32 %add27 to i64
+  %arrayidx29 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr, i64 %idxprom28
+  %8 = load i32, ptr addrspace(4) %arrayidx29, align 4, !tbaa !16
+  %arrayidx32 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_k, i32 0, i32 %add27
+  store i32 %8, ptr addrspace(3) %arrayidx32, align 4, !tbaa !16
+  %arrayidx34 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr20, i64 %idxprom23
+  %9 = load i32, ptr addrspace(4) %arrayidx34, align 4, !tbaa !16
+  %arrayidx36 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_v, i32 0, i32 %0
+  store i32 %9, ptr addrspace(3) %arrayidx36, align 4, !tbaa !16
+  %arrayidx39 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr20, i64 %idxprom28
+  %10 = load i32, ptr addrspace(4) %arrayidx39, align 4, !tbaa !16
+  %arrayidx42 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_v, i32 0, i32 %add27
+  store i32 %10, ptr addrspace(3) %arrayidx42, align 4, !tbaa !16
+  br label %if.end
+
+if.end:                                           ; preds = %if.then22, %if.then
+  %cmp43 = icmp eq i32 %3, 2
+  br i1 %cmp43, label %if.then44, label %if.end68
+
+if.then44:                                        ; preds = %if.end
+  %add.ptr45 = getelementptr inbounds i8, ptr addrspace(4) %add.ptr, i64 2048
+  %add.ptr46 = getelementptr inbounds i8, ptr addrspace(4) %add.ptr20, i64 2048
+  %idxprom47 = zext nneg i32 %0 to i64
+  %arrayidx48 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr45, i64 %idxprom47
+  %11 = load i32, ptr addrspace(4) %arrayidx48, align 4, !tbaa !16
+  %arrayidx50 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_k, i32 256), i32 0, i32 %0
+  store i32 %11, ptr addrspace(3) %arrayidx50, align 4, !tbaa !16
+  %add51 = add nuw nsw i32 %0, 32
+  %idxprom52 = zext nneg i32 %add51 to i64
+  %arrayidx53 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr45, i64 %idxprom52
+  %12 = load i32, ptr addrspace(4) %arrayidx53, align 4, !tbaa !16
+  %arrayidx56 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_k, i32 256), i32 0, i32 %add51
+  store i32 %12, ptr addrspace(3) %arrayidx56, align 4, !tbaa !16
+  %arrayidx58 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr46, i64 %idxprom47
+  %13 = load i32, ptr addrspace(4) %arrayidx58, align 4, !tbaa !16
+  %arrayidx60 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_v, i32 256), i32 0, i32 %0
+  store i32 %13, ptr addrspace(3) %arrayidx60, align 4, !tbaa !16
+  %arrayidx63 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr46, i64 %idxprom52
+  %14 = load i32, ptr addrspace(4) %arrayidx63, align 4, !tbaa !16
+  %arrayidx66 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_v, i32 256), i32 0, i32 %add51
+  store i32 %14, ptr addrspace(3) %arrayidx66, align 4, !tbaa !16
+  br label %if.end68
+
+if.end68:                                         ; preds = %if.end, %if.then44, %entry
+  fence syncscope("block") release
+  tail call void @llvm.mxc.barrier()
+  fence syncscope("block") acquire
+  %cmp69 = icmp slt i32 %3, 1
+  br i1 %cmp69, label %cleanup, label %if.end71
+
+if.end71:                                         ; preds = %if.end68
+  %15 = shl i32 %div324, 12
+  %16 = shl nuw nsw i32 %and, 9
+  %17 = shl nuw nsw i32 %1, 7
+  %18 = add nuw nsw i32 %16, %17
+  %mul76 = add i32 %18, %15
+  %idx.ext77 = sext i32 %mul76 to i64
+  %add.ptr78 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %q.coerce, i64 %idx.ext77

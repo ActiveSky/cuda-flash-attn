@@ -1,0 +1,7 @@
+special pass/fail summary
+exit: 0
+candidate: build/exp625_relaxed_candidate.so (single binary; no distinct control/A-B)
+build_sha: 4ff2f8e0dc6e3259545b52de1d832f1c27418bcef3bdd3823818ae043cc786e3
+special_pass_lines: 290
+special_fail_lines: 0
+terminal: case12 exp644 special correctness: PASS finite=True no_nan=True no_inf=True guards=True

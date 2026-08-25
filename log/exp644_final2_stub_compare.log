@@ -1,0 +1,7 @@
+candidate stub count:
+32
+control stub count:
+31
+candidate-only stubs:
+_Z75__device_stub__paged_decode_case12_kv8_headpair_z8_direct_three_peer_kernelILb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif
+control-only stubs:

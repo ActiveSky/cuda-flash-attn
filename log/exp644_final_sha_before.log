@@ -1,0 +1,6 @@
+exp644 final static gate: build-before source identity
+UTC 2026-08-22T21:49:34Z
+candidate:
+871756b882bda577c31f9522cc5ef735f0fbfd051b22c21c448cf849e3c5a532  solutions/archive/2026-08-22-experiments/cuda_case12_pair_state_threepeer_fanin_exp644.cpp
+control:
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp

@@ -1,0 +1,143 @@
+exp659 target LLVM static audit
+candidate target producer definition and pointer attributes:
+39995:define protected metaxgpu_kernel void @_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+candidate target producer partial_l references/stores (expect none):
+1:define protected metaxgpu_kernel void @_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+271:  %51 = tail call contract float @llvm.exp2.f32(float %sub.i2687)
+293:  %56 = tail call contract float @llvm.exp2.f32(float %sub28.i)
+311:  %61 = tail call contract float @llvm.exp2.f32(float %sub.i.i2200)
+532:  tail call void @llvm.experimental.noalias.scope.decl(metadata !96)
+533:  tail call void @llvm.experimental.noalias.scope.decl(metadata !99)
+534:  tail call void @llvm.experimental.noalias.scope.decl(metadata !101)
+609:  %168 = tail call contract float @llvm.exp2.f32(float %sub.i2073)
+631:  %173 = tail call contract float @llvm.exp2.f32(float %sub32.i)
+649:  %178 = tail call contract float @llvm.exp2.f32(float %sub.i.i)
+863:  tail call void @llvm.experimental.noalias.scope.decl(metadata !119)
+864:  tail call void @llvm.experimental.noalias.scope.decl(metadata !121)
+865:  tail call void @llvm.experimental.noalias.scope.decl(metadata !123)
+940:  %285 = tail call contract float @llvm.exp2.f32(float %sub.i2073.1)
+962:  %290 = tail call contract float @llvm.exp2.f32(float %sub32.i.1)
+980:  %295 = tail call contract float @llvm.exp2.f32(float %sub.i.i.1)
+1392:  %407 = tail call contract float @llvm.exp2.f32(float %sub144)
+1414:  %412 = tail call contract float @llvm.exp2.f32(float %sub168)
+1433:  %417 = tail call contract float @llvm.exp2.f32(float %sub.i1571)
+1789:  %523 = tail call contract float @llvm.exp2.f32(float %sub273)
+1811:  %528 = tail call contract float @llvm.exp2.f32(float %sub298)
+1830:  %533 = tail call contract float @llvm.exp2.f32(float %sub.i1476)
+2102:  store float %acc0.sroa.0.0.vec.extract3628, ptr addrspace(3) %add.ptr337, align 16, !tbaa !73
+2104:  store float %acc1.sroa.0.0.vec.extract3196, ptr addrspace(3) %add.ptr343, align 16, !tbaa !73
+2107:  store float %acc0.sroa.0.4.vec.extract3686, ptr addrspace(3) %arrayidx351.1, align 4, !tbaa !73
+2110:  store float %acc1.sroa.0.4.vec.extract3254, ptr addrspace(3) %arrayidx355.1, align 4, !tbaa !73
+2113:  store float %acc0.sroa.83.8.vec.extract3736, ptr addrspace(3) %arrayidx351.2, align 8, !tbaa !73
+2116:  store float %acc1.sroa.83.8.vec.extract3304, ptr addrspace(3) %arrayidx355.2, align 8, !tbaa !73
+2119:  store float %acc0.sroa.83.12.vec.extract3790, ptr addrspace(3) %arrayidx351.3, align 4, !tbaa !73
+2122:  store float %acc1.sroa.83.12.vec.extract3358, ptr addrspace(3) %arrayidx355.3, align 4, !tbaa !73
+2125:  store float %acc0.sroa.163.16.vec.extract3844, ptr addrspace(3) %arrayidx351.4, align 16, !tbaa !73
+2128:  store float %acc1.sroa.163.16.vec.extract3412, ptr addrspace(3) %arrayidx355.4, align 16, !tbaa !73
+2131:  store float %acc0.sroa.163.20.vec.extract3898, ptr addrspace(3) %arrayidx351.5, align 4, !tbaa !73
+2134:  store float %acc1.sroa.163.20.vec.extract3466, ptr addrspace(3) %arrayidx355.5, align 4, !tbaa !73
+2137:  store float %acc0.sroa.243.24.vec.extract3952, ptr addrspace(3) %arrayidx351.6, align 8, !tbaa !73
+2140:  store float %acc1.sroa.243.24.vec.extract3520, ptr addrspace(3) %arrayidx355.6, align 8, !tbaa !73
+2143:  store float %acc0.sroa.243.28.vec.extract4006, ptr addrspace(3) %arrayidx351.7, align 4, !tbaa !73
+2146:  store float %acc1.sroa.243.28.vec.extract3574, ptr addrspace(3) %arrayidx355.7, align 4, !tbaa !73
+2155:  store float %m0.5, ptr addrspace(3) %arrayidx362, align 8, !tbaa !73
+2156:  store float %l0.9, ptr addrspace(3) %arrayidx366, align 4, !tbaa !73
+2157:  store float %m1.5, ptr addrspace(3) %arrayidx368, align 8, !tbaa !73
+2158:  store float %l1.9, ptr addrspace(3) %arrayidx372, align 4, !tbaa !73
+2183:  %619 = tail call contract float @llvm.exp2.f32(float %sub.i1136)
+2187:  %620 = tail call contract float @llvm.exp2.f32(float %sub3.i1139)
+2237:  %640 = tail call contract float @llvm.exp2.f32(float %sub.i1120)
+2241:  %641 = tail call contract float @llvm.exp2.f32(float %sub3.i1123)
+2305:  store float %acc1.sroa.0.0.vec.extract3198, ptr addrspace(3) %add.ptr417, align 16, !tbaa !73
+2308:  store float %acc1.sroa.0.4.vec.extract3256, ptr addrspace(3) %arrayidx426.1, align 4, !tbaa !73
+2311:  store float %acc1.sroa.83.8.vec.extract3306, ptr addrspace(3) %arrayidx426.2, align 8, !tbaa !73
+2314:  store float %acc1.sroa.83.12.vec.extract3360, ptr addrspace(3) %arrayidx426.3, align 4, !tbaa !73
+2317:  store float %acc1.sroa.163.16.vec.extract3414, ptr addrspace(3) %arrayidx426.4, align 16, !tbaa !73
+2320:  store float %acc1.sroa.163.20.vec.extract3468, ptr addrspace(3) %arrayidx426.5, align 4, !tbaa !73
+2323:  store float %acc1.sroa.243.24.vec.extract3522, ptr addrspace(3) %arrayidx426.6, align 8, !tbaa !73
+2326:  store float %acc1.sroa.243.28.vec.extract3576, ptr addrspace(3) %arrayidx426.7, align 4, !tbaa !73
+2341:  store float %acc0.sroa.0.0.vec.extract3630, ptr addrspace(3) %add.ptr450, align 16, !tbaa !73
+2344:  store float %acc0.sroa.0.4.vec.extract3688, ptr addrspace(3) %arrayidx459.1, align 4, !tbaa !73
+2347:  store float %acc0.sroa.83.8.vec.extract3738, ptr addrspace(3) %arrayidx459.2, align 8, !tbaa !73
+2350:  store float %acc0.sroa.83.12.vec.extract3792, ptr addrspace(3) %arrayidx459.3, align 4, !tbaa !73
+2353:  store float %acc0.sroa.163.16.vec.extract3846, ptr addrspace(3) %arrayidx459.4, align 16, !tbaa !73
+2356:  store float %acc0.sroa.163.20.vec.extract3900, ptr addrspace(3) %arrayidx459.5, align 4, !tbaa !73
+2359:  store float %acc0.sroa.243.24.vec.extract3954, ptr addrspace(3) %arrayidx459.6, align 8, !tbaa !73
+2362:  store float %acc0.sroa.243.28.vec.extract4008, ptr addrspace(3) %arrayidx459.7, align 4, !tbaa !73
+2372:  store float %m0.6.sink, ptr addrspace(3) %arrayidx466, align 8, !tbaa !73
+2373:  store float %l0.10.sink, ptr addrspace(3) %arrayidx470, align 4, !tbaa !73
+2395:  %661 = tail call contract float @llvm.exp2.f32(float %sub.i1104)
+2399:  %662 = tail call contract float @llvm.exp2.f32(float %sub3.i1107)
+2445:  %div495 = fdiv contract float 1.000000e+00, %add.i1111
+2465:  %681 = tail call contract float @llvm.log2.f32(float %add.i1111)
+2469:  %arrayidx544 = getelementptr inbounds float, ptr addrspace(1) %partial_m.coerce, i64 %idxprom543
+2470:  store float %add537., ptr addrspace(1) %arrayidx544, align 4, !tbaa !73
+2475:  %div549 = fdiv contract float 1.000000e+00, %add.i1111
+2501:  %685 = tail call contract float @llvm.exp2.f32(float %sub.i)
+2505:  %686 = tail call contract float @llvm.exp2.f32(float %sub3.i)
+2551:  %div602 = fdiv contract float 1.000000e+00, %add.i1099
+2571:  %705 = tail call contract float @llvm.log2.f32(float %add.i1099)
+2575:  %arrayidx651 = getelementptr inbounds float, ptr addrspace(1) %partial_m.coerce, i64 %idxprom650
+2576:  store float %add644., ptr addrspace(1) %arrayidx651, align 4, !tbaa !73
+2581:  %div656 = fdiv contract float 1.000000e+00, %add.i1099
+2708:declare float @llvm.log2.f32(float) #6
+candidate single-LSE reducer definition and math references:
+1:define protected metaxgpu_kernel void @_Z44paged_decode_reduce_case14_single_lse_kernelILb1EEvPKfS1_P15__maca_bfloat16PKiiii(ptr addrspace(1) noalias nocapture noundef readonly %partial_lse.coerce, ptr addrspace(1) noalias nocapture noundef readonly %partial_acc.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, i32 noundef %batch_size, i32 noundef %pages_per_split, i32 noundef %n_split) local_unnamed_addr #19 comdat {
+46:  %arrayidx21 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %partial_acc.coerce, i64 %idxprom20
+49:  store i16 %3, ptr addrspace(1) %arrayidx27, align 2, !tbaa !27
+58:  store i16 %4, ptr addrspace(1) %arrayidx34, align 2, !tbaa !27
+74:  %arrayidx51 = getelementptr inbounds float, ptr addrspace(1) %partial_lse.coerce, i64 %idxprom50
+89:  %arrayidx60 = getelementptr inbounds float, ptr addrspace(1) %partial_lse.coerce, i64 %idxprom59
+104:  %arrayidx69 = getelementptr inbounds float, ptr addrspace(1) %partial_lse.coerce, i64 %idxprom68
+177:  store float %44, ptr addrspace(3) %arrayidx80, align 4, !tbaa !73
+261:  store float %80, ptr addrspace(3) %add.ptr, align 4, !tbaa !73
+274:  %82 = tail call contract noundef float @llvm.exp2.f32(float %sub115)
+277:  store float %cond119, ptr addrspace(3) %arrayidx121, align 4, !tbaa !73
+287:  %83 = tail call contract noundef float @llvm.exp2.f32(float %sub131)
+290:  store float %cond135, ptr addrspace(3) %arrayidx137, align 4, !tbaa !73
+291:  %add138 = fadd contract float %cond135, %weight_local.0
+301:  %84 = tail call contract noundef float @llvm.exp2.f32(float %sub147)
+304:  store float %cond151, ptr addrspace(3) %arrayidx153, align 4, !tbaa !73
+305:  %add154 = fadd contract float %cond151, %weight_local.1
+321:  %add162 = fadd contract float %weight_local.2, %90
+333:  %add162.1 = fadd contract float %add162, %96
+345:  %add162.2 = fadd contract float %add162.1, %102
+357:  %add162.3 = fadd contract float %add162.2, %108
+372:  %add162.4 = fadd contract float %add162.3, %114
+374:  store float %add162.4, ptr addrspace(3) %arrayidx169, align 4, !tbaa !73
+405:  %add186 = fadd contract float %cond179, %121
+417:  %add186.1 = fadd contract float %add186, %127
+429:  %add186.2 = fadd contract float %add186.1, %133
+441:  %add186.3 = fadd contract float %add186.2, %139
+456:  %add186.4 = fadd contract float %add186.3, %145
+457:  store float %add186.4, ptr addrspace(3) %add.ptr, align 4, !tbaa !73
+497:  %arrayidx212.epil = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %partial_acc.coerce, i64 %idxprom211.epil
+504:  %add218.epil = fadd contract float %acc_sum.0386.epil, %mul217.epil
+513:  %div224 = fdiv contract float %add218.lcssa, %146
+520:  store i16 %156, ptr addrspace(1) %arrayidx235, align 2, !tbaa !27
+534:  %arrayidx212 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %partial_acc.coerce, i64 %idxprom211
+541:  %add218 = fadd contract float %acc_sum.0386, %mul217
+550:  %arrayidx212.1 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %partial_acc.coerce, i64 %idxprom211.1
+557:  %add218.1 = fadd contract float %add218, %mul217.1
+566:  %arrayidx212.2 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %partial_acc.coerce, i64 %idxprom211.2
+573:  %add218.2 = fadd contract float %add218.1, %mul217.2
+582:  %arrayidx212.3 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %partial_acc.coerce, i64 %idxprom211.3
+589:  %add218.3 = fadd contract float %add218.2, %mul217.3
+598:  %arrayidx212.4 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %partial_acc.coerce, i64 %idxprom211.4
+605:  %add218.4 = fadd contract float %add218.3, %mul217.4
+614:  %arrayidx212.5 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %partial_acc.coerce, i64 %idxprom211.5
+621:  %add218.5 = fadd contract float %add218.4, %mul217.5
+630:  %arrayidx212.6 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %partial_acc.coerce, i64 %idxprom211.6
+637:  %add218.6 = fadd contract float %add218.5, %mul217.6
+646:  %arrayidx212.7 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %partial_acc.coerce, i64 %idxprom211.7
+653:  %add218.7 = fadd contract float %add218.6, %mul217.7
+candidate all single-LSE symbol references:
+68:$_Z44paged_decode_reduce_case14_single_lse_kernelILb1EEvPKfS1_P15__maca_bfloat16PKiiii = comdat any
+38693:define protected metaxgpu_kernel void @_Z44paged_decode_reduce_case14_single_lse_kernelILb1EEvPKfS1_P15__maca_bfloat16PKiiii(ptr addrspace(1) noalias nocapture noundef readonly %partial_lse.coerce, ptr addrspace(1) noalias nocapture noundef readonly %partial_acc.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, i32 noundef %batch_size, i32 noundef %pages_per_split, i32 noundef %n_split) local_unnamed_addr #19 comdat {
+43283:$_Z59__device_stub__paged_decode_reduce_case14_single_lse_kernelILb1EEvPKfS1_P15__maca_bfloat16PKiiii = comdat any
+43324:@29 = private unnamed_addr constant [86 x i8] c"_Z44paged_decode_reduce_case14_single_lse_kernelILb1EEvPKfS1_P15__maca_bfloat16PKiiii\00", align 1
+44288:  tail call void @_Z59__device_stub__paged_decode_reduce_case14_single_lse_kernelILb1EEvPKfS1_P15__maca_bfloat16PKiiii(ptr noundef %105, ptr noundef %106, ptr noundef %output, ptr noundef %cache_seqlens, i32 noundef 1, i32 noundef %conv729, i32 noundef 257) #9
+46176:define linkonce_odr void @_Z59__device_stub__paged_decode_reduce_case14_single_lse_kernelILb1EEvPKfS1_P15__maca_bfloat16PKiiii(ptr noalias noundef %partial_lse, ptr noalias noundef %partial_acc, ptr noalias noundef %out, ptr noalias noundef %cache_seqlens, i32 noundef %batch_size, i32 noundef %pages_per_split, i32 noundef %n_split) #1 comdat {
+46219:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z59__device_stub__paged_decode_reduce_case14_single_lse_kernelILb1EEvPKfS1_P15__maca_bfloat16PKiiii, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %7, ptr noundef %8)
+46403:  %33 = tail call i32 @__mcRegisterFunction(ptr %3, ptr nonnull @_Z59__device_stub__paged_decode_reduce_case14_single_lse_kernelILb1EEvPKfS1_P15__maca_bfloat16PKiiii, ptr nonnull @29, ptr nonnull @29, i32 -1, ptr null, ptr null, ptr null, ptr null, ptr null)
+control target producer pointer attributes:

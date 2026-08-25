@@ -1,0 +1,11 @@
+exp673 OJ archive log
+archive_utc: 2026-08-24
+command: python3 tools/archive_cuda_submissions.py
+result: archived 373 submissions; manifest: /data/cuda-flash-attn/solutions/archive/SUBMISSIONS.md
+submission_id: 124669
+raw: results/raw/cuda_124669_raw.json
+raw_sha256: 58a1d3f26798faecf12015580bb00b73e43b4ab0e37cf6f5793f79e7fa788b79
+raw_inner_code_sha256: 730c05bfb34fd113a16a69822ed5ce93c841ba57c2ceebcb8ccfd2213b194341
+immutable_source: solutions/archive/2026-08-24-submissions/cuda_124669.cpp
+immutable_source_sha256: 730c05bfb34fd113a16a69822ed5ce93c841ba57c2ceebcb8ccfd2213b194341
+manifest_row: #124669 | 2026-08-24 09:30:18 UTC+8 | Accepted | 66.07

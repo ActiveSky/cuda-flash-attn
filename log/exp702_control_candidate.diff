@@ -1,0 +1,365 @@
+--- solutions/archive/2026-08-24-submissions/cuda_124611.cpp	2026-08-24 16:29:55.278599749 +0000
++++ solutions/archive/2026-08-24-experiments/cuda_control124611_case14_single_lse_fixed_exp702.cpp	2026-08-24 17:12:30.879321892 +0000
+@@ -2382,6 +2382,75 @@
+     }
+ }
+ 
++// exp702: the case14 fused tail can have fewer than four valid tokens in a
++// z partition.  Keep the full-page helper branchless and guard each tail V
++// transaction so poisoned logical padding never enters PV.
++template <int HEAD1_LANE>
++__device__ __forceinline__ void owned_score_tail_pv(
++    float owned_score,
++    float m_new0,
++    float m_new1,
++    uint32_t (*s_v)[U32_PER_ROW],
++    int token_base,
++    int valid_tokens,
++    int tx,
++    float& l0,
++    float& l1,
++    float* acc0,
++    float* acc1)
++{
++    static_assert(HEAD1_LANE == 4 || HEAD1_LANE == 8,
++                  "head1 owner must start at lane 4 or 8");
++    if (token_base < valid_tokens) {
++        const float owned_exp_arg =
++            owned_score - ((tx & HEAD1_LANE) ? m_new1 : m_new0);
++        const float owned_weight = __builtin_exp2f(owned_exp_arg);
++        const float w0 = native_row16_broadcast<0>(owned_weight);
++        const float w1 = native_row16_broadcast<HEAD1_LANE>(owned_weight);
++        l0 += w0;
++        l1 += w1;
++        const uint4 vpack = *reinterpret_cast<const uint4*>(
++            &s_v[token_base][tx * 4]);
++        pv_two_heads_same_v(acc0, acc1, vpack, w0, w1);
++    }
++    if (token_base + 1 < valid_tokens) {
++        const float owned_exp_arg =
++            owned_score - ((tx & HEAD1_LANE) ? m_new1 : m_new0);
++        const float owned_weight = __builtin_exp2f(owned_exp_arg);
++        const float w0 = native_row16_broadcast<1>(owned_weight);
++        const float w1 = native_row16_broadcast<HEAD1_LANE + 1>(owned_weight);
++        l0 += w0;
++        l1 += w1;
++        const uint4 vpack = *reinterpret_cast<const uint4*>(
++            &s_v[token_base + 1][tx * 4]);
++        pv_two_heads_same_v(acc0, acc1, vpack, w0, w1);
++    }
++    if (token_base + 2 < valid_tokens) {
++        const float owned_exp_arg =
++            owned_score - ((tx & HEAD1_LANE) ? m_new1 : m_new0);
++        const float owned_weight = __builtin_exp2f(owned_exp_arg);
++        const float w0 = native_row16_broadcast<2>(owned_weight);
++        const float w1 = native_row16_broadcast<HEAD1_LANE + 2>(owned_weight);
++        l0 += w0;
++        l1 += w1;
++        const uint4 vpack = *reinterpret_cast<const uint4*>(
++            &s_v[token_base + 2][tx * 4]);
++        pv_two_heads_same_v(acc0, acc1, vpack, w0, w1);
++    }
++    if (token_base + 3 < valid_tokens) {
++        const float owned_exp_arg =
++            owned_score - ((tx & HEAD1_LANE) ? m_new1 : m_new0);
++        const float owned_weight = __builtin_exp2f(owned_exp_arg);
++        const float w0 = native_row16_broadcast<3>(owned_weight);
++        const float w1 = native_row16_broadcast<HEAD1_LANE + 3>(owned_weight);
++        l0 += w0;
++        l1 += w1;
++        const uint4 vpack = *reinterpret_cast<const uint4*>(
++            &s_v[token_base + 3][tx * 4]);
++        pv_two_heads_same_v(acc0, acc1, vpack, w0, w1);
++    }
++}
++
+ __device__ __forceinline__ void merge_case11_head_state(
+     float& m, float& l, float* acc,
+     float peer_m, float peer_l, const float* peer_acc)
+@@ -2997,6 +3066,35 @@
+     }
+ }
+ 
++// exp702: BF16-MMA reads the complete shared K tile before applying the
++// logical-token mask.  Zero invalid rows in the case14 fused tail so a legal
++// tail with poisoned padding cannot contaminate QK or the subsequent state.
++__device__ __forceinline__ void issue_case14_tail_headpair_z4_page(
++    const __nv_bfloat16* __restrict__ cache,
++    uint32_t (*smem)[U32_PER_ROW],
++    int pid,
++    int kv_head,
++    int tx,
++    int ty,
++    int tz,
++    int valid_tokens)
++{
++    const int token = tz * 4 + ty;
++    uint32_t* dst = &smem[token][tx * 4];
++    if (token >= valid_tokens) {
++        dst[0] = 0u;
++        dst[1] = 0u;
++        dst[2] = 0u;
++        dst[3] = 0u;
++        return;
++    }
++    const int cache_row =
++        (pid * PAGE_TOKENS * 4 + token * 4 + kv_head) * HEAD_DIM;
++    const uint32_t* src =
++        reinterpret_cast<const uint32_t*>(cache + cache_row) + tx * 4;
++    *reinterpret_cast<uint4*>(dst) = *reinterpret_cast<const uint4*>(src);
++}
++
+ // exp110: synchronous case11 can keep one thread-owned 16-byte K/V vector in
+ // registers while the current page finishes PV.  Unlike a second shared page
+ // buffer, this preserves the 8 KiB allocation; the caller delays both shared
+@@ -3738,10 +3836,18 @@
+     if constexpr (FUSE_TAIL_IN_LAST_SPLIT) {
+         if (owns_fused_tail) {
+             const int32_t pid = bt_row[full_pages];
+-            issue_case11_headpair_z4_page<SYNC_COPY>(
+-                k_cache, s_k, pid, kv_head, tx, ty, tz);
+-            issue_case11_headpair_z4_page<SYNC_COPY>(
+-                v_cache, s_v, pid, kv_head, tx, ty, tz);
++            const int tail_tokens = seqlen & (PAGE_TOKENS - 1);
++            if constexpr (CASE14_FIXED_15_PAGES) {
++                issue_case14_tail_headpair_z4_page(
++                    k_cache, s_k, pid, kv_head, tx, ty, tz, tail_tokens);
++                issue_case14_tail_headpair_z4_page(
++                    v_cache, s_v, pid, kv_head, tx, ty, tz, tail_tokens);
++            } else {
++                issue_case11_headpair_z4_page<SYNC_COPY>(
++                    k_cache, s_k, pid, kv_head, tx, ty, tz);
++                issue_case11_headpair_z4_page<SYNC_COPY>(
++                    v_cache, s_v, pid, kv_head, tx, ty, tz);
++            }
+             wait_case11_headpair_z4_page<SYNC_COPY>();
+ 
+             float score0[4];
+@@ -3750,7 +3856,6 @@
+             float owned_page_max = -CUDART_INF_F;
+             float m_page0 = -CUDART_INF_F;
+             float m_page1 = -CUDART_INF_F;
+-            const int tail_tokens = seqlen & (PAGE_TOKENS - 1);
+             if constexpr (BF16_MMA_QK) {
+                 qk_two_heads_mma_owned_score(
+                     mma_q_frag_bits, s_k, tx, ty, tz, tail_tokens,
+@@ -3813,8 +3918,9 @@
+                     packed_scale(acc1 + 6, acc1 + 6, alpha1);
+                 }
+                 if constexpr (BF16_MMA_QK) {
+-                    owned_score_full_page_pv<8>(
+-                        owned_score, m_new0, m_new1, s_v, tz * 4, tx,
++                    owned_score_tail_pv<8>(
++                        owned_score, m_new0, m_new1, s_v, tz * 4,
++                        tail_tokens, tx,
+                         l0, l1, acc0, acc1);
+                 } else {
+ #pragma unroll
+@@ -3927,7 +4033,14 @@
+             } else {
+                 const int idx0 = (out_split * batch_size + b) * 32 + h0;
+                 if (tx == 0) {
+-                    if constexpr (FP16_PACKED_ML_PARTIAL) {
++                    if constexpr (CASE14_FIXED_15_PAGES &&
++                                  FP16_PACKED_ML_PARTIAL &&
++                                  BF16_NORMALIZED_PARTIAL && BF16_MMA_QK) {
++                        // exp702: one FP32 LSE is sufficient for this
++                        // normalized-BF16 case14 partial state.
++                        partial_m[idx0] = l0 > 0.f
++                            ? m0 + __builtin_log2f(l0) : -CUDART_INF_F;
++                    } else if constexpr (FP16_PACKED_ML_PARTIAL) {
+                         *reinterpret_cast<__half2*>(partial_m + idx0) =
+                             __floats2half2_rn(m0, l0);
+                     } else {
+@@ -3974,7 +4087,12 @@
+             } else {
+                 const int idx1 = (out_split * batch_size + b) * 32 + h1;
+                 if (tx == 0) {
+-                    if constexpr (FP16_PACKED_ML_PARTIAL) {
++                    if constexpr (CASE14_FIXED_15_PAGES &&
++                                  FP16_PACKED_ML_PARTIAL &&
++                                  BF16_NORMALIZED_PARTIAL && BF16_MMA_QK) {
++                        partial_m[idx1] = l1 > 0.f
++                            ? m1 + __builtin_log2f(l1) : -CUDART_INF_F;
++                    } else if constexpr (FP16_PACKED_ML_PARTIAL) {
+                         *reinterpret_cast<__half2*>(partial_m + idx1) =
+                             __floats2half2_rn(m1, l1);
+                     } else {
+@@ -4050,7 +4168,14 @@
+                 const int idx0 = (out_split * batch_size + b) * 32 + h0;
+                 const int idx1 = (out_split * batch_size + b) * 32 + h1;
+                 if (tx == 0) {
+-                    if constexpr (FP16_PACKED_ML_PARTIAL) {
++                    if constexpr (CASE14_FIXED_15_PAGES &&
++                                  FP16_PACKED_ML_PARTIAL &&
++                                  BF16_NORMALIZED_PARTIAL && BF16_MMA_QK) {
++                        partial_m[idx0] = l0 > 0.f
++                            ? m0 + __builtin_log2f(l0) : -CUDART_INF_F;
++                        partial_m[idx1] = l1 > 0.f
++                            ? m1 + __builtin_log2f(l1) : -CUDART_INF_F;
++                    } else if constexpr (FP16_PACKED_ML_PARTIAL) {
+                         // exp288/291: case14 already stores normalized BF16
+                         // accumulators. Pack both scalar merge statistics in the
+                         // existing four-byte partial_m slot and omit partial_l.
+@@ -4625,6 +4750,141 @@
+     }
+ }
+ 
++// exp702 case14 reducer: normalized BF16 partials carry one FP32 LSE
++// reference in the existing four-byte metadata slot.  Merge those partials
++// directly with exp2(lse-lse_max), retaining the current 257-split ABI and
++// one CTA per output head.
++template <bool BASE2>
++__global__ void __launch_bounds__(128)
++paged_decode_reduce_case14_single_lse_kernel(
++    const float* __restrict__ partial_lse,
++    const float* __restrict__ partial_acc,
++    __nv_bfloat16* __restrict__ out,
++    const int32_t* __restrict__ cache_seqlens,
++    int batch_size,
++    int pages_per_split,
++    int n_split)
++{
++    const int tid = threadIdx.x;
++    const int lane = tid & 31;
++    const int warp = tid >> 5;
++    const int bh = blockIdx.x;
++    const int b = bh >> 5;
++    const int h = bh & 31;
++    const int seqlen = cache_seqlens[b];
++    const int full_pages = seqlen / PAGE_TOKENS;
++    const int live_splits = full_pages > 0
++        ? min(n_split, (full_pages + pages_per_split - 1) / pages_per_split)
++        : ((seqlen & (PAGE_TOKENS - 1)) != 0);
++
++    // A single normalized partial is already the final output.  Empty rows
++    // retain the control's zero-output behavior without reading metadata.
++    if (live_splits <= 1) {
++        if (tid < HEAD_DIM) {
++            if (live_splits == 1) {
++                const int hidx = b * 32 + h;
++                const __nv_bfloat16* partial_bf16 =
++                    reinterpret_cast<const __nv_bfloat16*>(partial_acc);
++                out[(b * 32 + h) * HEAD_DIM + tid] =
++                    partial_bf16[hidx * HEAD_DIM + tid];
++            } else {
++                out[(b * 32 + h) * HEAD_DIM + tid] = __float2bfloat16(0.f);
++            }
++        }
++        return;
++    }
++
++    extern __shared__ float smem[];
++    float* s_w = smem;             // [n_split] LSE merge weights
++    float* s_warp = s_w + n_split; // four warp partial reductions
++
++    const int s0 = tid;
++    const int s1 = tid + 128;
++    const int s2 = tid + 256;
++    float own_lse0 = -CUDART_INF_F;
++    float own_lse1 = -CUDART_INF_F;
++    float own_lse2 = -CUDART_INF_F;
++    if (s0 < live_splits) {
++        own_lse0 = partial_lse[(s0 * batch_size + b) * 32 + h];
++    }
++    if (s1 < live_splits) {
++        own_lse1 = partial_lse[(s1 * batch_size + b) * 32 + h];
++    }
++    if (s2 < live_splits) {
++        own_lse2 = partial_lse[(s2 * batch_size + b) * 32 + h];
++    }
++
++    float lse_local = fmaxf(own_lse0, fmaxf(own_lse1, own_lse2));
++#pragma unroll
++    for (int off = 16; off > 0; off >>= 1) {
++        lse_local = fmaxf(
++            lse_local, __shfl_xor_sync(0xffffffffu, lse_local, off));
++    }
++    if (lane == 0) s_warp[warp] = lse_local;
++    __syncthreads();
++
++    if (warp == 0) {
++        float lse = lane < 4 ? s_warp[lane] : -CUDART_INF_F;
++#pragma unroll
++        for (int off = 16; off > 0; off >>= 1) {
++            lse = fmaxf(lse, __shfl_xor_sync(0xffffffffu, lse, off));
++        }
++        if (lane == 0) s_warp[0] = lse;
++    }
++    __syncthreads();
++    const float lse_max = s_warp[0];
++
++    float weight_local = 0.f;
++    if (s0 < live_splits) {
++        const float weight = own_lse0 > -CUDART_INF_F
++            ? softmax_exp<BASE2>(own_lse0 - lse_max) : 0.f;
++        s_w[s0] = weight;
++        weight_local += weight;
++    }
++    if (s1 < live_splits) {
++        const float weight = own_lse1 > -CUDART_INF_F
++            ? softmax_exp<BASE2>(own_lse1 - lse_max) : 0.f;
++        s_w[s1] = weight;
++        weight_local += weight;
++    }
++    if (s2 < live_splits) {
++        const float weight = own_lse2 > -CUDART_INF_F
++            ? softmax_exp<BASE2>(own_lse2 - lse_max) : 0.f;
++        s_w[s2] = weight;
++        weight_local += weight;
++    }
++#pragma unroll
++    for (int off = 16; off > 0; off >>= 1) {
++        weight_local += __shfl_xor_sync(0xffffffffu, weight_local, off);
++    }
++    if (lane == 0) s_warp[warp] = weight_local;
++    __syncthreads();
++
++    if (warp == 0) {
++        float weight_sum = lane < 4 ? s_warp[lane] : 0.f;
++#pragma unroll
++        for (int off = 16; off > 0; off >>= 1) {
++            weight_sum += __shfl_xor_sync(0xffffffffu, weight_sum, off);
++        }
++        if (lane == 0) s_warp[0] = weight_sum;
++    }
++    __syncthreads();
++    const float weight_sum = s_warp[0];
++
++    if (tid < HEAD_DIM) {
++        const __nv_bfloat16* partial_bf16 =
++            reinterpret_cast<const __nv_bfloat16*>(partial_acc);
++        float acc_sum = 0.f;
++        for (int s = 0; s < live_splits; ++s) {
++            const int hidx = (s * batch_size + b) * 32 + h;
++            acc_sum += __bfloat162float(
++                partial_bf16[hidx * HEAD_DIM + tid]) * s_w[s];
++        }
++        out[(b * 32 + h) * HEAD_DIM + tid] =
++            __float2bfloat16(weight_sum > 0.f ? acc_sum / weight_sum : 0.f);
++    }
++}
++
+ // exp87 case10 reducer: preserve one CTA per (batch, head), but let one
+ // 32-lane row own the 128 output dimensions as four adjacent values per lane.
+ // This removes the original four-warp max/l second stage while retaining the
+@@ -6045,13 +6305,12 @@
+                     cache_seqlens, (int)batch_size,
+                     (int)pages_per_split, reduce_splits);
+             } else if (num_heads_k == 4 && batch_size == 1 && seqlen_k == 61519) {
+-                const size_t packed_rsmem =
+-                    ((size_t)reduce_splits + 8) * sizeof(float);
+-                paged_decode_reduce_kernel<
+-                    (XPUOJ_USE_BASE2 != 0), false, true, true, true, true,
+-                    true><<<
+-                    rgrid, rthreads, packed_rsmem>>>(
+-                    s_partial_m, s_partial_l, s_partial_acc, output,
++                const size_t lse_rsmem =
++                    ((size_t)reduce_splits + 4) * sizeof(float);
++                paged_decode_reduce_case14_single_lse_kernel<
++                    (XPUOJ_USE_BASE2 != 0)><<<
++                    rgrid, rthreads, lse_rsmem>>>(
++                    s_partial_m, s_partial_acc, output,
+                     cache_seqlens, (int)batch_size,
+                     (int)pages_per_split, reduce_splits);
+             } else if constexpr (separate_tail) {

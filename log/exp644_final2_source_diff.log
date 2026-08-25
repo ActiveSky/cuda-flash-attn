@@ -1,0 +1,501 @@
+--- solutions/archive/2026-08-16-submissions/cuda_113889.cpp	2026-08-22 19:34:15.270081357 +0000
++++ solutions/archive/2026-08-22-experiments/cuda_case12_pair_state_threepeer_fanin_exp644.cpp	2026-08-22 21:58:12.499704295 +0000
+@@ -2402,6 +2402,61 @@
+     packed_scale_acc(acc + 6, peer_acc + 6, w1);
+ }
+ 
++// exp644: case12's eight z partitions are paired inside their physical
++// 64-lane waves before the cross-wave state fan-in.  This is the exact raw
++// FP32 exchange validated by exp525; the even z partition consumes the odd
++// peer and retains the merged state in its own registers.
++__device__ __forceinline__ float raw_wave64_xor32(float value) {
++#if defined(__MACA_ARCH__) && (__MACA_ARCH__ == 1000)
++    union {
++        float f;
++        int i;
++    } bits;
++    bits.f = value;
++    const unsigned source_lane = __lane_id() ^ 32u;
++    bits.i = __builtin_mxc_bsm_bpermute(source_lane << 2, bits.i);
++    return bits.f;
++#else
++    return __shfl_xor_sync(~0ull, value, 32, 64);
++#endif
++}
++
++__device__ __forceinline__ void merge_case13_intrawave_acc2(
++    float* acc, float own_weight, float peer_weight, bool consume_peer)
++{
++    const float peer0 = raw_wave64_xor32(acc[0]);
++    const float peer1 = raw_wave64_xor32(acc[1]);
++    if (consume_peer) {
++        packed_scale(acc, acc, own_weight);
++        acc[0] = fmaf(peer0, peer_weight, acc[0]);
++        acc[1] = fmaf(peer1, peer_weight, acc[1]);
++    }
++}
++
++__device__ __forceinline__ void merge_case13_intrawave_state(
++    float& m, float& l, float* acc, bool consume_peer)
++{
++    const float peer_m = raw_wave64_xor32(m);
++    const float peer_l = raw_wave64_xor32(l);
++    float own_weight = 0.f;
++    float peer_weight = 0.f;
++    if (consume_peer) {
++        const float m_all = fmaxf(m, peer_m);
++        own_weight = l > 0.f ? __builtin_exp2f(m - m_all) : 0.f;
++        peer_weight = peer_l > 0.f
++            ? __builtin_exp2f(peer_m - m_all) : 0.f;
++        l = l * own_weight + peer_l * peer_weight;
++        m = m_all;
++    }
++    merge_case13_intrawave_acc2(acc, own_weight, peer_weight, consume_peer);
++    merge_case13_intrawave_acc2(
++        acc + 2, own_weight, peer_weight, consume_peer);
++    merge_case13_intrawave_acc2(
++        acc + 4, own_weight, peer_weight, consume_peer);
++    merge_case13_intrawave_acc2(
++        acc + 6, own_weight, peer_weight, consume_peer);
++}
++
+ // exp386: long-KV8 head-pair/z8 architecture probe.  A 256-thread
+ // dim3(16, 2, 8) CTA still owns one complete (batch, kv_head, split) tile,
+ // but every thread computes two query heads over two tokens.  Each shared K/V
+@@ -2878,6 +2933,397 @@
+     }
+ }
+ 
++template <bool ALL_NATIVE_ROW_QK = false, bool NATIVE_HEAD_BIT1 = false,
++          bool FIXED_LIVE_BUCKETS = false>
++__global__ void __launch_bounds__(256)
++paged_decode_case12_kv8_headpair_z8_direct_three_peer_kernel(
++    const __nv_bfloat16* __restrict__ q,
++    const __nv_bfloat16* __restrict__ k_cache,
++    const __nv_bfloat16* __restrict__ v_cache,
++    __nv_bfloat16* __restrict__ out,
++    const int32_t* __restrict__ cache_seqlens,
++    const int32_t* __restrict__ block_table,
++    float* __restrict__ partial_m,
++    float* __restrict__ partial_l,
++    float* __restrict__ partial_acc,
++    int batch_size,
++    int pages_per_batch,
++    int pages_per_split,
++    int n_split,
++    float sm_scale)
++{
++    const int tx = threadIdx.x;
++    const int ty = threadIdx.y;
++    const int tz = threadIdx.z;
++    const int b = blockIdx.x >> 3;
++    const int kv_head = blockIdx.x & 7;
++    const int split = blockIdx.y;
++    const int local_h0 = ty;
++    const int local_h1 = ty + 2;
++    const int h0 = kv_head * 4 + local_h0;
++    const int h1 = kv_head * 4 + local_h1;
++
++    const int seqlen = cache_seqlens[b];
++    const int full_pages = seqlen / PAGE_TOKENS;
++    int p_beg;
++    int p_end;
++    bool owns_fused_tail;
++    if constexpr (FIXED_LIVE_BUCKETS) {
++        // exp484: case7 retains its fixed three CTAs and the capacity mapping
++        // 43/43/42.  Only redistribute pages across the already-live prefix:
++        // 1 CTA through 43 pages, 2 through 86, then all 3.  This avoids
++        // exp448's per-row valid_pages/n_split division and never exposes a
++        // reducer to an unwritten partial slot.
++        const int live_splits =
++            1 + (full_pages > 43) + (full_pages > 86);
++        const int bucket_pages = full_pages <= 43
++            ? full_pages
++            : (full_pages <= 86
++                ? ((full_pages + 1) >> 1)
++                // floor(n / 3) = umulhi(n, 0xAAAAAAAB) >> 1 for n >= 0.
++                // Keep it explicit: exp484's literal division survived as
++                // device-IR udiv and therefore failed this candidate's gate.
++                : static_cast<int>(__umulhi(
++                    static_cast<unsigned int>(full_pages + 2),
++                    0xAAAAAAABu) >> 1));
++        p_beg = split * bucket_pages;
++        p_end = min(p_beg + bucket_pages, full_pages);
++        owns_fused_tail =
++            ((seqlen & (PAGE_TOKENS - 1)) != 0) &&
++            split == live_splits - 1;
++        if (split >= live_splits ||
++            (p_beg >= p_end && !owns_fused_tail)) return;
++    } else {
++        p_beg = split * pages_per_split;
++        p_end = min(p_beg + pages_per_split, full_pages);
++        owns_fused_tail =
++            ((seqlen & (PAGE_TOKENS - 1)) != 0) &&
++            split == (full_pages > 0
++                ? (full_pages - 1) / pages_per_split : 0);
++        if (p_beg >= p_end && !owns_fused_tail) return;
++    }
++
++    constexpr int KV_BUFFER_BYTES =
++        2 * PAGE_TOKENS * U32_PER_ROW * (int)sizeof(uint32_t);
++    constexpr int MD_BYTES = 32 * 2 * (int)sizeof(float);
++    __shared__ __align__(16) uint8_t s_storage[KV_BUFFER_BYTES + MD_BYTES];
++    uint32_t (*s_k)[U32_PER_ROW] =
++        reinterpret_cast<uint32_t (*)[U32_PER_ROW]>(s_storage);
++    uint32_t (*s_v)[U32_PER_ROW] =
++        reinterpret_cast<uint32_t (*)[U32_PER_ROW]>(
++            s_storage + KV_BUFFER_BYTES / 2);
++
++    const uint32_t* q0_src = reinterpret_cast<const uint32_t*>(
++        q + (b * 32 + h0) * HEAD_DIM) + tx * 4;
++    const uint32_t* q1_src = reinterpret_cast<const uint32_t*>(
++        q + (b * 32 + h1) * HEAD_DIM) + tx * 4;
++    const uint4 qpack0 = *reinterpret_cast<const uint4*>(q0_src);
++    const uint4 qpack1 = *reinterpret_cast<const uint4*>(q1_src);
++    float q0[8] = {
++        bf16_lo(qpack0.x), bf16_hi(qpack0.x),
++        bf16_lo(qpack0.y), bf16_hi(qpack0.y),
++        bf16_lo(qpack0.z), bf16_hi(qpack0.z),
++        bf16_lo(qpack0.w), bf16_hi(qpack0.w)};
++    float q1[8] = {
++        bf16_lo(qpack1.x), bf16_hi(qpack1.x),
++        bf16_lo(qpack1.y), bf16_hi(qpack1.y),
++        bf16_lo(qpack1.z), bf16_hi(qpack1.z),
++        bf16_lo(qpack1.w), bf16_hi(qpack1.w)};
++#pragma unroll
++    for (int i = 0; i < 8; ++i) {
++        q0[i] *= sm_scale;
++        q1[i] *= sm_scale;
++    }
++
++    float m0 = -CUDART_INF_F;
++    float m1 = -CUDART_INF_F;
++    float l0 = 0.f;
++    float l1 = 0.f;
++    float acc0[8] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
++    float acc1[8] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
++
++    const int32_t* bt_row = block_table + b * pages_per_batch;
++    if (p_beg < p_end) {
++        int32_t pid = bt_row[p_beg];
++        issue_case13_kv8_headpair_z8_page(
++            k_cache, s_k, pid, kv_head, tx, ty, tz);
++        issue_case13_kv8_headpair_z8_page(
++            v_cache, s_v, pid, kv_head, tx, ty, tz);
++
++        for (int p = p_beg; p < p_end; ++p) {
++            // One physical 64-lane wave contains two adjacent z partitions
++            // and owns exactly four token rows, so no cross-wave page data is
++            // consumed in the hot loop.
++            __syncwarp();
++
++            float owned_score = -CUDART_INF_F;
++            float owned_page_max = -CUDART_INF_F;
++#pragma unroll
++            for (int j = 0; j < 2; ++j) {
++                const int token = tz * 2 + j;
++                const uint4 kpack = *reinterpret_cast<const uint4*>(
++                    &s_k[token][tx * 4]);
++                const float selected_score =
++                    qk_two_heads_split_half_reduce<
++                        ALL_NATIVE_ROW_QK, NATIVE_HEAD_BIT1>(
++                        q0, q1, kpack, tx);
++                if ((NATIVE_HEAD_BIT1 ? (tx & 1) :
++                     (ALL_NATIVE_ROW_QK ? (tx & 3) : (tx & 7))) == j) {
++                    owned_score = selected_score;
++                }
++                owned_page_max = fmaxf(owned_page_max, selected_score);
++            }
++            const float m_page0 =
++                native_row16_broadcast<0>(owned_page_max);
++            const float m_page1 =
++                NATIVE_HEAD_BIT1
++                    ? native_row16_broadcast<2>(owned_page_max)
++                    : (ALL_NATIVE_ROW_QK
++                    ? native_row16_broadcast<4>(owned_page_max)
++                    : native_row16_broadcast<8>(owned_page_max));
++
++            const bool has_next_page = p + 1 < p_end;
++            uint32_t next_k0 = 0;
++            uint32_t next_k1 = 0;
++            uint32_t next_k2 = 0;
++            uint32_t next_k3 = 0;
++            uint32_t next_v0 = 0;
++            uint32_t next_v1 = 0;
++            uint32_t next_v2 = 0;
++            uint32_t next_v3 = 0;
++            if (has_next_page) {
++                pid = bt_row[p + 1];
++                const int next_token = tz * 2 + ty;
++                const int next_row =
++                    (pid * PAGE_TOKENS * 8 +
++                     next_token * 8 + kv_head) * HEAD_DIM;
++                const uint2* next_k_src =
++                    reinterpret_cast<const uint2*>(k_cache + next_row) + tx * 2;
++                const uint2* next_v_src =
++                    reinterpret_cast<const uint2*>(v_cache + next_row) + tx * 2;
++                const uint2 next_k01 = next_k_src[0];
++                const uint2 next_k23 = next_k_src[1];
++                const uint2 next_v01 = next_v_src[0];
++                const uint2 next_v23 = next_v_src[1];
++                next_k0 = next_k01.x;
++                next_k1 = next_k01.y;
++                next_k2 = next_k23.x;
++                next_k3 = next_k23.y;
++                next_v0 = next_v01.x;
++                next_v1 = next_v01.y;
++                next_v2 = next_v23.x;
++                next_v3 = next_v23.y;
++            }
++
++            const bool new_max0 = m_page0 > m0;
++            const bool new_max1 = m_page1 > m1;
++            const float m_new0 = new_max0 ? m_page0 : m0;
++            const float m_new1 = new_max1 ? m_page1 : m1;
++            if (new_max0 && l0 > 0.f) {
++                const float alpha0 = __builtin_exp2f(m0 - m_new0);
++                l0 *= alpha0;
++                packed_scale(acc0, acc0, alpha0);
++                packed_scale(acc0 + 2, acc0 + 2, alpha0);
++                packed_scale(acc0 + 4, acc0 + 4, alpha0);
++                packed_scale(acc0 + 6, acc0 + 6, alpha0);
++            }
++            if (new_max1 && l1 > 0.f) {
++                const float alpha1 = __builtin_exp2f(m1 - m_new1);
++                l1 *= alpha1;
++                packed_scale(acc1, acc1, alpha1);
++                packed_scale(acc1 + 2, acc1 + 2, alpha1);
++                packed_scale(acc1 + 4, acc1 + 4, alpha1);
++                packed_scale(acc1 + 6, acc1 + 6, alpha1);
++            }
++            if constexpr (NATIVE_HEAD_BIT1) {
++                case13_headpair_two_token_pv<2>(
++                    owned_score, m_new0, m_new1, s_v, tz * 2, tx,
++                    l0, l1, acc0, acc1);
++            } else if constexpr (ALL_NATIVE_ROW_QK) {
++                case13_headpair_two_token_pv<4>(
++                    owned_score, m_new0, m_new1, s_v, tz * 2, tx,
++                    l0, l1, acc0, acc1);
++            } else {
++                case13_headpair_two_token_pv<8>(
++                    owned_score, m_new0, m_new1, s_v, tz * 2, tx,
++                    l0, l1, acc0, acc1);
++            }
++            m0 = m_new0;
++            m1 = m_new1;
++
++            if (has_next_page) {
++                __syncwarp();
++                const int next_token = tz * 2 + ty;
++                uint32_t* next_k_dst = &s_k[next_token][tx * 4];
++                uint32_t* next_v_dst = &s_v[next_token][tx * 4];
++                next_k_dst[0] = next_k0;
++                next_k_dst[1] = next_k1;
++                next_k_dst[2] = next_k2;
++                next_k_dst[3] = next_k3;
++                next_v_dst[0] = next_v0;
++                next_v_dst[1] = next_v1;
++                next_v_dst[2] = next_v2;
++                next_v_dst[3] = next_v3;
++            } else {
++                __syncthreads();
++            }
++        }
++    }
++
++    if (owns_fused_tail) {
++        const int32_t pid = bt_row[full_pages];
++        issue_case13_kv8_headpair_z8_page(
++            k_cache, s_k, pid, kv_head, tx, ty, tz);
++        issue_case13_kv8_headpair_z8_page(
++            v_cache, s_v, pid, kv_head, tx, ty, tz);
++        __syncwarp();
++
++        float owned_score = -CUDART_INF_F;
++        float owned_page_max = -CUDART_INF_F;
++        const int tail_tokens = seqlen & (PAGE_TOKENS - 1);
++#pragma unroll
++        for (int j = 0; j < 2; ++j) {
++            const int token = tz * 2 + j;
++            if (token < tail_tokens) {
++                const uint4 kpack = *reinterpret_cast<const uint4*>(
++                    &s_k[token][tx * 4]);
++                const float selected_score =
++                    qk_two_heads_split_half_reduce<
++                        ALL_NATIVE_ROW_QK, NATIVE_HEAD_BIT1>(
++                        q0, q1, kpack, tx);
++                if ((NATIVE_HEAD_BIT1 ? (tx & 1) :
++                     (ALL_NATIVE_ROW_QK ? (tx & 3) : (tx & 7))) == j) {
++                    owned_score = selected_score;
++                }
++                owned_page_max = fmaxf(owned_page_max, selected_score);
++            }
++        }
++        const float m_page0 =
++            native_row16_broadcast<0>(owned_page_max);
++        const float m_page1 =
++            NATIVE_HEAD_BIT1
++                ? native_row16_broadcast<2>(owned_page_max)
++                : (ALL_NATIVE_ROW_QK
++                ? native_row16_broadcast<4>(owned_page_max)
++                : native_row16_broadcast<8>(owned_page_max));
++        if (m_page0 != -CUDART_INF_F) {
++            const bool new_max0 = m_page0 > m0;
++            const bool new_max1 = m_page1 > m1;
++            const float m_new0 = new_max0 ? m_page0 : m0;
++            const float m_new1 = new_max1 ? m_page1 : m1;
++            if (new_max0 && l0 > 0.f) {
++                const float alpha0 = __builtin_exp2f(m0 - m_new0);
++                l0 *= alpha0;
++                packed_scale(acc0, acc0, alpha0);
++                packed_scale(acc0 + 2, acc0 + 2, alpha0);
++                packed_scale(acc0 + 4, acc0 + 4, alpha0);
++                packed_scale(acc0 + 6, acc0 + 6, alpha0);
++            }
++            if (new_max1 && l1 > 0.f) {
++                const float alpha1 = __builtin_exp2f(m1 - m_new1);
++                l1 *= alpha1;
++                packed_scale(acc1, acc1, alpha1);
++                packed_scale(acc1 + 2, acc1 + 2, alpha1);
++                packed_scale(acc1 + 4, acc1 + 4, alpha1);
++                packed_scale(acc1 + 6, acc1 + 6, alpha1);
++            }
++            if constexpr (NATIVE_HEAD_BIT1) {
++                case13_headpair_two_token_pv<2>(
++                    owned_score, m_new0, m_new1, s_v, tz * 2, tx,
++                    l0, l1, acc0, acc1);
++            } else if constexpr (ALL_NATIVE_ROW_QK) {
++                case13_headpair_two_token_pv<4>(
++                    owned_score, m_new0, m_new1, s_v, tz * 2, tx,
++                    l0, l1, acc0, acc1);
++            } else {
++                case13_headpair_two_token_pv<8>(
++                    owned_score, m_new0, m_new1, s_v, tz * 2, tx,
++                    l0, l1, acc0, acc1);
++            }
++            m0 = m_new0;
++            m1 = m_new1;
++        }
++        __syncthreads();
++    }
++
++    // exp644 keeps the even-z pair owners in registers, then makes z2, z4
++    // and z6 publish their complete raw-FP32 pair states.  z0 consumes the
++    // three peers in order after one CTA barrier; no second accumulator or
++    // intermediate pair state is introduced.
++    float* s_acc = reinterpret_cast<float*>(s_storage);
++    float (*s_md)[2] = reinterpret_cast<float (*)[2]>(
++        s_storage + KV_BUFFER_BYTES);
++    // z0/z1, z2/z3, z4/z5 and z6/z7 share physical 64-lane waves.
++    // Pair reduction is register-to-register; only the even owner
++    // continues to the cross-wave fan-in.
++    const bool consume_peer = (tz & 1) == 0;
++    merge_case13_intrawave_state(m0, l0, acc0, consume_peer);
++    merge_case13_intrawave_state(m1, l1, acc1, consume_peer);
++
++    // z2, z4 and z6 publish all four query-head states of their pair.
++    // The three four-row ranges are disjoint and leave z0 entirely in
++    // registers until the single CTA barrier has completed.
++    if (tz == 2 || tz == 4 || tz == 6) {
++        const int row_base = tz == 2 ? 0 : (tz == 4 ? 4 : 8);
++        store_case13_headpair_state(
++            s_acc, s_md, row_base + local_h0, tx, m0, l0, acc0);
++        store_case13_headpair_state(
++            s_acc, s_md, row_base + local_h1, tx, m1, l1, acc1);
++    }
++    __syncthreads();
++
++    if (tz == 0) {
++        // Preserve the raw-FP32 online-softmax merge order: P0, then P1,
++        // P2, then P3.  Each peer is consumed directly from its rows.
++        merge_case11_head_state(
++            m0, l0, acc0,
++            s_md[local_h0][0], s_md[local_h0][1],
++            s_acc + local_h0 * HEAD_DIM + tx * 8);
++        merge_case11_head_state(
++            m1, l1, acc1,
++            s_md[local_h1][0], s_md[local_h1][1],
++            s_acc + local_h1 * HEAD_DIM + tx * 8);
++        merge_case11_head_state(
++            m0, l0, acc0,
++            s_md[4 + local_h0][0], s_md[4 + local_h0][1],
++            s_acc + (4 + local_h0) * HEAD_DIM + tx * 8);
++        merge_case11_head_state(
++            m1, l1, acc1,
++            s_md[4 + local_h1][0], s_md[4 + local_h1][1],
++            s_acc + (4 + local_h1) * HEAD_DIM + tx * 8);
++        merge_case11_head_state(
++            m0, l0, acc0,
++            s_md[8 + local_h0][0], s_md[8 + local_h0][1],
++            s_acc + (8 + local_h0) * HEAD_DIM + tx * 8);
++        merge_case11_head_state(
++            m1, l1, acc1,
++            s_md[8 + local_h1][0], s_md[8 + local_h1][1],
++            s_acc + (8 + local_h1) * HEAD_DIM + tx * 8);
++    }
++    if (tz == 0) {
++        const int idx0 = (split * batch_size + b) * 32 + h0;
++        const int idx1 = (split * batch_size + b) * 32 + h1;
++        if (tx == 0) {
++            *reinterpret_cast<__half2*>(partial_m + idx0) =
++                __floats2half2_rn(m0, l0);
++            *reinterpret_cast<__half2*>(partial_m + idx1) =
++                __floats2half2_rn(m1, l1);
++        }
++        float* out_acc0 = partial_acc + idx0 * HEAD_DIM + tx * 8;
++        float* out_acc1 = partial_acc + idx1 * HEAD_DIM + tx * 8;
++        *reinterpret_cast<float4*>(out_acc0) =
++            make_float4(acc0[0], acc0[1], acc0[2], acc0[3]);
++        *reinterpret_cast<float4*>(out_acc0 + 4) =
++            make_float4(acc0[4], acc0[5], acc0[6], acc0[7]);
++        *reinterpret_cast<float4*>(out_acc1) =
++            make_float4(acc1[0], acc1[1], acc1[2], acc1[3]);
++        *reinterpret_cast<float4*>(out_acc1 + 4) =
++            make_float4(acc1[4], acc1[5], acc1[6], acc1[7]);
++    }
++}
++
++
++
+ template <bool SYNC_COPY>
+ __device__ __forceinline__ void issue_case11_headpair_z4_page(
+     const __nv_bfloat16* __restrict__ cache,
+@@ -5606,14 +6052,30 @@
+                     // prescale, packed metadata, global partial count and vec2
+                     // reducer unchanged. exp428 changes only this z8
+                     // producer's QK exchange to the all-native row network.
+-                    paged_decode_case13_kv8_headpair_z8_kernel<true><<<
+-                        grid, dim3(16, 2, 8)>>>(
+-                        q, k_cache_paged, v_cache_paged, output,
+-                        cache_seqlens, block_table,
+-                        s_partial_m, s_partial_l, s_partial_acc,
+-                        (int)batch_size, (int)pages_per_batch,
+-                        (int)pages_per_split, n_split,
+-                        sm_scale * 1.4426950408889634f);
++                    // exp644: retain the exp525 physical-wave pair exchange,
++                    // then let z0 directly consume pair owners z2/z4/z6.
++                    volatile const int64_t preserve_case12_control =
++                        batch_size;
++                    if (preserve_case12_control < 0) {
++                        paged_decode_case13_kv8_headpair_z8_kernel<true><<<
++                            grid, dim3(16, 2, 8)>>>(
++                            q, k_cache_paged, v_cache_paged, output,
++                            cache_seqlens, block_table,
++                            s_partial_m, s_partial_l, s_partial_acc,
++                            (int)batch_size, (int)pages_per_batch,
++                            (int)pages_per_split, n_split,
++                            sm_scale * 1.4426950408889634f);
++                    } else {
++                        paged_decode_case12_kv8_headpair_z8_direct_three_peer_kernel<
++                            true, false, false><<<
++                            grid, dim3(16, 2, 8)>>>(
++                            q, k_cache_paged, v_cache_paged, output,
++                            cache_seqlens, block_table,
++                            s_partial_m, s_partial_l, s_partial_acc,
++                            (int)batch_size, (int)pages_per_batch,
++                            (int)pages_per_split, n_split,
++                            sm_scale * 1.4426950408889634f);
++                    }
+                 } else if (batch_size == 64 && seqlen_k == 2048) {
+                     // exp390: extend the case13/12/9 head-pair/z8 producer
+                     // ownership only to case7. Keep split14, ten

@@ -1,0 +1,39 @@
+exp674 OJ submission log
+started_utc: 2026-08-24T01:43:00Z
+candidate: solutions/archive/2026-08-24-experiments/cuda_control124611_case7_bf16_static_exp674.cpp
+workfile: solutions/cuda_maca_optimized.cpp
+candidate_sha256: 48dabb57f77b39d55b1f4268bda6ba506f4596d8a29a81700304bdf95643771f
+control: solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+control_sha256: 3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+initial_workfile_sha256: 730c05bfb34fd113a16a69822ed5ce93c841ba57c2ceebcb8ccfd2213b194341
+preflight_queue_command: python3 tools/xpuoj_submit.py --list 10
+preflight_queue_result: all 10 listed submissions were terminal Accepted; newest #124669 Accepted 66.07
+candidate_applied_with: apply_patch (exact exp673 to exp674 diff)
+post_apply_workfile_sha256: 48dabb57f77b39d55b1f4268bda6ba506f4596d8a29a81700304bdf95643771f
+post_apply_cmp: workfile byte-identical to candidate (cmp exit 0)
+dry_run_command: python3 tools/xpuoj_submit.py solutions/cuda_maca_optimized.cpp
+dry_run_result: target contest #11 problem #1; language cuda.maca-c500; 272295 bytes; no submission created
+pre_submit_sha256: 48dabb57f77b39d55b1f4268bda6ba506f4596d8a29a81700304bdf95643771f
+pre_submit_queue: all 10 listed submissions were terminal Accepted; newest #124669 Accepted 66.07
+submit_command: python3 tools/xpuoj_submit.py solutions/cuda_maca_optimized.cpp --submit --no-archive --poll-seconds 30 --timeout-seconds 900
+submit_invocation: exactly once authorized; created submission #124684
+submission_id: 124684
+submit_output_initial: created submission #124684; progress=None status=Pending
+submit_client_result: timeout after 900s; remote submission was not canceled
+watch_command: python3 tools/xpuoj_submit.py --watch 124684 --no-archive --poll-seconds 30 --timeout-seconds 900
+watch_output: submission=124684 progress=Running status=Pending; then progress=Finished status=Accepted
+terminal_status: Accepted
+progress_type: Finished
+submit_time_utc: 2026-08-24T01:51:24.000Z
+total_score: 65.5
+time_used_ms: 1599
+memory_used_kb: 23060268
+case_results: 1=3ms/92, 2=4ms/90, 3=10ms/82, 4=23ms/72, 5=18ms/71, 6=33ms/59, 7=227ms/55, 8=93ms/54, 9=232ms/57, 10=39ms/62, 11=221ms/52, 12=375ms/60, 13=182ms/56, 14=139ms/55
+target_case7: 227ms/55 (control 227ms/55; target threshold >=56 not reached)
+result: 14/14 Accepted; target case7 did not improve; no control decision made
+raw_archive: not created (--no-archive; raw was not edited)
+final_queue: #124684 Accepted 65.5; no nonterminal submissions in --list 10
+final_workfile_sha256: 48dabb57f77b39d55b1f4268bda6ba506f4596d8a29a81700304bdf95643771f
+final_candidate_sha256: 48dabb57f77b39d55b1f4268bda6ba506f4596d8a29a81700304bdf95643771f
+workfile_restored: no (left frozen exp674 candidate as instructed)
+completed_utc: 2026-08-24T02:10:12Z

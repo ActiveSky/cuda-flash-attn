@@ -1,0 +1,11 @@
+candidate_source_sha=337c8fc37a1ad6de70732ef1eee45d44eb4e86e83e95adc239e5c2b71a69c1c7
+candidate_normal_so=34c439a494a71d1d9c54077e3bfa4e34be87572750bcf272ef58bf9428c8e58d
+candidate_resource_so=73a4804c6a188358f737b1ec4175e48fac3825902ba73edb6109e714b88f9a42
+parent_exp686_source_sha=655996d41d65e82e89817675fa10bd96f4b573f9cbd51c1aa5c9eb1df0571595
+control_source_sha=3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+target_pair_resource=112 MTreg / 70 STreg / 12480 B shared / 72 B stack / 4 waves
+parent_exp686_pair_resource=112 MTreg / 68 STreg / 12480 B shared / 72 B stack / 4 waves
+control_case14_resource=82 MTreg / 66 STreg / 8320 B shared / 0 B stack / 5 waves
+matching_reducer=40 MTreg / 28 STreg / 0 B shared / 0 B stack / 8 waves
+normal_build=PASS
+resource_build=PASS

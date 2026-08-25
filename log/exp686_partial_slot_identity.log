@@ -1,0 +1,66 @@
+case14_length=61519
+full_pages=3844
+tail_tokens=15
+logical_splits=257
+aggregate_splits=129
+pages_per_aggregate=30
+source_slot_and_reducer_lines:
+3651-                    second_acc[i] * w_second;
+3652-            }
+3653-        }
+3654:        const int idx = (pair * batch_size + b) * 32 + head;
+3655-        if (tx == 0) {
+3656-            *reinterpret_cast<__half2*>(partial_m + idx) =
+3657-                __floats2half2_rn(first_m, first_l);
+3658-        }
+3659-        const float inv_l = first_l > 0.f ? 1.f / first_l : 0.f;
+3660:        __nv_bfloat162* dst = reinterpret_cast<__nv_bfloat162*>(partial_acc) +
+3661-            idx * (HEAD_DIM / 2) + tx * 4;
+3662-#pragma unroll
+3663-        for (int i = 0; i < 4; ++i) {
+--
+5849-    // the six legacy separate-tail launch branches do not instantiate dead
+5850-    // device kernels. Runtime dispatch for all OJ shapes is unchanged.
+5851-    constexpr bool separate_tail = false;
+5852:    const int partial_split_count = n_split + (separate_tail ? 1 : 0);
+5853-
+5854-    // n_split==1 由主 kernel 直接输出，不需要分配 partial。
+5855-    const size_t need =
+--
+6314-
+6315-    // ---- launch 归约 kernel（单 split 已由主 kernel 直写）----
+6316-    if (n_split > 1) {
+6317:        const int reduce_splits = partial_split_count;
+6318-        // 一个 CTA 协作合并一个 (batch, head)；两个 split 标量数组与
+6319-        // 4 个 warp 临时值存于动态 shared memory。
+6320-        if (num_heads_k == 8 && batch_size == 32 && seqlen_k == 4096) {
+--
+6487-            } else if (num_heads_k == 4 && batch_size == 1 && seqlen_k == 61519) {
+6488-                const size_t packed_rsmem =
+6489-                    ((size_t)reduce_splits + 8) * sizeof(float);
+6490:                paged_decode_reduce_kernel<
+6491-                    (XPUOJ_USE_BASE2 != 0), false, true, true, true, true,
+6492-                    true><<<
+6493-                    rgrid, rthreads, packed_rsmem>>>(
+--
+6495-                    cache_seqlens, (int)batch_size,
+6496-                    (int)pages_per_split, reduce_splits);
+6497-            } else if constexpr (separate_tail) {
+6498:                paged_decode_reduce_kernel<
+6499-                    (XPUOJ_USE_BASE2 != 0), true><<<
+6500-                    rgrid, rthreads, rsmem>>>(
+6501-                    s_partial_m, s_partial_l, s_partial_acc, output,
+6502-                    cache_seqlens, (int)batch_size,
+6503-                    (int)pages_per_split, reduce_splits);
+6504-            } else {
+6505:                paged_decode_reduce_kernel<
+6506-                    (XPUOJ_USE_BASE2 != 0), false><<<
+6507-                    rgrid, rthreads, rsmem>>>(
+6508-                    s_partial_m, s_partial_l, s_partial_acc, output,
+required_static_contracts:
+present: const int idx = (pair * batch_size + b) * 32 + head;
+present: idx * (HEAD_DIM / 2) + tx * 4
+present: const int reduce_splits = partial_split_count;
+present: if (use_case14_pair_aggregate) n_split = 129;
+present: paged_decode_reduce_kernel<
+present: false, true, true, true, true><<<

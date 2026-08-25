@@ -1,0 +1,2 @@
+mxcc: warning: argument unused during compilation: '--maca-path=/opt/maca' [-Wunused-command-line-argument]
+mxcc: warning: argument unused during compilation: '-I /opt/maca-3.7.1/tools/cu-bridge/include' [-Wunused-command-line-argument]

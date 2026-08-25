@@ -1,0 +1,70 @@
+exp705 static audit
+candidate_sha256 25a637f309f8a8206a2210a1c8f6382fe9e9206507b5b0b4b41f92caefebe083
+control_sha256 3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+candidate_device_lines 48965 control_device_lines 48962
+candidate_intrinsics async_load_v4i32=17 arrive64=11 barrier=107 barrier_inst=4
+control_intrinsics async_load_v4i32=0 arrive64=3 barrier=99 barrier_inst=4
+
+case8_fixed19 matches=1
+line=42324 resource=(82, 64, 8320, 0, 5)
+symbol=_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif
+lowering={'async_load_v4i32': 6, 'arrive64': 3, 'barrier': 8, 'barrier_inst': 0, 'barrier_warp': 8, 'shared_memcpy': 6}
+ordering_windows:
+  573: %165 = tail call <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) %164) #24, !alias.scope !323, !noalias !326, !call_argsrelate !29
+  580: %167 = tail call <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) %166) #24, !alias.scope !327, !noalias !330, !call_argsrelate !30
+  837: tail call void @llvm.mxc.arrive(i32 64), !noalias !315
+    838: tail call void @llvm.mxc.barrier(), !noalias !315
+    840: tail call void @llvm.mxc.barrier.warp(), !noalias !315
+  898: %284 = tail call <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) %283) #24, !alias.scope !340, !noalias !341, !call_argsrelate !29
+  905: %286 = tail call <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) %285) #24, !alias.scope !342, !noalias !343, !call_argsrelate !30
+  1162: tail call void @llvm.mxc.arrive(i32 64), !noalias !337
+    1163: tail call void @llvm.mxc.barrier(), !noalias !337
+    1165: tail call void @llvm.mxc.barrier.warp(), !noalias !337
+  1338: %408 = tail call <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) %407) #24, !alias.scope !348, !call_argsrelate !29
+  1345: %410 = tail call <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) %409) #24, !alias.scope !351, !call_argsrelate !30
+  1636: tail call void @llvm.mxc.arrive(i32 64)
+    1637: tail call void @llvm.mxc.barrier()
+    1639: tail call void @llvm.mxc.barrier.warp()
+
+case11_generic matches=1
+line=5142 resource=(80, 58, 8320, 0, 6)
+symbol=_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif
+lowering={'async_load_v4i32': 2, 'arrive64': 1, 'barrier': 5, 'barrier_inst': 0, 'barrier_warp': 3, 'shared_memcpy': 4}
+ordering_windows:
+  292: %52 = tail call <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) %51) #24, !alias.scope !78, !call_argsrelate !29
+  299: %54 = tail call <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) %53) #24, !alias.scope !81, !call_argsrelate !30
+  590: tail call void @llvm.mxc.arrive(i32 64)
+    591: tail call void @llvm.mxc.barrier()
+    593: tail call void @llvm.mxc.barrier.warp()
+
+case14_fixed15 matches=1
+line=6917 resource=(82, 66, 8320, 0, 5)
+symbol=_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif
+lowering={'async_load_v4i32': 6, 'arrive64': 3, 'barrier': 8, 'barrier_inst': 0, 'barrier_warp': 8, 'shared_memcpy': 6}
+ordering_windows:
+  579: %167 = tail call <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) %166) #24, !alias.scope !111, !noalias !114, !call_argsrelate !29
+  586: %169 = tail call <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) %168) #24, !alias.scope !115, !noalias !118, !call_argsrelate !30
+  849: tail call void @llvm.mxc.arrive(i32 64), !noalias !103
+    850: tail call void @llvm.mxc.barrier(), !noalias !103
+    852: tail call void @llvm.mxc.barrier.warp(), !noalias !103
+  910: %288 = tail call <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) %287) #24, !alias.scope !128, !noalias !129, !call_argsrelate !29
+  917: %290 = tail call <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) %289) #24, !alias.scope !130, !noalias !131, !call_argsrelate !30
+  1180: tail call void @llvm.mxc.arrive(i32 64), !noalias !125
+    1181: tail call void @llvm.mxc.barrier(), !noalias !125
+    1183: tail call void @llvm.mxc.barrier.warp(), !noalias !125
+  1348: %414 = tail call <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) %413) #24, !alias.scope !136, !call_argsrelate !29
+  1355: %416 = tail call <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) %415) #24, !alias.scope !139, !call_argsrelate !30
+  1651: tail call void @llvm.mxc.arrive(i32 64)
+    1652: tail call void @llvm.mxc.barrier()
+    1654: tail call void @llvm.mxc.barrier.warp()
+
+case10_generic matches=1
+line=9636 resource=(80, 58, 8320, 0, 6)
+symbol=_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif
+lowering={'async_load_v4i32': 2, 'arrive64': 1, 'barrier': 6, 'barrier_inst': 0, 'barrier_warp': 3, 'shared_memcpy': 4}
+ordering_windows:
+  292: %52 = tail call <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) %51) #24, !alias.scope !155, !call_argsrelate !29
+  299: %54 = tail call <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) %53) #24, !alias.scope !158, !call_argsrelate !30
+  590: tail call void @llvm.mxc.arrive(i32 64)
+    591: tail call void @llvm.mxc.barrier()
+    593: tail call void @llvm.mxc.barrier.warp()

@@ -1,0 +1,5 @@
+79ddd204ec894185e2939056d99c482433026a48b6aa15080876efd18386c36b  solutions/archive/2026-08-23-experiments/cuda_case13_bf16_normalized_partial_exp663.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+build/exp663_candidate_normal.so 787952 bytes 2026-08-23 22:27:54.189517197 +0000
+build/exp663_control_normal.so 746656 bytes 2026-08-23 22:28:10.661561143 +0000
+PASS exact=48 poison_pages=3 tails_fail=4 reuse=

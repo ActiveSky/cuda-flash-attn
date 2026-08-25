@@ -1,0 +1,4 @@
+106: maca info  : Function properties for  _Z42paged_decode_case1_per_word_raw_bsm_kernelPK15__maca_bfloat16PS_PKii 
+107-  0 bytes stack frame 
+108- maca info  : Used  14 MTregisters, 14 STregisters, 0 bytes shared mem  
+109- maca info  : staticMaxWarps/PEU : 8

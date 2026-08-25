@@ -1,0 +1,24 @@
+candidate_sha
+eeed1381178dc74998ea0b5bdfde263efc9f93a7c52e78ab400d727385243055  solutions/archive/2026-08-24-experiments/cuda_control124611_case14_native_partial_stg_exp685.cpp
+control_sha
+3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe  solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+candidate_native_stg_count
+3
+control_native_stg_count
+candidate_native_stg_lines
+6911:define protected metaxgpu_kernel void @_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+9591:  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %add.ptr552, i32 0, <4 x i32> %packed.sroa.0.12.vec.insert.i2706, i64 %717, i1 true, i1 false, i1 false), !alias.scope !149, !call_argsrelate !152
+9896:  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %add.ptr648, i32 0, <4 x i32> %packed.sroa.0.12.vec.insert.i, i64 %777, i1 true, i1 false, i1 false), !alias.scope !156, !call_argsrelate !152
+9907:declare void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) noalias nocapture, i32 immarg, <4 x i32>, i64, i1 immarg, i1 immarg, i1 immarg) #14
+candidate_nonzero_stack
+control_nonzero_stack
+candidate_target_resource
+134: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+135-  0 bytes stack frame 
+136- maca info  : Used  82 MTregisters, 66 STregisters, 8320 bytes shared mem  
+137- maca info  : staticMaxWarps/PEU : 5
+control_target_resource
+134: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+135-  0 bytes stack frame 
+136- maca info  : Used  82 MTregisters, 66 STregisters, 8320 bytes shared mem  
+137- maca info  : staticMaxWarps/PEU : 5

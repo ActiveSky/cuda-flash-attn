@@ -1,0 +1,64 @@
+exp661 static resource summary
+2026-08-23T21:10:00Z
+candidate SHA:
+25fed14d39148f013533225a317696a983197e964a8a007cb2e3a31f167b04b5  solutions/archive/2026-08-24-experiments/cuda_case14_single_lse_tailmask_exp661.cpp
+parent exp659 SHA:
+c356c76e543d822f020b9db955884963afb7a012effa5056846131567ce4e6e1  solutions/archive/2026-08-24-experiments/cuda_case14_single_lse_state_rebase_exp659.cpp
+control SHA:
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+
+expected target producer symbol:
+_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif
+expected single-LSE reducer symbol:
+_Z44paged_decode_reduce_case14_single_lse_kernelILb1EEvPKfS1_P15__maca_bfloat16PKiiii
+
+candidate target producer LLVM definition:
+26:$_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif = comdat any
+candidate reducer LLVM definition:
+68:$_Z44paged_decode_reduce_case14_single_lse_kernelILb1EEvPKfS1_P15__maca_bfloat16PKiiii = comdat any
+
+candidate target producer resource block (82/66/8320/0/5 expected):
+139- maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+140-  0 bytes stack frame 
+141: maca info  : Used  82 MTregisters, 66 STregisters, 8320 bytes shared mem  
+142- maca info  : staticMaxWarps/PEU : 5
+143- maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+
+candidate single-LSE reducer resource block (40/32/0/0/8 expected; symbol wraps in compiler log):
+223- maca info  : Function properties for  _Z44paged_d10 warnings generated when compiling for xcore1000.
+224-ecode_reduce_case14_single_lse_kernelILb1EEvPKfS1_P15__maca_bfloat16PKiiii 
+225-  0 bytes stack frame 
+226: maca info  : Used  40 MTregisters, 32 STregisters, 0 bytes shared mem  
+227- maca info  : staticMaxWarps/PEU : 8
+228- maca info  : Function properties for  _Z26paged_decode_reduce_kernelILb1ELb0ELb0ELb0ELb0ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+
+exp659 target producer resource reference:
+134- maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+135-  0 bytes stack frame 
+136: maca info  : Used  82 MTregisters, 66 STregisters, 8320 bytes shared mem  
+137- maca info  : staticMaxWarps/PEU : 5
+138- maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+
+exp659 single-LSE reducer resource reference:
+218- maca info  : Function properties for  _Z44paged_d10 warnings generated when compiling for xcore1000.
+219-ecode_reduce_case14_single_lse_kernelILb1EEvPKfS1_P15__maca_bfloat16PKiiii 
+220-  0 bytes stack frame 
+221: maca info  : Used  40 MTregisters, 32 STregisters, 0 bytes shared mem  
+222- maca info  : staticMaxWarps/PEU : 8
+223- maca info  : Function properties for  _Z26paged_decode_reduce_kernelILb1ELb0ELb0ELb0ELb0ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+
+candidate resource nonzero stack-frame lines:
+candidate resource stack-frame status:
+stack_frames=31 zero_stack_frames=31 nonzero_stack_frames=0
+candidate resource spill/local-memory mentions:
+
+build wrapper statuses:
+Built build/exp661_candidate_normal.so
+wrapper_exit_status=0
+348e4e756d7c64c7e1b3cfbbc2c606a1c7879bc821415c15ef293579ff4b2e41  build/exp661_candidate_normal.so
+Built build/exp661_candidate_resource.so
+wrapper_exit_status=0
+f97a49a9eb85c0305be79706dd702e61d851842981014be3832862120ca31b2e  build/exp661_candidate_resource.so
+Built build/exp661_candidate_device.ll
+wrapper_exit_status=0
+eccd2b10b991a061eaae3f932d5d18488446310f5b70cabfe8713f7f024aba45  build/exp661_candidate_device.ll

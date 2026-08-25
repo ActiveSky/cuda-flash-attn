@@ -1,0 +1,5 @@
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+[PASS] case  8 B=16 L= 4096 KV=4 lengths=boundary match=1.000000 max_error=7.812500e-03 max_tol_ratio=0.242 finite=True
+[PASS] case 10 B= 1 L= 8192 KV=4 lengths=boundary match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 finite=True
+[PASS] case 11 B=16 L=12251 KV=4 lengths=boundary match=1.000000 max_error=7.812500e-03 max_tol_ratio=0.241 finite=True
+[PASS] case 14 B= 1 L=61519 KV=4 lengths=boundary match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 finite=True

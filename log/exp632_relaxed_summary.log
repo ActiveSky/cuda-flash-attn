@@ -1,0 +1,16 @@
+exp632 relaxed C500 safety-smoke summary
+
+candidate: solutions/archive/2026-08-22-experiments/cuda_case2_source_owner_streaming_b32_exp632.cpp
+source_sha256: d43be08ccec3ccbf6bb332870c15e69b70055440170fac352626d259fe87fc9b
+binary: build/exp632_relaxed_candidate.so
+binary_sha256: b3665f9d48bea7a15fc7a1fb533ecd325fee1fd9c4d06aacc9a49d12fa071544
+
+basic smoke: PASS (full, random, boundary, exact lengths 1 and 2; all finite;
+match=1.000000 in every run).
+
+bounded special smoke: PASS (all-one token/padding poison, all-two padding
+poison, mixed lengths [1,2,1,2] and [2,1,2,1], raw-BF16 candidate/reference
+equality, input/guard integrity, workspace full-short-full and short-full
+reuse, and five-repeat determinism for lengths 1 and 2).
+
+overall=PASS

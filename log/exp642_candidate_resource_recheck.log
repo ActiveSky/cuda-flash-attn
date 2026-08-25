@@ -1,0 +1,4 @@
+command: tools/build_local_maca.sh solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp build/exp642_candidate_resource.so -resource-usage
+3950d999d281032a7c40385cf041e9691cf13ec056b068bdae2c4ae31915e760  solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp
+build_rc=0
+3950d999d281032a7c40385cf041e9691cf13ec056b068bdae2c4ae31915e760  solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp

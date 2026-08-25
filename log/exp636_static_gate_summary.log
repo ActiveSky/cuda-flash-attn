@@ -1,0 +1,4 @@
+exp636 preliminary verdict: FAIL
+Reason: target case3 token_parallel specialization resource tuple candidate 98 MTreg / 54 STreg / 8320 B shared / 0 B stack / 4 staticMaxWarps versus control 92 / 48 / 8320 / 0 / 5.
+Full resource tuple sequence differs only at target index 11; all other 30 tuples match (with candidate default REGISTER_TAIL_WAVE_BSM=false mangling differences only).
+No CPU/C500/A-B/OJ should run.

@@ -1,0 +1,241 @@
+watching existing submission #124563
+submission=124563 progress=Finished status=Accepted
+full result archive: results/raw/cuda_124563_raw.json
+{
+  "id": 124563,
+  "status": "Accepted",
+  "score": 65.86,
+  "language": "cuda.maca-c500",
+  "submit_time": "2026-08-23T21:19:20.000Z",
+  "time_used_ms": 1593,
+  "memory_used_kb": 23060324,
+  "progress_type": "Finished",
+  "code_file": "(watched submission)",
+  "archive": "results/raw/cuda_124563_raw.json",
+  "testcases": [
+    {
+      "testcase": 1,
+      "status": "Accepted",
+      "score": 92,
+      "time_ms": 3,
+      "spj": {
+        "testcase": "1",
+        "config": "batch=1, seqlen_k_cap=1, seqlen_q=1, heads=32, kv_heads=4, headdim=128, page_size=16, causal=0, kind=edge",
+        "baseline_ms": 0.038,
+        "user_ms": 0.003,
+        "speedup": 12.667,
+        "score_ratio": 0.926829,
+        "display_score": 92,
+        "pass": "OK"
+      }
+    },
+    {
+      "testcase": 2,
+      "status": "Accepted",
+      "score": 90,
+      "time_ms": 4,
+      "spj": {
+        "testcase": "2",
+        "config": "batch=4, seqlen_k_cap=2, seqlen_q=1, heads=32, kv_heads=8, headdim=128, page_size=16, causal=0, kind=edge",
+        "baseline_ms": 0.038,
+        "user_ms": 0.004,
+        "speedup": 9.5,
+        "score_ratio": 0.904762,
+        "display_score": 90,
+        "pass": "OK"
+      }
+    },
+    {
+      "testcase": 3,
+      "status": "Accepted",
+      "score": 82,
+      "time_ms": 10,
+      "spj": {
+        "testcase": "3",
+        "config": "batch=16, seqlen_k_cap=17, seqlen_q=1, heads=32, kv_heads=4, headdim=128, page_size=16, causal=0, kind=edge",
+        "baseline_ms": 0.046,
+        "user_ms": 0.01,
+        "speedup": 4.6,
+        "score_ratio": 0.821429,
+        "display_score": 82,
+        "pass": "OK"
+      }
+    },
+    {
+      "testcase": 4,
+      "status": "Accepted",
+      "score": 72,
+      "time_ms": 23,
+      "spj": {
+        "testcase": "4",
+        "config": "batch=64, seqlen_k_cap=64, seqlen_q=1, heads=32, kv_heads=8, headdim=128, page_size=16, causal=0, kind=perf",
+        "baseline_ms": 0.06,
+        "user_ms": 0.023,
+        "speedup": 2.609,
+        "score_ratio": 0.722892,
+        "display_score": 72,
+        "pass": "OK"
+      }
+    },
+    {
+      "testcase": 5,
+      "status": "Accepted",
+      "score": 73,
+      "time_ms": 17,
+      "spj": {
+        "testcase": "5",
+        "config": "batch=16, seqlen_k_cap=141, seqlen_q=1, heads=32, kv_heads=4, headdim=128, page_size=16, causal=0, kind=perf",
+        "baseline_ms": 0.046,
+        "user_ms": 0.017,
+        "speedup": 2.706,
+        "score_ratio": 0.730159,
+        "display_score": 73,
+        "pass": "OK"
+      }
+    },
+    {
+      "testcase": 6,
+      "status": "Accepted",
+      "score": 63,
+      "time_ms": 28,
+      "spj": {
+        "testcase": "6",
+        "config": "batch=16, seqlen_k_cap=362, seqlen_q=1, heads=32, kv_heads=8, headdim=128, page_size=16, causal=0, kind=perf",
+        "baseline_ms": 0.049,
+        "user_ms": 0.028,
+        "speedup": 1.75,
+        "score_ratio": 0.636364,
+        "display_score": 63,
+        "pass": "OK"
+      }
+    },
+    {
+      "testcase": 7,
+      "status": "Accepted",
+      "score": 55,
+      "time_ms": 225,
+      "spj": {
+        "testcase": "7",
+        "config": "batch=64, seqlen_k_cap=2048, seqlen_q=1, heads=32, kv_heads=8, headdim=128, page_size=16, causal=0, kind=perf",
+        "baseline_ms": 0.281,
+        "user_ms": 0.225,
+        "speedup": 1.249,
+        "score_ratio": 0.555336,
+        "display_score": 55,
+        "pass": "OK"
+      }
+    },
+    {
+      "testcase": 8,
+      "status": "Accepted",
+      "score": 54,
+      "time_ms": 94,
+      "spj": {
+        "testcase": "8",
+        "config": "batch=16, seqlen_k_cap=4096, seqlen_q=1, heads=32, kv_heads=4, headdim=128, page_size=16, causal=0, kind=perf",
+        "baseline_ms": 0.111,
+        "user_ms": 0.094,
+        "speedup": 1.181,
+        "score_ratio": 0.541463,
+        "display_score": 54,
+        "pass": "OK"
+      }
+    },
+    {
+      "testcase": 9,
+      "status": "Accepted",
+      "score": 57,
+      "time_ms": 232,
+      "spj": {
+        "testcase": "9",
+        "config": "batch=32, seqlen_k_cap=4096, seqlen_q=1, heads=32, kv_heads=8, headdim=128, page_size=16, causal=0, kind=perf",
+        "baseline_ms": 0.317,
+        "user_ms": 0.232,
+        "speedup": 1.366,
+        "score_ratio": 0.577413,
+        "display_score": 57,
+        "pass": "OK"
+      }
+    },
+    {
+      "testcase": 10,
+      "status": "Accepted",
+      "score": 62,
+      "time_ms": 39,
+      "spj": {
+        "testcase": "10",
+        "config": "batch=1, seqlen_k_cap=8192, seqlen_q=1, heads=32, kv_heads=4, headdim=128, page_size=16, causal=0, kind=perf",
+        "baseline_ms": 0.064,
+        "user_ms": 0.039,
+        "speedup": 1.641,
+        "score_ratio": 0.621359,
+        "display_score": 62,
+        "pass": "OK"
+      }
+    },
+    {
+      "testcase": 11,
+      "status": "Accepted",
+      "score": 52,
+      "time_ms": 222,
+      "spj": {
+        "testcase": "11",
+        "config": "batch=16, seqlen_k_cap=12251, seqlen_q=1, heads=32, kv_heads=4, headdim=128, page_size=16, causal=0, kind=perf",
+        "baseline_ms": 0.249,
+        "user_ms": 0.222,
+        "speedup": 1.122,
+        "score_ratio": 0.528662,
+        "display_score": 52,
+        "pass": "OK"
+      }
+    },
+    {
+      "testcase": 12,
+      "status": "Accepted",
+      "score": 60,
+      "time_ms": 373,
+      "spj": {
+        "testcase": "12",
+        "config": "batch=8, seqlen_k_cap=32768, seqlen_q=1, heads=32, kv_heads=8, headdim=128, page_size=16, causal=0, kind=perf",
+        "baseline_ms": 0.572,
+        "user_ms": 0.373,
+        "speedup": 1.534,
+        "score_ratio": 0.605291,
+        "display_score": 60,
+        "pass": "OK"
+      }
+    },
+    {
+      "testcase": 13,
+      "status": "Accepted",
+      "score": 56,
+      "time_ms": 182,
+      "spj": {
+        "testcase": "13",
+        "config": "batch=1, seqlen_k_cap=58966, seqlen_q=1, heads=32, kv_heads=8, headdim=128, page_size=16, causal=0, kind=perf",
+        "baseline_ms": 0.241,
+        "user_ms": 0.182,
+        "speedup": 1.324,
+        "score_ratio": 0.56974,
+        "display_score": 56,
+        "pass": "OK"
+      }
+    },
+    {
+      "testcase": 14,
+      "status": "Accepted",
+      "score": 54,
+      "time_ms": 141,
+      "spj": {
+        "testcase": "14",
+        "config": "batch=1, seqlen_k_cap=61519, seqlen_q=1, heads=32, kv_heads=4, headdim=128, page_size=16, causal=0, kind=perf",
+        "baseline_ms": 0.172,
+        "user_ms": 0.141,
+        "speedup": 1.22,
+        "score_ratio": 0.549521,
+        "display_score": 54,
+        "pass": "OK"
+      }
+    }
+  ]
+}

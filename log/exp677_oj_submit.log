@@ -1,0 +1,29 @@
+exp677 OJ submission log
+started_utc: 2026-08-24
+candidate: solutions/archive/2026-08-24-experiments/cuda_control124611_case11_regcoeff_exp677.cpp
+workfile: solutions/cuda_maca_optimized.cpp
+candidate_sha256: 7d2e0f10e8808e9f338395c27601090e8d448a7e3b806f2dd43ce163a8938c4e
+control: solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+control_sha256: 3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+preflight_queue: all listed submissions terminal; newest #124761 Accepted 66
+dry_run_command: python3 tools/xpuoj_submit.py solutions/cuda_maca_optimized.cpp
+dry_run_result: target contest #11 problem #1; language cuda.maca-c500; 271475 bytes; no submission created
+pre_submit_sha256: 7d2e0f10e8808e9f338395c27601090e8d448a7e3b806f2dd43ce163a8938c4e
+submit_command: python3 tools/xpuoj_submit.py solutions/cuda_maca_optimized.cpp --submit --no-archive --poll-seconds 30 --timeout-seconds 900
+submit_invocation: exactly once; created submission #124788
+submission_id: 124788
+terminal_status: Accepted
+progress_type: Finished
+submit_time_utc: 2026-08-24T03:41:26.000Z
+total_score: 65.93
+time_used_ms: 1604
+memory_used_kb: 23060500
+case_results: 1=3ms/92, 2=4ms/90, 3=10ms/82, 4=23ms/72, 5=17ms/73, 6=28ms/63, 7=224ms/55, 8=93ms/54, 9=236ms/57, 10=38ms/62, 11=232ms/51, 12=376ms/60, 13=181ms/57, 14=139ms/55
+target_case11: 232ms/51 (control target 224us/52; threshold >=53 not reached)
+result: 14/14 Accepted; target case11 regcoeff candidate regressed; no control decision made
+raw_archive: results/raw/cuda_124788_raw.json (saved by post-terminal same-ID watch)
+archive_command: python tools/archive_cuda_submissions.py; immutable source and manifest verified
+final_queue: #124788 Accepted 65.93; no nonterminal submissions in --list 10
+final_workfile_sha256: 3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+workfile_restored: yes; byte-identical to control
+completed_utc: 2026-08-24

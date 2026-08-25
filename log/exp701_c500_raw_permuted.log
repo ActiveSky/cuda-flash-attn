@@ -1,0 +1,15 @@
+exp701 isolated real C500 raw BF16 and permuted block-table safety
+date=2026-08-24T15:11:42Z
+candidate_library_sha256=b04852a3d2c27d472dbdc3677738c7510fbdc281b6fe699ef99c9448f194d924
+control_library_sha256=4bbe97993b7ad219dc607e95a8a45a11c26c8c96042d857084f91098d00ea873
+block_table=[[6,3],[4,1],[2,7],[0,5]] (legal, nonzero/permuted physical page IDs)
+
+The inline C500 check used finite, distinct raw BF16 words per logical batch/KV head, zero Q/K for exact one-token output, poisoned token1/tails/second pages, output guards, and then restored random payload for mixed lengths.
+[PASS] permuted-table raw candidate whole_words=True even_lane_16B_slices=True finite=True guards=True inputs_untouched=True
+[PASS] permuted-table raw control whole_words=True even_lane_16B_slices=True finite=True guards=True inputs_untouched=True
+[PASS] permuted-table candidate_control_raw_equal=True
+[PASS] permuted-table mixed candidate lengths=1,2,1,2 finite_reference=True tolerance=True guards=True table_untouched=True max_error=7.812500e-03
+[PASS] permuted-table mixed control lengths=1,2,1,2 finite_reference=True tolerance=True guards=True table_untouched=True max_error=7.812500e-03
+[PASS] permuted-table mixed candidate_control_bit_equal=True
+
+Raw words matched the expected GQA-expanded output for all 4x32x128 BF16 elements; every even-lane 8-BF16 (16-byte) slice matched. No input or output-guard mutation was observed.

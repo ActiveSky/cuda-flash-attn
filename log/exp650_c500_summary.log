@@ -1,0 +1,26 @@
+exp650 isolated C500 correctness/safety smoke (2026-08-23)
+
+Frozen candidate:
+  source: solutions/archive/2026-08-23-experiments/cuda_case11_direct_fanin_normalized_bf16_txfix_exp650.cpp
+  expected SHA-256: b896fe8165d3d9729aec655a50c728d79dbe2bfc261a2b16e4de450ca9120dde
+  post-run SHA-256: b896fe8165d3d9729aec655a50c728d79dbe2bfc261a2b16e4de450ca9120dde
+
+Isolated build:
+  tools/build_local_maca.sh solutions/archive/2026-08-23-experiments/cuda_case11_direct_fanin_normalized_bf16_txfix_exp650.cpp build/exp650_c500_candidate.so
+  exit=0; only existing illegal min-blocks-per-multiprocessor warnings
+
+C500 commands:
+  python3 tests/c500_paged_decode_harness.py --library build/exp650_c500_candidate.so --cases 11 --length-values 1,2,15,16,17,319,320,321
+  python3 tests/c500_paged_decode_harness.py --library build/exp650_c500_candidate.so --cases 11 --length-values 639,640,641,959,960,961,12159,12160,12161,12239,12240,12241,12250,12251
+  python3 tests/c500_paged_decode_harness.py --library build/exp650_c500_candidate.so --cases 11 --full-length
+  python3 tests/c500_paged_decode_harness.py --library build/exp650_c500_candidate.so --cases 11 --lengths random --seed 650
+  python3 tests/c500_paged_decode_harness.py --library build/exp650_c500_candidate.so --cases 11 --lengths boundary --seed 651
+  inline C500 script: NaN padding poison, output prefix/suffix guards, full-short-full and short-full reuse, repeated full raw-BF16 equality
+
+Results:
+  all commands exit 0; every correctness result is 1.000000 match and finite
+  exact lengths cover 1/2/15/16/17, 319/320/321 and 639/640/641 split boundaries
+  tail lengths cover 12159/12160/12161 and 12239/12240/12241/12250/12251
+  padding/guard/reuse smoke: 21 PASS checks; no poisoned-page read, guard write, NaN/Inf, or stale workspace observed
+  deterministic full output raw-BF16 equality: PASS
+  no A/B, OJ, work-file, or project-document operation performed

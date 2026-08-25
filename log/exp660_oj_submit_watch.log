@@ -1,0 +1,11 @@
+$ python tools/xpuoj_submit.py solutions/cuda_maca_optimized.cpp --submit --skip-samples --poll-seconds 30 --timeout-seconds 900
+target: contest #11, problem #1
+language: cuda.maca-c500
+code: solutions/cuda_maca_optimized.cpp (265981 bytes)
+created submission #124570
+submission=124570 progress=None status=Pending
+submission=124570 progress=Running status=Pending
+submission=124570 progress=Finished status=Accepted
+full result archive: results/raw/cuda_124570_raw.json
+terminal: Accepted, 14/14, total score 66, time 1598 ms, memory 23060396 KB
+case1-14 us/scores: 3/92, 4/90, 9/83, 23/72, 17/73, 28/63, 228/55, 93/54, 236/57, 39/62, 224/52, 373/60, 182/56, 139/55

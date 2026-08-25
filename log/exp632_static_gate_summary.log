@@ -1,0 +1,30 @@
+exp632 static gate summary
+2026-08-22
+
+parent/control:
+  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+  sha256 a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+candidate:
+  solutions/archive/2026-08-22-experiments/cuda_case2_source_owner_streaming_b32_exp632.cpp
+  sha256 d43be08ccec3ccbf6bb332870c15e69b70055440170fac352626d259fe87fc9b
+
+normal build: PASS
+resource build: PASS
+
+resource comparison (MTreg / STreg / shared / stack / waves):
+  candidate <4,8,false>  = 22 / 26 / 0 / 0 / 8
+  control   <4,8>         = 22 / 26 / 0 / 0 / 8
+  candidate <8,4,false>  = 22 / 26 / 0 / 0 / 8
+  control   <8,4>         = 22 / 26 / 0 / 0 / 8
+  candidate <8,4,true>   = 23 / 32 / 0 / 0 / 8
+  target gate            = <=22 / <=26 / 0 / 0 / >=8
+
+decision: STATIC GATE FAILED. The true target adds 1 MTreg and 6 STreg;
+the hard resource gate fails despite unchanged shared, stack, and wave count.
+
+The source-level contract is scalar B32 native load followed immediately by
+four scalar B32 stores inside a four-word owner loop (source lines 147-214),
+with no B128 payload, shared/BSM/barrier, or cross-word prefetch. The target
+LLVM lowering audit was not run after the hard resource failure, as required
+by the one-time gate. No CPU/C500/A-B/OJ was run; no work file or shared
+record was modified.

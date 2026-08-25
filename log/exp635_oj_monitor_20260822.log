@@ -1,0 +1,5 @@
+2026-08-22T13:31:17Z submission=122490 progress=None status=Pending (xpuoj_submit.py --watch 122490 --no-archive)
+2026-08-22T13:33:27Z submission=122490 progress=Running status=Pending
+2026-08-22T13:41:22Z submission=122490 progress=Finished status=Accepted score=66 time_used_ms=1598 memory_used_kb=23060640 case12=376ms/display60 case3=9ms/display83
+2026-08-22T13:44:08Z raw=results/raw/cuda_122490_raw.json immutable=solutions/archive/2026-08-22-submissions/cuda_122490.cpp candidate=solutions/archive/2026-08-22-experiments/cuda_case12_native_ldg_wave_bsm_exp635.cpp all_sha256=f1d2515b3f8f592e990b55d302fe49965e4b18d06198bfecba52431afae80d0f
+2026-08-22T13:44:08Z restored_work_file=solutions/cuda_maca_optimized.cpp control=solutions/archive/2026-08-16-submissions/cuda_113889.cpp control_sha256=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972 diff=empty

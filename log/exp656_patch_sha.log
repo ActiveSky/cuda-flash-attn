@@ -1,0 +1,194 @@
+43bd1015d0fce0641214a3ee895f9d2bc1f3f189e7dc6607ae5c02f558d21be0  solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_exp655.cpp
+1a85732e921a177f336ecaaa1eb646451e1f20befb152a942a53960df2d34937  solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp
+66aebe2c1f681805e802dc50b7ac490de1cc80ae92b576e1c5eb79c5d5cfb0f9  build/exp656_patch_normal.so
+6f163a0b6f53aa7c3834fe27f18571708fb580ef905a9505c3f4c6e73c4b359e  build/exp656_patch_resource.so
+4d5fb9ab0ffc501e417d8a07595cd763577da8b2c1bd4d28aa5a2801621b9971  build/exp656_patch_device.ll
+
+normal/resource/llvm status markers:
+log/exp656_patch_llvm.log:7:mxcc: warning: argument unused during compilation: '-shared' [-Wunused-command-line-argument]
+log/exp656_patch_llvm.log:8:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_llvm.log:11:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_llvm.log:14:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_llvm.log:17:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_llvm.log:21:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_llvm.log:27:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_llvm.log:33:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_llvm.log:39:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_llvm.log:45:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_llvm.log:51:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_llvm.log:58:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_llvm.log:61:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_llvm.log:64:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_llvm.log:67:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_llvm.log:71:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_llvm.log:77:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_llvm.log:83:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_llvm.log:89:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_llvm.log:95:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_llvm.log:101:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_llvm.log:108:Built build/exp656_patch_device.ll
+log/exp656_patch_resource.log:7:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:10:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:13:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:16:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:20:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:26:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:32:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:38:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:44:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:50:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:57:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:60:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:63:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:66:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:70:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:76:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:82:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:88:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:94:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:100:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:235:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:238:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:241:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:244:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:248:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:254:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:260:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:266:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:272:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:278:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_resource.log:285:Built build/exp656_patch_resource.so
+log/exp656_patch_normal.log:7:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:10:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:13:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:16:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:20:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:26:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:32:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:38:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:44:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:50:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:57:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:60:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:63:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:66:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:70:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:76:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:82:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:88:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:94:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:100:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:107:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:110:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:113:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:116:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:120:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:126:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:132:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:1229:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:138:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:701:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:144:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:150:solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp:335:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+log/exp656_patch_normal.log:157:Built build/exp656_patch_normal.so
+
+resource target symbols:
+107:  0 bytes stack frame 
+108: maca info  : Used  28 MTregisters, 50 STregisters, 0 bytes shared mem  
+109: maca info  : staticMaxWarps/PEU : 8
+111:  0 bytes stack frame 
+112: maca info  : Used  6 MTregisters, 18 STregisters, 0 bytes shared mem  
+113: maca info  : staticMaxWarps/PEU : 8
+115:  0 bytes stack frame 
+116: maca info  : Used  6 MTregisters, 18 STregisters, 0 bytes shared mem  
+117: maca info  : staticMaxWarps/PEU : 8
+119:  0 bytes stack frame 
+120: maca info  : Used  22 MTregisters, 26 STregisters, 0 bytes shared mem  
+121: maca info  : staticMaxWarps/PEU : 8
+123:  0 bytes stack frame 
+124: maca info  : Used  22 MTregisters, 26 STregisters, 0 bytes shared mem  
+125: maca info  : staticMaxWarps/PEU : 8
+127:  0 bytes stack frame 
+128: maca info  : Used  86 MTregisters, 70 STregisters, 8320 bytes shared mem  
+129: maca info  : staticMaxWarps/PEU : 5
+131:  0 bytes stack frame 
+132: maca info  : Used  80 MTregisters, 58 STregisters, 8320 bytes shared mem  
+133: maca info  : staticMaxWarps/PEU : 6
+135:  0 bytes stack frame 
+136: maca info  : Used  82 MTregisters, 66 STregisters, 8320 bytes shared mem  
+137: maca info  : staticMaxWarps/PEU : 5
+139:  0 bytes stack frame 
+140: maca info  : Used  80 MTregisters, 58 STregisters, 8320 bytes shared mem  
+141: maca info  : staticMaxWarps/PEU : 6
+143:  0 bytes stack frame 
+144: maca info  : Used  74 MTregisters, 52 STregisters, 8320 bytes shared mem  
+145: maca info  : staticMaxWarps/PEU : 6
+147:  0 bytes stack frame 
+148: maca info  : Used  92 MTregisters, 48 STregisters, 8320 bytes shared mem  
+149: maca info  : staticMaxWarps/PEU : 5
+151:  0 bytes stack frame 
+152: maca info  : Used  92 MTregisters, 48 STregisters, 8320 bytes shared mem  
+153: maca info  : staticMaxWarps/PEU : 5
+154: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+155:  0 bytes stack frame 
+156: maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+157: maca info  : staticMaxWarps/PEU : 5
+158: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+159:  0 bytes stack frame 
+160: maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+161: maca info  : staticMaxWarps/PEU : 5
+162: maca info  : Function properties for  _Z59paged_decode_case9_kv8_headpair_z8_direct_three_peer_kernelILb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+163:  0 bytes stack frame 
+164: maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+165: maca info  : staticMaxWarps/PEU : 5
+166: maca info  : Function properties for  _Z60paged_decode_case13_kv8_headpair_z8_direct_three_peer_kernelILb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+167:  0 bytes stack frame 
+168: maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+169: maca info  : staticMaxWarps/PEU : 5
+171:  0 bytes stack frame 
+172: maca info  : Used  74 MTregisters, 44 STregisters, 8320 bytes shared mem  
+173: maca info  : staticMaxWarps/PEU : 6
+175:  0 bytes stack frame 
+176: maca info  : Used  80 MTregisters, 44 STregisters, 8320 bytes shared mem  
+177: maca info  : staticMaxWarps/PEU : 6
+179:  0 bytes stack frame 
+180: maca info  : Used  118 MTregisters, 50 STregisters, 8192 bytes shared mem  
+181: maca info  : staticMaxWarps/PEU : 4
+183:  0 bytes stack frame 
+184: maca info  : Used  104 MTregisters, 74 STregisters, 8192 bytes shared mem  
+185: maca info  : staticMaxWarps/PEU : 4
+187:  0 bytes stack frame 
+188: maca info  : Used  104 MTregisters, 74 STregisters, 8192 bytes shared mem  
+189: maca info  : staticMaxWarps/PEU : 4
+191:  0 bytes stack frame 
+192: maca info  : Used  38 MTregisters, 39 STregisters, 0 bytes shared mem  
+193: maca info  : staticMaxWarps/PEU : 8
+195:  0 bytes stack frame 
+196: maca info  : Used  66 MTregisters, 24 STregisters, 0 bytes shared mem  
+197: maca info  : staticMaxWarps/PEU : 7
+199:  0 bytes stack frame 
+200: maca info  : Used  54 MTregisters, 25 STregisters, 0 bytes shared mem  
+201: maca info  : staticMaxWarps/PEU : 8
+203:  0 bytes stack frame 
+204: maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+205: maca info  : staticMaxWarps/PEU : 7
+207:  0 bytes stack frame 
+208: maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+209: maca info  : staticMaxWarps/PEU : 7
+211:  0 bytes stack frame 
+212: maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+213: maca info  : staticMaxWarps/PEU : 7
+215:  0 bytes stack frame 
+216: maca info  : Used  38 MTregisters, 36 STregisters, 0 bytes shared mem  
+220:  0 bytes stack frame 
+221: maca info  : Used  64 MTregisters, 35 STregisters, 0 bytes shared mem  
+222: maca info  : staticMaxWarps/PEU : 8
+224:  0 bytes stack frame 
+225: maca info  : Used  40 MTregisters, 28 STregisters, 0 bytes shared mem  
+226: maca info  : staticMaxWarps/PEU : 8
+228:  0 bytes stack frame 
+229: maca info  : Used  40 MTregisters, 36 STregisters, 0 bytes shared mem  
+230: maca info  : staticMaxWarps/PEU : 8
+232:  0 bytes stack frame 
+233: maca info  : Used  82 MTregisters, 64 STregisters, 8320 bytes shared mem  
+234: maca info  : staticMaxWarps/PEU : 5
+
+llvm target/helper symbols:

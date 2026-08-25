@@ -1,0 +1,8 @@
+helper_tx_parameter= True
+helper_consumption_offset= True
+producer_offset= True
+peer_helper_calls= 6
+peer_calls_with_tx= 6
+raw_origin_consumer_without_offset= True
+tree_or_barrier_or_dispatch_diff_outside_patch= not independently computed; source diff is the authoritative six-call tx-only patch
+source_diff_lines= 58

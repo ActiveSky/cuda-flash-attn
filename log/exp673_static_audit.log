@@ -1,0 +1,124 @@
+exp673 static audit
+3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe  solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+730c05bfb34fd113a16a69822ed5ce93c841ba57c2ceebcb8ccfd2213b194341  solutions/archive/2026-08-24-experiments/cuda_control124611_case9_bf16_row16_exp673.cpp
+source diff
+diff --git a/solutions/archive/2026-08-24-submissions/cuda_124611.cpp b/solutions/archive/2026-08-24-experiments/cuda_control124611_case9_bf16_row16_exp673.cpp
+index 0c740c7..fb4f04b 100644
+--- a/solutions/archive/2026-08-24-submissions/cuda_124611.cpp
++++ b/solutions/archive/2026-08-24-experiments/cuda_control124611_case9_bf16_row16_exp673.cpp
+@@ -5763,7 +5763,10 @@ extern "C" void run_kernel(
+                     // K+V-over-PV, Q prescale and the global partial count.
+                     // exp439 changes only QK/token ownership to the bit1
+                     // all-native network already validated on case13.
+-                    paged_decode_case13_kv8_headpair_z8_kernel<true, true><<<
++                    // exp673 changes only the producer partial accumulator to
++                    // normalized BF16 for the matching row16 vec2 consumer.
++                    paged_decode_case13_kv8_headpair_z8_kernel<
++                        true, true, false, true><<<
+                         grid, dim3(16, 2, 8)>>>(
+                         q, k_cache_paged, v_cache_paged, output,
+                         cache_seqlens, block_table,
+@@ -5882,11 +5885,14 @@ extern "C" void run_kernel(
+             // partial_m, matching the already-validated case12/13 producer
+             // contract. Use the packed-aware full-wave vec2 reducer while
+             // retaining case9's fused-tail partial slots and owner count.
++            // exp673 pairs the producer's normalized-BF16 accumulator ABI
++            // with physical-row serial reduction and four leader slots.
+             const int rgrid = (int)(batch_size * 32);
+             const size_t vec2_smem =
+-                ((size_t)2 * (size_t)reduce_splits + 2) * sizeof(float);
++                ((size_t)2 * (size_t)reduce_splits + 4) * sizeof(float);
+             paged_decode_reduce_vec2_kernel<
+-                (XPUOJ_USE_BASE2 != 0), false, true><<<
++                (XPUOJ_USE_BASE2 != 0), false, true, false, true,
++                true><<<
+                 rgrid, 64, vec2_smem>>>(
+                 s_partial_m, s_partial_l, s_partial_acc, output,
+                 cache_seqlens, (int)batch_size,
+candidate resource target symbols
+161- maca info  : staticMaxWarps/PEU : 5
+162: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+163-  0 bytes stack frame 
+164- maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+165- maca info  : staticMaxWarps/PEU : 5
+--
+185- maca info  : staticMaxWarps/PEU : 4
+186: maca info  : Function properties for  _Z31paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb0ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+187-  0 bytes stack frame 
+188- maca info  : Used  36 MTregisters, 33 STregisters, 0 bytes shared mem  
+189- maca info  : staticMaxWarps/PEU : 8
+control resource target symbols
+161- maca info  : staticMaxWarps/PEU : 5
+162: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+163-  0 bytes stack frame 
+164- maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+165- maca info  : staticMaxWarps/PEU : 5
+--
+189- maca info  : staticMaxWarps/PEU : 4
+190: maca info  : Function properties for  _Z31paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb0ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+191-  0 bytes stack frame 
+192- maca info  : Used  38 MTregisters, 39 STregisters, 0 bytes shared mem  
+193- maca info  : staticMaxWarps/PEU : 8
+candidate LLVM target launch symbols
+43825:$_Z57__device_stub__paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif = comdat any
+43837:$_Z46__device_stub__paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb0ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii = comdat any
+44533:  tail call void @_Z57__device_stub__paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr noundef %q, ptr noundef %k_cache_paged, ptr noundef %v_cache_paged, ptr noundef %output, ptr noundef %cache_seqlens, ptr noundef %block_table, ptr noundef %50, ptr noundef %51, ptr noundef %52, i32 noundef 32, i32 noundef %conv418, i32 noundef %conv419, i32 noundef %n_split.14, float noundef 0x3FC0527DC0000000) #9
+44551:  tail call void @_Z57__device_stub__paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr noundef %q, ptr noundef %k_cache_paged, ptr noundef %v_cache_paged, ptr noundef %output, ptr noundef %cache_seqlens, ptr noundef %block_table, ptr noundef %53, ptr noundef %54, ptr noundef %55, i32 noundef 1, i32 noundef %conv433, i32 noundef %conv434, i32 noundef %n_split.14, float noundef 0x3FC0527DC0000000) #9
+44662:  tail call void @_Z46__device_stub__paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb0ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii(ptr noundef %72, ptr noundef %73, ptr noundef %74, ptr noundef %output, ptr noundef %cache_seqlens, i32 noundef 32, i32 noundef %conv526, i32 noundef %n_split.14) #9
+44843:  tail call void @_Z46__device_stub__paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb0ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii(ptr noundef %102, ptr noundef %103, ptr noundef %104, ptr noundef %output, ptr noundef %cache_seqlens, i32 noundef 1, i32 noundef %conv711, i32 noundef %n_split.14) #9
+45877:define linkonce_odr void @_Z57__device_stub__paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr noalias noundef %q, ptr noalias noundef %k_cache, ptr noalias noundef %v_cache, ptr noalias noundef %out, ptr noalias noundef %cache_seqlens, ptr noalias noundef %block_table, ptr noalias noundef %partial_m, ptr noalias noundef %partial_l, ptr noalias noundef %partial_acc, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) #1 comdat {
+45948:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z57__device_stub__paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %14, ptr noundef %15)
+46333:define linkonce_odr void @_Z46__device_stub__paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb0ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii(ptr noalias noundef %partial_m, ptr noalias noundef %partial_l, ptr noalias noundef %partial_acc, ptr noalias noundef %out, ptr noalias noundef %cache_seqlens, i32 noundef %batch_size, i32 noundef %pages_per_split, i32 noundef %n_split) #1 comdat {
+46380:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z46__device_stub__paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb0ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %8, ptr noundef %9)
+47018:  %19 = tail call i32 @__mcRegisterFunction(ptr %3, ptr nonnull @_Z57__device_stub__paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif, ptr nonnull @15, ptr nonnull @15, i32 -1, ptr null, ptr null, ptr null, ptr null, ptr null)
+47024:  %25 = tail call i32 @__mcRegisterFunction(ptr %3, ptr nonnull @_Z46__device_stub__paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb0ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii, ptr nonnull @21, ptr nonnull @21, i32 -1, ptr null, ptr null, ptr null, ptr null, ptr null)
+candidate LLVM BF16 and row16 lowering
+47:  %3 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %value_bf16.sroa.0.0.extract.trunc)
+48:  %4 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %value_bf16.sroa.4.0.extract.trunc)
+53:  %add.ptr42 = getelementptr inbounds float, ptr addrspace(3) %add.ptr40, i32 %n_split
+67:  %and66 = and i32 %0, 15
+68:  %shr67 = lshr i32 %0, 4
+70:  %11 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %10, i32 296, i32 15, i32 15, i1 false)
+74:  %15 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %14, i32 292, i32 15, i32 15, i1 false)
+78:  %19 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %18, i32 78, i32 15, i32 15, i1 false)
+82:  %23 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %22, i32 177, i32 15, i32 15, i1 false)
+83:  %cmp69 = icmp eq i32 %and66, 0
+104:  store float %conv6.i, ptr addrspace(3) %arrayidx61, align 4, !tbaa !73
+106:  store float %conv.i, ptr addrspace(3) %arrayidx63, align 4, !tbaa !73
+113:  %arrayidx72 = getelementptr inbounds float, ptr addrspace(3) %add.ptr42, i32 %shr67
+116:  store float %35, ptr addrspace(3) %arrayidx72, align 4, !tbaa !73
+121:  tail call void @llvm.mxc.barrier()
+127:  %36 = load float, ptr addrspace(3) %add.ptr42, align 4, !tbaa !73
+128:  %arrayidx82 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr42, i32 4
+131:  %arrayidx82.1 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr42, i32 8
+134:  %arrayidx82.2 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr42, i32 12
+137:  store float %42, ptr addrspace(3) %add.ptr42, align 4, !tbaa !73
+142:  tail call void @llvm.mxc.barrier()
+144:  %43 = load float, ptr addrspace(3) %add.ptr42, align 4, !tbaa !73
+150:  %45 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %44, i32 296, i32 15, i32 15, i1 false)
+154:  %48 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %47, i32 292, i32 15, i32 15, i1 false)
+158:  %51 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %50, i32 78, i32 15, i32 15, i1 false)
+162:  %54 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %53, i32 177, i32 15, i32 15, i1 false)
+175:  store float %mul106, ptr addrspace(3) %arrayidx105, align 4, !tbaa !73
+182:  %arrayidx121 = getelementptr inbounds float, ptr addrspace(3) %add.ptr42, i32 %shr67
+185:  store float %add6.i, ptr addrspace(3) %arrayidx121, align 4, !tbaa !73
+190:  tail call void @llvm.mxc.barrier()
+195:  %59 = load float, ptr addrspace(3) %add.ptr42, align 4, !tbaa !73
+196:  %arrayidx132 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr42, i32 4
+199:  %arrayidx132.1 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr42, i32 8
+202:  %arrayidx132.2 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr42, i32 12
+205:  store float %add133.2, ptr addrspace(3) %add.ptr42, align 4, !tbaa !73
+210:  tail call void @llvm.mxc.barrier()
+212:  %63 = load float, ptr addrspace(3) %add.ptr42, align 4, !tbaa !73
+252:  %70 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %value_bf16153.sroa.0.0.extract.trunc.epil)
+253:  %71 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %value_bf16153.sroa.4.0.extract.trunc.epil)
+6:  %add.ptr530 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %partial_acc.coerce, i64 %idx.ext529
+10:  %add.ptr536 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %partial_acc.coerce, i64 %idx.ext535
+18:  %408 = bitcast float %407 to i32
+27:  %410 = bitcast float %409 to i32
+34:  store i16 %conv.i.i.i.i.i, ptr addrspace(1) %add.ptr533, align 4, !tbaa !27
+36:  store i16 %conv.i.i.i7.i.i, ptr addrspace(1) %y3.i, align 2, !tbaa !27
+43:  %412 = bitcast float %411 to i32
+52:  %414 = bitcast float %413 to i32
+60:  store i16 %conv.i.i.i.i.i1929, ptr addrspace(1) %arrayidx552, align 4, !tbaa !27
+62:  store i16 %conv.i.i.i7.i.i1936, ptr addrspace(1) %y3.i1939, align 2, !tbaa !27

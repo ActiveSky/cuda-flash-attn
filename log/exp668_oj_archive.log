@@ -1,0 +1,10 @@
+exp668 OJ archive and identity record
+raw: results/raw/cuda_124621_raw.json
+raw_sha256: e4d38406599b692f5d451dad3228a21faa7177082b02a0e1a0fc16c304b2bd5a
+archive_command: python3 tools/archive_cuda_submissions.py
+archive_result: archived 370 submissions; manifest updated
+manifest_entry: #124621 | Accepted | 65.86 | 2026-08-24 07:43:40 | solutions/archive/2026-08-24-submissions/cuda_124621.cpp
+candidate_sha256: 8aee7ba576d47f1ca7166abf7113096bec5ebf9db2d510749399831ccc2b2010
+raw_embedded_code_sha256: 8aee7ba576d47f1ca7166abf7113096bec5ebf9db2d510749399831ccc2b2010
+immutable_sha256: 8aee7ba576d47f1ca7166abf7113096bec5ebf9db2d510749399831ccc2b2010
+result: 14/14 Accepted; total=65.86; case12=392 us/59; case13=181 us/57

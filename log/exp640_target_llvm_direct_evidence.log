@@ -1,0 +1,53 @@
+237:  tail call void @llvm.mxc.barrier.warp()
+593:  tail call void @llvm.mxc.barrier.warp()
+607:  tail call void @llvm.mxc.barrier()
+653:  tail call void @llvm.mxc.barrier.warp()
+1001:  tail call void @llvm.mxc.barrier()
+1167:  br i1 %cmp17.i1655, label %if.then.i1656, label %_Z33store_case11_direct_fanin_z_stateP16__maca_bfloat162PA2_fiiffPKf.exit1682
+1176:  br label %_Z33store_case11_direct_fanin_z_stateP16__maca_bfloat162PA2_fiiffPKf.exit1682
+1178:_Z33store_case11_direct_fanin_z_stateP16__maca_bfloat162PA2_fiiffPKf.exit1682: ; preds = %cond.end14.i1668.3, %if.then.i1656
+1187:cond.true6.i1630:                                 ; preds = %_Z33store_case11_direct_fanin_z_stateP16__maca_bfloat162PA2_fiiffPKf.exit1682
+1237:cond.end14.i1625.1.critedge:                      ; preds = %_Z33store_case11_direct_fanin_z_stateP16__maca_bfloat162PA2_fiiffPKf.exit1682
+1637:  tail call void @llvm.mxc.barrier()
+1668:  br i1 %cmp1.i2262, label %if.then.i2293, label %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit2369
+1714:  br label %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit2369
+1716:_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit2369: ; preds = %if.then299, %if.then.i2293
+1743:  br i1 %cmp1.i2128, label %if.then.i2159, label %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit2235
+1745:if.then.i2159:                                    ; preds = %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit2369
+1789:  br label %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit2235
+1791:_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit2235: ; preds = %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit2369, %if.then.i2159
+1792:  %acc0.sroa.171.8 = phi <2 x float> [ %371, %if.then.i2159 ], [ %355, %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit2369 ]
+1793:  %acc0.sroa.115.8 = phi <2 x float> [ %370, %if.then.i2159 ], [ %354, %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit2369 ]
+1794:  %acc0.sroa.59.8 = phi <2 x float> [ %369, %if.then.i2159 ], [ %353, %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit2369 ]
+1795:  %acc0.sroa.0.8 = phi <2 x float> [ %368, %if.then.i2159 ], [ %352, %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit2369 ]
+1819:  br i1 %cmp1.i1994, label %if.then.i2025, label %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit2101
+1821:if.then.i2025:                                    ; preds = %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit2235
+1865:  br label %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit2101
+1867:_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit2101: ; preds = %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit2235, %if.then.i2025
+1868:  %acc0.sroa.171.9 = phi <2 x float> [ %396, %if.then.i2025 ], [ %380, %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit2235 ]
+1869:  %acc0.sroa.115.9 = phi <2 x float> [ %395, %if.then.i2025 ], [ %379, %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit2235 ]
+1870:  %acc0.sroa.59.9 = phi <2 x float> [ %394, %if.then.i2025 ], [ %378, %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit2235 ]
+1871:  %acc0.sroa.0.9 = phi <2 x float> [ %393, %if.then.i2025 ], [ %377, %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit2235 ]
+1875:if.then337:                                       ; preds = %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit2101
+1992:if.else372:                                       ; preds = %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit2101
+2064:  br i1 %cmp1.i1860, label %if.then.i1891, label %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit1967
+2110:  br label %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit1967
+2112:_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit1967: ; preds = %if.then406, %if.then.i1891
+2139:  br i1 %cmp1.i1726, label %if.then.i1757, label %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit1833
+2141:if.then.i1757:                                    ; preds = %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit1967
+2185:  br label %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit1833
+2187:_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit1833: ; preds = %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit1967, %if.then.i1757
+2188:  %acc1.sroa.171.8 = phi <2 x float> [ %464, %if.then.i1757 ], [ %448, %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit1967 ]
+2189:  %acc1.sroa.115.8 = phi <2 x float> [ %463, %if.then.i1757 ], [ %447, %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit1967 ]
+2190:  %acc1.sroa.59.8 = phi <2 x float> [ %462, %if.then.i1757 ], [ %446, %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit1967 ]
+2191:  %acc1.sroa.0.8 = phi <2 x float> [ %461, %if.then.i1757 ], [ %445, %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit1967 ]
+2215:  br i1 %cmp1.i, label %if.then.i1696, label %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit
+2217:if.then.i1696:                                    ; preds = %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit1833
+2261:  br label %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit
+2263:_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit: ; preds = %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit1833, %if.then.i1696
+2264:  %acc1.sroa.171.9 = phi <2 x float> [ %489, %if.then.i1696 ], [ %473, %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit1833 ]
+2265:  %acc1.sroa.115.9 = phi <2 x float> [ %488, %if.then.i1696 ], [ %472, %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit1833 ]
+2266:  %acc1.sroa.59.9 = phi <2 x float> [ %487, %if.then.i1696 ], [ %471, %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit1833 ]
+2267:  %acc1.sroa.0.9 = phi <2 x float> [ %486, %if.then.i1696 ], [ %470, %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit1833 ]
+2271:if.then447:                                       ; preds = %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit
+2388:if.else483:                                       ; preds = %_Z32merge_case11_direct_fanin_z_peerRfS_PfffPK16__maca_bfloat162.exit

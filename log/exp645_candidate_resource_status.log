@@ -1,0 +1,2 @@
+command=tools/build_local_maca.sh solutions/archive/2026-08-22-experiments/cuda_case8_direct_fanin_normalized_bf16_exp645.cpp build/exp645_candidate_resource.so -resource-usage
+exit_code=0

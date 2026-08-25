@@ -1,0 +1,35 @@
+log/exp644_control_resource_stdout.log:55: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+log/exp644_control_resource_stdout.log-56-  0 bytes stack frame 
+log/exp644_control_resource_stdout.log-57- maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+log/exp644_control_resource_stdout.log-58- maca info  : staticMaxWarps/PEU : 5
+log/exp644_control_resource_stdout.log:59: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+log/exp644_control_resource_stdout.log-60-  0 bytes stack frame 
+log/exp644_control_resource_stdout.log-61- maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+log/exp644_control_resource_stdout.log-62- maca info  : staticMaxWarps/PEU : 5
+log/exp644_control_resource_stdout.log:63: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+log/exp644_control_resource_stdout.log-64-  0 bytes stack frame 
+log/exp644_control_resource_stdout.log-65- maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+log/exp644_control_resource_stdout.log-66- maca info  : staticMaxWarps/PEU : 5
+--
+log/exp644_control_resource_stdout.log:87: maca info  : Function properties for  _Z31paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+log/exp644_control_resource_stdout.log-88-  0 bytes stack frame 
+log/exp644_control_resource_stdout.log-89- maca info  : Used  38 MTregisters, 39 STregisters, 0 bytes shared mem  
+log/exp644_control_resource_stdout.log-90- maca info  : staticMaxWarps/PEU : 8
+--
+log/exp644_candidate_resource_stdout.log:55: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+log/exp644_candidate_resource_stdout.log-56-  0 bytes stack frame 
+log/exp644_candidate_resource_stdout.log-57- maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+log/exp644_candidate_resource_stdout.log-58- maca info  : staticMaxWarps/PEU : 5
+log/exp644_candidate_resource_stdout.log:59: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+log/exp644_candidate_resource_stdout.log-60-  0 bytes stack frame 
+log/exp644_candidate_resource_stdout.log-61- maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+log/exp644_candidate_resource_stdout.log-62- maca info  : staticMaxWarps/PEU : 5
+log/exp644_candidate_resource_stdout.log:63: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+log/exp644_candidate_resource_stdout.log-64-  0 bytes stack frame 
+log/exp644_candidate_resource_stdout.log-65- maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+log/exp644_candidate_resource_stdout.log-66- maca info  : staticMaxWarps/PEU : 5
+--
+log/exp644_candidate_resource_stdout.log:87: maca info  : Function properties for  _Z31paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+log/exp644_candidate_resource_stdout.log-88-  0 bytes stack frame 
+log/exp644_candidate_resource_stdout.log-89- maca info  : Used  38 MTregisters, 39 STregisters, 0 bytes shared mem  
+log/exp644_candidate_resource_stdout.log-90- maca info  : staticMaxWarps/PEU : 8

@@ -1,0 +1,6 @@
+exp602 relaxed C500 identity
+4783e62d92fa4103264e8b83c4d54945f6f05b0aecefa2708c121252042dff44  solutions/archive/2026-08-19-experiments/cuda_case11_aggregate_direct_global_kv_exp602.cpp
+326b6990ef39c705c8c6a54aa9aeaddda2a53debc6f53e31f1af2f47dd7e5f5d  build/exp602_relaxed_candidate.so
+Building solutions/archive/2026-08-19-experiments/cuda_case11_aggregate_direct_global_kv_exp602.cpp
+Output: build/exp602_relaxed_candidate.so
+Built build/exp602_relaxed_candidate.so

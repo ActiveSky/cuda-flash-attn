@@ -1,0 +1,29 @@
+benchmark_module=tests/c500_benchmark.py
+case=12 lengths=random seed=20260822 warmup=5 iterations=100 rounds=21 skip_correctness=False
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+control:   build/exp644_ab_control_20260822.so
+candidate: build/exp644_ab_candidate_20260822.so
+correctness=PASS
+round=01 control_ms=0.408379 candidate_ms=0.410578 ratio=1.005384849
+round=02 control_ms=0.406897 candidate_ms=0.410760 ratio=1.009493978
+round=03 control_ms=0.407516 candidate_ms=0.409925 ratio=1.005911282
+round=04 control_ms=0.407887 candidate_ms=0.410476 ratio=1.006345276
+round=05 control_ms=0.408420 candidate_ms=0.410171 ratio=1.004287403
+round=06 control_ms=0.407503 candidate_ms=0.409830 ratio=1.005710485
+round=07 control_ms=0.407708 candidate_ms=0.411034 ratio=1.008156384
+round=08 control_ms=0.408105 candidate_ms=0.410793 ratio=1.006586512
+round=09 control_ms=0.407613 candidate_ms=0.410079 ratio=1.006048098
+round=10 control_ms=0.407857 candidate_ms=0.409554 ratio=1.004161446
+round=11 control_ms=0.407642 candidate_ms=0.409892 ratio=1.005520172
+round=12 control_ms=0.407667 candidate_ms=0.409428 ratio=1.004320396
+round=13 control_ms=0.407173 candidate_ms=0.410788 ratio=1.008877626
+round=14 control_ms=0.407724 candidate_ms=0.410225 ratio=1.006134413
+round=15 control_ms=0.408282 candidate_ms=0.409864 ratio=1.003874947
+round=16 control_ms=0.407427 candidate_ms=0.410993 ratio=1.008752633
+round=17 control_ms=0.407104 candidate_ms=0.409715 ratio=1.006414082
+round=18 control_ms=0.406904 candidate_ms=0.409270 ratio=1.005813203
+round=19 control_ms=0.407332 candidate_ms=0.410022 ratio=1.006605288
+round=20 control_ms=0.408207 candidate_ms=0.409912 ratio=1.004176747
+round=21 control_ms=0.408294 candidate_ms=0.409569 ratio=1.003122433
+summary control_p50=0.407667 candidate_p50=0.410022 ratio_p10/p50/p90=1.004161446/1.005911282/1.008752633 speedup=0.994123x
+benchmark_exit=0

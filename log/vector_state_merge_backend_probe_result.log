@@ -1,0 +1,73 @@
+vector_state_merge_backend_probe (compile-only, 2026-08-23)
+============================================================
+
+Toolchain
+---------
+Compiler: /opt/maca/mxgpu_llvm/bin/mxcc
+Version: mxcc version 1.0.0 (d9102a1572)
+Target: -offload-arch=xcore1000
+Input: tests/vector_state_merge_backend_probe.cpp
+Parent/control: #113889 / exp559, SHA a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+
+Baseline compile
+----------------
+Command:
+  mxcc -x maca -std=c++17 -O3 -fPIC -offload-arch=xcore1000
+       --maca-path=/opt/maca
+       -I/opt/maca-3.7.1/tools/cu-bridge/include
+       -S -emit-llvm tests/vector_state_merge_backend_probe.cpp
+       -o tests/vector_state_merge_backend_probe_baseline.ll
+Result: exit 0.
+
+The lowered kernel in baseline.ll contains:
+  * an ordinary <4 x float> global load/store for the ext_vector_type(4)
+    value (kernel body around lines 182-250);
+  * one scalar FP32 device-scope atomicrmw fadd (IR line 193);
+  * scalar __reduce_max_sync expansion into six llvm.mxc.bsm.bpermute calls
+    plus scalar maxnum operations (IR lines 200-230);
+  * scalar __shfl_sync expansion into one llvm.mxc.bsm.bpermute call (IR
+    line 234).
+No vector atomic or vector collective intrinsic appears in the object-facing
+LLVM. The vector value is only a normal vector load/store and element extracts.
+
+Vector atomic overload attempt
+------------------------------
+Command: same command with -D VECTOR_ATOMIC_ATTEMPT and output
+  tests/vector_state_merge_backend_probe_vector_atomic.ll
+Result: exit 1 during device compilation; no object/LLVM output.
+Diagnostic: no matching function for atomicAdd(float4*, float4). The only
+candidate overloads shown by the installed header are int*, unsigned int*,
+unsigned long long*, float*, and double* (header
+/opt/maca-3.7.1/mxgpu_llvm/lib/clang/19/include/__clang_maca_atomic_functions.h,
+lines 91-138). The diagnostic lists no vector FP32 overload.
+
+Vector collective overload attempt
+-----------------------------------
+Command: same command with -D VECTOR_COLLECTIVE_ATTEMPT and output
+  tests/vector_state_merge_backend_probe_vector_collective.ll
+Result: exit 1 during device compilation; no object/LLVM output.
+Diagnostic: no matching function for __shfl_sync(uint64_t, F32x4, int, int).
+The installed device header provides scalar int/uint/float and pair-word
+64-bit overloads (same header, lines 578-710), and its only generic template
+for a non-64-bit mask rejects uint64_t for vector F32x4
+(lines 1124-1139). There is no vector FP32 collective overload.
+
+Independent header evidence
+---------------------------
+The xcore1000 device function header implements FP32 __reduce_{add,min,max}_sync
+as a scalar ValueType template that performs six scalar bsm_bpermute steps
+(lines 200-270), with public overloads only for unsigned, int, and float
+(lines 273-310). The MACA atomic header defines scalar FP32 atomicAdd and
+atomicExch only (lines 121-138 and 191-200); vector atomics are absent. The
+runtime capability header reports only scalar global int32/int64 and FP32
+atomic-add capability (mcr/mc_common.h lines 21-38).
+
+Verdict
+-------
+NO CANDIDATE / NO usable changed-precondition. The installed C500/xcore1000
+toolchain can lower scalar FP32 atomics and scalar warp reductions, but it has
+no accepted or object-lowered vector FP32 atomic/collective/state-merge backend.
+The scalar facilities cannot atomically merge the complete online-softmax
+(m,l,acc[128]) state and are the same semantic class covered by the existing
+atomic/CAS closure. No production source, workfile, C500 run, A/B, OJ, or
+shared project record was changed.

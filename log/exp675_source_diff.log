@@ -1,0 +1,142 @@
+diff --git a/solutions/archive/2026-08-24-submissions/cuda_124611.cpp b/solutions/archive/2026-08-24-experiments/cuda_control124611_case11_bf16_vec4_exp675.cpp
+index 0c740c7..6e99092 100644
+--- a/solutions/archive/2026-08-24-submissions/cuda_124611.cpp
++++ b/solutions/archive/2026-08-24-experiments/cuda_control124611_case11_bf16_vec4_exp675.cpp
+@@ -4628,11 +4628,12 @@ paged_decode_reduce_kernel(
+ // exp87 case10 reducer: preserve one CTA per (batch, head), but let one
+ // 32-lane row own the 128 output dimensions as four adjacent values per lane.
+ // This removes the original four-warp max/l second stage while retaining the
+ // same split weights and coalesced workspace traffic.
+ template <bool BASE2, bool SEPARATE_TAIL = false,
+-          bool FUSE_TAIL_IN_LAST_SPLIT = false>
++          bool FUSE_TAIL_IN_LAST_SPLIT = false,
++          bool BF16_NORMALIZED_PARTIAL = false>
+ __global__ void __launch_bounds__(32)
+ paged_decode_reduce_vec4_kernel(
+     const float* __restrict__ partial_m,
+     const float* __restrict__ partial_l,
+     const float* __restrict__ partial_acc,
+@@ -4671,18 +4672,33 @@ paged_decode_reduce_vec4_kernel(
+ 
+     if (live_splits <= 1) {
+         float value[4] = {0.f, 0.f, 0.f, 0.f};
+         if (live_splits == 1) {
+             const int hidx = b * 32 + h;
+-            const float inv_l = partial_l[hidx] > 0.f
+-                ? 1.f / partial_l[hidx] : 0.f;
+-            const float4 a = *reinterpret_cast<const float4*>(
+-                partial_acc + hidx * HEAD_DIM + lane * 4);
+-            value[0] = a.x * inv_l;
+-            value[1] = a.y * inv_l;
+-            value[2] = a.z * inv_l;
+-            value[3] = a.w * inv_l;
++            if constexpr (BF16_NORMALIZED_PARTIAL) {
++                const __nv_bfloat16* partial_bf16 =
++                    reinterpret_cast<const __nv_bfloat16*>(partial_acc);
++                const __nv_bfloat162 a =
++                    *reinterpret_cast<const __nv_bfloat162*>(
++                        partial_bf16 + hidx * HEAD_DIM + lane * 4);
++                value[0] = __bfloat162float(a.x);
++                value[1] = __bfloat162float(a.y);
++                const __nv_bfloat162 bpair =
++                    *reinterpret_cast<const __nv_bfloat162*>(
++                        partial_bf16 + hidx * HEAD_DIM + lane * 4 + 2);
++                value[2] = __bfloat162float(bpair.x);
++                value[3] = __bfloat162float(bpair.y);
++            } else {
++                const float inv_l = partial_l[hidx] > 0.f
++                    ? 1.f / partial_l[hidx] : 0.f;
++                const float4 a = *reinterpret_cast<const float4*>(
++                    partial_acc + hidx * HEAD_DIM + lane * 4);
++                value[0] = a.x * inv_l;
++                value[1] = a.y * inv_l;
++                value[2] = a.z * inv_l;
++                value[3] = a.w * inv_l;
++            }
+         }
+         __nv_bfloat162* out2 = reinterpret_cast<__nv_bfloat162*>(out_ptr);
+         out2[0] = __floats2bfloat162_rn(value[0], value[1]);
+         out2[1] = __floats2bfloat162_rn(value[2], value[3]);
+         return;
+@@ -4705,25 +4721,50 @@ paged_decode_reduce_vec4_kernel(
+ 
+     float l_sum = 0.f;
+     for (int s = lane; s < live_splits; s += 32) {
+         const int hidx = (s * batch_size + b) * 32 + h;
+         const float w = softmax_exp<BASE2>(s_m[s] - m);
+-        s_w[s] = w;
+-        l_sum += partial_l[hidx] * w;
++        const float partial_l_value = partial_l[hidx];
++        const float lw = partial_l_value * w;
++        if constexpr (BF16_NORMALIZED_PARTIAL) {
++            s_w[s] = lw;
++        } else {
++            s_w[s] = w;
++        }
++        l_sum += lw;
+     }
+ #pragma unroll
+     for (int off = 16; off > 0; off >>= 1) {
+         l_sum += __shfl_xor_sync(0xffffffffu, l_sum, off);
+     }
+     __syncthreads();
+ 
+     float acc[4] = {0.f, 0.f, 0.f, 0.f};
+     for (int s = 0; s < live_splits; ++s) {
+         const int hidx = (s * batch_size + b) * 32 + h;
+-        const float4 a = *reinterpret_cast<const float4*>(
+-            partial_acc + hidx * HEAD_DIM + lane * 4);
+-        const float value[4] = {a.x, a.y, a.z, a.w};
++        float value[4];
++        if constexpr (BF16_NORMALIZED_PARTIAL) {
++            const __nv_bfloat16* partial_bf16 =
++                reinterpret_cast<const __nv_bfloat16*>(partial_acc);
++            const __nv_bfloat162 a =
++                *reinterpret_cast<const __nv_bfloat162*>(
++                    partial_bf16 + hidx * HEAD_DIM + lane * 4);
++            const __nv_bfloat162 bpair =
++                *reinterpret_cast<const __nv_bfloat162*>(
++                    partial_bf16 + hidx * HEAD_DIM + lane * 4 + 2);
++            value[0] = __bfloat162float(a.x);
++            value[1] = __bfloat162float(a.y);
++            value[2] = __bfloat162float(bpair.x);
++            value[3] = __bfloat162float(bpair.y);
++        } else {
++            const float4 a = *reinterpret_cast<const float4*>(
++                partial_acc + hidx * HEAD_DIM + lane * 4);
++            value[0] = a.x;
++            value[1] = a.y;
++            value[2] = a.z;
++            value[3] = a.w;
++        }
+         packed_scale_acc(acc, value, s_w[s]);
+         packed_scale_acc(acc + 2, value + 2, s_w[s]);
+     }
+ 
+     const float inv_l = l_sum > 0.f ? 1.f / l_sum : 0.f;
+@@ -5558,11 +5599,11 @@ extern "C" void run_kernel(
+                         // exp151 folds the invariant score scale into Q once
+                         // per split instead of multiplying every token score.
+                         // exp464: symmetric z-state finalizer ownership.
+                         paged_decode_case11_headpair_z4_kernel<
+                             true, true, false, true, true, true, true, true,
+-                            false, true, false, false, false, true, true, true,
++                            true, true, false, false, false, true, true, true,
+                             true, true, true><<<
+                             grid, dim3(16, 4, 4)>>>(
+                             q, k_cache_paged, v_cache_paged, output,
+                             cache_seqlens, block_table,
+                             s_partial_m, s_partial_l, s_partial_acc,
+@@ -6008,11 +6049,11 @@ extern "C" void run_kernel(
+                 // exp105: case11 now has fused-tail partial slots; preserve
+                 // exp89's vec4 ownership and count only full-page owners.
+                 const size_t vec4_smem =
+                     (size_t)2 * (size_t)reduce_splits * sizeof(float);
+                 paged_decode_reduce_vec4_kernel<
+-                    (XPUOJ_USE_BASE2 != 0), false, true><<<
++                    (XPUOJ_USE_BASE2 != 0), false, true, true><<<
+                     rgrid, 32, vec4_smem>>>(
+                     s_partial_m, s_partial_l, s_partial_acc, output,
+                     cache_seqlens, (int)batch_size,
+                     (int)pages_per_split, reduce_splits);
+             } else if (num_heads_k == 8 && batch_size == 8 &&

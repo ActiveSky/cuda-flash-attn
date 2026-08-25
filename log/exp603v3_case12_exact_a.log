@@ -1,0 +1,84 @@
+exp603v3 C500 candidate case12 exact group A (40-split/tail boundaries)
+UTC 2026-08-20T07:23:14Z
+command: python3 tests/c500_paged_decode_harness.py --library build/exp603v3_candidate.so --cases 12 --length-values 1,2,15,16,17,831,832,833,847,848,849,1663,1664,1665,1679,1680,1681,2495,2496,2497,2511,2512,2513,3327,3328,3329,3343,3344,3345,4159,4160,4161,4175,4176,4177,4991,4992,4993,5007,5008,5009,5823,5824,5825,5839,5840,5841,6655,6656,6657,6671,6672,6673,7487,7488,7489,7503,7504,7505,8319,8320,8321,8335,8336,8337,9151,9152,9153,9167,9168,9169,9983,9984,9985,9999,10000,10001 --seed 20260809
+candidate source SHA256: d27f5e5cfb17562baacbc4f4393c3513bc501cae283d222d718719abd251df28  solutions/archive/2026-08-20-experiments/cuda_case12_wave_local_q_bsm_exp603.cpp
+candidate binary SHA256: 61ecb650b68ac181fbc17795c0df200b2431cfc69b4c48911890f421e61c65c5  build/exp603v3_candidate.so
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:1  match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:2  match=1.000000 max_error=1.562500e-02 max_tol_ratio=0.326 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:15 match=1.000000 max_error=7.812500e-03 max_tol_ratio=0.243 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:16 match=1.000000 max_error=7.812500e-03 max_tol_ratio=0.244 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:17 match=1.000000 max_error=7.812500e-03 max_tol_ratio=0.242 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:831 match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.054 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:832 match=1.000000 max_error=1.953125e-03 max_tol_ratio=0.097 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:833 match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.054 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:847 match=1.000000 max_error=1.953125e-03 max_tol_ratio=0.097 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:848 match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.054 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:849 match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.054 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:1663 match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.054 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:1664 match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.054 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:1665 match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.054 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:1679 match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.054 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:1680 match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.054 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:1681 match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.054 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:2495 match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.054 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:2496 match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.054 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:2497 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:2511 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:2512 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:2513 match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.054 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:3327 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:3328 match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.053 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:3329 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:3343 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:3344 match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.053 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:3345 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:4159 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:4160 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:4161 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:4175 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:4176 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:4177 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:4991 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:4992 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:4993 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:5007 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:5008 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:5009 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:5823 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:5824 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:5825 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:5839 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:5840 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:5841 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:6655 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:6656 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:6657 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:6671 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:6672 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:6673 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:7487 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:7488 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:7489 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:7503 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.028 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:7504 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:7505 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:8319 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:8320 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:8321 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:8335 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:8336 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:8337 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:9151 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:9152 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:9153 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:9167 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:9168 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:9169 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:9983 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:9984 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:9985 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:9999 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:10000 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:10001 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True
+exit_status=0

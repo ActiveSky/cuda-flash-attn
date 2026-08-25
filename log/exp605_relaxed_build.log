@@ -1,0 +1,27 @@
+exp605 relaxed static audit build evidence (2026-08-23)
+
+Candidate source:
+  solutions/archive/2026-08-20-experiments/cuda_case12_full_direct_v_bsm_exp605.cpp
+  SHA-256 e4b76402fc5345c8088e9cecb8e77cf5128385ce06139c58d4e163e917c7a61b
+Parent/control source:
+  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+  SHA-256 a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+
+Commands (all compiler exits 0; no C500/OJ command was run):
+  tools/build_local_maca.sh <candidate> build/exp605_relaxed_normal.so
+    artifact SHA-256 6bf81ecee91e0e3dbce8762a0b598f57101be4a49ead9560d221e311369e3041
+  tools/build_local_maca.sh <candidate> build/exp605_relaxed_resource.so -resource-usage
+    artifact SHA-256 d10c134ce5bf53f70d0962e1c46f21fdb683c1fe4e4f6ac635397acef20490ef
+  tools/build_local_maca.sh <candidate> build/exp605_relaxed_device.ll -emit-llvm -S
+    artifact SHA-256 1a1085dfd3dd8e9881f9cfe84ec2c78f304407aa44b0da871116c5aff8b78459
+  tools/build_local_maca.sh <control> build/exp605_relaxed_control_normal.so
+    artifact SHA-256 4bbe97993b7ad219dc607e95a8a45a11c26c8c96042d857084f91098d00ea873
+  tools/build_local_maca.sh <control> build/exp605_relaxed_control_resource.so -resource-usage
+    artifact SHA-256 b6c698cb46553eece3a907dd820881887f7c5b05776d178419f0f6cba81a2fe5
+  tools/build_local_maca.sh <control> build/exp605_relaxed_control_device.ll -emit-llvm -S
+    artifact SHA-256 25509a2cb9cfae61b302b18a5e4ab0f8a6e2bfe7687e8a8763b88eeb85910df1
+
+Compiler output contained only the existing MACA warning that
+__launch_bounds__(256, 6) minimum-blocks is ignored (and the expected
+"-shared" unused warning for LLVM emission); no compile, launch, or resource
+diagnostic error occurred.

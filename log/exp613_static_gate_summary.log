@@ -1,0 +1,25 @@
+exp613 static resource gate summary
+UTC 2026-08-21T07:44Z
+candidate source: solutions/archive/2026-08-21-experiments/cuda_case7_shared_staged_finalizer_exp613.cpp
+control source: solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+candidate source SHA pre: 956c87ae6f14a2fcee337f067b4b15b3dd53a961669b2ba38a485ef6e1bcc442
+candidate source SHA post: 956c87ae6f14a2fcee337f067b4b15b3dd53a961669b2ba38a485ef6e1bcc442
+control source SHA verified before candidate build: a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+source SHA gate: PASS (candidate pre == post)
+command: tools/build_local_maca.sh solutions/archive/2026-08-21-experiments/cuda_case7_shared_staged_finalizer_exp613.cpp build/exp613_candidate_resource.so -resource-usage
+command exit: 0
+candidate resource artifact SHA-256: d925c22c9bf992cbf85589baafa4096c7c44db50bcb7a0e9d79dcf0a3a5f5659
+
+candidate case7 ordinary producer specialization <true,false,true,false>:
+  Function: _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb0EE...
+  MTreg=82 STreg=50 shared=8448 B stack=0 B waves=5
+candidate case7 finalizer specialization <true,false,true,true>:
+  Function: _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb1EE...
+  MTreg=90 STreg=54 shared=8448 B stack=0 B waves=5
+  spill/local-memory: no spill marker; stack frame is 0 B
+
+resource gate: FAIL. Finalizer exceeds the hard gate 82 MTreg / 50 STreg / 8448 B shared / 0 B stack / 5 waves.
+Control resource build and all LLVM builds were intentionally not run after this first resource failure.
+LLVM ownership evidence: NOT GENERATED (stopped at failed resource gate); no LLVM/C500/A-B/OJ conclusions are authorized.
+case7 two-launch/reducer-skip LLVM verification: NOT RUN.
+FINAL: NO C500 / NO A-B / NO OJ.

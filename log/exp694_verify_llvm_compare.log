@@ -1,0 +1,44 @@
+exp694 LLVM target comparison
+UTC 2026-08-24T13:07:34Z
+candidate source/artifact:
+abd65ca70ef44da9f39eec2a0d1fe86af4178eb928a8c21acf0c4df040b934b2  solutions/archive/2026-08-24-experiments/cuda_control124611_case7_raw_wave_rebase_exp694.cpp
+9c5b0c244088bd3d6a17082b3555e58c09050e1c18cd00cfdb8c594572828b7b  build/exp694_verify_candidate_device.ll
+control source/artifact:
+3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe  solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+c0b1feacbfa1f793737da57fe0104013a92ac56e7408de40deb789d8fd7b29b7  build/exp694_verify_control_device.ll
+target candidate definition:
+19837:define protected metaxgpu_kernel void @_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef readnone %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+target control definition:
+19818:define protected metaxgpu_kernel void @_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef readnone %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+candidate target lines=19837-21630
+control target lines=19818-21596
+target intrinsic counts (candidate vs control):
+llvm.mxc.bsm.bpermute        candidate=20 control=
+llvm.mxc.mov.shfl            candidate=28 control=28
+llvm.mxc.barrier             candidate=7 control=10
+llvm.mxc.barrier.shared      candidate= control=
+llvm.mxc.stg.predicator      candidate= control=
+target raw BSM call sites:
+1052:  %275 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1678, i32 %274)
+1059:  %280 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i, i32 %279)
+1079:  %288 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i14.i1745, i32 %287)
+1086:  %292 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i1750, i32 %291)
+1102:  %300 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i14.i1722, i32 %299)
+1109:  %304 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i1727, i32 %303)
+1121:  %312 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i14.i1699, i32 %311)
+1128:  %316 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i1704, i32 %315)
+1140:  %324 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i14.i, i32 %323)
+1147:  %328 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i, i32 %327)
+1158:  %336 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1684, i32 %335)
+1165:  %341 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1681, i32 %340)
+1185:  %349 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i14.i1837, i32 %348)
+1192:  %353 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i1842, i32 %352)
+1208:  %361 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i14.i1814, i32 %360)
+1215:  %365 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i1819, i32 %364)
+1227:  %373 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i14.i1791, i32 %372)
+1234:  %377 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i1796, i32 %376)
+1246:  %385 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i14.i1768, i32 %384)
+1253:  %389 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i1773, i32 %388)
+target definition contains raw BSM:
+PASS (20 target-call sites; the preceding pipeline's rg -q/SIGPIPE status was not a semantic failure)
+candidate target has no stack/spill is established by resource log; LLVM comparison complete.

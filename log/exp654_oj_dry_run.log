@@ -1,0 +1,9 @@
+exp654 OJ pre-submit dry-run
+timestamp_utc: 2026-08-23T18:09:11Z
+command: python3 tools/xpuoj_submit.py solutions/cuda_maca_optimized.cpp
+workfile_sha256_before: 314c3445e887e4e2e1e16653a3e7be28d71b44803b8d6a720f73b68d28f13bff
+target: contest #11, problem #1
+language: cuda.maca-c500
+code_bytes: 282596
+dry-run: no submission created; use --submit to submit
+workfile_sha256_after: 314c3445e887e4e2e1e16653a3e7be28d71b44803b8d6a720f73b68d28f13bff

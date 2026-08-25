@@ -1,0 +1,47 @@
+exp703 C500 case12 special poison/guards/input/workspace rerun after raw-BF16 input compare fix
+UTC 2026-08-24T17:35:44Z
+command: timeout 3600s python3 tests/exp703_c500_special.py --candidate build/exp703_candidate_normal.so --control build/exp703_control_normal.so --seed 20260824
+f9321d4d76636f6d9ecabf6e92240c10962c3e20f0d3267be643ea4f43649102  solutions/archive/2026-08-24-experiments/cuda_control124611_case12_async_register_kv_exp703.cpp
+3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe  solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+f472aa713961c07ca95ba62cbc7fb8bdd5071c854f3013010be8e4971e58f03e  build/exp703_candidate_normal.so
+c9d643f25e0e15193820b4809f53ce32ebe8cdfabf91505143ec169c61de137b  build/exp703_control_normal.so
+969f857ef6c7551860939b6835ad8b024ecc49d94ca2546429ef70ac40afebaa  tests/exp703_c500_special.py
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3 | candidate=build/exp703_candidate_normal.so | control=build/exp703_control_normal.so | seed=20260824
+[PASS] case12 mixed baseline candidate lengths=(1, 16, 8191, 8192, 16385, 24576, 32767, 32768) pages=0 tails=0 finite=True reference_finite=True within_tolerance=True max_error=3.906250e-03 max_tol_ratio=0.163 guards=True inputs_untouched=True
+[PASS] case12 mixed baseline control lengths=(1, 16, 8191, 8192, 16385, 24576, 32767, 32768) pages=0 tails=0 finite=True reference_finite=True within_tolerance=True max_error=3.906250e-03 max_tol_ratio=0.163 guards=True inputs_untouched=True
+[PASS] case12 mixed baseline candidate_control_within_tolerance=True control_gate=pass
+[PASS] case12 mixed padding-page poison candidate lengths=(1, 16, 8191, 8192, 16385, 24576, 32767, 32768) pages=8701 tails=0 finite=True reference_finite=True within_tolerance=True max_error=3.906250e-03 max_tol_ratio=0.163 guards=True inputs_untouched=True
+[PASS] case12 mixed padding-page poison control lengths=(1, 16, 8191, 8192, 16385, 24576, 32767, 32768) pages=8701 tails=0 finite=True reference_finite=True within_tolerance=True max_error=3.906250e-03 max_tol_ratio=0.163 guards=True inputs_untouched=True
+[PASS] case12 mixed padding-page poison candidate_control_within_tolerance=True control_gate=pass
+[PASS] case12 mixed padding-page poison poison invariance candidate_unchanged=True reference_unchanged=True
+[PASS] case12 mixed tail poison candidate lengths=(1, 16, 8191, 8192, 16385, 24576, 32767, 32768) pages=0 tails=32 finite=True reference_finite=True within_tolerance=True max_error=3.906250e-03 max_tol_ratio=0.163 guards=True inputs_untouched=True
+[PASS] case12 mixed tail poison control lengths=(1, 16, 8191, 8192, 16385, 24576, 32767, 32768) pages=0 tails=32 finite=True reference_finite=True within_tolerance=True max_error=3.906250e-03 max_tol_ratio=0.163 guards=True inputs_untouched=True
+[PASS] case12 mixed tail poison candidate_control_within_tolerance=True control_gate=pass
+[PASS] case12 mixed tail poison poison invariance candidate_unchanged=True reference_unchanged=True
+[PASS] case12 mixed padding-page+tail poison candidate lengths=(1, 16, 8191, 8192, 16385, 24576, 32767, 32768) pages=8701 tails=32 finite=True reference_finite=True within_tolerance=True max_error=3.906250e-03 max_tol_ratio=0.163 guards=True inputs_untouched=True
+[PASS] case12 mixed padding-page+tail poison control lengths=(1, 16, 8191, 8192, 16385, 24576, 32767, 32768) pages=8701 tails=32 finite=True reference_finite=True within_tolerance=True max_error=3.906250e-03 max_tol_ratio=0.163 guards=True inputs_untouched=True
+[PASS] case12 mixed padding-page+tail poison candidate_control_within_tolerance=True control_gate=pass
+[PASS] case12 mixed padding-page+tail poison poison invariance candidate_unchanged=True reference_unchanged=True
+[PASS] case12 mixed padding/tail poison gate lengths=(1, 16, 8191, 8192, 16385, 24576, 32767, 32768)
+[PASS] case12 workspace 32768->1->32768 step=1/3 candidate lengths=(32768, 32768, 32768, 32768, 32768, 32768, 32768, 32768) pages=0 tails=0 finite=True reference_finite=True within_tolerance=True max_error=2.441406e-04 max_tol_ratio=0.015 guards=True inputs_untouched=True
+[PASS] case12 workspace 32768->1->32768 step=1/3 control lengths=(32768, 32768, 32768, 32768, 32768, 32768, 32768, 32768) pages=0 tails=0 finite=True reference_finite=True within_tolerance=True max_error=2.441406e-04 max_tol_ratio=0.015 guards=True inputs_untouched=True
+[PASS] case12 workspace 32768->1->32768 step=1/3 candidate_control_within_tolerance=True control_gate=pass
+[PASS] case12 workspace 32768->1->32768 step=2/3 candidate lengths=(1, 1, 1, 1, 1, 1, 1, 1) pages=16376 tails=120 finite=True reference_finite=True within_tolerance=True max_error=0.000000e+00 max_tol_ratio=0.000 guards=True inputs_untouched=True
+[PASS] case12 workspace 32768->1->32768 step=2/3 control lengths=(1, 1, 1, 1, 1, 1, 1, 1) pages=16376 tails=120 finite=True reference_finite=True within_tolerance=True max_error=0.000000e+00 max_tol_ratio=0.000 guards=True inputs_untouched=True
+[PASS] case12 workspace 32768->1->32768 step=2/3 candidate_control_within_tolerance=True control_gate=pass
+[PASS] case12 workspace 32768->1->32768 step=3/3 candidate lengths=(32768, 32768, 32768, 32768, 32768, 32768, 32768, 32768) pages=0 tails=0 finite=True reference_finite=True within_tolerance=True max_error=2.441406e-04 max_tol_ratio=0.015 guards=True inputs_untouched=True
+[PASS] case12 workspace 32768->1->32768 step=3/3 control lengths=(32768, 32768, 32768, 32768, 32768, 32768, 32768, 32768) pages=0 tails=0 finite=True reference_finite=True within_tolerance=True max_error=2.441406e-04 max_tol_ratio=0.015 guards=True inputs_untouched=True
+[PASS] case12 workspace 32768->1->32768 step=3/3 candidate_control_within_tolerance=True control_gate=pass
+[PASS] case12 workspace 32768->1->32768 full-state invariant=True
+[PASS] case12 workspace sequence 32768->1->32768
+[PASS] case12 workspace 1->32768 step=1/2 candidate lengths=(1, 1, 1, 1, 1, 1, 1, 1) pages=16376 tails=120 finite=True reference_finite=True within_tolerance=True max_error=0.000000e+00 max_tol_ratio=0.000 guards=True inputs_untouched=True
+[PASS] case12 workspace 1->32768 step=1/2 control lengths=(1, 1, 1, 1, 1, 1, 1, 1) pages=16376 tails=120 finite=True reference_finite=True within_tolerance=True max_error=0.000000e+00 max_tol_ratio=0.000 guards=True inputs_untouched=True
+[PASS] case12 workspace 1->32768 step=1/2 candidate_control_within_tolerance=True control_gate=pass
+[PASS] case12 workspace 1->32768 step=2/2 candidate lengths=(32768, 32768, 32768, 32768, 32768, 32768, 32768, 32768) pages=0 tails=0 finite=True reference_finite=True within_tolerance=True max_error=2.441406e-04 max_tol_ratio=0.015 guards=True inputs_untouched=True
+[PASS] case12 workspace 1->32768 step=2/2 control lengths=(32768, 32768, 32768, 32768, 32768, 32768, 32768, 32768) pages=0 tails=0 finite=True reference_finite=True within_tolerance=True max_error=2.441406e-04 max_tol_ratio=0.015 guards=True inputs_untouched=True
+[PASS] case12 workspace 1->32768 step=2/2 candidate_control_within_tolerance=True control_gate=pass
+[PASS] case12 workspace 1->32768 full-state invariant=True
+[PASS] case12 workspace sequence 1->32768
+[PASS] case12 workspace reuse 32768->1->32768 and 1->32768
+SPECIAL_RESULT=PASS
+exit_status=0

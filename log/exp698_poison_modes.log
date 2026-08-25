@@ -1,0 +1,10 @@
+candidate pages: ids=97 tails=101 finite=True ok=True nan=0 refsame=True max=0.015625
+control pages: ids=97 tails=101 finite=True ok=True nan=0 refsame=True max=0.015625
+candidate tails: ids=97 tails=101 finite=False ok=False nan=40960 refsame=True max=0.0078125
+ firstbad [[1, 0, 0, 0], [1, 0, 0, 1], [1, 0, 0, 2], [1, 0, 0, 3], [1, 0, 0, 4], [1, 0, 0, 5], [1, 0, 0, 6], [1, 0, 0, 7]]
+control tails: ids=97 tails=101 finite=False ok=False nan=40960 refsame=True max=0.0078125
+ firstbad [[1, 0, 0, 0], [1, 0, 0, 1], [1, 0, 0, 2], [1, 0, 0, 3], [1, 0, 0, 4], [1, 0, 0, 5], [1, 0, 0, 6], [1, 0, 0, 7]]
+candidate both: ids=97 tails=101 finite=False ok=False nan=40960 refsame=True max=0.0078125
+ firstbad [[1, 0, 0, 0], [1, 0, 0, 1], [1, 0, 0, 2], [1, 0, 0, 3], [1, 0, 0, 4], [1, 0, 0, 5], [1, 0, 0, 6], [1, 0, 0, 7]]
+control both: ids=97 tails=101 finite=False ok=False nan=40960 refsame=True max=0.0078125
+ firstbad [[1, 0, 0, 0], [1, 0, 0, 1], [1, 0, 0, 2], [1, 0, 0, 3], [1, 0, 0, 4], [1, 0, 0, 5], [1, 0, 0, 6], [1, 0, 0, 7]]

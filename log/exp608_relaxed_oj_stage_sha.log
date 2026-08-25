@@ -1,0 +1,7 @@
+exp608 relaxed OJ stage and SHA freeze
+candidate: solutions/archive/2026-08-20-experiments/cuda_case12_direct_k_wave_bsm_exp608.cpp
+candidate SHA-256: 1ed233b3ba65106c80024d0aece5c006f9b05678d8f36069800c1f84fd6d4f5f
+staged workfile at submit: solutions/cuda_maca_optimized.cpp
+staged workfile SHA-256: 1ed233b3ba65106c80024d0aece5c006f9b05678d8f36069800c1f84fd6d4f5f
+candidate and staged workfile were identical at the SHA freeze.
+After terminal processing the workfile was restored to control; see exp608_relaxed_oj_restore.log.

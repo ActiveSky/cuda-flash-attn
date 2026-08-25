@@ -1,0 +1,4 @@
+command: tools/build_local_maca.sh solutions/archive/2026-08-22-experiments/cuda_case12_distributed_weight_exp625.cpp build/exp625_candidate.so
+exit: 0
+result: normal build succeeded; compiler emitted only existing __launch_bounds__(256,6) warnings.
+candidate_sha256: ba5635cf0b62441587edc893fcf80feafed2228b70b13aa62eac693506b07026

@@ -1,0 +1,4 @@
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:16383 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:16384 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=exact:16385 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True

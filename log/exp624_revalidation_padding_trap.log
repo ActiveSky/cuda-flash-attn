@@ -1,0 +1,10 @@
+exp624 candidate/control C500 case12 mixed-length legal-padding sentinel trap
+2026-08-21T13:34:58Z
+candidate_sha=8daf875522d473d4c19aa44e6f3523190e098ef22ec3036f6a7ef4320ff4cc43
+control_sha=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+command: PYTHONPATH=tests python3 - (case12 mixed_lengths=1,15,16,17,831,832,833,32767; disjoint legal page-table; baseline/sentinel output+reference guards)
+GPU: MetaX C500 | case=12 mixed_lengths=(1, 15, 16, 17, 831, 832, 833, 32767)
+[PASS] candidate sentinel_pages=14174 baseline_match=1.000000 sentinel_match=1.000000 baseline_finite=True sentinel_finite=True reference_max_delta=0.000000e+00 output_max_delta=0.000000e+00 padding_trap=PASS
+[PASS] control sentinel_pages=14174 baseline_match=1.000000 sentinel_match=1.000000 baseline_finite=True sentinel_finite=True reference_max_delta=0.000000e+00 output_max_delta=0.000000e+00 padding_trap=PASS
+padding_trap=PASS
+exit_status=0

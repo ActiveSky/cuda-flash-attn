@@ -1,0 +1,25 @@
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+candidate: build/exp641_special_candidate.so | control: build/exp641_special_control.so | seed: 20260822
+[INFO] distinct raw BF16 groups q=128 k=64 v=64 GQA=4
+[PASS] all-one token1 poison/tail padding trap candidate_error=0.000000e+00 control_error=0.000000e+00 candidate_tol_ratio=0.000 control_tol_ratio=0.000 bit_equal=True deterministic=True candidate_untouched=True control_untouched=True guards=True
+[PASS] all-two full token range candidate_error=7.812500e-03 control_error=7.812500e-03 candidate_tol_ratio=0.236 control_tol_ratio=0.236 bit_equal=True deterministic=True candidate_untouched=True control_untouched=True guards=True
+[PASS] mixed [1,2,1,2] GQA/page ownership candidate_error=7.812500e-03 control_error=7.812500e-03 candidate_tol_ratio=0.236 control_tol_ratio=0.236 bit_equal=True deterministic=True candidate_untouched=True control_untouched=True guards=True
+[PASS] reverse [2,1,2,1] GQA/page ownership candidate_error=3.906250e-03 control_error=3.906250e-03 candidate_tol_ratio=0.155 control_tol_ratio=0.155 bit_equal=True deterministic=True candidate_untouched=True control_untouched=True guards=True
+[PASS] workspace reuse full->short->full iter=1/100 step=1/3 lengths=(2, 2, 2, 2) candidate_error=7.812500e-03 control_error=7.812500e-03 candidate_tol_ratio=0.236 control_tol_ratio=0.236 bit_equal=True deterministic=True candidate_untouched=True control_untouched=True guards=True
+[PASS] workspace reuse full->short->full iter=1/100 step=2/3 lengths=(1, 1, 1, 1) candidate_error=0.000000e+00 control_error=0.000000e+00 candidate_tol_ratio=0.000 control_tol_ratio=0.000 bit_equal=True deterministic=True candidate_untouched=True control_untouched=True guards=True
+[PASS] workspace reuse full->short->full iter=1/100 step=3/3 lengths=(2, 2, 2, 2) candidate_error=7.812500e-03 control_error=7.812500e-03 candidate_tol_ratio=0.236 control_tol_ratio=0.236 bit_equal=True deterministic=True candidate_untouched=True control_untouched=True guards=True
+[PASS] workspace reuse full->short->full iter=100/100 step=1/3 lengths=(2, 2, 2, 2) candidate_error=7.812500e-03 control_error=7.812500e-03 candidate_tol_ratio=0.236 control_tol_ratio=0.236 bit_equal=True deterministic=True candidate_untouched=True control_untouched=True guards=True
+[PASS] workspace reuse full->short->full iter=100/100 step=2/3 lengths=(1, 1, 1, 1) candidate_error=0.000000e+00 control_error=0.000000e+00 candidate_tol_ratio=0.000 control_tol_ratio=0.000 bit_equal=True deterministic=True candidate_untouched=True control_untouched=True guards=True
+[PASS] workspace reuse full->short->full iter=100/100 step=3/3 lengths=(2, 2, 2, 2) candidate_error=7.812500e-03 control_error=7.812500e-03 candidate_tol_ratio=0.236 control_tol_ratio=0.236 bit_equal=True deterministic=True candidate_untouched=True control_untouched=True guards=True
+[PASS] workspace reuse full->short->full deterministic checks=100
+[PASS] workspace reuse short->full iter=1/100 step=1/2 lengths=(1, 1, 1, 1) candidate_error=0.000000e+00 control_error=0.000000e+00 candidate_tol_ratio=0.000 control_tol_ratio=0.000 bit_equal=True deterministic=True candidate_untouched=True control_untouched=True guards=True
+[PASS] workspace reuse short->full iter=1/100 step=2/2 lengths=(2, 2, 2, 2) candidate_error=7.812500e-03 control_error=7.812500e-03 candidate_tol_ratio=0.236 control_tol_ratio=0.236 bit_equal=True deterministic=True candidate_untouched=True control_untouched=True guards=True
+[PASS] workspace reuse short->full iter=100/100 step=1/2 lengths=(1, 1, 1, 1) candidate_error=0.000000e+00 control_error=0.000000e+00 candidate_tol_ratio=0.000 control_tol_ratio=0.000 bit_equal=True deterministic=True candidate_untouched=True control_untouched=True guards=True
+[PASS] workspace reuse short->full iter=100/100 step=2/2 lengths=(2, 2, 2, 2) candidate_error=7.812500e-03 control_error=7.812500e-03 candidate_tol_ratio=0.236 control_tol_ratio=0.236 bit_equal=True deterministic=True candidate_untouched=True control_untouched=True guards=True
+[PASS] workspace reuse short->full deterministic checks=100
+[PASS] workspace reuse full->short->full and short->full
+[PASS] determinism all-one candidate repetitions=100 mismatches=0 max_tol_ratio=0.000
+[PASS] determinism all-one control repetitions=100 mismatches=0 max_tol_ratio=0.000
+[PASS] determinism all-two candidate repetitions=100 mismatches=0 max_tol_ratio=0.236
+[PASS] determinism all-two control repetitions=100 mismatches=0 max_tol_ratio=0.236
+case2 exp641 special correctness: PASS checks=9

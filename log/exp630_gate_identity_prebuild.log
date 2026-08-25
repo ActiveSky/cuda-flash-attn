@@ -1,0 +1,13 @@
+exp630 gate: pre-build identity and control/workfile guard
+UTC 2026-08-22T07:51:36Z
+candidate expected/source SHA:
+e96b60455098002d684167531399d6620e8e7427918cadbf5609b64b126866c1  solutions/archive/2026-08-22-experiments/cuda_case2_source_owner_native_b128_exp630.cpp
+control expected/source SHA:
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+workfile SHA (must remain control):
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/cuda_maca_optimized.cpp
+candidate source path:
+/data/cuda-flash-attn/solutions/archive/2026-08-22-experiments/cuda_case2_source_owner_native_b128_exp630.cpp
+control source path:
+/data/cuda-flash-attn/solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+exit_status=0

@@ -1,0 +1,15 @@
+id 120152 status Accepted score 66 cases 14
+case1: status=Accepted score=92 time_ms=3 display=92
+case2: status=Accepted score=90 time_ms=4 display=90
+case3: status=Accepted score=83 time_ms=9 display=83
+case4: status=Accepted score=72 time_ms=23 display=72
+case5: status=Accepted score=73 time_ms=17 display=73
+case6: status=Accepted score=63 time_ms=28 display=63
+case7: status=Accepted score=55 time_ms=226 display=55
+case8: status=Accepted score=54 time_ms=93 display=54
+case9: status=Accepted score=57 time_ms=231 display=57
+case10: status=Accepted score=62 time_ms=39 display=62
+case11: status=Accepted score=52 time_ms=223 display=52
+case12: status=Accepted score=60 time_ms=374 display=60
+case13: status=Accepted score=56 time_ms=182 display=56
+case14: status=Accepted score=55 time_ms=139 display=55

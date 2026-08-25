@@ -1,0 +1,12 @@
+exp603v3 strict interleaved C500 A/B case12 full
+UTC 
+command: python3 tests/c500_benchmark.py --control build/exp603v3_control.so --candidate build/exp603v3_candidate.so --cases 12 --lengths full --seed 20260809 --warmup 5 --iterations 20 --rounds 9
+candidate source SHA256: d27f5e5cfb17562baacbc4f4393c3513bc501cae283d222d718719abd251df28  solutions/archive/2026-08-20-experiments/cuda_case12_wave_local_q_bsm_exp603.cpp
+control source SHA256: a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+candidate binary SHA256: 61ecb650b68ac181fbc17795c0df200b2431cfc69b4c48911890f421e61c65c5  build/exp603v3_candidate.so
+control binary SHA256: 4bbe97993b7ad219dc607e95a8a45a11c26c8c96042d857084f91098d00ea873  build/exp603v3_control.so
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+control:   build/exp603v3_control.so
+candidate: build/exp603v3_candidate.so
+case 12 B= 8 L=32768 KV=8 | control p50=0.7214 ms | candidate p50=0.7209 ms | candidate/control p10/p50/p90=0.9979/0.9993/1.0009 | speedup=1.001x
+exit_status=0

@@ -1,0 +1,70 @@
+exp603v3 validation summary
+UTC 
+source SHA:
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+d27f5e5cfb17562baacbc4f4393c3513bc501cae283d222d718719abd251df28  solutions/archive/2026-08-20-experiments/cuda_case12_wave_local_q_bsm_exp603.cpp
+binary SHA:
+4bbe97993b7ad219dc607e95a8a45a11c26c8c96042d857084f91098d00ea873  build/exp603v3_control.so
+61ecb650b68ac181fbc17795c0df200b2431cfc69b4c48911890f421e61c65c5  build/exp603v3_candidate.so
+b6c698cb46553eece3a907dd820881887f7c5b05776d178419f0f6cba81a2fe5  build/exp603v3_control_resource.so
+5c7c8c32130dc4d78a0ae1fd66d92f01c41b080baf563ffa44e37df76957325b  build/exp603v3_candidate_resource.so
+25509a2cb9cfae61b302b18a5e4ab0f8a6e2bfe7687e8a8763b88eeb85910df1  build/exp603v3_control.ll
+6b3d6af5bcbad1f8c6dae43c2cbda7a1081a582660c99d133cb4453f9a735c9d  build/exp603v3_candidate.ll
+resource target control:
+158: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+159-  0 bytes stack frame 
+160- maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+161- maca info  : staticMaxWarps/PEU : 5
+resource target candidate:
+158: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+159-  0 bytes stack frame 
+160- maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+161- maca info  : staticMaxWarps/PEU : 5
+target BSM counts:
+control=candidate=correctness pass counts:
+log/exp603v3_c500_full.log exit_status=0
+log/exp603v3_c500_random.log exit_status=0
+log/exp603v3_c500_boundary.log exit_status=0
+log/exp603v3_case12_exact_a.log exit_status=0
+log/exp603v3_case12_exact_b.log exit_status=0
+log/exp603v3_case12_exact_c.log exit_status=0
+log/exp603v3_case12_exact_tail.log exit_status=0
+log/exp603v3_case12_reuse_full_short_full.log exit_status=0
+log/exp603v3_case12_reuse_short_full.log exit_status=0
+A/B results:
+log/exp603v3_ab_case12_boundary.log:case 12 B= 8 L=32768 KV=8 | control p50=0.2342 ms | candidate p50=0.2327 ms | candidate/control p10/p50/p90=0.9919/0.9937/0.9986 | speedup=1.006x
+log/exp603v3_ab_case12_boundary.log:exit_status=0
+log/exp603v3_ab_case12_random.log:case 12 B= 8 L=32768 KV=8 | control p50=0.4869 ms | candidate p50=0.4874 ms | candidate/control p10/p50/p90=0.9989/0.9994/1.0033 | speedup=1.001x
+log/exp603v3_ab_case12_random.log:exit_status=0
+log/exp603v3_ab_case12_full.log:case 12 B= 8 L=32768 KV=8 | control p50=0.7214 ms | candidate p50=0.7209 ms | candidate/control p10/p50/p90=0.9979/0.9993/1.0009 | speedup=1.001x
+log/exp603v3_ab_case12_full.log:exit_status=0
+exact union check:
+observed= 0 unique= 0 expected= 239 missing= [1, 2, 15, 16, 17, 831, 832, 833, 847, 848, 849, 1663, 1664, 1665, 1679, 1680, 1681, 2495, 2496, 2497, 2511, 2512, 2513, 3327, 3328, 3329, 3343, 3344, 3345, 4159, 4160, 4161, 4175, 4176, 4177, 4991, 4992, 4993, 5007, 5008, 5009, 5823, 5824, 5825, 5839, 5840, 5841, 6655, 6656, 6657, 6671, 6672, 6673, 7487, 7488, 7489, 7503, 7504, 7505, 8319, 8320, 8321, 8335, 8336, 8337, 9151, 9152, 9153, 9167, 9168, 9169, 9983, 9984, 9985, 9999, 10000, 10001, 10815, 10816, 10817, 10831, 10832, 10833, 11647, 11648, 11649, 11663, 11664, 11665, 12479, 12480, 12481, 12495, 12496, 12497, 13311, 13312, 13313, 13327, 13328, 13329, 14143, 14144, 14145, 14159, 14160, 14161, 14975, 14976, 14977, 14991, 14992, 14993, 15807, 15808, 15809, 15823, 15824, 15825, 16639, 16640, 16641, 16655, 16656, 16657, 17471, 17472, 17473, 17487, 17488, 17489, 18303, 18304, 18305, 18319, 18320, 18321, 19135, 19136, 19137, 19151, 19152, 19153, 19967, 19968, 19969, 19983, 19984, 19985, 20799, 20800, 20801, 20815, 20816, 20817, 21631, 21632, 21633, 21647, 21648, 21649, 22463, 22464, 22465, 22479, 22480, 22481, 23295, 23296, 23297, 23311, 23312, 23313, 24127, 24128, 24129, 24143, 24144, 24145, 24959, 24960, 24961, 24975, 24976, 24977, 25791, 25792, 25793, 25807, 25808, 25809, 26623, 26624, 26625, 26639, 26640, 26641, 27455, 27456, 27457, 27471, 27472, 27473, 28287, 28288, 28289, 28303, 28304, 28305, 29119, 29120, 29121, 29135, 29136, 29137, 29951, 29952, 29953, 29967, 29968, 29969, 30783, 30784, 30785, 30799, 30800, 30801, 31615, 31616, 31617, 31631, 31632, 31633, 32447, 32448, 32449, 32463, 32464, 32465] extra= []
+worktree status (our exp603v3 files only shown):
+ M AGENTS.md
+ M goal.md
+ M notes.md
+ M results/cuda_result.md
+?? log/exp603v3_ab_case12_boundary.log
+?? log/exp603v3_ab_case12_full.log
+?? log/exp603v3_ab_case12_random.log
+?? log/exp603v3_c500_boundary.log
+?? log/exp603v3_c500_full.log
+?? log/exp603v3_c500_random.log
+?? log/exp603v3_candidate_build.log
+?? log/exp603v3_candidate_llvm.log
+?? log/exp603v3_candidate_resource.log
+?? log/exp603v3_case12_exact_a.log
+?? log/exp603v3_case12_exact_b.log
+?? log/exp603v3_case12_exact_c.log
+?? log/exp603v3_case12_exact_tail.log
+?? log/exp603v3_case12_reuse_full_short_full.log
+?? log/exp603v3_case12_reuse_short_full.log
+?? log/exp603v3_control_build.log
+?? log/exp603v3_control_llvm.log
+?? log/exp603v3_control_resource.log
+?? log/exp603v3_cpu_logic.log
+?? log/exp603v3_final_summary.log
+?? log/exp603v3_identity.log
+?? log/exp603v3_llvm_summary.log
+?? log/exp603v3_target_lowering.log

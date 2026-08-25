@@ -1,0 +1,110 @@
+command: tools/build_local_maca.sh solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp /tmp/exp624_revalidation.CFnpm9/candidate.ll -c -emit-llvm -S
+2026-08-21T13:21:12Z
+Building solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp
+Compiler: /opt/maca/mxgpu_llvm/bin/mxcc
+MACA path: /opt/maca
+CUDA bridge: /opt/maca-3.7.1/tools/cu-bridge
+Target: xcore1000
+Output: /tmp/exp624_revalidation.CFnpm9/candidate.ll
+mxcc: warning: argument unused during compilation: '-shared' [-Wunused-command-line-argument]
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:342:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  342 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:708:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  708 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:1236:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1236 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:1236:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:5625:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, true, false, false, false, false, false, true, false, false, false>' requested here
+ 5625 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:1236:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1236 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:5637:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false>' requested here
+ 5637 |                     paged_decode_token_parallel_kernel<4, 8, false><<<
+      |                     ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:1236:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1236 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:5772:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, false, false, false, false, false, true, false, false, false, false, true, true, true, true, false>' requested here
+ 5772 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:1236:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1236 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:5794:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, true, false, false, false, false, true, false, false, true, false, true, true, false, false, true>' requested here
+ 5794 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:708:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  708 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:5809:9: note: in instantiation of function template specialization 'paged_decode_split_qk_pair_kernel<8, 4>' requested here
+ 5809 |         paged_decode_split_qk_pair_kernel<8, 4><<<grid, 128>>>(
+      |         ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:342:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  342 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:5816:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<4, 8>' requested here
+ 5816 |             paged_decode_split_kernel<4, 8><<<grid, 256>>>(
+      |             ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:342:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  342 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:5822:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<8, 4>' requested here
+ 5822 |             paged_decode_split_kernel<8, 4><<<grid, 128>>>(
+      |             ^
+10 warnings generated when compiling for xcore1000.
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:342:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  342 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:708:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  708 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:1236:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1236 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:1236:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:5625:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, true, false, false, false, false, false, true, false, false, false>' requested here
+ 5625 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:1236:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1236 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:5637:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false>' requested here
+ 5637 |                     paged_decode_token_parallel_kernel<4, 8, false><<<
+      |                     ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:1236:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1236 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:5772:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, false, false, false, false, false, true, false, false, false, false, true, true, true, true, false>' requested here
+ 5772 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:1236:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1236 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:5794:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, true, false, false, false, false, true, false, false, true, false, true, true, false, false, true>' requested here
+ 5794 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:708:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  708 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:5809:9: note: in instantiation of function template specialization 'paged_decode_split_qk_pair_kernel<8, 4>' requested here
+ 5809 |         paged_decode_split_qk_pair_kernel<8, 4><<<grid, 128>>>(
+      |         ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:342:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  342 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:5816:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<4, 8>' requested here
+ 5816 |             paged_decode_split_kernel<4, 8><<<grid, 256>>>(
+      |             ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:342:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  342 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp:5822:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<8, 4>' requested here
+ 5822 |             paged_decode_split_kernel<8, 4><<<grid, 128>>>(
+      |             ^
+10 warnings generated when compiling for host.
+Built /tmp/exp624_revalidation.CFnpm9/candidate.ll

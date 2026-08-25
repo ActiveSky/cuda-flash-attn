@@ -1,0 +1,6 @@
+exp622 relaxed C500 identity
+5477c2430e721a8d9a075814b9d8ad42ad438693b616e1df39f1280f2430d58a  solutions/archive/2026-08-21-experiments/cuda_case14_single_lse_current_exp622.cpp
+9c0b3221d67e0f997f14df3ed6e6418485ee92a934594260f1f4cc94885fd614  build/exp622_relaxed_candidate.so
+Building solutions/archive/2026-08-21-experiments/cuda_case14_single_lse_current_exp622.cpp
+Output: build/exp622_relaxed_candidate.so
+Built build/exp622_relaxed_candidate.so

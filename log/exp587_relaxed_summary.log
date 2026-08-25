@@ -1,0 +1,23 @@
+exp587 relaxed C500 safety-smoke summary
+
+candidate: solutions/archive/2026-08-18-experiments/cuda_case11_single_live_direct_output_exp587.cpp
+source_sha256: 38687f579b0d46ce5411534c685aa72f773069a9de244b3fd45f529f59cf4508
+binary: build/exp587_relaxed_candidate.so
+binary_sha256: 87c5faca432f343444fc80f277234c124f7340e032c06b00b9fc91614d5bb7d1
+
+basic smoke: PASS (case11 full/random/boundary and exact lengths
+1,2,15,16,17,319,320,321,335,336,337,12250,12251; all finite and
+match=1.000000).
+
+special mixed safety gate: FAIL and stopped immediately.  B16 lengths
+(1,16,17,319,320,321,335,336,337,639,640,641,12250,12251,12251,1)
+baseline passed (match=1.000000, finite=True).  After NaN poison of 9707
+invalid padding pages and 109 invalid tail rows, the reference remained
+finite but the candidate became nonfinite (match=0.250000,
+max_tol_ratio=nan).  Output guards and metadata remained intact.
+
+Workspace reuse was not run after this deterministic poison/tail failure.
+No resource audit, A/B, OJ, work-file, or project-document operation was
+performed.
+
+overall=FAIL

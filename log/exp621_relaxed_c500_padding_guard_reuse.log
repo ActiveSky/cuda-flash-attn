@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "<stdin>", line 154, in <module>
+  File "<stdin>", line 104, in run_one
+AssertionError: mixed tail-only/no-tail/full+tail padding-poison guard: reference became nonfinite under padding poison

@@ -1,0 +1,95 @@
+candidate target resource:
+ maca info  : Function properties for  _Z41paged_decode_case1_shared_v_fanout_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKiS5_i 
+  32 bytes stack frame 
+ maca info  : Used  8 MTregisters, 38 STregisters, 256 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 8
+ maca info  : Function properties for  _Z32paged_decode_single_token_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKii 
+control token resource:
+ maca info  : Function properties for  _Z32paged_decode_single_token_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKii 
+  0 bytes stack frame 
+ maca info  : Used  6 MTregisters, 18 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 8
+ maca info  : Function properties for  _Z32paged_decode_single_token_kernelILi8ELi4EEvPK15__maca_bfloat16PS0_PKii 
+candidate LLVM symbols:
+14:$_Z41paged_decode_case1_shared_v_fanout_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKiS5_i = comdat any
+80:$_ZZ41paged_decode_case1_shared_v_fanout_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKiS5_iE8v_shared = comdat any
+122:@_ZZ41paged_decode_case1_shared_v_fanout_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKiS5_iE8v_shared = linkonce_odr protected local_unnamed_addr addrspace(3) global [16 x %struct.uint4.2] undef, comdat, align 16
+168:  %0 = tail call ptr addrspace(4) @llvm.mxc.implicitarg.ptr()
+182:  %6 = tail call align 4 dereferenceable(64) ptr addrspace(4) @llvm.mxc.dispatch.ptr()
+201:  %14 = tail call noundef range(i32 0, 2147483647) i32 @llvm.mxc.block.id.z(), !range !15
+203:  %15 = tail call noundef range(i32 0, 2147483647) i32 @llvm.mxc.block.id.y(), !range !15
+206:  %16 = tail call noundef range(i32 0, 2147483647) i32 @llvm.mxc.block.id.x(), !range !15
+210:  %17 = tail call i1 @llvm.mxc.is.private(ptr nonnull %arrayidx.i)
+230:  tail call void @llvm.mxc.sleep(i32 1)
+234:  %20 = tail call i1 @llvm.mxc.is.private(ptr nonnull %current_counter.i)
+260:  tail call void @llvm.mxc.sleep(i32 30)
+285:  %30 = tail call i1 @llvm.mxc.is.private(ptr %add.ptr.i.i)
+299:  %33 = tail call i1 @llvm.mxc.is.private(ptr %arrayidx16.i)
+319:  %0 = tail call noundef range(i32 0, 2147483647) i32 @llvm.mxc.block.id.x(), !range !15
+321:  %1 = tail call align 4 dereferenceable(64) ptr addrspace(4) @llvm.mxc.dispatch.ptr()
+326:  %4 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.x(), !range !26
+350:  %8 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %agg.tmp.sroa.0.0.copyload), !call_argsrelate !28
+400:  %13 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %agg.tmp42.sroa.0.0.copyload.epil), !call_argsrelate !29
+413:  %17 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %agg.tmp55.sroa.0.0.copyload.epil), !call_argsrelate !30
+427:  %18 = tail call i16 @llvm.mxc.cvt.f32tobf16(float %cond)
+453:  %21 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %agg.tmp42.sroa.0.0.copyload), !call_argsrelate !29
+466:  %25 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %agg.tmp55.sroa.0.0.copyload), !call_argsrelate !30
+485:  %28 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %agg.tmp42.sroa.0.0.copyload.1), !call_argsrelate !29
+498:  %32 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %agg.tmp55.sroa.0.0.copyload.1), !call_argsrelate !30
+517:  %35 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %agg.tmp42.sroa.0.0.copyload.2), !call_argsrelate !29
+530:  %39 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %agg.tmp55.sroa.0.0.copyload.2), !call_argsrelate !30
+549:  %42 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %agg.tmp42.sroa.0.0.copyload.3), !call_argsrelate !29
+562:  %46 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %agg.tmp55.sroa.0.0.copyload.3), !call_argsrelate !30
+581:declare i32 @llvm.mxc.block.id.x() #5
+584:declare align 4 ptr addrspace(4) @llvm.mxc.dispatch.ptr() #5
+587:declare i32 @llvm.mxc.thread.id.x() #5
+590:declare float @llvm.mxc.bf16.to.f32(i16) #5
+596:declare i16 @llvm.mxc.cvt.f32tobf16(float) #5
+599:define protected metaxgpu_kernel void @_Z41paged_decode_case1_shared_v_fanout_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKiS5_i(ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch) local_unnamed_addr #7 comdat {
+602:  %0 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.x(), !range !26
+603:  %1 = tail call noundef range(i32 0, 2147483647) i32 @llvm.mxc.block.id.x(), !range !15
+634:  %arrayidx17 = getelementptr inbounds [16 x %struct.uint4.2], ptr addrspace(3) @_ZZ41paged_decode_case1_shared_v_fanout_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKiS5_iE8v_shared, i32 0, i32 %0
+641:  tail call void @llvm.mxc.barrier()
+648:  %arrayidx30 = getelementptr inbounds [16 x %struct.uint4.2], ptr addrspace(3) @_ZZ41paged_decode_case1_shared_v_fanout_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKiS5_iE8v_shared, i32 0, i32 %sub
+682:declare void @llvm.mxc.barrier() #8
+687:  %0 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.x(), !range !26
+692:  %1 = tail call noundef range(i32 0, 2147483647) i32 @llvm.mxc.block.id.x(), !range !15
+724:  %0 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.x(), !range !26
+729:  %1 = tail call noundef range(i32 0, 2147483647) i32 @llvm.mxc.block.id.x(), !range !15
+761:  %0 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.x(), !range !26
+766:  %1 = tail call noundef range(i32 0, 2147483647) i32 @llvm.mxc.block.id.x(), !range !15
+790:  %10 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i247)
+793:  %11 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i278)
+795:  %12 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i244)
+798:  %13 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i274)
+810:  %18 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i241)
+814:  %19 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i270)
+818:  %20 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i238)
+823:  %21 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i266)
+827:  %23 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #26
+828:  %24 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %23) #26
+835:  %26 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i, i32 %22)
+839:  %29 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #26
+840:  %30 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %29) #26
+847:  %32 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.1, i32 %28)
+851:  %35 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #26
+852:  %36 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %35) #26
+859:  %38 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.2, i32 %34)
+863:  %41 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #26
+864:  %42 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %41) #26
+871:  %44 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.3, i32 %40)
+875:  %47 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #26
+876:  %48 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %47) #26
+883:  %50 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.4, i32 %46)
+894:  %55 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i241.1)
+898:  %56 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i270.1)
+902:  %57 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i238.1)
+907:  %58 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i266.1)
+911:  %60 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #26
+912:  %61 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %60) #26
+919:  %63 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.1367, i32 %59)
+923:  %66 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #26
+924:  %67 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %66) #26
+931:  %69 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.1.1, i32 %65)
+candidate/control symbol counts:
+12

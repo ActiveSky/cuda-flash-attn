@@ -1,0 +1,9 @@
+GPU: MetaX C500
+mapping: lane(z,ty,tx), token=4*z+(tx&3), c[s]=dot(q[ty+4*s], k[token]), s=0..3
+q_rows_8_15_absmin=2.695312e-01 k_absmin=3.164062e-01
+max_error=0.000000e+00 max_error_ratio=0.000000e+00
+c[0]: expected_absmax=8.715234e+01 observed_absmax=8.715234e+01 max_error=0.000000e+00
+c[1]: expected_absmax=9.916797e+01 observed_absmax=9.916797e+01 max_error=0.000000e+00
+c[2]: expected_absmax=1.111836e+02 observed_absmax=1.111836e+02 max_error=0.000000e+00
+c[3]: expected_absmax=1.231992e+02 observed_absmax=1.231992e+02 max_error=0.000000e+00
+[PASS] all four populated BF16-MMA accumulator components match the lane/row/token reference; this is capability evidence only

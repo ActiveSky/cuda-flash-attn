@@ -1,0 +1,251 @@
+diff --git a/solutions/archive/2026-08-16-submissions/cuda_113889.cpp b/solutions/archive/2026-08-22-experiments/cuda_case12_pair_state_threepeer_fanin_exp644.cpp
+index cf8c168..e383c0d 100644
+--- a/solutions/archive/2026-08-16-submissions/cuda_113889.cpp
++++ b/solutions/archive/2026-08-22-experiments/cuda_case12_pair_state_threepeer_fanin_exp644.cpp
+@@ -2403,4 +2403,59 @@ __device__ __forceinline__ void merge_case11_head_state(
+ }
+ 
++// exp644: case12's eight z partitions are paired inside their physical
++// 64-lane waves before the cross-wave state fan-in.  This is the exact raw
++// FP32 exchange validated by exp525; the even z partition consumes the odd
++// peer and retains the merged state in its own registers.
++__device__ __forceinline__ float raw_wave64_xor32(float value) {
++#if defined(__MACA_ARCH__) && (__MACA_ARCH__ == 1000)
++    union {
++        float f;
++        int i;
++    } bits;
++    bits.f = value;
++    const unsigned source_lane = __lane_id() ^ 32u;
++    bits.i = __builtin_mxc_bsm_bpermute(source_lane << 2, bits.i);
++    return bits.f;
++#else
++    return __shfl_xor_sync(~0ull, value, 32, 64);
++#endif
++}
++
++__device__ __forceinline__ void merge_case13_intrawave_acc2(
++    float* acc, float own_weight, float peer_weight, bool consume_peer)
++{
++    const float peer0 = raw_wave64_xor32(acc[0]);
++    const float peer1 = raw_wave64_xor32(acc[1]);
++    if (consume_peer) {
++        packed_scale(acc, acc, own_weight);
++        acc[0] = fmaf(peer0, peer_weight, acc[0]);
++        acc[1] = fmaf(peer1, peer_weight, acc[1]);
++    }
++}
++
++__device__ __forceinline__ void merge_case13_intrawave_state(
++    float& m, float& l, float* acc, bool consume_peer)
++{
++    const float peer_m = raw_wave64_xor32(m);
++    const float peer_l = raw_wave64_xor32(l);
++    float own_weight = 0.f;
++    float peer_weight = 0.f;
++    if (consume_peer) {
++        const float m_all = fmaxf(m, peer_m);
++        own_weight = l > 0.f ? __builtin_exp2f(m - m_all) : 0.f;
++        peer_weight = peer_l > 0.f
++            ? __builtin_exp2f(peer_m - m_all) : 0.f;
++        l = l * own_weight + peer_l * peer_weight;
++        m = m_all;
++    }
++    merge_case13_intrawave_acc2(acc, own_weight, peer_weight, consume_peer);
++    merge_case13_intrawave_acc2(
++        acc + 2, own_weight, peer_weight, consume_peer);
++    merge_case13_intrawave_acc2(
++        acc + 4, own_weight, peer_weight, consume_peer);
++    merge_case13_intrawave_acc2(
++        acc + 6, own_weight, peer_weight, consume_peer);
++}
++
+ // exp386: long-KV8 head-pair/z8 architecture probe.  A 256-thread
+ // dim3(16, 2, 8) CTA still owns one complete (batch, kv_head, split) tile,
+@@ -2482,5 +2537,6 @@ __device__ __forceinline__ void store_case13_headpair_state(
+ 
+ template <bool ALL_NATIVE_ROW_QK = false, bool NATIVE_HEAD_BIT1 = false,
+-          bool FIXED_LIVE_BUCKETS = false>
++          bool FIXED_LIVE_BUCKETS = false,
++          bool DIRECT_THREE_PEER_FANIN = false>
+ __global__ void __launch_bounds__(256)
+ paged_decode_case13_kv8_headpair_z8_kernel(
+@@ -2794,57 +2850,123 @@ paged_decode_case13_kv8_headpair_z8_kernel(
+     }
+ 
+-    // Three in-place tree stages reduce eight z states without increasing the
+-    // global partial count.  Every stage stores at most sixteen head states,
+-    // so the accumulator payload fits in the original 8 KiB K/V allocation.
++    // exp644 keeps the even-z pair owners in registers, then makes z2, z4
++    // and z6 publish their complete raw-FP32 pair states.  z0 consumes the
++    // three peers in order after one CTA barrier; no second accumulator or
++    // intermediate pair state is introduced.
+     float* s_acc = reinterpret_cast<float*>(s_storage);
+     float (*s_md)[2] = reinterpret_cast<float (*)[2]>(
+         s_storage + KV_BUFFER_BYTES);
+-    if (tz >= 4) {
+-        const int row0 = (tz - 4) * 4 + local_h0;
+-        const int row1 = (tz - 4) * 4 + local_h1;
+-        store_case13_headpair_state(s_acc, s_md, row0, tx, m0, l0, acc0);
+-        store_case13_headpair_state(s_acc, s_md, row1, tx, m1, l1, acc1);
+-    }
+-    __syncthreads();
++    if constexpr (DIRECT_THREE_PEER_FANIN) {
++        // z0/z1, z2/z3, z4/z5 and z6/z7 share physical 64-lane waves.
++        // Pair reduction is register-to-register; only the even owner
++        // continues to the cross-wave fan-in.
++        const bool consume_peer = (tz & 1) == 0;
++        merge_case13_intrawave_state(m0, l0, acc0, consume_peer);
++        merge_case13_intrawave_state(m1, l1, acc1, consume_peer);
++
++        // z2, z4 and z6 publish all four query-head states of their pair.
++        // The three four-row ranges are disjoint and leave z0 entirely in
++        // registers until the single CTA barrier has completed.
++        if (tz == 2 || tz == 4 || tz == 6) {
++            const int row_base = tz == 2 ? 0 : (tz == 4 ? 4 : 8);
++            store_case13_headpair_state(
++                s_acc, s_md, row_base + local_h0, tx, m0, l0, acc0);
++            store_case13_headpair_state(
++                s_acc, s_md, row_base + local_h1, tx, m1, l1, acc1);
++        }
++        __syncthreads();
+ 
+-    if (tz < 4) {
+-        const int peer0 = tz * 4 + local_h0;
+-        const int peer1 = tz * 4 + local_h1;
+-        merge_case11_head_state(
+-            m0, l0, acc0, s_md[peer0][0], s_md[peer0][1],
+-            s_acc + peer0 * HEAD_DIM + tx * 8);
+-        merge_case11_head_state(
+-            m1, l1, acc1, s_md[peer1][0], s_md[peer1][1],
+-            s_acc + peer1 * HEAD_DIM + tx * 8);
+-    }
+-    __syncthreads();
++        if (tz == 0) {
++            // Preserve the raw-FP32 online-softmax merge order: P0, then P1,
++            // P2, then P3.  Each peer is consumed directly from its rows.
++            merge_case11_head_state(
++                m0, l0, acc0,
++                s_md[local_h0][0], s_md[local_h0][1],
++                s_acc + local_h0 * HEAD_DIM + tx * 8);
++            merge_case11_head_state(
++                m1, l1, acc1,
++                s_md[local_h1][0], s_md[local_h1][1],
++                s_acc + local_h1 * HEAD_DIM + tx * 8);
++            merge_case11_head_state(
++                m0, l0, acc0,
++                s_md[4 + local_h0][0], s_md[4 + local_h0][1],
++                s_acc + (4 + local_h0) * HEAD_DIM + tx * 8);
++            merge_case11_head_state(
++                m1, l1, acc1,
++                s_md[4 + local_h1][0], s_md[4 + local_h1][1],
++                s_acc + (4 + local_h1) * HEAD_DIM + tx * 8);
++            merge_case11_head_state(
++                m0, l0, acc0,
++                s_md[8 + local_h0][0], s_md[8 + local_h0][1],
++                s_acc + (8 + local_h0) * HEAD_DIM + tx * 8);
++            merge_case11_head_state(
++                m1, l1, acc1,
++                s_md[8 + local_h1][0], s_md[8 + local_h1][1],
++                s_acc + (8 + local_h1) * HEAD_DIM + tx * 8);
++        }
++    } else {
++        // Three in-place tree stages reduce eight z states without increasing
++        // the global partial count.  Every stage stores at most sixteen head
++        // states, so the accumulator payload fits in the original 8 KiB K/V
++        // allocation.
++        if (tz >= 4) {
++            const int row0 = (tz - 4) * 4 + local_h0;
++            const int row1 = (tz - 4) * 4 + local_h1;
++            store_case13_headpair_state(s_acc, s_md, row0, tx, m0, l0, acc0);
++            store_case13_headpair_state(s_acc, s_md, row1, tx, m1, l1, acc1);
++        }
++        __syncthreads();
+ 
+-    if (tz == 2 || tz == 3) {
+-        const int row0 = (tz - 2) * 4 + local_h0;
+-        const int row1 = (tz - 2) * 4 + local_h1;
+-        store_case13_headpair_state(s_acc, s_md, row0, tx, m0, l0, acc0);
+-        store_case13_headpair_state(s_acc, s_md, row1, tx, m1, l1, acc1);
+-    }
+-    __syncthreads();
++        if (tz < 4) {
++            const int peer0 = tz * 4 + local_h0;
++            const int peer1 = tz * 4 + local_h1;
++            merge_case11_head_state(
++                m0, l0, acc0, s_md[peer0][0], s_md[peer0][1],
++                s_acc + peer0 * HEAD_DIM + tx * 8);
++            merge_case11_head_state(
++                m1, l1, acc1, s_md[peer1][0], s_md[peer1][1],
++                s_acc + peer1 * HEAD_DIM + tx * 8);
++        }
++        __syncthreads();
+ 
+-    if (tz < 2) {
+-        const int peer0 = tz * 4 + local_h0;
+-        const int peer1 = tz * 4 + local_h1;
+-        merge_case11_head_state(
+-            m0, l0, acc0, s_md[peer0][0], s_md[peer0][1],
+-            s_acc + peer0 * HEAD_DIM + tx * 8);
+-        merge_case11_head_state(
+-            m1, l1, acc1, s_md[peer1][0], s_md[peer1][1],
+-            s_acc + peer1 * HEAD_DIM + tx * 8);
+-    }
+-    __syncthreads();
++        if (tz == 2 || tz == 3) {
++            const int row0 = (tz - 2) * 4 + local_h0;
++            const int row1 = (tz - 2) * 4 + local_h1;
++            store_case13_headpair_state(s_acc, s_md, row0, tx, m0, l0, acc0);
++            store_case13_headpair_state(s_acc, s_md, row1, tx, m1, l1, acc1);
++        }
++        __syncthreads();
++
++        if (tz < 2) {
++            const int peer0 = tz * 4 + local_h0;
++            const int peer1 = tz * 4 + local_h1;
++            merge_case11_head_state(
++                m0, l0, acc0, s_md[peer0][0], s_md[peer0][1],
++                s_acc + peer0 * HEAD_DIM + tx * 8);
++            merge_case11_head_state(
++                m1, l1, acc1, s_md[peer1][0], s_md[peer1][1],
++                s_acc + peer1 * HEAD_DIM + tx * 8);
++        }
++        __syncthreads();
++
++        if (tz == 1) {
++            store_case13_headpair_state(
++                s_acc, s_md, local_h0, tx, m0, l0, acc0);
++            store_case13_headpair_state(
++                s_acc, s_md, local_h1, tx, m1, l1, acc1);
++        }
++        __syncthreads();
+ 
+-    if (tz == 1) {
+-        store_case13_headpair_state(
+-            s_acc, s_md, local_h0, tx, m0, l0, acc0);
+-        store_case13_headpair_state(
+-            s_acc, s_md, local_h1, tx, m1, l1, acc1);
++        if (tz == 0) {
++            merge_case11_head_state(
++                m0, l0, acc0,
++                s_md[local_h0][0], s_md[local_h0][1],
++                s_acc + local_h0 * HEAD_DIM + tx * 8);
++            merge_case11_head_state(
++                m1, l1, acc1,
++                s_md[local_h1][0], s_md[local_h1][1],
++                s_acc + local_h1 * HEAD_DIM + tx * 8);
++        }
+     }
+-    __syncthreads();
+ 
+     if (tz == 0) {
+@@ -5607,5 +5729,8 @@ extern "C" void run_kernel(
+                     // reducer unchanged. exp428 changes only this z8
+                     // producer's QK exchange to the all-native row network.
+-                    paged_decode_case13_kv8_headpair_z8_kernel<true><<<
++                    // exp644: retain the exp525 physical-wave pair exchange,
++                    // then let z0 directly consume pair owners z2/z4/z6.
++                    paged_decode_case13_kv8_headpair_z8_kernel<
++                        true, false, false, true><<<
+                         grid, dim3(16, 2, 8)>>>(
+                         q, k_cache_paged, v_cache_paged, output,

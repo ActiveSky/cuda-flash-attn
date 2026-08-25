@@ -1,0 +1,14 @@
+exp690 OJ watch and terminal result
+submission: #125388
+watch_1: tool timeout after 900s; queue query confirmed #125388 Pending
+watch_2: same-ID watch timeout after 900s; queue query confirmed #125388 Pending
+watch_3: same-ID watch resumed with 3600s timeout; progress None/Pending -> Running/Pending -> Finished/Accepted
+terminal_status: Accepted
+score: 65.71
+time_used_ms: 1636
+testcase_count: 14
+case_times_ms: 3,4,10,23,17,28,269,93,235,38,222,374,181,139
+case_scores: 92,90,82,72,73,63,51,54,57,62,52,60,57,55
+raw_archive: results/raw/cuda_125388_raw.json
+embedded_code_sha256: bc90ae1b38e7c79daced75c8495c7426542c500cd30c3e7956b7f410950e8ce2
+post_terminal_queue: #125388 Accepted; latest --list showed no non-terminal submission

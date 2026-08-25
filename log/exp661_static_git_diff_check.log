@@ -1,0 +1,12 @@
+exp661 static source whitespace check
+2026-08-23T21:12:59Z
+candidate SHA:
+25fed14d39148f013533225a317696a983197e964a8a007cb2e3a31f167b04b5  solutions/archive/2026-08-24-experiments/cuda_case14_single_lse_tailmask_exp661.cpp
+parent SHA:
+c356c76e543d822f020b9db955884963afb7a012effa5056846131567ce4e6e1  solutions/archive/2026-08-24-experiments/cuda_case14_single_lse_state_rebase_exp659.cpp
+
+command:
+git diff --no-index --check solutions/archive/2026-08-24-experiments/cuda_case14_single_lse_state_rebase_exp659.cpp solutions/archive/2026-08-24-experiments/cuda_case14_single_lse_tailmask_exp661.cpp
+git_diff_no_index_check_exit=1
+interpretation=expected nonzero because candidate differs; no whitespace diagnostics emitted
+result=PASS (no whitespace errors)

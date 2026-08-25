@@ -1,0 +1,21 @@
+exp648 build evidence (2026-08-23)
+candidate_sha=a708993cb5bb10cea02f46b297d8880173c090eb8f08f370070f10863a2f6afd
+
+Normal build:
+command: tools/build_local_maca.sh solutions/archive/2026-08-23-experiments/cuda_case8_direct_fanin_normalized_bf16_txfix_exp648.cpp build/exp648_candidate_normal.so
+exit_code=0
+artifact_sha=1e1d04246adf195b7ad24c79fdc0d83e988c720243509638fc129d29a3d50963
+
+Resource build:
+command: tools/build_local_maca.sh solutions/archive/2026-08-23-experiments/cuda_case8_direct_fanin_normalized_bf16_txfix_exp648.cpp build/exp648_candidate_resource.so -resource-usage
+exit_code=0
+artifact_sha=f5e4217d1b61bcc3bce9d4716714ca9b2ed439321fae058e7a0fd5c62da62d84
+warnings: only existing illegal minimum-blocks-per-multiprocessor warnings;
+no compile error.
+
+Target direct kernel resource:
+84 MTregisters / 64 STregisters / 8320 bytes shared / 0 stack / 5 waves
+This matches exp645 target resource; the +2 MTreg relative to control remains,
+but was explicitly not used as a correctness veto.
+
+No real C500 execution, correctness harness, benchmark, A/B, or OJ was run.

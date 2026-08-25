@@ -1,0 +1,291 @@
+exp691 static audit
+timestamp=2026-08-24T11:50:41Z
+parent control SHA / candidate SHA / old reference SHA
+3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe  solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+39db393846e782ee07bd389b8f8adfb1314becd1da3be96d4b0fb5ec985b1291  solutions/archive/2026-08-24-experiments/cuda_control124611_case6_static_weight8_exp691.cpp
+fefcfa55bc17f0456ef7a984e2fe301ec8d39be7019f714207c15af62dde25e1  solutions/archive/2026-08-16-experiments/cuda_case6_static_weight_unrolled8_exp561.cpp
+expected parent control SHA
+solutions/archive/2026-08-24-submissions/cuda_124611.cpp: OK
+source diff stat
+three hunks: static helper, guarded eight-slot accumulator, and case5/case6 reducer dispatch split
+source diff
+--- solutions/archive/2026-08-24-submissions/cuda_124611.cpp	2026-08-24 11:23:55.280866371 +0000
++++ solutions/archive/2026-08-24-experiments/cuda_control124611_case6_static_weight8_exp691.cpp	2026-08-24 11:46:43.906447070 +0000
+@@ -5000,6 +5000,36 @@
+     }
+ }
+ 
++// exp691: case6 has an eight-slot physical partial prefix.  Keep the
++// accumulator order of the rolled path, but make each weight source lane a
++// compile-time row16 broadcast.  The caller guards every slot with the
++// CTA-uniform live-prefix predicate before touching its partial.
++template <int SPLIT>
++__device__ __forceinline__ void group8_static_accumulate_split(
++    float* acc,
++    const float* partial_acc,
++    int batch_size,
++    int batch,
++    int head,
++    int tx,
++    float w_lane)
++{
++    static_assert(SPLIT >= 0 && SPLIT < 8,
++                  "case6 static group8 prefix is exactly eight slots");
++    const int hidx = (SPLIT * batch_size + batch) * 32 + head;
++    const float* src = partial_acc + hidx * HEAD_DIM + tx * 8;
++    const float4 a0 = *reinterpret_cast<const float4*>(src);
++    const float4 a1 = *reinterpret_cast<const float4*>(src + 4);
++    const float w = native_row16_broadcast<SPLIT>(w_lane);
++    const float value[8] = {
++        a0.x, a0.y, a0.z, a0.w, a1.x, a1.y, a1.z, a1.w
++    };
++    packed_scale_acc(acc, value, w);
++    packed_scale_acc(acc + 2, value + 2, w);
++    packed_scale_acc(acc + 4, value + 4, w);
++    packed_scale_acc(acc + 6, value + 6, w);
++}
++
+ // Group eight query heads per CTA.  Sixteen tx lanes cooperate on one head's
+ // split metadata, while each lane owns eight adjacent output dimensions.  This
+ // retains one exponential per (head, split) but cuts reducer CTA count by 8x.
+@@ -5157,29 +5187,66 @@
+     if constexpr (!SHUFFLE_WEIGHTS) __syncthreads();
+ 
+     float acc[8] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
+-    for (int s = 0; s < live_splits; ++s) {
+-        const int hidx = (s * batch_size + b) * 32 + h;
+-        const float* src = partial_acc + hidx * HEAD_DIM + tx * 8;
+-        const float4 a0 = *reinterpret_cast<const float4*>(src);
+-        const float4 a1 = *reinterpret_cast<const float4*>(src + 4);
+-        float w;
+-        if constexpr (SHUFFLE_WEIGHTS) {
+-            if constexpr (STATIC_WEIGHT_SPLITS == 0) {
+-                w = __shfl_sync(0xffffffffu, w_lane, s, 16);
++    if constexpr (STATIC_WEIGHT_SPLITS == 8) {
++        // Every source is a live prefix slot, and every inactive slot is
++        // excluded before its partial_acc load or broadcast is instantiated.
++        if (live_splits > 0) {
++            group8_static_accumulate_split<0>(
++                acc, partial_acc, batch_size, b, h, tx, w_lane);
++        }
++        if (live_splits > 1) {
++            group8_static_accumulate_split<1>(
++                acc, partial_acc, batch_size, b, h, tx, w_lane);
++        }
++        if (live_splits > 2) {
++            group8_static_accumulate_split<2>(
++                acc, partial_acc, batch_size, b, h, tx, w_lane);
++        }
++        if (live_splits > 3) {
++            group8_static_accumulate_split<3>(
++                acc, partial_acc, batch_size, b, h, tx, w_lane);
++        }
++        if (live_splits > 4) {
++            group8_static_accumulate_split<4>(
++                acc, partial_acc, batch_size, b, h, tx, w_lane);
++        }
++        if (live_splits > 5) {
++            group8_static_accumulate_split<5>(
++                acc, partial_acc, batch_size, b, h, tx, w_lane);
++        }
++        if (live_splits > 6) {
++            group8_static_accumulate_split<6>(
++                acc, partial_acc, batch_size, b, h, tx, w_lane);
++        }
++        if (live_splits > 7) {
++            group8_static_accumulate_split<7>(
++                acc, partial_acc, batch_size, b, h, tx, w_lane);
++        }
++    } else {
++        for (int s = 0; s < live_splits; ++s) {
++            const int hidx = (s * batch_size + b) * 32 + h;
++            const float* src = partial_acc + hidx * HEAD_DIM + tx * 8;
++            const float4 a0 = *reinterpret_cast<const float4*>(src);
++            const float4 a1 = *reinterpret_cast<const float4*>(src + 4);
++            float w;
++            if constexpr (SHUFFLE_WEIGHTS) {
++                if constexpr (STATIC_WEIGHT_SPLITS == 0) {
++                    w = __shfl_sync(0xffffffffu, w_lane, s, 16);
++                } else {
++                    w = group8_static_weight_handoff<STATIC_WEIGHT_SPLITS>(
++                        w_lane, s);
++                }
+             } else {
+-                w = group8_static_weight_handoff<STATIC_WEIGHT_SPLITS>(
+-                    w_lane, s);
++                w = s_w[row + s];
+             }
+-        } else {
+-            w = s_w[row + s];
++            const float value[8] = {
++                a0.x, a0.y, a0.z, a0.w, a1.x, a1.y, a1.z, a1.w
++            };
++            packed_scale_acc(acc, value, w);
++            packed_scale_acc(acc + 2, value + 2, w);
++            packed_scale_acc(acc + 4, value + 4, w);
++            packed_scale_acc(acc + 6, value + 6, w);
+         }
+-        const float value[8] = {
+-            a0.x, a0.y, a0.z, a0.w, a1.x, a1.y, a1.z, a1.w
+-        };
+-        packed_scale_acc(acc, value, w);
+-        packed_scale_acc(acc + 2, value + 2, w);
+-        packed_scale_acc(acc + 4, value + 4, w);
+-        packed_scale_acc(acc + 6, value + 6, w);
+     }
+ 
+     const float inv_l = l_sum > 0.f ? 1.f / l_sum : 0.f;
+@@ -5921,15 +5988,22 @@
+                         s_partial_m, s_partial_l, s_partial_acc, output,
+                         cache_seqlens, (int)batch_size,
+                         (int)pages_per_split, reduce_splits);
+-                } else if (batch_size == 16 &&
+-                           ((num_heads_k == 8 && seqlen_k == 362) ||
+-                            (num_heads_k == 4 && seqlen_k == 141))) {
+-                    // exp186: case6's producer already uses native row-local
+-                    // QK.  Isolate the same four-instruction network in the
+-                    // grouped reducer's max/sum allreduces while preserving
+-                    // its split-weight broadcasts and all producer policy.
+-                    // exp385 revalidates exp191's case5 reducer benefit after
+-                    // exp384 changed only case5's producer ownership.
++                } else if (num_heads_k == 8 && batch_size == 16 &&
++                           seqlen_k == 362) {
++                    // exp691: case6 only. Keep the producer, FP32 partial
++                    // ABI, split geometry, and ownership unchanged; specialize
++                    // the eight-slot live-prefix weight handoff.
++                    paged_decode_reduce_group8_kernel<
++                        (XPUOJ_USE_BASE2 != 0), false, true, false, true,
++                        false, 8><<<
++                        rgrid, dim3(16, 8), 0>>>(
++                        s_partial_m, s_partial_l, s_partial_acc, output,
++                        cache_seqlens, (int)batch_size,
++                        (int)pages_per_split, reduce_splits);
++                } else if (num_heads_k == 4 && batch_size == 16 &&
++                           seqlen_k == 141) {
++                    // exp186/385: case5's existing native-row reducer and
++                    // dynamic split-weight handoff remain unchanged.
+                     paged_decode_reduce_group8_kernel<
+                         (XPUOJ_USE_BASE2 != 0), false, true, false, true><<<
+                         rgrid, dim3(16, 8), 0>>>(
+target source checks
+5006-// CTA-uniform live-prefix predicate before touching its partial.
+5007-template <int SPLIT>
+5008:__device__ __forceinline__ void group8_static_accumulate_split(
+5009-    float* acc,
+5010-    const float* partial_acc,
+--
+5188-
+5189-    float acc[8] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
+5190:    if constexpr (STATIC_WEIGHT_SPLITS == 8) {
+5191-        // Every source is a live prefix slot, and every inactive slot is
+5192-        // excluded before its partial_acc load or broadcast is instantiated.
+5193:        if (live_splits > 0) {
+5194:            group8_static_accumulate_split<0>(
+5195-                acc, partial_acc, batch_size, b, h, tx, w_lane);
+5196-        }
+5197:        if (live_splits > 1) {
+5198:            group8_static_accumulate_split<1>(
+5199-                acc, partial_acc, batch_size, b, h, tx, w_lane);
+5200-        }
+5201:        if (live_splits > 2) {
+5202:            group8_static_accumulate_split<2>(
+5203-                acc, partial_acc, batch_size, b, h, tx, w_lane);
+5204-        }
+5205:        if (live_splits > 3) {
+5206:            group8_static_accumulate_split<3>(
+5207-                acc, partial_acc, batch_size, b, h, tx, w_lane);
+5208-        }
+5209:        if (live_splits > 4) {
+5210:            group8_static_accumulate_split<4>(
+5211-                acc, partial_acc, batch_size, b, h, tx, w_lane);
+5212-        }
+5213:        if (live_splits > 5) {
+5214:            group8_static_accumulate_split<5>(
+5215-                acc, partial_acc, batch_size, b, h, tx, w_lane);
+5216-        }
+5217:        if (live_splits > 6) {
+5218:            group8_static_accumulate_split<6>(
+5219-                acc, partial_acc, batch_size, b, h, tx, w_lane);
+5220-        }
+5221:        if (live_splits > 7) {
+5222:            group8_static_accumulate_split<7>(
+5223-                acc, partial_acc, batch_size, b, h, tx, w_lane);
+5224-        }
+--
+5432-    // Case 6 normally creates just 384 CTAs (3 splits over 23 pages). Raise
+5433-    // it to the 1024-CTA target: eight splits, about three pages each.
+5434:    if (num_heads_k == 8 && batch_size == 16 && seqlen_k == 362) {
+5435:        n_split = 8;
+5436-    }
+5437-    // Token-parallel case-5 upper split probe: five live splits cover its
+5438-    // nine pages in two-page chunks, raising producer parallelism 3 -> 5.
+5439:    if (num_heads_k == 4 && batch_size == 16 && seqlen_k == 141) {
+5440-        n_split = 5;
+5441-    }
+--
+5465-    // producer, then test a corrected fused-tail grouped reducer below.
+5466-    if (num_heads_k == 4 && batch_size == 16 && seqlen_k == 4096) n_split = 14;
+5467:    if (num_heads_k == 8 && batch_size == 16 && seqlen_k == 362) n_split = 8;
+5468-    // Case 14 split-boundary probe: one extra split changes the ceiling from
+5469-    // 16 to 15 pages/CTA while adding only four producer CTAs in total.
+5470-    if (num_heads_k == 4 && batch_size == 1 && seqlen_k == 61519) n_split = 257;
+5471:    const int64_t pages_per_split = (max_pages + n_split - 1) / n_split;
+5472-
+5473-    // ---- partial 缓冲（static 缓存，仅首次/扩容时分配；评测多轮调用零开销）----
+--
+5698-                        (int)pages_per_split, n_split,
+5699-                        sm_scale * 1.4426950408889634f);
+5700:                } else if (batch_size == 16 && seqlen_k == 141) {
+5701-                    // exp383: retain case5's five splits, combined masked
+5702-                    // tail, BSM loader, FP32 partial ABI and group8 reducer.
+--
+5990-                        (int)pages_per_split, reduce_splits);
+5991-                } else if (num_heads_k == 8 && batch_size == 16 &&
+5992:                           seqlen_k == 362) {
+5993-                    // exp691: case6 only. Keep the producer, FP32 partial
+5994-                    // ABI, split geometry, and ownership unchanged; specialize
+--
+6002-                        (int)pages_per_split, reduce_splits);
+6003-                } else if (num_heads_k == 4 && batch_size == 16 &&
+6004:                           seqlen_k == 141) {
+6005-                    // exp186/385: case5's existing native-row reducer and
+6006-                    // dynamic split-weight handoff remain unchanged.
+normal/resource/LLVM artifacts
+-rw-r--r-- 1 root root 3.6M Aug 24 11:47 build/exp691_candidate_device.ll
+-rwxr-xr-x 1 root root 778K Aug 24 11:47 build/exp691_candidate_normal.so
+-rwxr-xr-x 1 root root 778K Aug 24 11:47 build/exp691_candidate_resource.so
+candidate resource target static instance
+202: maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb1ELb0ELi8EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+203-  0 bytes stack frame 
+204- maca info  : Used  34 MTregisters, 24 STregisters, 0 bytes shared mem  
+205- maca info  : staticMaxWarps/PEU : 8
+parent resource target dynamic instance (same SHA control resource build)
+202: maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb1ELb0ELi0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+203-  0 bytes stack frame 
+204- maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+205- maca info  : staticMaxWarps/PEU : 7
+resource tuple delta
+ maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb1ELb0ELi8EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+ maca info  : Used  34 MTregisters, 24 STregisters, 0 bytes shared mem  
+device kernel symbols added by candidate
+_Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb1ELb0ELi8EEvPKfS1_S1_P15__maca_bfloat16PKiiii
+device kernel symbols removed by candidate
+target LLVM native row16 lowering
+  %51 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %w_lane.0, i32 336, i32 15, i32 15, i1 false)
+  %58 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %w_lane.0, i32 337, i32 15, i32 15, i1 false)
+  %65 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %w_lane.0, i32 338, i32 15, i32 15, i1 false)
+  %72 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %w_lane.0, i32 339, i32 15, i32 15, i1 false)
+  %79 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %w_lane.0, i32 340, i32 15, i32 15, i1 false)
+  %86 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %w_lane.0, i32 341, i32 15, i32 15, i1 false)
+  %93 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %w_lane.0, i32 342, i32 15, i32 15, i1 false)
+  %100 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %w_lane.0, i32 343, i32 15, i32 15, i1 false)
+target LLVM weight-broadcast controls
+mov.shfl.i32(i32 %w_lane.0, i32 336, i32 15, i32 15, i1 false)
+mov.shfl.i32(i32 %w_lane.0, i32 337, i32 15, i32 15, i1 false)
+mov.shfl.i32(i32 %w_lane.0, i32 338, i32 15, i32 15, i1 false)
+mov.shfl.i32(i32 %w_lane.0, i32 339, i32 15, i32 15, i1 false)
+mov.shfl.i32(i32 %w_lane.0, i32 340, i32 15, i32 15, i1 false)
+mov.shfl.i32(i32 %w_lane.0, i32 341, i32 15, i32 15, i1 false)
+mov.shfl.i32(i32 %w_lane.0, i32 342, i32 15, i32 15, i1 false)
+mov.shfl.i32(i32 %w_lane.0, i32 343, i32 15, i32 15, i1 false)
+target LLVM stack/spill scan

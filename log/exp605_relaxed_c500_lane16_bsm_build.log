@@ -1,0 +1,9 @@
+Building tests/exp605_v_lane16_bsm_probe.cpp
+Compiler: /opt/maca/mxgpu_llvm/bin/mxcc
+MACA path: /opt/maca
+CUDA bridge: /opt/maca-3.7.1/tools/cu-bridge
+Target: xcore1000
+Output: build/exp605_relaxed_c500_lane16_bsm_probe.so
+Built build/exp605_relaxed_c500_lane16_bsm_probe.so
+84853d726bfc7e2ed2409e29c5a2ec9926efd07a9eff1391ac8154740677cd0b  tests/exp605_v_lane16_bsm_probe.cpp
+c5248f714fd547477476281c8df6f61d65d3861d1436c9814d455b26af4191dc  build/exp605_relaxed_c500_lane16_bsm_probe.so

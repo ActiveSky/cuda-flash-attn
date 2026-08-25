@@ -1,0 +1,250 @@
+--- solutions/archive/2026-08-24-submissions/cuda_124611.cpp	2026-08-23 23:27:04.612936493 +0000
++++ solutions/archive/2026-08-23-experiments/cuda_control124611_case12_v_dead_half_exp668.cpp	2026-08-23 23:32:11.168733884 +0000
+@@ -2423,6 +2423,43 @@
+         *reinterpret_cast<const uint4*>(src);
+ }
+ 
++// exp668: V-next is produced into the K half after QK retires K-current.
++// K-next remains the existing scalar lookahead and is published into the
++// V half after PV; the two shared-half roles then swap for the next page.
++// This leaves one V token outstanding across current PV and next-page QK.
++__device__ __forceinline__ BsmToken128
++issue_case13_kv8_headpair_z8_tokenized_bsm_page(
++    const __nv_bfloat16* __restrict__ cache,
++    uint32_t (*smem)[U32_PER_ROW],
++    int pid, int kv_head, int tx, int ty, int tz)
++{
++    const int token = tz * 2 + ty;
++    const int cache_row =
++        (pid * PAGE_TOKENS * 8 + token * 8 + kv_head) * HEAD_DIM;
++    const uint32_t* src =
++        reinterpret_cast<const uint32_t*>(cache + cache_row) + tx * 4;
++    uint32_t* dst = &smem[token][tx * 4];
++#if XPUOJ_HAS_MCFLASHINFER_BSM
++    return memcpy_async_pred<16, MACA_ICMP_EQ>(
++        dst, const_cast<uint32_t*>(src), 1, 1);
++#else
++    *reinterpret_cast<uint4*>(dst) = *reinterpret_cast<const uint4*>(src);
++    return {};
++#endif
++}
++
++template <bool V_DEAD_HALF_TOKEN_BSM>
++struct Case13VTokenState;
++
++template <>
++struct Case13VTokenState<false> {};
++
++template <>
++struct Case13VTokenState<true> {
++    BsmToken128 token{};
++    bool pending = false;
++};
++
+ // exp664: the normalized-BF16 case13 probe retains exp663's producer and
+ // partial format, but its fused tail must not read padding rows.  Keep this
+ // loader private to the case13 z8 fused-tail path; the full-page loader above
+@@ -2546,6 +2583,7 @@
+ 
+ template <bool ALL_NATIVE_ROW_QK = false, bool NATIVE_HEAD_BIT1 = false,
+           bool FIXED_LIVE_BUCKETS = false,
++          bool V_DEAD_HALF_TOKEN_BSM = false,
+           bool BF16_NORMALIZED_PARTIAL = false>
+ __global__ void __launch_bounds__(256)
+ paged_decode_case13_kv8_headpair_z8_kernel(
+@@ -2655,6 +2693,7 @@
+     float acc1[8] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
+ 
+     const int32_t* bt_row = block_table + b * pages_per_batch;
++    Case13VTokenState<V_DEAD_HALF_TOKEN_BSM> v_bsm_state{};
+     if (p_beg < p_end) {
+         int32_t pid = bt_row[p_beg];
+         issue_case13_kv8_headpair_z8_page(
+@@ -2703,28 +2742,49 @@
+             uint32_t next_v1 = 0;
+             uint32_t next_v2 = 0;
+             uint32_t next_v3 = 0;
++            if constexpr (V_DEAD_HALF_TOKEN_BSM) {
++                // V-current was published after the preceding QK.  Its only
++                // consumer is this page's PV, so defer its acquire until QK
++                // is complete and retain the token's latency coverage.
++                if (v_bsm_state.pending) {
++                    wait_token_parallel_page_tokenized_bsm(v_bsm_state.token);
++                    v_bsm_state.pending = false;
++                }
++            }
+             if (has_next_page) {
+                 pid = bt_row[p + 1];
+                 const int next_token = tz * 2 + ty;
+                 const int next_row =
+                     (pid * PAGE_TOKENS * 8 +
+                      next_token * 8 + kv_head) * HEAD_DIM;
++                if constexpr (V_DEAD_HALF_TOKEN_BSM) {
++                    // QK is the last consumer of this physical wave's current
++                    // K half.  Converge before a V producer aliases it.
++                    __syncwarp();
++                    v_bsm_state.token =
++                        issue_case13_kv8_headpair_z8_tokenized_bsm_page(
++                            v_cache, s_k, pid, kv_head, tx, ty, tz);
++                    v_bsm_state.pending = true;
++                }
+                 const uint2* next_k_src =
+                     reinterpret_cast<const uint2*>(k_cache + next_row) + tx * 2;
+-                const uint2* next_v_src =
+-                    reinterpret_cast<const uint2*>(v_cache + next_row) + tx * 2;
+                 const uint2 next_k01 = next_k_src[0];
+                 const uint2 next_k23 = next_k_src[1];
+-                const uint2 next_v01 = next_v_src[0];
+-                const uint2 next_v23 = next_v_src[1];
+                 next_k0 = next_k01.x;
+                 next_k1 = next_k01.y;
+                 next_k2 = next_k23.x;
+                 next_k3 = next_k23.y;
+-                next_v0 = next_v01.x;
+-                next_v1 = next_v01.y;
+-                next_v2 = next_v23.x;
+-                next_v3 = next_v23.y;
++                if constexpr (!V_DEAD_HALF_TOKEN_BSM) {
++                    const uint2* next_v_src =
++                        reinterpret_cast<const uint2*>(v_cache + next_row) +
++                        tx * 2;
++                    const uint2 next_v01 = next_v_src[0];
++                    const uint2 next_v23 = next_v_src[1];
++                    next_v0 = next_v01.x;
++                    next_v1 = next_v01.y;
++                    next_v2 = next_v23.x;
++                    next_v3 = next_v23.y;
++                }
+             }
+ 
+             const bool new_max0 = m_page0 > m0;
+@@ -2767,15 +2827,26 @@
+                 __syncwarp();
+                 const int next_token = tz * 2 + ty;
+                 uint32_t* next_k_dst = &s_k[next_token][tx * 4];
+-                uint32_t* next_v_dst = &s_v[next_token][tx * 4];
++                if constexpr (V_DEAD_HALF_TOKEN_BSM) {
++                    // PV has retired current V, so scalar K-next may take this
++                    // half while the tokenized V-next remains in the old K half.
++                    next_k_dst = &s_v[next_token][tx * 4];
++                }
+                 next_k_dst[0] = next_k0;
+                 next_k_dst[1] = next_k1;
+                 next_k_dst[2] = next_k2;
+                 next_k_dst[3] = next_k3;
+-                next_v_dst[0] = next_v0;
+-                next_v_dst[1] = next_v1;
+-                next_v_dst[2] = next_v2;
+-                next_v_dst[3] = next_v3;
++                if constexpr (!V_DEAD_HALF_TOKEN_BSM) {
++                    uint32_t* next_v_dst = &s_v[next_token][tx * 4];
++                    next_v_dst[0] = next_v0;
++                    next_v_dst[1] = next_v1;
++                    next_v_dst[2] = next_v2;
++                    next_v_dst[3] = next_v3;
++                } else {
++                    uint32_t (*old_s_k)[U32_PER_ROW] = s_k;
++                    s_k = s_v;
++                    s_v = old_s_k;
++                }
+             } else {
+                 __syncthreads();
+             }
+@@ -2785,10 +2856,17 @@
+     if (owns_fused_tail) {
+         const int32_t pid = bt_row[full_pages];
+         const int tail_tokens = seqlen & (PAGE_TOKENS - 1);
+-        issue_exp664_case13_tail_page(
+-            k_cache, s_k, pid, kv_head, tx, ty, tz, tail_tokens);
+-        issue_exp664_case13_tail_page(
+-            v_cache, s_v, pid, kv_head, tx, ty, tz, tail_tokens);
++        if constexpr (BF16_NORMALIZED_PARTIAL) {
++            issue_exp664_case13_tail_page(
++                k_cache, s_k, pid, kv_head, tx, ty, tz, tail_tokens);
++            issue_exp664_case13_tail_page(
++                v_cache, s_v, pid, kv_head, tx, ty, tz, tail_tokens);
++        } else {
++            issue_case13_kv8_headpair_z8_page(
++                k_cache, s_k, pid, kv_head, tx, ty, tz);
++            issue_case13_kv8_headpair_z8_page(
++                v_cache, s_v, pid, kv_head, tx, ty, tz);
++        }
+         __syncwarp();
+ 
+         float owned_score = -CUDART_INF_F;
+@@ -2839,18 +2917,34 @@
+                 packed_scale(acc1 + 4, acc1 + 4, alpha1);
+                 packed_scale(acc1 + 6, acc1 + 6, alpha1);
+             }
+-            if constexpr (NATIVE_HEAD_BIT1) {
+-                exp664_case13_tail_two_token_pv<2>(
+-                    owned_score, m_new0, m_new1, s_v, tz * 2, tail_tokens, tx,
+-                    l0, l1, acc0, acc1);
+-            } else if constexpr (ALL_NATIVE_ROW_QK) {
+-                exp664_case13_tail_two_token_pv<4>(
+-                    owned_score, m_new0, m_new1, s_v, tz * 2, tail_tokens, tx,
+-                    l0, l1, acc0, acc1);
++            if constexpr (BF16_NORMALIZED_PARTIAL) {
++                if constexpr (NATIVE_HEAD_BIT1) {
++                    exp664_case13_tail_two_token_pv<2>(
++                        owned_score, m_new0, m_new1, s_v, tz * 2,
++                        tail_tokens, tx, l0, l1, acc0, acc1);
++                } else if constexpr (ALL_NATIVE_ROW_QK) {
++                    exp664_case13_tail_two_token_pv<4>(
++                        owned_score, m_new0, m_new1, s_v, tz * 2,
++                        tail_tokens, tx, l0, l1, acc0, acc1);
++                } else {
++                    exp664_case13_tail_two_token_pv<8>(
++                        owned_score, m_new0, m_new1, s_v, tz * 2,
++                        tail_tokens, tx, l0, l1, acc0, acc1);
++                }
+             } else {
+-                exp664_case13_tail_two_token_pv<8>(
+-                    owned_score, m_new0, m_new1, s_v, tz * 2, tail_tokens, tx,
+-                    l0, l1, acc0, acc1);
++                if constexpr (NATIVE_HEAD_BIT1) {
++                    case13_headpair_two_token_pv<2>(
++                        owned_score, m_new0, m_new1, s_v, tz * 2, tx,
++                        l0, l1, acc0, acc1);
++                } else if constexpr (ALL_NATIVE_ROW_QK) {
++                    case13_headpair_two_token_pv<4>(
++                        owned_score, m_new0, m_new1, s_v, tz * 2, tx,
++                        l0, l1, acc0, acc1);
++                } else {
++                    case13_headpair_two_token_pv<8>(
++                        owned_score, m_new0, m_new1, s_v, tz * 2, tx,
++                        l0, l1, acc0, acc1);
++                }
+             }
+             m0 = m_new0;
+             m1 = m_new1;
+@@ -5723,13 +5817,13 @@
+ #endif
+             } else {
+                 if (batch_size == 8 && seqlen_k == 32768) {
+-                    // exp387: extend exp386's head-pair/z8 producer ownership
+-                    // only to case12. exp414 uses split40/52 pages per partial,
+-                    // fused-tail ownership, synchronous K+V-over-PV, Q
+-                    // prescale, packed metadata, global partial count and vec2
+-                    // reducer unchanged. exp428 changes only this z8
+-                    // producer's QK exchange to the all-native row network.
+-                    paged_decode_case13_kv8_headpair_z8_kernel<true><<<
++                    // exp668 changes only case12 next-page V ownership: the
++                    // tokenized V producer aliases the QK-dead K half, while
++                    // scalar K uses the PV-dead V half and the two roles swap.
++                    // Keep split40/partial/reducer and every other shape
++                    // unchanged.
++                    paged_decode_case13_kv8_headpair_z8_kernel<
++                        true, false, false, true><<<
+                         grid, dim3(16, 2, 8)>>>(
+                         q, k_cache_paged, v_cache_paged, output,
+                         cache_seqlens, block_table,
+@@ -5782,7 +5876,7 @@
+                     // exp434 maps the two heads through tx bit1 so tx bit0
+                     // directly owns this z partition's two tokens.
+                     paged_decode_case13_kv8_headpair_z8_kernel<
+-                        true, true, false, true><<<
++                        true, true, false, false, true><<<
+                         grid, dim3(16, 2, 8)>>>(
+                         q, k_cache_paged, v_cache_paged, output,
+                         cache_seqlens, block_table,

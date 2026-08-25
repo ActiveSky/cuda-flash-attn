@@ -1,0 +1,182 @@
+exp657 static symbol/dispatch audit
+candidate LLVM owner definition/registration/launch:
+313:define protected metaxgpu_kernel void @_Z37paged_decode_case6_short_owner_kernelPK15__maca_bfloat16S1_S1_PS_PKiS4_if(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch, float noundef %score_scale) local_unnamed_addr #3 {
+46437:define void @_Z52__device_stub__paged_decode_case6_short_owner_kernelPK15__maca_bfloat16S1_S1_PS_PKiS4_if(ptr noalias noundef %q, ptr noalias noundef %k_cache, ptr noalias noundef %v_cache, ptr noalias noundef %out, ptr noalias noundef %cache_seqlens, ptr noalias noundef %block_table, i32 noundef %pages_per_batch, float noundef %score_scale) #1 {
+46484:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z52__device_stub__paged_decode_case6_short_owner_kernelPK15__maca_bfloat16S1_S1_PS_PKiS4_if, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %8, ptr noundef %9)
+46924:  tail call void @_Z52__device_stub__paged_decode_case6_short_owner_kernelPK15__maca_bfloat16S1_S1_PS_PKiS4_if(ptr noundef %q, ptr noundef %k_cache_paged, ptr noundef %v_cache_paged, ptr noundef %output, ptr noundef %cache_seqlens, ptr noundef %block_table, i32 noundef %conv268, float noundef 0x3FC0527DC0000000) #9
+49697:  %4 = tail call i32 @__mcRegisterFunction(ptr %3, ptr nonnull @_Z52__device_stub__paged_decode_case6_short_owner_kernelPK15__maca_bfloat16S1_S1_PS_PKiS4_if, ptr nonnull @0, ptr nonnull @0, i32 -1, ptr null, ptr null, ptr null, ptr null, ptr null)
+candidate case6 producer skip=true launch/definition/registration:
+44:$_Z34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif = comdat any
+46:$_Z34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif = comdat any
+100:$_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage = comdat any
+102:$_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage = comdat any
+131:@_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage = linkonce_odr protected local_unnamed_addr addrspace(3) global [8320 x i8] undef, comdat, align 16
+132:@_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage = linkonce_odr protected local_unnamed_addr addrspace(3) global [8320 x i8] undef, comdat, align 16
+26786:define protected metaxgpu_kernel void @_Z34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #16 comdat {
+26873:  %arrayidx12.i1297 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.i1285, i32 %mul28
+26877:  %arrayidx12.i1283 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %add.i1285, i32 %mul28
+26900:  %arrayidx80 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %mul.i1284, i32 %mul28
+26905:  %arrayidx80.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add75.1, i32 %mul28
+26910:  %arrayidx80.2 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add75.2, i32 %mul28
+26915:  %arrayidx80.3 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add75.3, i32 %mul28
+26928:  %arrayidx142 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %mul.i1284, i32 %mul28
+26935:  %arrayidx142.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add133.1, i32 %mul28
+26942:  %arrayidx142.2 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add133.2, i32 %mul28
+26949:  %arrayidx142.3 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add133.3, i32 %mul28
+26954:  %arrayidx277 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %mul.i1284, i32 %mul28
+26959:  %arrayidx277.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %add267.1, i32 %mul28
+26964:  %arrayidx277.2 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %add267.2, i32 %mul28
+26970:  %arrayidx334 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %mul.i1284, i32 %mul28
+26977:  %arrayidx334.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %add319.1, i32 %mul28
+26984:  %arrayidx334.2 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %add319.2, i32 %mul28
+27852:  %arrayidx334.3.sink = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %add267.3.pn, i32 %mul28
+27937:  %add.ptr402 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr402.idx
+27968:  %arrayidx422 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add.i1285
+27982:  %invariant.gep1442 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %1
+28034:  %invariant.gep1446 = getelementptr inbounds float, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %mul403
+28079:  %arrayidx463.1 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add461.1
+28127:  %arrayidx463.2 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add461.2
+28175:  %arrayidx463.3 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add461.3
+28386:define protected metaxgpu_kernel void @_Z34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #16 comdat {
+28468:  %arrayidx12.i1289 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.i1277, i32 %mul24
+28472:  %arrayidx12.i1275 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %add.i1277, i32 %mul24
+28495:  %arrayidx75 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %mul.i1276, i32 %mul24
+28500:  %arrayidx75.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add70.1, i32 %mul24
+28505:  %arrayidx75.2 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add70.2, i32 %mul24
+28510:  %arrayidx75.3 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add70.3, i32 %mul24
+28523:  %arrayidx137 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %mul.i1276, i32 %mul24
+28530:  %arrayidx137.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add128.1, i32 %mul24
+28537:  %arrayidx137.2 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add128.2, i32 %mul24
+28544:  %arrayidx137.3 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add128.3, i32 %mul24
+28549:  %arrayidx272 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %mul.i1276, i32 %mul24
+28554:  %arrayidx272.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %add262.1, i32 %mul24
+28559:  %arrayidx272.2 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %add262.2, i32 %mul24
+28565:  %arrayidx329 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %mul.i1276, i32 %mul24
+28572:  %arrayidx329.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %add314.1, i32 %mul24
+28579:  %arrayidx329.2 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %add314.2, i32 %mul24
+29447:  %arrayidx329.3.sink = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %add262.3.pn, i32 %mul24
+29532:  %add.ptr397 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr397.idx
+29563:  %arrayidx417 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add.i1277
+29577:  %invariant.gep1434 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %1
+29629:  %invariant.gep1438 = getelementptr inbounds float, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %mul398
+29674:  %arrayidx458.1 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add456.1
+29722:  %arrayidx458.2 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add456.2
+29770:  %arrayidx458.3 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add456.3
+46348:$_Z49__device_stub__paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif = comdat any
+46350:$_Z49__device_stub__paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif = comdat any
+46406:@18 = private unnamed_addr constant [162 x i8] c"_Z34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif\00", align 1
+46407:@19 = private unnamed_addr constant [162 x i8] c"_Z34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif\00", align 1
+47184:  tail call void @_Z49__device_stub__paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr noundef %q, ptr noundef %k_cache_paged, ptr noundef %v_cache_paged, ptr noundef %output, ptr noundef %cache_seqlens, ptr noundef %block_table, ptr noundef %60, ptr noundef %61, ptr noundef %62, i32 noundef 16, i32 noundef %conv481, i32 noundef %conv482, i32 noundef %n_split.14, float noundef 0x3FC0527DC0000000) #9
+47197:  tail call void @_Z49__device_stub__paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr noundef %q, ptr noundef %k_cache_paged, ptr noundef %v_cache_paged, ptr noundef %output, ptr noundef %cache_seqlens, ptr noundef %block_table, ptr noundef %63, ptr noundef %64, ptr noundef %65, i32 noundef %conv491, i32 noundef %conv492, i32 noundef %conv493, i32 noundef %n_split.14, float noundef 0x3FC0527DC0000000) #9
+48647:define linkonce_odr void @_Z49__device_stub__paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr noalias noundef %q, ptr noalias noundef %k_cache, ptr noalias noundef %v_cache, ptr noalias noundef %out, ptr noalias noundef %cache_seqlens, ptr noalias noundef %block_table, ptr noalias noundef %partial_m, ptr noalias noundef %partial_l, ptr noalias noundef %partial_acc, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) #1 comdat {
+48718:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z49__device_stub__paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %14, ptr noundef %15)
+48723:define linkonce_odr void @_Z49__device_stub__paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr noalias noundef %q, ptr noalias noundef %k_cache, ptr noalias noundef %v_cache, ptr noalias noundef %out, ptr noalias noundef %cache_seqlens, ptr noalias noundef %block_table, ptr noalias noundef %partial_m, ptr noalias noundef %partial_l, ptr noalias noundef %partial_acc, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) #1 comdat {
+48794:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z49__device_stub__paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %14, ptr noundef %15)
+49715:  %22 = tail call i32 @__mcRegisterFunction(ptr %3, ptr nonnull @_Z49__device_stub__paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif, ptr nonnull @18, ptr nonnull @18, i32 -1, ptr null, ptr null, ptr null, ptr null, ptr null)
+49716:  %23 = tail call i32 @__mcRegisterFunction(ptr %3, ptr nonnull @_Z49__device_stub__paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif, ptr nonnull @19, ptr nonnull @19, i32 -1, ptr null, ptr null, ptr null, ptr null, ptr null)
+candidate case6 reducer skip=true launch/definition/registration:
+60:$_Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb1ELb0ELi0ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii = comdat any
+38286:define protected metaxgpu_kernel void @_Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb1ELb0ELi0ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii(ptr addrspace(1) noalias nocapture noundef readonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readonly %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef readonly %partial_acc.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, i32 noundef %batch_size, i32 noundef %pages_per_split, i32 noundef %n_split) local_unnamed_addr #18 comdat {
+46364:$_Z48__device_stub__paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb1ELb0ELi0ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii = comdat any
+46414:@26 = private unnamed_addr constant [106 x i8] c"_Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb1ELb0ELi0ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii\00", align 1
+47327:  tail call void @_Z48__device_stub__paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb1ELb0ELi0ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii(ptr noundef %84, ptr noundef %85, ptr noundef %86, ptr noundef %output, ptr noundef %cache_seqlens, i32 noundef 16, i32 noundef %conv612, i32 noundef %n_split.14) #9
+49183:define linkonce_odr void @_Z48__device_stub__paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb1ELb0ELi0ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii(ptr noalias noundef %partial_m, ptr noalias noundef %partial_l, ptr noalias noundef %partial_acc, ptr noalias noundef %out, ptr noalias noundef %cache_seqlens, i32 noundef %batch_size, i32 noundef %pages_per_split, i32 noundef %n_split) #1 comdat {
+49230:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z48__device_stub__paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb1ELb0ELi0ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %8, ptr noundef %9)
+49723:  %30 = tail call i32 @__mcRegisterFunction(ptr %3, ptr nonnull @_Z48__device_stub__paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb1ELb0ELi0ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii, ptr nonnull @26, ptr nonnull @26, i32 -1, ptr null, ptr null, ptr null, ptr null, ptr null)
+all skip-specialized producer/reducer symbols:
+paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb1ELb0ELi0ELb1EEv
+paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1EEv
+tail guard source:
+  1268	
+  1269	    float m = -CUDART_INF_F;
+  1270	    float l = 0.f;
+  1271	    float acc[8] = {0.f, 0.f, 0.f, 0.f,
+  1272	                    0.f, 0.f, 0.f, 0.f};
+  1273	    const int full_pages = seqlen / PAGE_TOKENS;
+  1274	    const int tail_tokens = seqlen & (PAGE_TOKENS - 1);
+  1275	    const int valid_pages = (seqlen + PAGE_TOKENS - 1) / PAGE_TOKENS;
+  1276	    const int32_t* bt_row = block_table + b * pages_per_batch;
+  1277	
+  1278	    for (int p = 0; p < valid_pages; ++p) {
+  1279	        // Retire the previous page's PV consumers before reusing the same
+  1280	        // shared K/V rows for the next page.
+  1281	        __syncwarp();
+  1282	        const int valid_tokens = p < full_pages ? PAGE_TOKENS : tail_tokens;
+  1283	        const int token = tz * GQA + ty;
+  1284	        const int32_t pid = bt_row[p];
+  1285	        if (token < valid_tokens) {
+  1286	            const int cache_row =
+  1287	                (pid * PAGE_TOKENS * KV_HEADS + token * KV_HEADS + kv_head) *
+  1288	                HEAD_DIM;
+  1289	            const uint32_t* k_src =
+  1290	                reinterpret_cast<const uint32_t*>(k_cache + cache_row) + tx * 4;
+  1291	            const uint32_t* v_src =
+  1292	                reinterpret_cast<const uint32_t*>(v_cache + cache_row) + tx * 4;
+  1293	            *reinterpret_cast<uint4*>(&s_k[token][tx * 4]) =
+  1294	                *reinterpret_cast<const uint4*>(k_src);
+  1295	            *reinterpret_cast<uint4*>(&s_v[token][tx * 4]) =
+  1296	                *reinterpret_cast<const uint4*>(v_src);
+  1297	        }
+  1298	        // KV8/GQA4 maps each z partition to one complete 64-thread C500 wave;
+  1299	        // no other z partition consumes these rows.
+  1300	        __syncwarp();
+case6 dispatch/skip guard source:
+  1508	    const int b = blockIdx.x / KV_HEADS;
+  1509	    const int kv_head = blockIdx.x & (KV_HEADS - 1);
+  1510	    const int split = blockIdx.y;
+  1511	    const int h = kv_head * GQA + ty;
+  1512	
+  1513	    const int seqlen = cache_seqlens[b];
+  1514	    if constexpr (SKIP_CASE6_SHORT_ROWS) {
+  1515	        // exp657: an independent case6 owner handles only real short rows.
+  1516	        // Keep this guard before Q/shared staging and before any partial write;
+  1517	        // zero-length rows intentionally retain the control clear path.
+  1518	        if (seqlen > 0 && seqlen <= 48) return;
+  1519	    }
+  1520	    const int full_pages = seqlen / PAGE_TOKENS;
+  1521	    int out_split = split;
+  1522	    int p_beg;
+  5568	    // identical layout to the other long KV8 shapes to measure its split-KV behavior.
+  5569	    const bool use_qk_pair =
+  5570	        num_heads_k == 8 &&
+  5571	        ((batch_size == 64 && seqlen_k == 2048) ||
+  5572	         (batch_size == 32 && seqlen_k == 4096) ||
+  5573	         (batch_size == 8 && seqlen_k == 32768) ||
+  5574	         (batch_size == 1 && seqlen_k == 58966));
+  5575	    const bool case6_separate_short_owner =
+  5576	        num_heads_k == 8 && batch_size == 16 && seqlen_k == 362;
+  5577	    if (case6_separate_short_owner) {
+  5578	        // The device predicate inside the owner selects only 0 < length <= 48;
+  5579	        // the launch itself is fixed to case6's (batch * KV8, one split) map.
+  5580	        paged_decode_case6_short_owner_kernel<<<
+  5581	            tail_grid, dim3(16, 4, 4)>>>(
+  5582	            q, k_cache_paged, v_cache_paged, output,
+  5583	            cache_seqlens, block_table, (int)pages_per_batch,
+  5584	            sm_scale * 1.4426950408889634f);
+  5585	    }
+  5586	    if (use_token_parallel) {
+  5587	        if (num_heads_k == 4) {
+  5588	            const bool sync_kv4 = batch_size == 16 &&
+  5589	                (seqlen_k == 4096 || seqlen_k == 12251);
+  5590	            if (sync_kv4) {
+  5591	                if constexpr (separate_tail) {
+  5592	#if 0  // exp384: unreachable since exp109; avoid dead template instances.
+  6060	                           seqlen_k == 362) {
+  6061	                    // exp186: case6's producer already uses native row-local
+  6062	                    // QK.  Isolate the same four-instruction network in the
+  6063	                    // grouped reducer's max/sum allreduces while preserving
+  6064	                    // its split-weight broadcasts and all producer policy.
+  6065	                    paged_decode_reduce_group8_kernel<
+  6066	                        (XPUOJ_USE_BASE2 != 0), false, true, false, true,
+  6067	                        false, 0, true><<<
+  6068	                        rgrid, dim3(16, 8), 0>>>(
+  6069	                        s_partial_m, s_partial_l, s_partial_acc, output,
+  6070	                        cache_seqlens, (int)batch_size,
+  6071	                        (int)pages_per_split, reduce_splits);
+  6072	                } else if (num_heads_k == 4 && batch_size == 16 &&
+  6073	                           seqlen_k == 141) {
+  6074	                    // exp385: retain case5's existing reducer contract.
+  6075	                    paged_decode_reduce_group8_kernel<
+  6076	                        (XPUOJ_USE_BASE2 != 0), false, true, false, true><<<
+  6077	                        rgrid, dim3(16, 8), 0>>>(
+  6078	                        s_partial_m, s_partial_l, s_partial_acc, output,

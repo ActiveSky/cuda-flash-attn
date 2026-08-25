@@ -1,0 +1,14 @@
+GPU: MetaX C500
+library: build/exp610_relaxed_candidate.so
+case12: B=8 L=32768 KV=8 pages=2048
+[PASS] mixed tail/no-tail baseline match=1.000000 max_error=7.812500e-03 max_tol_ratio=0.242 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] mixed tail/no-tail padding/tail poison match=1.000000 max_error=7.812500e-03 max_tol_ratio=0.242 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] padding poison invariance reference_same=True output_same=True pages=14071 tail_tokens=47
+[PASS] workspace full-short-full step=1/3 length=32768 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] workspace full-short-full step=2/3 length=1 match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] workspace full-short-full step=3/3 length=32768 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] workspace full-short-full endpoint_deterministic=True
+[PASS] workspace short-full step=1/2 length=1 match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] workspace short-full step=2/2 length=32768 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] workspace short-full endpoint_deterministic=True
+overall=PASS

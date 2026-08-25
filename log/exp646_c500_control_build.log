@@ -1,0 +1,5 @@
+command: bash tools/build_local_maca.sh solutions/archive/2026-08-16-submissions/cuda_113889.cpp build/exp646_c500_control.so
+exit: 0
+compiler: /opt/maca/mxgpu_llvm/bin/mxcc, target: xcore1000
+result: Built build/exp646_c500_control.so
+diagnostics: 10 existing -Wmaca-min-blocks-per-multiprocessor warnings; no error

@@ -1,0 +1,118 @@
+=== candidate STX call count ===
+real_call_sites=16
+declarations=1
+=== function ownership ===
+=== candidate active dispatch source ===
+                        // resolve the next page-table ID before QK, and
+                        // exp151 folds the invariant score scale into Q once
+                        // per split instead of multiplying every token score.
+                        // exp464: symmetric z-state finalizer ownership.
+                        paged_decode_case11_headpair_z4_kernel<
+                            true, true, false, true, true, true, true, true,
+                            false, true, false, false, false, true, true, true,
+                            true, true, true><<<
+                            grid, dim3(16, 4, 4)>>>(
+                            q, k_cache_paged, v_cache_paged, output,
+                            cache_seqlens, block_table,
+                            s_partial_m, s_partial_l, s_partial_acc,
+                            (int)batch_size, (int)pages_per_batch,
+                            (int)pages_per_split, n_split,
+                            sm_scale * 1.4426950408889634f);
+                    }
+                }
+            } else {
+                if constexpr (separate_tail) {
+=== owning LLVM definition ===
+  %ref.tmp591.sroa.4.0.add.ptr597.sroa_idx = getelementptr inbounds i8, ptr addrspace(1) %add.ptr584, i64 20
+  store float %acc1.sroa.103.20.vec.extract, ptr addrspace(1) %ref.tmp591.sroa.4.0.add.ptr597.sroa_idx, align 4, !tbaa !73
+  %ref.tmp591.sroa.5.0.add.ptr597.sroa_idx = getelementptr inbounds i8, ptr addrspace(1) %add.ptr584, i64 24
+  store float %acc1.sroa.153.24.vec.extract2349, ptr addrspace(1) %ref.tmp591.sroa.5.0.add.ptr597.sroa_idx, align 8, !tbaa !73
+  %ref.tmp591.sroa.6.0.add.ptr597.sroa_idx = getelementptr inbounds i8, ptr addrspace(1) %add.ptr584, i64 28
+  store float %acc1.sroa.153.28.vec.extract, ptr addrspace(1) %ref.tmp591.sroa.6.0.add.ptr597.sroa_idx, align 4, !tbaa !73
+  br label %cleanup
+
+cleanup:                                          ; preds = %if.else513, %if.end492, %if.end578, %if.then445, %if.then531, %land.end
+  ret void
+}
+
+; Function Attrs: convergent mustprogress nofree nounwind willreturn memory(none)
+declare <4 x float> @llvm.mxc.mma.f32.16x16x2bf16(<4 x half>, <4 x half>, <4 x float>) #9
+
+; Function Attrs: convergent mustprogress norecurse nounwind
+define protected metaxgpu_kernel void @_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+entry:
+  %0 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.x(), !range !26
+  %1 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.y(), !range !26
+  %2 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.z(), !range !26
+  %3 = tail call noundef range(i32 0, 2147483647) i32 @llvm.mxc.block.id.x(), !range !15
+  %shr = lshr i32 %3, 2
+=== candidate resource target candidates ===
+125- maca info  : staticMaxWarps/PEU : 8
+126: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb0ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+127-  0 bytes stack frame 
+128- maca info  : Used  86 MTregisters, 70 STregisters, 8320 bytes shared mem  
+129- maca info  : staticMaxWarps/PEU : 5
+130: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+131-  0 bytes stack frame 
+132- maca info  : Used  80 MTregisters, 58 STregisters, 8320 bytes shared mem  
+133- maca info  : staticMaxWarps/PEU : 6
+134: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+135-  0 bytes stack frame 
+136: maca info  : Used  82 MTregisters, 66 STregisters, 8320 bytes shared mem  
+137- maca info  : staticMaxWarps/PEU : 5
+138: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+139-  0 bytes stack frame 
+140- maca info  : Used  80 MTregisters, 58 STregisters, 8320 bytes shared mem  
+141- maca info  : staticMaxWarps/PEU : 6
+142: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb0ELb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+143-  0 bytes stack frame 
+144- maca info  : Used  74 MTregisters, 52 STregisters, 8320 bytes shared mem  
+145- maca info  : staticMaxWarps/PEU : 6
+--
+220-  0 bytes stack frame 
+221: maca info  : Used  40 MTregisters, 28 STregisters, 0 bytes shared mem  
+222- maca info  : staticMaxWarps/PEU : 8
+223- maca info  : Function properties for  _Z26paged_decode_reduce_kernelILb1ELb0ELb0ELb0ELb0ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+224-  0 bytes stack frame 
+--
+226- maca info  : staticMaxWarps/PEU : 8
+227: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+228-  0 bytes stack frame 
+229- maca info  : Used  82 MTregisters, 64 STregisters, 8320 bytes shared mem  
+230- maca info  : staticMaxWarps/PEU : 5
+=== control resource target candidates ===
+125- maca info  : staticMaxWarps/PEU : 8
+126: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+127-  0 bytes stack frame 
+128- maca info  : Used  86 MTregisters, 70 STregisters, 8320 bytes shared mem  
+129- maca info  : staticMaxWarps/PEU : 5
+130: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+131-  0 bytes stack frame 
+132- maca info  : Used  80 MTregisters, 58 STregisters, 8320 bytes shared mem  
+133- maca info  : staticMaxWarps/PEU : 6
+134: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+135-  0 bytes stack frame 
+136: maca info  : Used  82 MTregisters, 66 STregisters, 8320 bytes shared mem  
+137- maca info  : staticMaxWarps/PEU : 5
+138: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+139-  0 bytes stack frame 
+140- maca info  : Used  80 MTregisters, 58 STregisters, 8320 bytes shared mem  
+141- maca info  : staticMaxWarps/PEU : 6
+142: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+143-  0 bytes stack frame 
+144- maca info  : Used  74 MTregisters, 52 STregisters, 8320 bytes shared mem  
+145- maca info  : staticMaxWarps/PEU : 6
+--
+220-  0 bytes stack frame 
+221: maca info  : Used  40 MTregisters, 28 STregisters, 0 bytes shared mem  
+222- maca info  : staticMaxWarps/PEU : 8
+223- maca info  : Function properties for  _Z26paged_decode_reduce_kernelILb1ELb0ELb0ELb0ELb0ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+224-  0 bytes stack frame 
+--
+226- maca info  : staticMaxWarps/PEU : 8
+227: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+228-  0 bytes stack frame 
+229- maca info  : Used  82 MTregisters, 64 STregisters, 8320 bytes shared mem  
+230- maca info  : staticMaxWarps/PEU : 5
+=== spill/stack/wave summary ===
+candidate stack_nonzero=control stack_nonzero=candidate spill_mentions=control spill_mentions=

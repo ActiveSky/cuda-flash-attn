@@ -1,0 +1,20 @@
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+[PASS] case  9 B=32 L= 4096 KV=8 lengths=exact:1  match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 finite=True
+[PASS] case  9 B=32 L= 4096 KV=8 lengths=exact:2  match=1.000000 max_error=1.562500e-02 max_tol_ratio=0.326 finite=True
+[PASS] case  9 B=32 L= 4096 KV=8 lengths=exact:15 match=1.000000 max_error=7.812500e-03 max_tol_ratio=0.244 finite=True
+[PASS] case  9 B=32 L= 4096 KV=8 lengths=exact:16 match=1.000000 max_error=1.562500e-02 max_tol_ratio=0.319 finite=True
+[PASS] case  9 B=32 L= 4096 KV=8 lengths=exact:17 match=1.000000 max_error=7.812500e-03 max_tol_ratio=0.243 finite=True
+[PASS] case  9 B=32 L= 4096 KV=8 lengths=exact:687 match=1.000000 max_error=1.953125e-03 max_tol_ratio=0.097 finite=True
+[PASS] case  9 B=32 L= 4096 KV=8 lengths=exact:688 match=1.000000 max_error=1.953125e-03 max_tol_ratio=0.097 finite=True
+[PASS] case  9 B=32 L= 4096 KV=8 lengths=exact:689 match=1.000000 max_error=1.953125e-03 max_tol_ratio=0.097 finite=True
+[PASS] case  9 B=32 L= 4096 KV=8 lengths=exact:703 match=1.000000 max_error=1.953125e-03 max_tol_ratio=0.096 finite=True
+[PASS] case  9 B=32 L= 4096 KV=8 lengths=exact:704 match=1.000000 max_error=1.953125e-03 max_tol_ratio=0.089 finite=True
+[PASS] case  9 B=32 L= 4096 KV=8 lengths=exact:705 match=1.000000 max_error=1.953125e-03 max_tol_ratio=0.098 finite=True
+[PASS] case  9 B=32 L= 4096 KV=8 lengths=exact:1375 match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.054 finite=True
+[PASS] case  9 B=32 L= 4096 KV=8 lengths=exact:1376 match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.054 finite=True
+[PASS] case  9 B=32 L= 4096 KV=8 lengths=exact:1377 match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.054 finite=True
+[PASS] case  9 B=32 L= 4096 KV=8 lengths=exact:2047 match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.054 finite=True
+[PASS] case  9 B=32 L= 4096 KV=8 lengths=exact:2048 match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.054 finite=True
+[PASS] case  9 B=32 L= 4096 KV=8 lengths=exact:2049 match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.054 finite=True
+[PASS] case  9 B=32 L= 4096 KV=8 lengths=exact:4095 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case  9 B=32 L= 4096 KV=8 lengths=exact:4096 match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True

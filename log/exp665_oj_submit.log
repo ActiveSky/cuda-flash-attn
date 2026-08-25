@@ -1,0 +1,29 @@
+exp665
+candidate_source=solutions/archive/2026-08-23-experiments/cuda_case13_bf16_normalized_partial_tailmask_exp664.cpp
+candidate_sha256=1931a5d0721704e9a7800e9ab6e86be1663cb8aea74a916ea43e15dc6b902342
+workfile_sha256_at_submit=1931a5d0721704e9a7800e9ab6e86be1663cb8aea74a916ea43e15dc6b902342
+command_count_actual_submit=1
+command: python3 tools/xpuoj_submit.py solutions/cuda_maca_optimized.cpp --submit --poll-seconds 30 --timeout-seconds 900
+submission=124606
+status=Accepted
+progress=Finished
+score=66
+all_testcases=14/14 Accepted
+submit_time=2026-08-23T22:56:05.000Z
+time_used_ms=1597
+memory_used_kb=23060336
+case1=3ms/92
+case2=4ms/90
+case3=10ms/82
+case4=22ms/73
+case5=17ms/73
+case6=28ms/63
+case7=225ms/55
+case8=93ms/54
+case9=234ms/57
+case10=39ms/62
+case11=223ms/52
+case12=377ms/60
+case13=183ms/56
+case14=139ms/55
+raw=results/raw/cuda_124606_raw.json

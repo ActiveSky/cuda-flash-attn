@@ -1,0 +1,254 @@
+exp601 C500 candidate/control raw BF16 bit comparison case12 exact boundaries
+UTC 2026-08-18T17:29:57Z
+command: PYTHONPATH=tests python3 - (case12 deterministic exact 241 lengths, raw int16 BF16 outputs, guard check)
+candidate source SHA256:
+2eb8cbdcbc8727f4d9d1fd2861663c37d02b3402ad341829a2f786d4b032e4bf  solutions/archive/2026-08-18-experiments/cuda_case12_partial_b128_stg_exp601.cpp
+control source SHA256:
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+candidate/control binary SHA256:
+a3a2898f2f384c74085d430d60bd15ff0f01e9d6e147f3f4ee3a3e2e7d42e95c  build/exp601_c500_candidate.so
+4bbe97993b7ad219dc607e95a8a45a11c26c8c96042d857084f91098d00ea873  build/exp601_c500_control.so
+[PASS] length=    1 raw_bf16_bits_equal elements=32768 sha256_prefix=07a194c0e0dcc6b6 guard=unchanged
+[PASS] length=    2 raw_bf16_bits_equal elements=32768 sha256_prefix=a95d774d2a62d474 guard=unchanged
+[PASS] length=   15 raw_bf16_bits_equal elements=32768 sha256_prefix=52f939ebf349929f guard=unchanged
+[PASS] length=   16 raw_bf16_bits_equal elements=32768 sha256_prefix=051511ab88601fe8 guard=unchanged
+[PASS] length=   17 raw_bf16_bits_equal elements=32768 sha256_prefix=c3b89adce3ac5a28 guard=unchanged
+[PASS] length=  831 raw_bf16_bits_equal elements=32768 sha256_prefix=a1dcb0074106ba02 guard=unchanged
+[PASS] length=  832 raw_bf16_bits_equal elements=32768 sha256_prefix=48b6a3b2d102c843 guard=unchanged
+[PASS] length=  833 raw_bf16_bits_equal elements=32768 sha256_prefix=016c4be8a207607a guard=unchanged
+[PASS] length=  847 raw_bf16_bits_equal elements=32768 sha256_prefix=e6958d3e37b2efba guard=unchanged
+[PASS] length=  848 raw_bf16_bits_equal elements=32768 sha256_prefix=a7e5421c4700b620 guard=unchanged
+[PASS] length=  849 raw_bf16_bits_equal elements=32768 sha256_prefix=df8314c459aebdb3 guard=unchanged
+[PASS] length= 1663 raw_bf16_bits_equal elements=32768 sha256_prefix=2cb2205678d64432 guard=unchanged
+[PASS] length= 1664 raw_bf16_bits_equal elements=32768 sha256_prefix=557b7ae596e39643 guard=unchanged
+[PASS] length= 1665 raw_bf16_bits_equal elements=32768 sha256_prefix=8f372bb7eaa58e75 guard=unchanged
+[PASS] length= 1679 raw_bf16_bits_equal elements=32768 sha256_prefix=70900e305009328d guard=unchanged
+[PASS] length= 1680 raw_bf16_bits_equal elements=32768 sha256_prefix=9f1dd615a4cfa387 guard=unchanged
+[PASS] length= 1681 raw_bf16_bits_equal elements=32768 sha256_prefix=df85bee765a634c2 guard=unchanged
+[PASS] length= 2495 raw_bf16_bits_equal elements=32768 sha256_prefix=6ae0452680e2175f guard=unchanged
+[PASS] length= 2496 raw_bf16_bits_equal elements=32768 sha256_prefix=9ea8f705103ee2e3 guard=unchanged
+[PASS] length= 2497 raw_bf16_bits_equal elements=32768 sha256_prefix=1656699af428f862 guard=unchanged
+[PASS] length= 2511 raw_bf16_bits_equal elements=32768 sha256_prefix=c0f2c788a41fb28d guard=unchanged
+[PASS] length= 2512 raw_bf16_bits_equal elements=32768 sha256_prefix=ee79819115455b1a guard=unchanged
+[PASS] length= 2513 raw_bf16_bits_equal elements=32768 sha256_prefix=ddeb2f1a4ba30408 guard=unchanged
+[PASS] length= 3327 raw_bf16_bits_equal elements=32768 sha256_prefix=a3df78040acb99f3 guard=unchanged
+[PASS] length= 3328 raw_bf16_bits_equal elements=32768 sha256_prefix=0168d059a7d49a96 guard=unchanged
+[PASS] length= 3329 raw_bf16_bits_equal elements=32768 sha256_prefix=6c8eedf66b304b08 guard=unchanged
+[PASS] length= 3343 raw_bf16_bits_equal elements=32768 sha256_prefix=872fc322a86107c7 guard=unchanged
+[PASS] length= 3344 raw_bf16_bits_equal elements=32768 sha256_prefix=72162c2b1c725975 guard=unchanged
+[PASS] length= 3345 raw_bf16_bits_equal elements=32768 sha256_prefix=f5ed6e59e89abbcb guard=unchanged
+[PASS] length= 4159 raw_bf16_bits_equal elements=32768 sha256_prefix=91f97688b41f097e guard=unchanged
+[PASS] length= 4160 raw_bf16_bits_equal elements=32768 sha256_prefix=491ccb35868aff4c guard=unchanged
+[PASS] length= 4161 raw_bf16_bits_equal elements=32768 sha256_prefix=0f14ec1c70093ccb guard=unchanged
+[PASS] length= 4175 raw_bf16_bits_equal elements=32768 sha256_prefix=219fa0ad4a06d9d5 guard=unchanged
+[PASS] length= 4176 raw_bf16_bits_equal elements=32768 sha256_prefix=6c42cb8d015195e2 guard=unchanged
+[PASS] length= 4177 raw_bf16_bits_equal elements=32768 sha256_prefix=0e2f6f01015185a4 guard=unchanged
+[PASS] length= 4991 raw_bf16_bits_equal elements=32768 sha256_prefix=213e0f725215fd8f guard=unchanged
+[PASS] length= 4992 raw_bf16_bits_equal elements=32768 sha256_prefix=561ffb9b347f9e4e guard=unchanged
+[PASS] length= 4993 raw_bf16_bits_equal elements=32768 sha256_prefix=dd06c19799cb0253 guard=unchanged
+[PASS] length= 5007 raw_bf16_bits_equal elements=32768 sha256_prefix=2975d5fc14dd31bf guard=unchanged
+[PASS] length= 5008 raw_bf16_bits_equal elements=32768 sha256_prefix=fced7d7d2af82d86 guard=unchanged
+[PASS] length= 5009 raw_bf16_bits_equal elements=32768 sha256_prefix=5a9b17170674f847 guard=unchanged
+[PASS] length= 5823 raw_bf16_bits_equal elements=32768 sha256_prefix=69e0de611f2fd9ce guard=unchanged
+[PASS] length= 5824 raw_bf16_bits_equal elements=32768 sha256_prefix=eb3c262b56a97725 guard=unchanged
+[PASS] length= 5825 raw_bf16_bits_equal elements=32768 sha256_prefix=e59fe09ca9d64c2c guard=unchanged
+[PASS] length= 5839 raw_bf16_bits_equal elements=32768 sha256_prefix=25ab55bda00a88f7 guard=unchanged
+[PASS] length= 5840 raw_bf16_bits_equal elements=32768 sha256_prefix=d7b088a95d65333c guard=unchanged
+[PASS] length= 5841 raw_bf16_bits_equal elements=32768 sha256_prefix=001505787d7b600c guard=unchanged
+[PASS] length= 6655 raw_bf16_bits_equal elements=32768 sha256_prefix=3179e000a034436c guard=unchanged
+[PASS] length= 6656 raw_bf16_bits_equal elements=32768 sha256_prefix=4cc0c6a3fffc7633 guard=unchanged
+[PASS] length= 6657 raw_bf16_bits_equal elements=32768 sha256_prefix=c5a8cd4e877b35ae guard=unchanged
+[PASS] length= 6671 raw_bf16_bits_equal elements=32768 sha256_prefix=1df4a5a417040b2f guard=unchanged
+[PASS] length= 6672 raw_bf16_bits_equal elements=32768 sha256_prefix=4117885fc7f6ce4b guard=unchanged
+[PASS] length= 6673 raw_bf16_bits_equal elements=32768 sha256_prefix=865c781973353ac8 guard=unchanged
+[PASS] length= 7487 raw_bf16_bits_equal elements=32768 sha256_prefix=ef41e3ec4782eda6 guard=unchanged
+[PASS] length= 7488 raw_bf16_bits_equal elements=32768 sha256_prefix=65eb2c62ff2854c3 guard=unchanged
+[PASS] length= 7489 raw_bf16_bits_equal elements=32768 sha256_prefix=769005764b35553a guard=unchanged
+[PASS] length= 7503 raw_bf16_bits_equal elements=32768 sha256_prefix=01ce5023e3f6122e guard=unchanged
+[PASS] length= 7504 raw_bf16_bits_equal elements=32768 sha256_prefix=0846c04d811f3d56 guard=unchanged
+[PASS] length= 7505 raw_bf16_bits_equal elements=32768 sha256_prefix=9c6de9542ee60d42 guard=unchanged
+[PASS] length= 8319 raw_bf16_bits_equal elements=32768 sha256_prefix=402841384e46e6bd guard=unchanged
+[PASS] length= 8320 raw_bf16_bits_equal elements=32768 sha256_prefix=60e0bd23b5cfee2e guard=unchanged
+[PASS] length= 8321 raw_bf16_bits_equal elements=32768 sha256_prefix=79eae3a3f1dd7366 guard=unchanged
+[PASS] length= 8335 raw_bf16_bits_equal elements=32768 sha256_prefix=8061623c1af4fd57 guard=unchanged
+[PASS] length= 8336 raw_bf16_bits_equal elements=32768 sha256_prefix=79f9fa06fd3235bf guard=unchanged
+[PASS] length= 8337 raw_bf16_bits_equal elements=32768 sha256_prefix=46642777c0c48ced guard=unchanged
+[PASS] length= 9151 raw_bf16_bits_equal elements=32768 sha256_prefix=31d21f7847fabe22 guard=unchanged
+[PASS] length= 9152 raw_bf16_bits_equal elements=32768 sha256_prefix=8a9e6f8e8fe96a40 guard=unchanged
+[PASS] length= 9153 raw_bf16_bits_equal elements=32768 sha256_prefix=c16840479784fcd9 guard=unchanged
+[PASS] length= 9167 raw_bf16_bits_equal elements=32768 sha256_prefix=fb7a277942a8b87c guard=unchanged
+[PASS] length= 9168 raw_bf16_bits_equal elements=32768 sha256_prefix=0da5877a9ea00e58 guard=unchanged
+[PASS] length= 9169 raw_bf16_bits_equal elements=32768 sha256_prefix=45616078f7fe9b56 guard=unchanged
+[PASS] length= 9983 raw_bf16_bits_equal elements=32768 sha256_prefix=fed8c4d9c7cbba64 guard=unchanged
+[PASS] length= 9984 raw_bf16_bits_equal elements=32768 sha256_prefix=e9d03b1767b2b5e7 guard=unchanged
+[PASS] length= 9985 raw_bf16_bits_equal elements=32768 sha256_prefix=725bebd2daa261bc guard=unchanged
+[PASS] length= 9999 raw_bf16_bits_equal elements=32768 sha256_prefix=beb1f7453ae9105f guard=unchanged
+[PASS] length=10000 raw_bf16_bits_equal elements=32768 sha256_prefix=0919cc688ffc2f73 guard=unchanged
+[PASS] length=10001 raw_bf16_bits_equal elements=32768 sha256_prefix=6ffdfa5bdda4c6eb guard=unchanged
+[PASS] length=10815 raw_bf16_bits_equal elements=32768 sha256_prefix=77998ab565cffdea guard=unchanged
+[PASS] length=10816 raw_bf16_bits_equal elements=32768 sha256_prefix=e1ea700a0b9228ee guard=unchanged
+[PASS] length=10817 raw_bf16_bits_equal elements=32768 sha256_prefix=f1650a9155378ad5 guard=unchanged
+[PASS] length=10831 raw_bf16_bits_equal elements=32768 sha256_prefix=e68691b00605aaf0 guard=unchanged
+[PASS] length=10832 raw_bf16_bits_equal elements=32768 sha256_prefix=9e4d823ab00580e1 guard=unchanged
+[PASS] length=10833 raw_bf16_bits_equal elements=32768 sha256_prefix=93208b64a6e40328 guard=unchanged
+[PASS] length=11647 raw_bf16_bits_equal elements=32768 sha256_prefix=2cf111f699a34c52 guard=unchanged
+[PASS] length=11648 raw_bf16_bits_equal elements=32768 sha256_prefix=dbc2a1b0e3f71c0e guard=unchanged
+[PASS] length=11649 raw_bf16_bits_equal elements=32768 sha256_prefix=14ce30fd60858cff guard=unchanged
+[PASS] length=11663 raw_bf16_bits_equal elements=32768 sha256_prefix=e034e7525ad4d94f guard=unchanged
+[PASS] length=11664 raw_bf16_bits_equal elements=32768 sha256_prefix=6b97d31fc149a80a guard=unchanged
+[PASS] length=11665 raw_bf16_bits_equal elements=32768 sha256_prefix=12e19df7fa7da937 guard=unchanged
+[PASS] length=12479 raw_bf16_bits_equal elements=32768 sha256_prefix=05abbfb3235bbcfb guard=unchanged
+[PASS] length=12480 raw_bf16_bits_equal elements=32768 sha256_prefix=ef89d9c4cc63cdbd guard=unchanged
+[PASS] length=12481 raw_bf16_bits_equal elements=32768 sha256_prefix=af03ab600f0d8131 guard=unchanged
+[PASS] length=12495 raw_bf16_bits_equal elements=32768 sha256_prefix=40c2215cabd0abbe guard=unchanged
+[PASS] length=12496 raw_bf16_bits_equal elements=32768 sha256_prefix=ac8070f192a4ee70 guard=unchanged
+[PASS] length=12497 raw_bf16_bits_equal elements=32768 sha256_prefix=039dacef65ac1cfb guard=unchanged
+[PASS] length=13311 raw_bf16_bits_equal elements=32768 sha256_prefix=5cc82e25ff589177 guard=unchanged
+[PASS] length=13312 raw_bf16_bits_equal elements=32768 sha256_prefix=6795993572dd9051 guard=unchanged
+[PASS] length=13313 raw_bf16_bits_equal elements=32768 sha256_prefix=f8b9b43298bcadd8 guard=unchanged
+[PASS] length=13327 raw_bf16_bits_equal elements=32768 sha256_prefix=b879be8efeeca518 guard=unchanged
+[PASS] length=13328 raw_bf16_bits_equal elements=32768 sha256_prefix=e75c26fb40e60735 guard=unchanged
+[PASS] length=13329 raw_bf16_bits_equal elements=32768 sha256_prefix=af70cd0ff06caa28 guard=unchanged
+[PASS] length=14143 raw_bf16_bits_equal elements=32768 sha256_prefix=70474fe3fa30a322 guard=unchanged
+[PASS] length=14144 raw_bf16_bits_equal elements=32768 sha256_prefix=9bd5a855387f69af guard=unchanged
+[PASS] length=14145 raw_bf16_bits_equal elements=32768 sha256_prefix=327f2e52d6470452 guard=unchanged
+[PASS] length=14159 raw_bf16_bits_equal elements=32768 sha256_prefix=7e6733bfbd70c1d2 guard=unchanged
+[PASS] length=14160 raw_bf16_bits_equal elements=32768 sha256_prefix=4d81e9a1c012bf09 guard=unchanged
+[PASS] length=14161 raw_bf16_bits_equal elements=32768 sha256_prefix=ad8d9f93a4ea12d4 guard=unchanged
+[PASS] length=14975 raw_bf16_bits_equal elements=32768 sha256_prefix=361cbce1a87fdaa9 guard=unchanged
+[PASS] length=14976 raw_bf16_bits_equal elements=32768 sha256_prefix=7629b351325684b1 guard=unchanged
+[PASS] length=14977 raw_bf16_bits_equal elements=32768 sha256_prefix=45d427e2164a43a1 guard=unchanged
+[PASS] length=14991 raw_bf16_bits_equal elements=32768 sha256_prefix=ce8a6059d95a3acb guard=unchanged
+[PASS] length=14992 raw_bf16_bits_equal elements=32768 sha256_prefix=1e8b2931e4eb9c08 guard=unchanged
+[PASS] length=14993 raw_bf16_bits_equal elements=32768 sha256_prefix=11ef4d46a81091bc guard=unchanged
+[PASS] length=15807 raw_bf16_bits_equal elements=32768 sha256_prefix=b9751d4bcc27a8a4 guard=unchanged
+[PASS] length=15808 raw_bf16_bits_equal elements=32768 sha256_prefix=5679e27f9c1d64b6 guard=unchanged
+[PASS] length=15809 raw_bf16_bits_equal elements=32768 sha256_prefix=ce6656add8f1bed3 guard=unchanged
+[PASS] length=15823 raw_bf16_bits_equal elements=32768 sha256_prefix=253193d9cb0cdf5a guard=unchanged
+[PASS] length=15824 raw_bf16_bits_equal elements=32768 sha256_prefix=b2f8d0fd17fbc6c8 guard=unchanged
+[PASS] length=15825 raw_bf16_bits_equal elements=32768 sha256_prefix=e82b5c8956f34129 guard=unchanged
+[PASS] length=16639 raw_bf16_bits_equal elements=32768 sha256_prefix=58aca9a2ea407361 guard=unchanged
+[PASS] length=16640 raw_bf16_bits_equal elements=32768 sha256_prefix=f6c5f4ff917146b2 guard=unchanged
+[PASS] length=16641 raw_bf16_bits_equal elements=32768 sha256_prefix=6b69f6be1bbca066 guard=unchanged
+[PASS] length=16655 raw_bf16_bits_equal elements=32768 sha256_prefix=bf7e66b9049db776 guard=unchanged
+[PASS] length=16656 raw_bf16_bits_equal elements=32768 sha256_prefix=57b15a87800f6cfe guard=unchanged
+[PASS] length=16657 raw_bf16_bits_equal elements=32768 sha256_prefix=05b010d0d3dc6b03 guard=unchanged
+[PASS] length=17471 raw_bf16_bits_equal elements=32768 sha256_prefix=cd1e60f83e60659c guard=unchanged
+[PASS] length=17472 raw_bf16_bits_equal elements=32768 sha256_prefix=4c1bdd233faf0f05 guard=unchanged
+[PASS] length=17473 raw_bf16_bits_equal elements=32768 sha256_prefix=e010a7ebecdfa3f2 guard=unchanged
+[PASS] length=17487 raw_bf16_bits_equal elements=32768 sha256_prefix=5baf5586cfc5d5a1 guard=unchanged
+[PASS] length=17488 raw_bf16_bits_equal elements=32768 sha256_prefix=61f5276771a57f88 guard=unchanged
+[PASS] length=17489 raw_bf16_bits_equal elements=32768 sha256_prefix=6ca2c3be94dd5d45 guard=unchanged
+[PASS] length=18303 raw_bf16_bits_equal elements=32768 sha256_prefix=7654359985bd74c9 guard=unchanged
+[PASS] length=18304 raw_bf16_bits_equal elements=32768 sha256_prefix=bfb847da263934bf guard=unchanged
+[PASS] length=18305 raw_bf16_bits_equal elements=32768 sha256_prefix=c6812618537f9b1b guard=unchanged
+[PASS] length=18319 raw_bf16_bits_equal elements=32768 sha256_prefix=d734e91a8f8be3c8 guard=unchanged
+[PASS] length=18320 raw_bf16_bits_equal elements=32768 sha256_prefix=c8a1f3e7008b5cbe guard=unchanged
+[PASS] length=18321 raw_bf16_bits_equal elements=32768 sha256_prefix=1f2dd876cb17d5a0 guard=unchanged
+[PASS] length=19135 raw_bf16_bits_equal elements=32768 sha256_prefix=cd5c49b26ac76ed5 guard=unchanged
+[PASS] length=19136 raw_bf16_bits_equal elements=32768 sha256_prefix=cf8efb2731410585 guard=unchanged
+[PASS] length=19137 raw_bf16_bits_equal elements=32768 sha256_prefix=ebe1eddaa86c022d guard=unchanged
+[PASS] length=19151 raw_bf16_bits_equal elements=32768 sha256_prefix=3af7b824839f3144 guard=unchanged
+[PASS] length=19152 raw_bf16_bits_equal elements=32768 sha256_prefix=c2b25bebd46ad579 guard=unchanged
+[PASS] length=19153 raw_bf16_bits_equal elements=32768 sha256_prefix=439909e040e2fc63 guard=unchanged
+[PASS] length=19967 raw_bf16_bits_equal elements=32768 sha256_prefix=cba9435e760c1be8 guard=unchanged
+[PASS] length=19968 raw_bf16_bits_equal elements=32768 sha256_prefix=2b8ae057bec4b894 guard=unchanged
+[PASS] length=19969 raw_bf16_bits_equal elements=32768 sha256_prefix=add9c9c1c7ac3085 guard=unchanged
+[PASS] length=19983 raw_bf16_bits_equal elements=32768 sha256_prefix=c9bc5ce807368559 guard=unchanged
+[PASS] length=19984 raw_bf16_bits_equal elements=32768 sha256_prefix=c03a0fe4010b5dfd guard=unchanged
+[PASS] length=19985 raw_bf16_bits_equal elements=32768 sha256_prefix=b66ed94b0ec3d9e2 guard=unchanged
+[PASS] length=20799 raw_bf16_bits_equal elements=32768 sha256_prefix=85fcca717c0160d8 guard=unchanged
+[PASS] length=20800 raw_bf16_bits_equal elements=32768 sha256_prefix=bc1f6eae36b7b07e guard=unchanged
+[PASS] length=20801 raw_bf16_bits_equal elements=32768 sha256_prefix=7d2b7f232a57dc22 guard=unchanged
+[PASS] length=20815 raw_bf16_bits_equal elements=32768 sha256_prefix=915653bcaed5309f guard=unchanged
+[PASS] length=20816 raw_bf16_bits_equal elements=32768 sha256_prefix=fc171cd9fee40ea6 guard=unchanged
+[PASS] length=20817 raw_bf16_bits_equal elements=32768 sha256_prefix=caa718a8345fd3b3 guard=unchanged
+[PASS] length=21631 raw_bf16_bits_equal elements=32768 sha256_prefix=53cfabdac5d254c6 guard=unchanged
+[PASS] length=21632 raw_bf16_bits_equal elements=32768 sha256_prefix=35c1e4162554494f guard=unchanged
+[PASS] length=21633 raw_bf16_bits_equal elements=32768 sha256_prefix=04573e93d6790f60 guard=unchanged
+[PASS] length=21647 raw_bf16_bits_equal elements=32768 sha256_prefix=dd1a8e54f1fa0332 guard=unchanged
+[PASS] length=21648 raw_bf16_bits_equal elements=32768 sha256_prefix=57f8353f1200793d guard=unchanged
+[PASS] length=21649 raw_bf16_bits_equal elements=32768 sha256_prefix=9c0dc02b1750e0f4 guard=unchanged
+[PASS] length=22463 raw_bf16_bits_equal elements=32768 sha256_prefix=d1e5bb5643ff6964 guard=unchanged
+[PASS] length=22464 raw_bf16_bits_equal elements=32768 sha256_prefix=f9e4272e25299857 guard=unchanged
+[PASS] length=22465 raw_bf16_bits_equal elements=32768 sha256_prefix=37e9bdd612f9f491 guard=unchanged
+[PASS] length=22479 raw_bf16_bits_equal elements=32768 sha256_prefix=e2e6e6e1ad3bd750 guard=unchanged
+[PASS] length=22480 raw_bf16_bits_equal elements=32768 sha256_prefix=c3bf337ff9dcade0 guard=unchanged
+[PASS] length=22481 raw_bf16_bits_equal elements=32768 sha256_prefix=5bbcd9933f43e186 guard=unchanged
+[PASS] length=23295 raw_bf16_bits_equal elements=32768 sha256_prefix=0f395e189f0c23b5 guard=unchanged
+[PASS] length=23296 raw_bf16_bits_equal elements=32768 sha256_prefix=9c876fc5d6eb4592 guard=unchanged
+[PASS] length=23297 raw_bf16_bits_equal elements=32768 sha256_prefix=876ecb5d528861f2 guard=unchanged
+[PASS] length=23311 raw_bf16_bits_equal elements=32768 sha256_prefix=6183bfb468ac52ba guard=unchanged
+[PASS] length=23312 raw_bf16_bits_equal elements=32768 sha256_prefix=2fa2652109dde443 guard=unchanged
+[PASS] length=23313 raw_bf16_bits_equal elements=32768 sha256_prefix=3f5e1ab279982022 guard=unchanged
+[PASS] length=24127 raw_bf16_bits_equal elements=32768 sha256_prefix=b633d488635742a4 guard=unchanged
+[PASS] length=24128 raw_bf16_bits_equal elements=32768 sha256_prefix=60b566cacbc49a33 guard=unchanged
+[PASS] length=24129 raw_bf16_bits_equal elements=32768 sha256_prefix=4bf7f6a14e023c88 guard=unchanged
+[PASS] length=24143 raw_bf16_bits_equal elements=32768 sha256_prefix=1b7bb123654c3d8a guard=unchanged
+[PASS] length=24144 raw_bf16_bits_equal elements=32768 sha256_prefix=22a001103d86cd19 guard=unchanged
+[PASS] length=24145 raw_bf16_bits_equal elements=32768 sha256_prefix=1aeff6528fb1c570 guard=unchanged
+[PASS] length=24959 raw_bf16_bits_equal elements=32768 sha256_prefix=2935ab9aadd8f604 guard=unchanged
+[PASS] length=24960 raw_bf16_bits_equal elements=32768 sha256_prefix=77164a6a02fad79e guard=unchanged
+[PASS] length=24961 raw_bf16_bits_equal elements=32768 sha256_prefix=bdea7f5e0742294b guard=unchanged
+[PASS] length=24975 raw_bf16_bits_equal elements=32768 sha256_prefix=41a15c522eacd140 guard=unchanged
+[PASS] length=24976 raw_bf16_bits_equal elements=32768 sha256_prefix=54c53dff6b9fb160 guard=unchanged
+[PASS] length=24977 raw_bf16_bits_equal elements=32768 sha256_prefix=564d398235ffdeee guard=unchanged
+[PASS] length=25791 raw_bf16_bits_equal elements=32768 sha256_prefix=72f43235424da129 guard=unchanged
+[PASS] length=25792 raw_bf16_bits_equal elements=32768 sha256_prefix=6819e80049976ebc guard=unchanged
+[PASS] length=25793 raw_bf16_bits_equal elements=32768 sha256_prefix=509b38128cf25f6e guard=unchanged
+[PASS] length=25807 raw_bf16_bits_equal elements=32768 sha256_prefix=8201ebb8f95d94a2 guard=unchanged
+[PASS] length=25808 raw_bf16_bits_equal elements=32768 sha256_prefix=f1d8c1a553bbd1f2 guard=unchanged
+[PASS] length=25809 raw_bf16_bits_equal elements=32768 sha256_prefix=761afe220771984c guard=unchanged
+[PASS] length=26623 raw_bf16_bits_equal elements=32768 sha256_prefix=9f4548b09f5204b2 guard=unchanged
+[PASS] length=26624 raw_bf16_bits_equal elements=32768 sha256_prefix=c1d6b31d1b27d075 guard=unchanged
+[PASS] length=26625 raw_bf16_bits_equal elements=32768 sha256_prefix=6616b258d6e2ed6b guard=unchanged
+[PASS] length=26639 raw_bf16_bits_equal elements=32768 sha256_prefix=c6e4c9fee92d7f64 guard=unchanged
+[PASS] length=26640 raw_bf16_bits_equal elements=32768 sha256_prefix=fa517668bf020bbe guard=unchanged
+[PASS] length=26641 raw_bf16_bits_equal elements=32768 sha256_prefix=b6570ae1d941b543 guard=unchanged
+[PASS] length=27455 raw_bf16_bits_equal elements=32768 sha256_prefix=6f6f6b4900f1eb9a guard=unchanged
+[PASS] length=27456 raw_bf16_bits_equal elements=32768 sha256_prefix=c2efae2ff236a509 guard=unchanged
+[PASS] length=27457 raw_bf16_bits_equal elements=32768 sha256_prefix=664b15ab796d266e guard=unchanged
+[PASS] length=27471 raw_bf16_bits_equal elements=32768 sha256_prefix=78fbc198733928ed guard=unchanged
+[PASS] length=27472 raw_bf16_bits_equal elements=32768 sha256_prefix=774296b152e55d63 guard=unchanged
+[PASS] length=27473 raw_bf16_bits_equal elements=32768 sha256_prefix=c8d3632bd17d05f1 guard=unchanged
+[PASS] length=28287 raw_bf16_bits_equal elements=32768 sha256_prefix=1e03804c2a447aa7 guard=unchanged
+[PASS] length=28288 raw_bf16_bits_equal elements=32768 sha256_prefix=25c68237f27de31e guard=unchanged
+[PASS] length=28289 raw_bf16_bits_equal elements=32768 sha256_prefix=8b32c290c3afcc84 guard=unchanged
+[PASS] length=28303 raw_bf16_bits_equal elements=32768 sha256_prefix=0771d8dbf9771411 guard=unchanged
+[PASS] length=28304 raw_bf16_bits_equal elements=32768 sha256_prefix=910f09543e580c8c guard=unchanged
+[PASS] length=28305 raw_bf16_bits_equal elements=32768 sha256_prefix=07a381768ff5aa4f guard=unchanged
+[PASS] length=29119 raw_bf16_bits_equal elements=32768 sha256_prefix=8f47a1fdc30a3180 guard=unchanged
+[PASS] length=29120 raw_bf16_bits_equal elements=32768 sha256_prefix=e475150df018371d guard=unchanged
+[PASS] length=29121 raw_bf16_bits_equal elements=32768 sha256_prefix=4e8e387b89548a3b guard=unchanged
+[PASS] length=29135 raw_bf16_bits_equal elements=32768 sha256_prefix=f5606b5e7b7b1f9f guard=unchanged
+[PASS] length=29136 raw_bf16_bits_equal elements=32768 sha256_prefix=06ad362647d411b9 guard=unchanged
+[PASS] length=29137 raw_bf16_bits_equal elements=32768 sha256_prefix=7bd037c0387b68ed guard=unchanged
+[PASS] length=29951 raw_bf16_bits_equal elements=32768 sha256_prefix=88b5cdf6e0520cca guard=unchanged
+[PASS] length=29952 raw_bf16_bits_equal elements=32768 sha256_prefix=7d9512ec8c58f816 guard=unchanged
+[PASS] length=29953 raw_bf16_bits_equal elements=32768 sha256_prefix=948f7349f7768d3f guard=unchanged
+[PASS] length=29967 raw_bf16_bits_equal elements=32768 sha256_prefix=46e57d645399cf3c guard=unchanged
+[PASS] length=29968 raw_bf16_bits_equal elements=32768 sha256_prefix=0f7e41ee0ef69ec7 guard=unchanged
+[PASS] length=29969 raw_bf16_bits_equal elements=32768 sha256_prefix=497c1cb4fe750ca0 guard=unchanged
+[PASS] length=30783 raw_bf16_bits_equal elements=32768 sha256_prefix=898778d011cff5cc guard=unchanged
+[PASS] length=30784 raw_bf16_bits_equal elements=32768 sha256_prefix=60ea96dfa1666e81 guard=unchanged
+[PASS] length=30785 raw_bf16_bits_equal elements=32768 sha256_prefix=4bea2c24fc6aefec guard=unchanged
+[PASS] length=30799 raw_bf16_bits_equal elements=32768 sha256_prefix=7265d9ba951d0c4e guard=unchanged
+[PASS] length=30800 raw_bf16_bits_equal elements=32768 sha256_prefix=a4c894be3619d181 guard=unchanged
+[PASS] length=30801 raw_bf16_bits_equal elements=32768 sha256_prefix=656f62202fd6a6a4 guard=unchanged
+[PASS] length=31615 raw_bf16_bits_equal elements=32768 sha256_prefix=5600683d05243914 guard=unchanged
+[PASS] length=31616 raw_bf16_bits_equal elements=32768 sha256_prefix=932654a528fb94d6 guard=unchanged
+[PASS] length=31617 raw_bf16_bits_equal elements=32768 sha256_prefix=0691093e000b3179 guard=unchanged
+[PASS] length=31631 raw_bf16_bits_equal elements=32768 sha256_prefix=37ba9b24da06cab2 guard=unchanged
+[PASS] length=31632 raw_bf16_bits_equal elements=32768 sha256_prefix=1881b4d4a97b85a6 guard=unchanged
+[PASS] length=31633 raw_bf16_bits_equal elements=32768 sha256_prefix=ae46f821d6748190 guard=unchanged
+[PASS] length=32447 raw_bf16_bits_equal elements=32768 sha256_prefix=3dfce659f2d69025 guard=unchanged
+[PASS] length=32448 raw_bf16_bits_equal elements=32768 sha256_prefix=c9f6f5e624e55ec8 guard=unchanged
+[PASS] length=32449 raw_bf16_bits_equal elements=32768 sha256_prefix=a92228095ba63139 guard=unchanged
+[PASS] length=32463 raw_bf16_bits_equal elements=32768 sha256_prefix=9e627836e17c7b14 guard=unchanged
+[PASS] length=32464 raw_bf16_bits_equal elements=32768 sha256_prefix=9748428e7f6e0178 guard=unchanged
+[PASS] length=32465 raw_bf16_bits_equal elements=32768 sha256_prefix=c2e38f2e53c6535f guard=unchanged
+[PASS] length=32767 raw_bf16_bits_equal elements=32768 sha256_prefix=db4247945fe0f467 guard=unchanged
+[PASS] length=32768 raw_bf16_bits_equal elements=32768 sha256_prefix=ff023882011c208d guard=unchanged
+raw_bit_pass=241/241
+output_shape=(8, 1, 32, 128)
+exit_status=0

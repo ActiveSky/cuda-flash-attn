@@ -1,0 +1,19 @@
+exp599 OJ raw/archive/source SHA verification
+UTC 2026-08-18T15:39:03Z
+file SHA256:
+6808e03e0890dfd300dd7e7f582c07b0f08025af8c4ceb6a4b35d36a0d000180  results/raw/cuda_116965_raw.json
+35013de595b082974e0b59de7b87b1f9bfd3476afb2affae1c8aeb8d73635da7  solutions/archive/2026-08-18-submissions/cuda_116965.cpp
+35013de595b082974e0b59de7b87b1f9bfd3476afb2affae1c8aeb8d73635da7  solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp
+35013de595b082974e0b59de7b87b1f9bfd3476afb2affae1c8aeb8d73635da7  solutions/cuda_maca_optimized.cpp
+raw embedded code: bytes=264625 sha256=35013de595b082974e0b59de7b87b1f9bfd3476afb2affae1c8aeb8d73635da7
+immutable archived source: bytes=264625 sha256=35013de595b082974e0b59de7b87b1f9bfd3476afb2affae1c8aeb8d73635da7
+isolated experiment candidate: bytes=264625 sha256=35013de595b082974e0b59de7b87b1f9bfd3476afb2affae1c8aeb8d73635da7
+submitted work file: bytes=264625 sha256=35013de595b082974e0b59de7b87b1f9bfd3476afb2affae1c8aeb8d73635da7
+submission=116965 status=Accepted score=66.14 testcase_count=14
+times_ms=[3, 4, 9, 22, 17, 28, 226, 93, 234, 39, 223, 376, 181, 139]
+scores=[92, 90, 83, 73, 73, 63, 55, 54, 57, 62, 52, 60, 57, 55]
+raw_archive_source_identity=PASS
+submission summary from raw:
+id=116965 status=Accepted score=66.14 submit_time=2026-08-18T15:30:13.000Z time_used_ms=1594 memory_used_kb=23060544
+case_time_score=1:3us/92,2:4us/90,3:9us/83,4:22us/73,5:17us/73,6:28us/63,7:226us/55,8:93us/54,9:234us/57,10:39us/62,11:223us/52,12:376us/60,13:181us/57,14:139us/55
+exit_status=0

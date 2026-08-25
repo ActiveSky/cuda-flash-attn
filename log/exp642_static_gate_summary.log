@@ -1,0 +1,50 @@
+exp642 full-TU static gate summary
+timestamp: 2026-08-22 UTC
+candidate: solutions/archive/2026-08-22-experiments/cuda_case1_shared_v_fanout_exp642.cpp
+candidate_sha256: 3950d999d281032a7c40385cf041e9691cf13ec056b068bdae2c4ae31915e760
+control: solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+control_sha256: a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+
+builds (all exit 0; source SHA recorded before/after in each log):
+- normal: log/exp642_candidate_normal.log, log/exp642_control_normal.log
+- resource: log/exp642_candidate_resource_recheck.log plus stdout/stderr split in
+  log/exp642_candidate_resource_stdout.log and log/exp642_candidate_resource_stderr.log;
+  control equivalents are log/exp642_control_resource_recheck.log and
+  log/exp642_control_resource_stdout.log/log/exp642_control_resource_stderr.log
+- device LLVM: log/exp642_candidate_llvm.log, log/exp642_control_llvm.log
+
+resource inventory from fresh split stdout:
+- candidate 32 reachable device tuples; control 31.
+- all 31 control tuples are byte-for-byte identical in candidate; candidate-only tuple is
+  _Z41paged_decode_case1_shared_v_fanout_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKiS5_i
+  = 32 stack bytes, 8 MTreg, 38 STreg, 256 shared bytes, 8 waves.
+- control case1 fallback tuple is _Z32paged_decode_single_token_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKii
+  = 0 stack bytes, 6 MTreg, 18 STreg, 0 shared bytes, 8 waves.
+- parsed records: build/exp642_candidate_resource_records.txt and
+  build/exp642_control_resource_records.txt; counts/diff are in the same-prefix symbol
+  inventories and logs above.
+
+LLVM/host inventory:
+- candidate 32 device kernel definitions vs control 31; only candidate-only device symbol
+  is the exp642 kernel. Candidate/control host stub, registered, mcLaunchKernel, and
+  run_kernel stub-call inventories differ only by the corresponding exp642 stub symbol;
+  see build/exp642_*_device_kernel_symbols.txt, *_stub_symbols.txt,
+  *_registered_symbols.txt, *_launch_symbols.txt, and *_run_kernel_stub_calls.txt.
+- candidate run_kernel strict branch checks seqlen_k==1, num_heads_k==4, batch_size==1,
+  pushes grid=4/block=128 and calls the new stub; batch_size>1 retains the old
+  single_token stub, and num_heads_k==8 is unchanged. LLVM excerpt is in
+  build/exp642_candidate_dispatch_excerpt.txt and build/exp642_control_dispatch_excerpt.txt.
+
+new-kernel lowering (build/exp642_candidate_device.ll:592-677):
+- addrspace(3) global [16 x uint4] v_shared is 256 bytes; 16 owner threads perform
+  16-byte llvm.memcpy.p5.p4.i64 global V reads and llvm.memcpy.p3.p5.i64 stores.
+- one llvm.mxc.barrier() is surrounded by block release/acquire fences.
+- all 128 threads load four i32 words from addrspace(3) and store four i32 words to
+  addrspace(1) output.
+- the temporary uint4 value is an addrspace(5) alloca; resource output reports a 32-byte
+  stack frame (no spill, but nonzero stack).
+
+VERDICT: STATIC GATE FAILED / NO C500 / NO A-B / NO OJ.
+Reason: required target <= control 6 MTreg/18 STreg/0 stack/8 waves is violated by
+8 MTreg/38 STreg/32 stack bytes (256 shared is allowed); no residency drop, but the
+register and stack failures alone reject the candidate.

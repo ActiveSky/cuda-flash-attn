@@ -1,0 +1,289 @@
+UTC 2026-08-23T13:27:41Z
+exp580 relaxed static LLVM/source audit
+candidate SHA:
+67f1d6e2715903e6be58c17dd28442107351b287b038130176c1e000dad6fd26  solutions/archive/2026-08-17-experiments/cuda_case12_async_register_q_exp580.cpp
+device LLVM SHA:
+586e86d403e045a275f9f1358d6c05ea62f4d27d1c6e1f8eb5a52a8b99e1658e  build/exp580_relaxed_device.ll
+async_intrinsic_count=3
+target_define_count=6
+target_async_context_count=18104-  %add.ptr36 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %q.coerce, i64 %idx.ext35
+18105-  %add.ptr39 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr36, i64 %idx.ext30
+18106-  %7 = addrspacecast ptr addrspace(4) %add.ptr31 to ptr addrspace(1)
+18107:  %8 = tail call <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) %7) #24, !call_argsrelate !28
+18108-  %retval.sroa.0.0.vec.extract.i1630 = extractelement <4 x i32> %8, i64 0
+18109-  %retval.sroa.0.8.vec.extract.i1634 = extractelement <4 x i32> %8, i64 2
+18110-  %9 = addrspacecast ptr addrspace(4) %add.ptr39 to ptr addrspace(1)
+18111:  %10 = tail call <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) %9) #24, !call_argsrelate !28
+18112-  %retval.sroa.0.0.vec.extract.i = extractelement <4 x i32> %10, i64 0
+18113-  %retval.sroa.0.8.vec.extract.i = extractelement <4 x i32> %10, i64 2
+18114-  %retval.sroa.0.4.vec.extract.i1632 = extractelement <4 x i32> %8, i64 1
+--
+19876-}
+19877-
+19878-; Function Attrs: mustprogress nounwind willreturn memory(argmem: readwrite)
+19879:declare <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) noalias nocapture) #14
+19880-
+19881-; Function Attrs: convergent mustprogress norecurse nounwind
+19882-define protected metaxgpu_kernel void @_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef readnone %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+target/stub symbols:
+36:$_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif = comdat any
+38:$_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif = comdat any
+40:$_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif = comdat any
+88:$_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage = comdat any
+90:$_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage = comdat any
+92:$_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage = comdat any
+120:@_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage = linkonce_odr protected local_unnamed_addr addrspace(3) global [8448 x i8] undef, comdat, align 16
+121:@_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage = linkonce_odr protected local_unnamed_addr addrspace(3) global [8448 x i8] undef, comdat, align 16
+122:@_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage = linkonce_odr protected local_unnamed_addr addrspace(3) global [8448 x i8] undef, comdat, align 16
+1592:  tail call void @llvm.mxc.barrier.warp(), !noalias !38
+2176:  tail call void @llvm.mxc.barrier()
+2196:  tail call void @llvm.mxc.barrier.warp(), !noalias !47
+2801:  tail call void @llvm.mxc.barrier.warp(), !noalias !44
+2940:  tail call void @llvm.mxc.barrier.warp()
+3591:  tail call void @llvm.mxc.barrier.warp()
+3605:  tail call void @llvm.mxc.barrier()
+3649:  tail call void @llvm.mxc.barrier.warp()
+4385:  tail call void @llvm.mxc.barrier()
+4480:  tail call void @llvm.mxc.barrier()
+4614:  tail call void @llvm.mxc.barrier()
+4689:  tail call void @llvm.mxc.barrier()
+5129:declare void @llvm.mxc.barrier.warp() #13
+5132:declare void @llvm.mxc.barrier() #13
+5371:  tail call void @llvm.mxc.barrier.warp()
+5727:  tail call void @llvm.mxc.barrier.warp()
+5741:  tail call void @llvm.mxc.barrier()
+5787:  tail call void @llvm.mxc.barrier.warp()
+6135:  tail call void @llvm.mxc.barrier()
+6230:  tail call void @llvm.mxc.barrier()
+6445:  tail call void @llvm.mxc.barrier()
+7122:  tail call void @llvm.mxc.barrier.warp(), !noalias !88
+7417:  tail call void @llvm.mxc.barrier(), !noalias !88
+7439:  tail call void @llvm.mxc.barrier.warp(), !noalias !103
+7755:  tail call void @llvm.mxc.barrier.warp(), !noalias !103
+7770:  tail call void @llvm.mxc.barrier.warp(), !noalias !125
+8086:  tail call void @llvm.mxc.barrier.warp(), !noalias !125
+8203:  tail call void @llvm.mxc.barrier.warp()
+8557:  tail call void @llvm.mxc.barrier.warp()
+8571:  tail call void @llvm.mxc.barrier()
+8617:  tail call void @llvm.mxc.barrier.warp()
+8971:  tail call void @llvm.mxc.barrier()
+9066:  tail call void @llvm.mxc.barrier()
+9281:  tail call void @llvm.mxc.barrier()
+9859:  tail call void @llvm.mxc.barrier.warp()
+10215:  tail call void @llvm.mxc.barrier.warp()
+10229:  tail call void @llvm.mxc.barrier()
+10275:  tail call void @llvm.mxc.barrier.warp()
+10623:  tail call void @llvm.mxc.barrier()
+10718:  tail call void @llvm.mxc.barrier()
+10852:  tail call void @llvm.mxc.barrier()
+10927:  tail call void @llvm.mxc.barrier()
+11570:  tail call void @llvm.mxc.arrive(i32 64)
+11571:  tail call void @llvm.mxc.barrier.inst()
+11619:  tail call void @llvm.mxc.barrier.warp()
+11911:  tail call void @llvm.mxc.barrier.warp()
+11926:  tail call void @llvm.mxc.barrier()
+12013:  tail call void @llvm.mxc.barrier()
+12147:  tail call void @llvm.mxc.barrier()
+12222:  tail call void @llvm.mxc.barrier()
+12656:declare void @llvm.mxc.arrive(i32 immarg) #15
+12659:declare void @llvm.mxc.barrier.inst() #13
+12704:  tail call void @llvm.mxc.barrier()
+12966:  tail call void @llvm.mxc.arrive(i32 64)
+12967:  tail call void @llvm.mxc.barrier.inst()
+13973:  tail call void @llvm.mxc.barrier()
+14747:  tail call void @llvm.mxc.barrier()
+14808:  tail call void @llvm.mxc.barrier()
+15141:  tail call void @llvm.mxc.barrier()
+15403:  tail call void @llvm.mxc.arrive(i32 64)
+15404:  tail call void @llvm.mxc.barrier.inst()
+16922:  tail call void @llvm.mxc.barrier()
+17696:  tail call void @llvm.mxc.barrier()
+17757:  tail call void @llvm.mxc.barrier()
+18048:define protected metaxgpu_kernel void @_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef readnone %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+18137:  %arrayidx12.i1684 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.i1672, i32 %mul29
+18141:  %arrayidx12.i1670 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %add.i1672, i32 %mul29
+18143:  tail call void @llvm.mxc.arrive(i32 64)
+18144:  tail call void @llvm.mxc.barrier()
+18212:  %arrayidx4.i1921 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %mul.i1671, i32 %mul29
+18216:  %30 = getelementptr [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %mul.i1671
+18245:  %arrayidx136 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %mul.i1671, i32 %mul29
+18251:  %arrayidx136.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add131.1, i32 %mul29
+18274:  tail call void @llvm.mxc.barrier.warp()
+18606:  tail call void @llvm.mxc.barrier.warp()
+18620:  tail call void @llvm.mxc.barrier()
+18673:  %arrayidx12.i1656 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.i1644, i32 %mul29
+18677:  %arrayidx12.i = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %add.i1644, i32 %mul29
+18682:  tail call void @llvm.mxc.arrive(i32 64)
+18683:  tail call void @llvm.mxc.barrier()
+18760:  tail call void @llvm.mxc.barrier.warp()
+18785:  %arrayidx367 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %mul.i1643, i32 %mul29
+18866:  %arrayidx367.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add359.1, i32 %mul29
+19009:  %arrayidx4.i = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %mul.i1643, i32 %mul29
+19063:  %274 = getelementptr [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %mul.i1643
+19129:  tail call void @llvm.mxc.barrier()
+19154:  %add.ptr.i2252 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr.i2252.idx
+19185:  %arrayidx8.i2263 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add460
+19193:  %add.ptr.i2231 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr.i2231.idx
+19221:  %arrayidx8.i2242 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add463
+19229:  tail call void @llvm.mxc.barrier()
+19238:  %arrayidx475 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add470
+19243:  %add.ptr482 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr482.idx
+19293:  %arrayidx488 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add472
+19298:  %add.ptr495 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr495.idx
+19363:  tail call void @llvm.mxc.barrier()
+19374:  %add.ptr.i2210 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr.i2210.idx
+19405:  %arrayidx8.i2221 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add506
+19413:  %add.ptr.i2189 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr.i2189.idx
+19441:  %arrayidx8.i2200 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add510
+19449:  tail call void @llvm.mxc.barrier()
+19458:  %arrayidx524 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add518
+19463:  %add.ptr531 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr531.idx
+19513:  %arrayidx537 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add521
+19518:  %add.ptr544 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr544.idx
+19583:  tail call void @llvm.mxc.barrier()
+19590:  %add.ptr.i2168 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr.i2168.idx
+19620:  %arrayidx8.i2179 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %1
+19628:  %add.ptr.i2162 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr.i2162.idx
+19656:  %arrayidx8.i = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add
+19664:  tail call void @llvm.mxc.barrier()
+source forbidden sync/launch markers:
+99:    __syncthreads();
+120:__global__ void __launch_bounds__(128)
+148:__global__ void __launch_bounds__(GQA * 32)
+335:__global__ void __launch_bounds__(256, 6)
+408:        __syncthreads();
+468:        __syncthreads();  // 预取完成 + 计算完成，下一轮才可覆盖两个 buffer
+506:__global__ void __launch_bounds__(64)
+568:    __syncthreads();
+590:        __syncthreads();
+605:        __syncthreads();
+618:        __syncthreads();
+647:        __syncthreads();
+673:        __syncthreads();  // s_kv cannot be overwritten until every PV read ends.
+701:__global__ void __launch_bounds__(256, 6)
+780:        __syncthreads();
+851:        __syncthreads();  // 预取完成 + 计算完成，下一轮才可覆盖两个 buffer
+956:    __syncthreads();
+985:        __syncthreads();
+990:        __syncthreads();
+1001:        __syncwarp();
+1014:        __syncwarp();
+1162:        __syncwarp();
+1206:        __syncwarp();
+1211:        __syncthreads();
+1229:__global__ void __launch_bounds__(256, 6)
+1357:        __syncthreads();
+1388:        __syncthreads();
+1642:                        __syncwarp();
+1644:                        __syncthreads();
+1747:                    __syncwarp();
+1765:                    __syncthreads();
+1771:                __syncthreads();
+1781:                        __syncwarp();
+1796:                        __syncthreads();
+1799:                    __syncthreads();
+1922:            __syncthreads();
+1947:    __syncthreads();
+2498:__global__ void __launch_bounds__(256)
+2649:            __syncwarp();
+2747:                __syncwarp();
+2760:                __syncthreads();
+2792:        __syncwarp();
+2859:        __syncthreads();
+2874:    __syncthreads();
+2886:    __syncthreads();
+2894:    __syncthreads();
+2906:    __syncthreads();
+2914:    __syncthreads();
+3087:        __syncwarp();
+3093:        __syncthreads();
+3211:        __syncwarp();
+3216:        __syncthreads();
+3237:__global__ void __launch_bounds__(256)
+3607:            if (p + 1 < p_end) __syncwarp();
+3681:                __syncwarp();
+3687:                __syncthreads();
+3692:                __syncwarp();
+3698:                __syncthreads();
+3807:            __syncthreads();
+3836:    __syncthreads();
+3878:        __syncthreads();
+3976:        __syncthreads();
+3993:        __syncthreads();
+4079:__global__ void __launch_bounds__(256)
+4143:    __syncthreads();
+4163:    __syncthreads();
+4177:        __syncthreads();
+4204:        __syncthreads();
+4261:        __syncthreads();
+4279:    __syncthreads();
+4340:__global__ void __launch_bounds__(128)
+4489:    __syncthreads();
+4508:    __syncthreads();
+4558:    __syncthreads();
+4577:    __syncthreads();
+4604:__global__ void __launch_bounds__(32)
+4687:    __syncthreads();
+4713:__global__ void __launch_bounds__(64)
+4822:        __syncthreads();
+4831:        __syncthreads();
+4839:        __syncthreads();
+4848:        __syncthreads();
+4880:        __syncthreads();
+4889:        __syncthreads();
+4896:        __syncthreads();
+4905:        __syncthreads();
+4955:__global__ void __launch_bounds__(128)
+5100:    if constexpr (!SHUFFLE_WEIGHTS) __syncthreads();
+5239:        paged_decode_generic_kernel<<<grid, threads>>>(
+5255:            paged_decode_single_token_kernel<4, 8><<<grid, 128>>>(
+5258:            paged_decode_single_token_kernel<8, 4><<<grid, 64>>>(
+5266:            paged_decode_two_token_kernel<4, 8><<<grid, 256>>>(
+5270:            paged_decode_two_token_kernel<8, 4><<<grid, 128>>>(
+5421:                            false, true, false, true><<<
+5430:                            false, false, true, true><<<
+5440:                            true, true, false, true><<<
+5449:                            true, false, true, true><<<
+5478:                                false, true, true, false, false, true, true, true><<<
+5507:                            true, true, true><<<
+5520:                    paged_decode_token_parallel_kernel<4, 8, false, true, false><<<
+5528:                    paged_decode_token_parallel_kernel<4, 8, false, false, true><<<
+5552:                        false, true, true><<<grid, dim3(16, 4, 4)>>>(
+5569:                        true, true><<<grid, dim3(16, 4, 4)>>>(
+5584:                        false, true><<<grid, dim3(16, 4, 4)>>>(
+5599:                        false, false, false, false, false, true><<<
+5609:                    paged_decode_token_parallel_kernel<4, 8, false><<<
+5631:                        8, 4, true, true, false, false, false, true><<<
+5640:                        8, 4, true, false, true, false, false, true><<<
+5649:                    paged_decode_token_parallel_kernel<8, 4, true, true, false><<<
+5657:                    paged_decode_token_parallel_kernel<8, 4, true, false, true><<<
+5676:                        true, false, false, true><<<
+5694:                        true, false, true><<<
+5710:                    paged_decode_case13_kv8_headpair_z8_kernel<true, true><<<
+5728:                    paged_decode_case13_kv8_headpair_z8_kernel<true, true><<<
+5747:                        false, false, false, false, true, true, true, true><<<
+5770:                        true><<<
+5782:        paged_decode_split_qk_pair_kernel<8, 4><<<grid, 128>>>(
+5789:            paged_decode_split_kernel<4, 8><<<grid, 256>>>(
+5795:            paged_decode_split_kernel<8, 4><<<grid, 128>>>(
+5804:        paged_decode_split_kernel<4, 8><<<grid, 256>>>(
+5810:        paged_decode_split_kernel<8, 4><<<grid, 128>>>(
+5832:                (XPUOJ_USE_BASE2 != 0), false, true><<<
+5849:                        (XPUOJ_USE_BASE2 != 0), false, true, true, true><<<
+5862:                        false, true, 3><<<
+5877:                        (XPUOJ_USE_BASE2 != 0), false, true, false, true><<<
+5884:                        (XPUOJ_USE_BASE2 != 0), true, true><<<
+5891:                        (XPUOJ_USE_BASE2 != 0), false, true><<<
+5902:                        (XPUOJ_USE_BASE2 != 0), true, false><<<
+5909:                        (XPUOJ_USE_BASE2 != 0), false, false><<<
+5932:                    (XPUOJ_USE_BASE2 != 0), false, true, true, true><<<
+5944:                    (XPUOJ_USE_BASE2 != 0), false, true><<<
+5956:                    (XPUOJ_USE_BASE2 != 0), false, true><<<
+5970:                    (XPUOJ_USE_BASE2 != 0), false, true><<<
+5982:                    (XPUOJ_USE_BASE2 != 0), false, true><<<
+5992:                    true><<<
+5999:                    (XPUOJ_USE_BASE2 != 0), true><<<
+6006:                    (XPUOJ_USE_BASE2 != 0), false><<<
+6036:        true><<<
+source SHA after audit:
+67f1d6e2715903e6be58c17dd28442107351b287b038130176c1e000dad6fd26  solutions/archive/2026-08-17-experiments/cuda_case12_async_register_q_exp580.cpp

@@ -1,0 +1,20 @@
+exp701 isolated real C500 case2 special safety
+date=2026-08-24T15:11:42Z
+command=python3 tests/exp641_case2_shared_kv_special.py --candidate build/exp701_candidate_normal.so --control build/exp666_control_normal.so --seed 20260824
+script_sha256=8a89928dcd950a6c4c41684fceb7770f1dc2d6acf25d95ff88d76febaf804286
+
+GPU=MetaX C500 torch=2.8.0+metax3.7.1.3
+distinct raw BF16 groups q=128 k=64 v=64 GQA=4
+[PASS] all-one token1 poison/tail padding trap candidate/control error=0 bit_equal=True deterministic=True candidate_untouched=True control_untouched=True guards=True
+[PASS] all-two full token range candidate/control max_error=7.812500e-03 tol_ratio=0.236 bit_equal=True deterministic=True inputs untouched=True guards=True
+[PASS] mixed [1,2,1,2] GQA/page ownership candidate/control max_error=7.812500e-03 tol_ratio=0.236 bit_equal=True deterministic=True inputs untouched=True guards=True
+[PASS] reverse [2,1,2,1] GQA/page ownership candidate/control max_error=3.906250e-03 tol_ratio=0.155 bit_equal=True deterministic=True inputs untouched=True guards=True
+[PASS] workspace reuse full->short->full, iterations=100, every step candidate/control finite, tolerance, bit_equal, deterministic, guards, inputs_untouched
+[PASS] workspace reuse short->full, iterations=100, every step candidate/control finite, tolerance, bit_equal, deterministic, guards, inputs_untouched
+[PASS] determinism all-one candidate repetitions=100 mismatches=0 max_tol_ratio=0.000
+[PASS] determinism all-one control repetitions=100 mismatches=0 max_tol_ratio=0.000
+[PASS] determinism all-two candidate repetitions=100 mismatches=0 max_tol_ratio=0.236
+[PASS] determinism all-two control repetitions=100 mismatches=0 max_tol_ratio=0.236
+case2 exp641 special correctness: PASS checks=9
+
+This covers token1 sentinel/padding, all-one/all-two, mixed and reverse GQA/page ownership, guards, input immutability, same-case workspace reuse, and determinism. No timing/A-B or OJ operation was performed.

@@ -1,0 +1,87 @@
+exp706 static audit
+date=2026-08-24
+
+candidate=solutions/archive/2026-08-24-experiments/cuda_exp696_z4_all_async_register_kv_rebase_exp706.cpp
+candidate_sha256=ba0ef5e8fced08a3e1e970d9a50f43416b219d829251cb12c0a485ba0197841a
+parent_exp696=solutions/archive/2026-08-24-experiments/cuda_control124611_case12_raw_wave_rebase_exp696.cpp
+parent_exp696_sha256=f23ce28fa2e0abdc6329b2d73af9e56b3a236c195a1c703924692e6b7e3071fe
+source_exp705=solutions/archive/2026-08-24-experiments/cuda_control124611_z4_all_async_register_kv_exp705.cpp
+source_exp705_sha256=25a637f309f8a8206a2210a1c8f6382fe9e9206507b5b0b4b41f92caefebe083
+base_control=solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+base_control_sha256=3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+
+provenance_check=passed
+method=unified-diff changed-line multisets, excluding diff headers
+parent_exp696_to_candidate_added=102
+parent_exp696_to_candidate_removed=25
+base_to_exp705_added=102
+base_to_exp705_removed=25
+parent_exp696_to_candidate_equals_base_to_exp705=true
+exp705_to_candidate_added=109
+exp705_to_candidate_removed=9
+base_to_exp696_added=109
+base_to_exp696_removed=9
+exp705_to_candidate_equals_base_to_exp696=true
+interpretation=the candidate is exp696 plus exactly exp705's delta; equivalently exp705 plus exactly exp696's case12 raw-wave delta
+
+retained_exp696_source_markers
+  raw_wave64_xor32=present
+  RAW_WAVE_FIRST_Z_MERGE_template=present
+  case12_dispatch=<true, false, false, false, true>
+  case7_dispatch_raw_wave_disabled=present
+
+applied_exp705_source_markers
+  XpuojAsyncLoadI4=present
+  __builtin_mxc_load_global_async128=present
+  load_case11_headpair_z4_vector_async=present
+  ASYNC_NEXT_GLD_WAIT=present
+  async_arrive_barrier_after_register_load=present
+  async_scope=case8/case10/case11/case14 z4 register K/V lookahead only
+
+builds
+  normal_command=tools/build_local_maca.sh <candidate> build/exp706_candidate_normal.so
+  normal_exit=0
+  resource_command=tools/build_local_maca.sh <candidate> build/exp706_candidate_resource.so -resource-usage
+  resource_exit=0
+  llvm_command=tools/build_local_maca.sh <candidate> build/exp706_candidate_device.ll -c -emit-llvm -S
+  llvm_exit=0
+  compiler_warnings=existing illegal-min-blocks-per-multiprocessor warnings only
+
+LLVM totals (candidate device IR)
+  async_load_global_v4i32=17
+  arrive64=11
+  barrier=104
+  barrier_warp=49
+
+active target lowering and resource (candidate device IR/resource output)
+  case8_fixed19
+    async_load_global_v4i32=6
+    arrive64=3
+    barrier=8
+    barrier_warp=8
+    resource=82 MTregisters, 64 STregisters, 8320 bytes shared, 0 bytes stack, 5 waves
+  case11_generic
+    async_load_global_v4i32=2
+    arrive64=1
+    barrier=5
+    barrier_warp=3
+    resource=80 MTregisters, 58 STregisters, 8320 bytes shared, 0 bytes stack, 6 waves
+  case10_generic
+    async_load_global_v4i32=2
+    arrive64=1
+    barrier=6
+    barrier_warp=3
+    resource=80 MTregisters, 58 STregisters, 8320 bytes shared, 0 bytes stack, 6 waves
+  case14_fixed15
+    async_load_global_v4i32=6
+    arrive64=3
+    barrier=8
+    barrier_warp=8
+    resource=82 MTregisters, 66 STregisters, 8320 bytes shared, 0 bytes stack, 5 waves
+
+static_risk_assessment
+  normal/resource/LLVM compilation passed
+  target shared allocation remains 8320 bytes and stack remains 0 bytes
+  target occupancy remains 5 or 6 waves; no clear illegal launch or resource risk found
+  no C500 correctness, benchmark, or OJ command was run per task scope
+  workfile_sha256=3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe

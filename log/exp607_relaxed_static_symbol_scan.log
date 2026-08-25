@@ -1,0 +1,326 @@
+321:// grid  : (batch_size * num_heads_k, n_split)
+332://     n_split==1 时直接写最终输出（跳过归约 kernel）。
+343:    float* __restrict__ partial_m,    // [n_split, batch, num_heads]
+344:    float* __restrict__ partial_l,    // [n_split, batch, num_heads]
+345:    float* __restrict__ partial_acc,  // [n_split, batch, num_heads, headdim]
+348:    int pages_per_split,  // 每个 split 最多处理的 page 数
+349:    int n_split,          // split 总数（1 时直接输出，跳过归约）
+367:    const int p_beg = split * pages_per_split;
+368:    const int p_end = min(p_beg + pages_per_split, valid_pages);
+474:    if (n_split == 1) {
+523:    int64_t pages_per_split,
+524:    int64_t n_split,
+536:    const int64_t p_beg = split * pages_per_split;
+537:    const int64_t p_end = min(p_beg + pages_per_split, valid_pages);
+680:        if (n_split == 1) {
+709:    float* __restrict__ partial_m,    // [n_split, batch, num_heads]
+710:    float* __restrict__ partial_l,    // [n_split, batch, num_heads]
+711:    float* __restrict__ partial_acc,  // [n_split, batch, num_heads, headdim]
+714:    int pages_per_split,  // 每个 split 最多处理的 page 数
+715:    int n_split,          // split 总数（1 时直接输出，跳过归约）
+733:    const int p_beg = split * pages_per_split;
+734:    const int p_end = min(p_beg + pages_per_split, valid_pages);
+857:    if (n_split == 1) {
+1242:    int pages_per_split,
+1243:    int n_split,
+1300:        p_beg = split * pages_per_split;
+1301:        p_end = min(p_beg + pages_per_split, full_pages);
+1306:        out_split = (full_pages + pages_per_split - 1) / pages_per_split;
+1310:        p_beg = split * pages_per_split;
+1311:        p_end = min(p_beg + pages_per_split, valid_pages);
+1317:            ? (full_pages - 1) / pages_per_split : 0);
+1812:    // one producer launch and 257 workspace states, while preserving exact
+1996:        } else if (n_split == 1) {
+2010:                     batch_size == 8 && n_split == 128);
+2020:                // Case 14 is workspace-heavy: 257 splits materialize about
+2498:    int pages_per_split,
+2499:    int n_split,
+2522:        // exp448's per-row valid_pages/n_split division and never exposes a
+2524:        const int live_splits =
+2540:            split == live_splits - 1;
+2541:        if (split >= live_splits ||
+2544:        p_beg = split * pages_per_split;
+2545:        p_end = min(p_beg + pages_per_split, full_pages);
+2549:                ? (full_pages - 1) / pages_per_split : 0);
+3171:          bool SKIP_LAST_LIVE_SPLIT = false,
+3172:          bool LAST_LIVE_SPLIT_FINALIZER = false>
+3186:    int pages_per_split,
+3187:    int n_split,
+3241:    static_assert(!SKIP_LAST_LIVE_SPLIT ||
+3247:    static_assert(!LAST_LIVE_SPLIT_FINALIZER ||
+3253:    static_assert(!(SKIP_LAST_LIVE_SPLIT && LAST_LIVE_SPLIT_FINALIZER),
+3267:    const int live_splits = full_pages > 0
+3268:        ? min(n_split,
+3269:              (full_pages + pages_per_split - 1) / pages_per_split)
+3271:    const int last_live_split = live_splits - 1;
+3272:    if constexpr (LAST_LIVE_SPLIT_FINALIZER) {
+3273:        if (live_splits == 0) {
+3276:            // workspace slot from a previous call.
+3297:        split = last_live_split;
+3298:    } else if constexpr (SKIP_LAST_LIVE_SPLIT) {
+3301:        if (live_splits == 0 || split >= last_live_split) return;
+3307:        p_beg = split * pages_per_split;
+3308:        p_end = min(p_beg + pages_per_split, full_pages);
+3313:        out_split = (full_pages + pages_per_split - 1) / pages_per_split;
+3317:        p_beg = split * pages_per_split;
+3318:        p_end = min(p_beg + pages_per_split, valid_pages);
+3323:            ? (full_pages - 1) / pages_per_split : 0);
+3875:            if constexpr (LAST_LIVE_SPLIT_FINALIZER) {
+3878:                // stale workspace slots are never part of this merge.
+3879:                for (int s = 0; s < last_live_split; ++s) {
+3893:            } else if (n_split == 1) {
+3940:            if constexpr (LAST_LIVE_SPLIT_FINALIZER) {
+3943:                for (int s = 0; s < last_live_split; ++s) {
+3957:            } else if (n_split == 1) {
+4027:            if (n_split == 1) {
+4114:    int pages_per_split,
+4115:    int n_split,
+4133:        p_beg = split * pages_per_split;
+4134:        p_end = min(p_beg + pages_per_split, full_pages);
+4139:        out_split = (full_pages + pages_per_split - 1) / pages_per_split;
+4143:        p_beg = split * pages_per_split;
+4144:        p_end = min(p_beg + pages_per_split, valid_pages);
+4320:        if (n_split == 1) {
+4350:// smem  : [n_split] partial_m + [n_split] LSE 权重 + warp/physical-row 临时值
+4353:// n_split 很大的长 KV case，这会将同一组标量工作重复 128 次。本 kernel
+4370:    int pages_per_split,
+4371:    int n_split)
+4386:    int live_splits;
+4389:        const int main_splits = n_split - 1;
+4390:        live_splits = min(
+4391:            main_splits,
+4392:            (full_pages + pages_per_split - 1) / pages_per_split);
+4393:        live_splits += (seqlen & (PAGE_TOKENS - 1)) != 0;
+4396:        // owns full pages.  Counting ceil(valid_pages/pages_per_split) would
+4398:        // of pages_per_split.  A tail-only sequence is represented by split 0.
+4400:        live_splits = full_pages > 0
+4401:            ? min(n_split,
+4402:                  (full_pages + pages_per_split - 1) / pages_per_split)
+4407:        live_splits = min(
+4408:            n_split, (valid_pages + pages_per_split - 1) / pages_per_split);
+4414:    if (live_splits <= 1) {
+4416:            if (live_splits == 1) {
+4436:    float* s_m = smem;                  // [n_split], absent for exp288/291
+4438:        ? smem : s_m + n_split;         // [n_split], final LSE coefficient
+4439:    float* s_warp = s_w + n_split;      // 4 warp temporary values
+4456:        if (s0 < live_splits) {
+4463:        if (s1 < live_splits) {
+4470:        if (s2 < live_splits) {
+4479:        for (int s = tid; s < live_splits; s += blockDim.x) {
+4539:        if (s0 < live_splits) {
+4544:        if (s1 < live_splits) {
+4549:        if (s2 < live_splits) {
+4555:        for (int s = tid; s < live_splits; s += blockDim.x) {
+4604:        for (int s = 0; s < live_splits; s++) {
+4623:// same split weights and coalesced workspace traffic.
+4634:    int pages_per_split,
+4635:    int n_split)
+4642:    int live_splits;
+4645:        const int main_splits = n_split - 1;
+4646:        live_splits = min(
+4647:            main_splits,
+4648:            (full_pages + pages_per_split - 1) / pages_per_split);
+4649:        live_splits += (seqlen & (PAGE_TOKENS - 1)) != 0;
+4652:        live_splits = full_pages > 0
+4653:            ? min(n_split,
+4654:                  (full_pages + pages_per_split - 1) / pages_per_split)
+4658:        live_splits = min(
+4659:            n_split, (valid_pages + pages_per_split - 1) / pages_per_split);
+4664:    if (live_splits <= 1) {
+4666:        if (live_splits == 1) {
+4685:    float* s_w = s_m + n_split;
+4688:    for (int s = lane; s < live_splits; s += 32) {
+4699:    for (int s = lane; s < live_splits; s += 32) {
+4712:    for (int s = 0; s < live_splits; ++s) {
+4743:    int pages_per_split,
+4744:    int n_split)
+4753:    int live_splits;
+4756:        const int main_splits = n_split - 1;
+4757:        live_splits = min(
+4758:            main_splits,
+4759:            (full_pages + pages_per_split - 1) / pages_per_split);
+4760:        live_splits += (seqlen & (PAGE_TOKENS - 1)) != 0;
+4763:        live_splits = full_pages > 0
+4764:            ? min(n_split,
+4765:                  (full_pages + pages_per_split - 1) / pages_per_split)
+4770:        live_splits = min(
+4771:            n_split, (valid_pages + pages_per_split - 1) / pages_per_split);
+4776:    if (live_splits <= 1) {
+4778:        if (live_splits == 1) {
+4794:    float* s_w = REGISTER_PACKED_ML ? smem : s_m + n_split;
+4795:    float* s_warp = s_w + n_split;
+4808:        if (s0 < live_splits) {
+4815:        if (s1 < live_splits) {
+4824:        for (int s = tid; s < live_splits; s += 64) {
+4878:        if (s0 < live_splits) {
+4883:        if (s1 < live_splits) {
+4889:        for (int s = tid; s < live_splits; s += 64) {
+4932:    for (int s = 0; s < live_splits; ++s) {
+4985:    int pages_per_split,
+4986:    int n_split)
+4996:    int live_splits;
+4999:        const int main_splits = n_split - 1;
+5000:        live_splits = min(
+5001:            main_splits,
+5002:            (full_pages + pages_per_split - 1) / pages_per_split);
+5003:        live_splits += (seqlen & (PAGE_TOKENS - 1)) != 0;
+5006:        live_splits = full_pages > 0
+5007:            ? min(n_split,
+5008:                  (full_pages + pages_per_split - 1) / pages_per_split)
+5013:        live_splits = min(
+5014:            n_split, (valid_pages + pages_per_split - 1) / pages_per_split);
+5018:    if (live_splits <= 1) {
+5020:        if (live_splits == 1) {
+5048:    float* s_w = s_m + HEADS_PER_CTA * n_split;
+5049:    const int row = ty * n_split;
+5055:        if (tx < live_splits) {
+5068:        for (int s = tx; s < live_splits; s += 16) {
+5093:        if (tx < live_splits) {
+5100:        for (int s = tx; s < live_splits; s += 16) {
+5125:    for (int s = 0; s < live_splits; ++s) {
+5224:    int pages_per_split,
+5225:    int n_split,
+5261:        paged_decode_generic_kernel<<<grid, threads>>>(
+5277:            paged_decode_single_token_kernel<4, 8><<<grid, 128>>>(
+5280:            paged_decode_single_token_kernel<8, 4><<<grid, 64>>>(
+5288:            paged_decode_two_token_kernel<4, 8><<<grid, 256>>>(
+5292:            paged_decode_two_token_kernel<8, 4><<<grid, 128>>>(
+5302:    int n_split = (int)((seqlen_k + 127) / 128);
+5305:    if (n_split > target_splits) n_split = (int)target_splits;
+5306:    if (n_split < 1) n_split = 1;
+5312:        n_split *= 8;
+5317:        n_split *= 16;
+5323:        n_split = 39;
+5328:        n_split *= 2;
+5333:        n_split = 8;
+5338:        n_split = 5;
+5343:        n_split *= 2;
+5346:    // retains 2560 producer CTAs while cutting workspace and vec2-reducer
+5349:    if (num_heads_k == 8 && batch_size == 8 && seqlen_k == 32768) n_split = 40;
+5353:    if (num_heads_k == 8 && batch_size == 1 && seqlen_k == 58966) n_split = 65;
+5357:    if (num_heads_k == 8 && batch_size == 64 && seqlen_k == 2048) n_split = 3;
+5359:    // reducing packed partial workspace and the explicit vec2 reducer input
+5361:    if (num_heads_k == 8 && batch_size == 32 && seqlen_k == 4096) n_split = 6;
+5364:    if (num_heads_k == 4 && batch_size == 16 && seqlen_k == 4096) n_split = 14;
+5365:    if (num_heads_k == 8 && batch_size == 16 && seqlen_k == 362) n_split = 8;
+5368:    if (num_heads_k == 4 && batch_size == 1 && seqlen_k == 61519) n_split = 257;
+5369:    const int64_t pages_per_split = (max_pages + n_split - 1) / n_split;
+5375:    static size_t s_capacity = 0;  // 以 m/l 元素数为单位
+5390:    const int partial_split_count = n_split + (separate_tail ? 1 : 0);
+5392:    // n_split==1 由主 kernel 直接输出，不需要分配 partial。
+5394:        (size_t)partial_split_count * (size_t)batch_size * (size_t)num_heads;
+5395:    if (n_split > 1 && (s_partial_m == nullptr || need > s_capacity)) {
+5397:            cudaFree(s_partial_m);
+5398:            cudaFree(s_partial_l);
+5399:            cudaFree(s_partial_acc);
+5401:        cudaMalloc(&s_partial_m, need * sizeof(float));
+5402:        cudaMalloc(&s_partial_l, need * sizeof(float));
+5403:        cudaMalloc(&s_partial_acc, need * (size_t)headdim * sizeof(float));
+5404:        s_capacity = need;
+5408:    const dim3 grid((unsigned)(batch_size * num_heads_k), (unsigned)n_split);
+5410:    const bool use_case11_last_live_finalizer =
+5446:                            false, true, false, true><<<
+5452:                            (int)pages_per_split, partial_split_count,
+5455:                            false, false, true, true><<<
+5461:                            (int)pages_per_split, partial_split_count,
+5465:                            true, true, false, true><<<
+5471:                            (int)pages_per_split, partial_split_count,
+5474:                            true, false, true, true><<<
+5480:                            (int)pages_per_split, partial_split_count,
+5503:                                false, true, true, false, false, true, true, true><<<
+5509:                                (int)pages_per_split, n_split,
+5517:                                (int)pages_per_split, n_split,
+5535:                            true, true, true, true, false><<<
+5541:                            (int)pages_per_split, n_split,
+5543:                        if (use_case11_last_live_finalizer) {
+5547:                                true, true, true, false, true><<<
+5553:                                (int)pages_per_split, n_split,
+5561:                    paged_decode_token_parallel_kernel<4, 8, false, true, false><<<
+5567:                        (int)pages_per_split, partial_split_count,
+5569:                    paged_decode_token_parallel_kernel<4, 8, false, false, true><<<
+5576:                        (int)pages_per_split, partial_split_count,
+5593:                        false, true, true><<<grid, dim3(16, 4, 4)>>>(
+5598:                        (int)pages_per_split, n_split,
+5610:                        true, true><<<grid, dim3(16, 4, 4)>>>(
+5615:                        (int)pages_per_split, n_split,
+5625:                        false, true><<<grid, dim3(16, 4, 4)>>>(
+5630:                        (int)pages_per_split, n_split,
+5640:                        false, false, false, false, false, true><<<
+5647:                        (int)pages_per_split, n_split,
+5650:                    paged_decode_token_parallel_kernel<4, 8, false><<<
+5657:                        (int)pages_per_split, n_split,
+5672:                        8, 4, true, true, false, false, false, true><<<
+5678:                        (int)pages_per_split, partial_split_count,
+5681:                        8, 4, true, false, true, false, false, true><<<
+5687:                        (int)pages_per_split, partial_split_count,
+5690:                    paged_decode_token_parallel_kernel<8, 4, true, true, false><<<
+5696:                        (int)pages_per_split, partial_split_count,
+5698:                    paged_decode_token_parallel_kernel<8, 4, true, false, true><<<
+5704:                        (int)pages_per_split, partial_split_count,
+5716:                    paged_decode_case13_kv8_headpair_z8_kernel<true><<<
+5722:                        (int)pages_per_split, n_split,
+5734:                        true, false, true><<<
+5740:                        (int)pages_per_split, n_split,
+5750:                    paged_decode_case13_kv8_headpair_z8_kernel<true, true><<<
+5756:                        (int)pages_per_split, n_split,
+5768:                    paged_decode_case13_kv8_headpair_z8_kernel<true, true><<<
+5774:                        (int)pages_per_split, n_split,
+5787:                        false, false, false, false, true, true, true, true><<<
+5793:                        (int)pages_per_split, n_split,
+5810:                        true><<<
+5816:                        (int)pages_per_split, n_split,
+5822:        paged_decode_split_qk_pair_kernel<8, 4><<<grid, 128>>>(
+5825:            (int)batch_size, (int)pages_per_batch, (int)pages_per_split,
+5826:            n_split, sm_scale);
+5829:            paged_decode_split_kernel<4, 8><<<grid, 256>>>(
+5832:                (int)batch_size, (int)pages_per_batch, (int)pages_per_split,
+5833:                n_split, sm_scale);
+5835:            paged_decode_split_kernel<8, 4><<<grid, 128>>>(
+5838:                (int)batch_size, (int)pages_per_batch, (int)pages_per_split,
+5839:                n_split, sm_scale);
+5844:        paged_decode_split_kernel<4, 8><<<grid, 256>>>(
+5847:            (int)batch_size, (int)pages_per_batch, (int)pages_per_split,
+5848:            n_split, sm_scale);
+5850:        paged_decode_split_kernel<8, 4><<<grid, 128>>>(
+5853:            (int)batch_size, (int)pages_per_batch, (int)pages_per_split,
+5854:            n_split, sm_scale);
+5859:    if (n_split > 1 && !use_case11_last_live_finalizer) {
+5860:        const int reduce_splits = partial_split_count;
+5872:                (XPUOJ_USE_BASE2 != 0), false, true><<<
+5876:                (int)pages_per_split, reduce_splits);
+5883:                    // ceil(valid_pages/pages_per_split) live count even
+5889:                        (XPUOJ_USE_BASE2 != 0), false, true, true, true><<<
+5893:                        (int)pages_per_split, reduce_splits);
+5902:                        false, true, 3><<<
+5906:                        (int)pages_per_split, reduce_splits);
+5917:                        (XPUOJ_USE_BASE2 != 0), false, true, false, true><<<
+5921:                        (int)pages_per_split, reduce_splits);
+5924:                        (XPUOJ_USE_BASE2 != 0), true, true><<<
+5928:                        (int)pages_per_split, reduce_splits);
+5931:                        (XPUOJ_USE_BASE2 != 0), false, true><<<
+5935:                        (int)pages_per_split, reduce_splits);
+5942:                        (XPUOJ_USE_BASE2 != 0), true, false><<<
+5946:                        (int)pages_per_split, reduce_splits);
+5949:                        (XPUOJ_USE_BASE2 != 0), false, false><<<
+5953:                        (int)pages_per_split, reduce_splits);
+5972:                    (XPUOJ_USE_BASE2 != 0), false, true, true, true><<<
+5976:                    (int)pages_per_split, reduce_splits);
+5984:                    (XPUOJ_USE_BASE2 != 0), false, true><<<
+5988:                    (int)pages_per_split, reduce_splits);
+5996:                    (XPUOJ_USE_BASE2 != 0), false, true><<<
+6000:                    (int)pages_per_split, reduce_splits);
+6006:                // thread; producer, CTA count, workspace, and math stay fixed.
+6010:                    (XPUOJ_USE_BASE2 != 0), false, true><<<
+6014:                    (int)pages_per_split, reduce_splits);
+6022:                    (XPUOJ_USE_BASE2 != 0), false, true><<<
+6026:                    (int)pages_per_split, reduce_splits);
+6032:                    true><<<
+6036:                    (int)pages_per_split, reduce_splits);
+6039:                    (XPUOJ_USE_BASE2 != 0), true><<<
+6043:                    (int)pages_per_split, reduce_splits);
+6046:                    (XPUOJ_USE_BASE2 != 0), false><<<
+6050:                    (int)pages_per_split, reduce_splits);
+6069:    int pages_per_split,
+6070:    int n_split,
+6076:        true><<<
+6080:        batch_size, pages_per_batch, pages_per_split, n_split, sm_scale);

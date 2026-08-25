@@ -1,0 +1,5 @@
+exp654 queue checks
+pre-stage command: python3 tools/xpuoj_submit.py --list 20
+pre-stage result: latest #124413 Accepted; all 20 listed submissions were terminal; no Pending/Running.
+post-dry-run command: python3 tools/xpuoj_submit.py --list 20
+post-dry-run result: latest #124413 Accepted; all 20 listed submissions were terminal; no Pending/Running.

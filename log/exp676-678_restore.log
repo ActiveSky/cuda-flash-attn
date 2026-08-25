@@ -1,0 +1,11 @@
+exp676-678 terminal archive closeout
+queue_check: python tools/xpuoj_submit.py --list 20; #124761/#124788/#124801 and all listed submissions terminal; no nonterminal submission
+new_submit_count_during_archive: 0
+archive_command: python tools/archive_cuda_submissions.py
+workfile: solutions/cuda_maca_optimized.cpp
+control: solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+control_sha256: 3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+workfile_sha256_after_restore: 3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+workfile_control_cmp: MATCH
+oj_queue_after_restore: no nonterminal submissions
+diff_check: git diff --check PASS

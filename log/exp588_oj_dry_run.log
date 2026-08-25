@@ -1,0 +1,14 @@
+exp588 OJ pre-submit dry-run
+timestamp_utc: 2026-08-18
+candidate: solutions/archive/2026-08-18-experiments/cuda_case12_native_ldg_shared_q_exp588.cpp
+candidate_sha256: cb8835b53011b62c01358305ea3ff08b4f3bb1f5951a6167b3975573240bc033
+work_file: solutions/cuda_maca_optimized.cpp
+work_file_sha256_before_dry_run: cb8835b53011b62c01358305ea3ff08b4f3bb1f5951a6167b3975573240bc033
+control_sha256: a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+command: python3 tools/xpuoj_submit.py solutions/cuda_maca_optimized.cpp
+exit_code: 0
+output:
+target: contest #11, problem #1
+language: cuda.maca-c500
+code: solutions/cuda_maca_optimized.cpp (265237 bytes)
+dry-run: no submission created; use --submit to submit

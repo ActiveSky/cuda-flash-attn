@@ -1,0 +1,19 @@
+exp694 control C500 case7 mixed/padding/reuse
+UTC 2026-08-24T13:15:10Z
+3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe  solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+c9d643f25e0e15193820b4809f53ce32ebe8cdfabf91505143ec169c61de137b  build/exp694_verify_control_normal.so
+command: timeout 1800s python3 tests/c500_exp592_case7_mixed_validation.py --library build/exp694_verify_control_normal.so --seed 20260824
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+library: build/exp694_verify_control_normal.so | seed: 20260824
+[INFO] case=7 sequence=mixed-rows rows=64 direct_rows=28 normal_rows=36 lengths=1,2,15,16,17,687,688,689,703,704,705,1375,1376,1377,1391,1392,1393,2047,2048,1,2,15,16,17,687,688,689,703,704,705,1375,1376,1377,1391,1392,1393,2047,2048,1,2,15,16,17,687,688,689,703,704,705,1375,1376,1377,1391,1392,1393,2047,2048,1,2,15,16,17,687,688
+[PASS] case=7 sequence=mixed-rows finite=True match=1.000000 max_error=1.562500e-02 max_tol_ratio=0.326
+[PASS] case=7 sequence=padding-baseline finite=True match=1.000000 max_error=1.562500e-02 max_tol_ratio=0.321
+[PASS] case=7 sequence=padding-sentinel sentinel_pages=4962 finite=True tolerance=True reference_unchanged=True reference_max_error=0.000000e+00 reference_max_tol_ratio=0.000 candidate_unchanged=True candidate_max_error=0.000000e+00 candidate_max_tol_ratio=0.000
+[PASS] case=7 sequence=reuse-2048-first finite=True match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.054
+[PASS] case=7 sequence=reuse-1 finite=True match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000
+[PASS] case=7 sequence=reuse-2048-second finite=True match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.054
+[PASS] case=7 sequence=reuse-1-to-2048-short finite=True match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000
+[PASS] case=7 sequence=reuse-1-to-2048-full finite=True match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.054
+[PASS] case=7 sequence=all-short-rows finite=True match=1.000000 max_error=1.562500e-02 max_tol_ratio=0.324
+case=7 exp592 mixed validation: PASS
+test_exit_status=0

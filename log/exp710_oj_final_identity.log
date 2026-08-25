@@ -1,0 +1,9 @@
+UTC 2026-08-24T18:56:53Z
+submission_id=125788 status=Accepted total_score=65.57 accepted=14/14
+target_set=case8:51/103us case10:62/39us case11:52/226us case14:54/146us sum=219
+9496b2add95197c698c0ff39af34ec23bf766c7315078eeff9119a4d66d3aab0  solutions/archive/2026-08-24-experiments/cuda_control124611_z4_tail_trap_fix_exp710.cpp
+42db414b315992839afdcf6df4444cad2e89cda47cb6e4ec10ce54a3671dee9a  results/raw/cuda_125788_raw.json
+raw_detail_content_code_sha256=9496b2add95197c698c0ff39af34ec23bf766c7315078eeff9119a4d66d3aab0
+raw_detail_content_code_bytes=269931
+expected_candidate_sha=9496b2add95197c698c0ff39af34ec23bf766c7315078eeff9119a4d66d3aab0
+exit_status=0

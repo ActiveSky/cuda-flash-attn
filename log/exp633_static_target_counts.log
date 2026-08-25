@@ -1,0 +1,12 @@
+=== control_target18 ===
+memcpy=1 load=1 store=1 ldg= stg=
+=== candidate_target18 ===
+memcpy=8 load=1 store=8 ldg= stg=
+=== control_single84 ===
+memcpy=1 load=1 store=1 ldg= stg=
+=== candidate_single84 ===
+memcpy=1 load=1 store=1 ldg= stg=
+=== control_two84 ===
+memcpy= load=12 store=4 ldg= stg=
+=== candidate_two84 ===
+memcpy= load=12 store=4 ldg= stg=

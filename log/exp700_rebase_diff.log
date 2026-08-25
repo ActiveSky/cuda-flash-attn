@@ -1,0 +1,71 @@
+--- solutions/archive/2026-08-24-submissions/cuda_124611.cpp	2026-08-24 13:11:34.847038122 +0000
++++ solutions/archive/2026-08-24-experiments/cuda_control124611_case1_shared_v_fanout_exp700.cpp	2026-08-24 14:48:25.683397647 +0000
+@@ -144,6 +144,51 @@
+         reinterpret_cast<const uint4*>(v_row)[d4];
+ }
+ 
++// exp700: case1-only CTA fan-out. Sixteen owner threads read the single
++// legal token's V row once into 256 B of shared memory; the eight GQA output
++// groups then consume that immutable row after the CTA barrier. The exact
++// dispatch below is restricted to B=1, KV4, seqlen_k=1.
++template <int KV_HEADS, int GQA>
++__global__ void __launch_bounds__(128)
++paged_decode_case1_shared_v_fanout_kernel(
++    const __nv_bfloat16* __restrict__ v_cache,
++    __nv_bfloat16* __restrict__ out,
++    const int32_t* __restrict__ cache_seqlens,
++    const int32_t* __restrict__ block_table,
++    int pages_per_batch)
++{
++    static_assert(KV_HEADS == 4 && GQA == 8,
++                  "exp700 is only the case1 B1/KV4 fan-out");
++    constexpr int U4_PER_ROW = HEAD_DIM * sizeof(__nv_bfloat16) / sizeof(uint4);
++    static_assert(U4_PER_ROW == 16 && GQA * U4_PER_ROW == 128,
++                  "case1 shared-V mapping must be 16 owners and 128 consumers");
++
++    const int copy = threadIdx.x;
++    const int b = blockIdx.x / KV_HEADS;
++    const int kv_head = blockIdx.x & (KV_HEADS - 1);
++    const int seqlen = cache_seqlens[b];
++
++    __shared__ uint4 v_shared[U4_PER_ROW];
++    if (copy < U4_PER_ROW) {
++        uint4 value = {0u, 0u, 0u, 0u};
++        if (seqlen > 0) {
++            const int pid = block_table[b * pages_per_batch];
++            const __nv_bfloat16* v_row =
++                v_cache + (pid * PAGE_TOKENS * KV_HEADS + kv_head) * HEAD_DIM;
++            value = reinterpret_cast<const uint4*>(v_row)[copy];
++        }
++        v_shared[copy] = value;
++    }
++    __syncthreads();
++
++    const int q_head_in_group = copy / U4_PER_ROW;
++    const int d4 = copy - q_head_in_group * U4_PER_ROW;
++    __nv_bfloat16* out_row =
++        out + (b * 32 + kv_head * GQA + q_head_in_group) * HEAD_DIM;
++    reinterpret_cast<uint4*>(out_row)[d4] =
++        seqlen > 0 ? v_shared[d4] : uint4{0u, 0u, 0u, 0u};
++}
++
+ template <int KV_HEADS, int GQA>
+ __global__ void __launch_bounds__(GQA * 32)
+ paged_decode_two_token_kernel(
+@@ -5309,8 +5354,14 @@
+     if (seqlen_k == 1) {
+         const int grid = (int)(batch_size * num_heads_k);
+         if (num_heads_k == 4) {
+-            paged_decode_single_token_kernel<4, 8><<<grid, 128>>>(
+-                v_cache_paged, output, block_table, (int)pages_per_batch);
++            if (batch_size == 1) {
++                paged_decode_case1_shared_v_fanout_kernel<4, 8><<<grid, 128>>>(
++                    v_cache_paged, output, cache_seqlens, block_table,
++                    (int)pages_per_batch);
++            } else {
++                paged_decode_single_token_kernel<4, 8><<<grid, 128>>>(
++                    v_cache_paged, output, block_table, (int)pages_per_batch);
++            }
+         } else {
+             paged_decode_single_token_kernel<8, 4><<<grid, 64>>>(
+                 v_cache_paged, output, block_table, (int)pages_per_batch);

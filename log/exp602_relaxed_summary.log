@@ -1,0 +1,19 @@
+exp602 relaxed C500 smoke summary (2026-08-23)
+
+Candidate:
+  solutions/archive/2026-08-19-experiments/cuda_case11_aggregate_direct_global_kv_exp602.cpp
+  expected/source SHA-256: 4783e62d92fa4103264e8b83c4d54945f6f05b0aecefa2708c121252042dff44
+  isolated build: build/exp602_relaxed_candidate.so
+  binary SHA-256 is recorded in log/exp602_relaxed_identity.log
+  build command/output is recorded in log/exp602_relaxed_build.log
+
+Results before stop:
+  full case11: finite=True, match=0.998596, max_error=2.319336e-02,
+    max_tol_ratio=1.442; harness returned PASS (>=0.99), but not exact.
+  random case11, seed=20260823: finite=True, match=0.919968,
+    max_error=1.029053e-01, max_tol_ratio=5.982; FAIL.
+
+The random correctness failure is deterministic evidence against the
+candidate safety gate. Per instruction, stopped immediately: boundary,
+exact-length, mixed padding/tail poison+guard, and workspace reuse were not
+run. No OJ, A/B, work-file, or project-document operation was performed.

@@ -1,0 +1,8 @@
+exp703 candidate C500 case12 boundary correctness
+UTC 2026-08-24T17:28:56Z
+command: timeout 1200s python3 tests/c500_paged_decode_harness.py --library build/exp703_candidate_normal.so --cases 12 --lengths boundary --seed 20260824
+f9321d4d76636f6d9ecabf6e92240c10962c3e20f0d3267be643ea4f43649102  solutions/archive/2026-08-24-experiments/cuda_control124611_case12_async_register_kv_exp703.cpp
+f472aa713961c07ca95ba62cbc7fb8bdd5071c854f3013010be8e4971e58f03e  build/exp703_candidate_normal.so
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=boundary match=1.000000 max_error=7.812500e-03 max_tol_ratio=0.244 finite=True
+exit_status=0

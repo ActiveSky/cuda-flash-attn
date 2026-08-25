@@ -1,0 +1,25 @@
+exp694 serialized OJ probe
+candidate=solutions/archive/2026-08-24-experiments/cuda_control124611_case7_raw_wave_rebase_exp694.cpp
+candidate_sha256=abd65ca70ef44da9f39eec2a0d1fe86af4178eb928a8c21acf0c4df040b934b2
+parent_control_sha256=3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+pre_submit_queue=#125434 Accepted; no Pending/Running entries in --list 20
+dry_run=python tools/xpuoj_submit.py solutions/archive/2026-08-24-experiments/cuda_control124611_case7_raw_wave_rebase_exp694.cpp
+dry_run_result=no submission created
+pre_submit_sha_recheck=candidate abd65ca70ef44da9f39eec2a0d1fe86af4178eb928a8c21acf0c4df040b934b2; workfile/control 3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+submit_command=python tools/xpuoj_submit.py solutions/archive/2026-08-24-experiments/cuda_control124611_case7_raw_wave_rebase_exp694.cpp --submit --poll-seconds 10 --timeout-seconds 3600
+submission_id=125561
+initial_status=Pending
+submit_count=1
+cancel_count=0
+parallel_submit_count=0
+terminal_status=Accepted
+terminal_score=65.86
+terminal_cases=14/14 Accepted
+terminal_case_times_ms=3,4,10,23,17,28,233,94,233,38,224,374,182,139
+terminal_case_scores=92,90,82,72,73,63,54,54,57,62,52,60,56,55
+target_case7=233 us / score 54; target did not cross >=56 tier
+raw=results/raw/cuda_125561_raw.json
+raw_sha256=7106b47ef070efcc409b8a8069dddd1306893a8a1cf761ebac154e6fb7f0354a
+source_sha256=candidate abd65ca70ef44da9f39eec2a0d1fe86af4178eb928a8c21acf0c4df040b934b2 (raw code_file matches candidate path)
+source_bytes=273536
+final_queue=#125561 Accepted; no Pending/Running entries in --list 20

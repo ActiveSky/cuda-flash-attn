@@ -1,0 +1,8 @@
+exp694 candidate C500 case7 boundary
+UTC 2026-08-24T13:09:11Z
+abd65ca70ef44da9f39eec2a0d1fe86af4178eb928a8c21acf0c4df040b934b2  solutions/archive/2026-08-24-experiments/cuda_control124611_case7_raw_wave_rebase_exp694.cpp
+cdc96ab8b19ea0b1f3ad39d02d658169e479d2c65f955dd30cd298ee628fd9cd  build/exp694_verify_candidate_normal.so
+command: python3 tests/c500_paged_decode_harness.py --library build/exp694_verify_candidate_normal.so --cases 7 --lengths boundary --seed 20260824
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+[PASS] case  7 B=64 L= 2048 KV=8 lengths=boundary match=1.000000 max_error=7.812500e-03 max_tol_ratio=0.244 finite=True
+test_exit_status=0

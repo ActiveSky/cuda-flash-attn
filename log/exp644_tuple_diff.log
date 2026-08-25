@@ -1,0 +1,15 @@
+--- log/exp644_control_tuple_table.log	2026-08-22 21:30:26.922258028 +0000
++++ log/exp644_candidate_tuple_table.log	2026-08-22 21:30:26.922258028 +0000
+@@ -10,9 +10,9 @@
+ _Z38paged_decode_case11_headpair_z4_kernelILb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif	74 MTregisters, 52 STregisters, 8320 bytes shared mem  	6
+ _Z34paged_decode_token_parallel_kernelILi4ELi8ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif	92 MTregisters, 48 STregisters, 8320 bytes shared mem  	5
+ _Z34paged_decode_token_parallel_kernelILi4ELi8ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif	92 MTregisters, 48 STregisters, 8320 bytes shared mem  	5
+-_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif	82 MTregisters, 50 STregisters, 8448 bytes shared mem  	5
+-_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif	82 MTregisters, 50 STregisters, 8448 bytes shared mem  	5
+-_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif	82 MTregisters, 48 STregisters, 8448 bytes shared mem  	5
++_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif	82 MTregisters, 50 STregisters, 8448 bytes shared mem  	5
++_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif	82 MTregisters, 50 STregisters, 8448 bytes shared mem  	5
++_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif	82 MTregisters, 48 STregisters, 8448 bytes shared mem  	5
+ _Z34paged_decode_token_parallel_kernelILi8ELi4ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif	74 MTregisters, 44 STregisters, 8320 bytes shared mem  	6
+ _Z34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif	80 MTregisters, 44 STregisters, 8320 bytes shared mem  	6
+ _Z33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif	118 MTregisters, 50 STregisters, 8192 bytes shared mem  	4

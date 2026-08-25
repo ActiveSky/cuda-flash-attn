@@ -39,7 +39,7 @@ python3 tests/c500_bf16_mma_qk_resource_probe.py \
 `archive/closed-backend-probes/` 保存以下已经闭合的证据族：
 
 - BF16/FP16/FP32/INT8 MMA 映射、精度和旧集成：确认了哪些指令/fragment 可用，也确认完整 score tile、KV8 z8 BF16 MMA、BF16 P×V、FP32 runtime 和 INT8 量化集成在已测数据流下不成立。
-- `c500_bf16_mma_qk_resource_probe.*`：12个scale/seed均确认填充A fragment后`c[2]/c[3]`仍为零；当前lane-local BF16 MMA不具备额外score密度，除非硬件或fragment ownership实质改变，不重开。
+- `c500_bf16_mma_qk_resource_probe.*`：旧 probe 在`c[2]/c[3]`对应的 A 行填零时得到零输出；`c500_bf16_mma_slots4_populated_probe.*`随后确认非零输入可填充四个 slot，故硬件能力存在，但 case11 KV4/GQA8 没有正确且不重复的 K/V、state、PV production owner。除非硬件或完整 fragment ownership 实质改变，不重开。
 - `c500_case13_head4_x32_resource_probe.cpp`：`(32,1,8)`、每线程四头×四维的资源模型可达`80/22/8448 B/0 stack/6 waves`，但对应完整 exp567 producer 的 full/random/boundary 均明显回退；资源通过不代表这个四头/32-lane QK ownership 有性能前景，不再以 x、shuffle 或 load 拼写扫描重开。
 - `c500_lazy_page_guard_probe.*`：确认固定row/full-wave vote语义，但exp449–452已夹定当前case14 fixed15 guard、single-LSE和`+8`状态流；不以mask或阈值变体重跑。
 - `c500_ldcs_probe.*`：确认`__ldcs/__ldlu`对`uint4`的payload正确，却在xcore1000 LLVM中同样变成带`nontemporal/l2rp` metadata的四个标量load；没有独立async/prefetch语义或两种cache-policy差异，不能只改loader拼写重开。

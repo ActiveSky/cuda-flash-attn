@@ -1,0 +1,251 @@
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3 | candidate=build/exp651_normal.so | control=build/cuda_113889.so | seed=20260823
+[INFO] page-audit case7 no-len0-mixed pages-only row=0 length=1 valid_page_ids=0 padding_page_ids=1-127 tail_tokens=page=0:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed pages-only row=1 length=2 valid_page_ids=128 padding_page_ids=129-255 tail_tokens=page=128:tokens=2-15
+[INFO] page-audit case7 no-len0-mixed pages-only row=2 length=15 valid_page_ids=256 padding_page_ids=257-383 tail_tokens=page=256:tokens=15
+[INFO] page-audit case7 no-len0-mixed pages-only row=3 length=16 valid_page_ids=384 padding_page_ids=385-511 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed pages-only row=4 length=17 valid_page_ids=512-513 padding_page_ids=514-639 tail_tokens=page=513:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed pages-only row=5 length=687 valid_page_ids=640-682 padding_page_ids=683-767 tail_tokens=page=682:tokens=15
+[INFO] page-audit case7 no-len0-mixed pages-only row=6 length=688 valid_page_ids=768-810 padding_page_ids=811-895 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed pages-only row=7 length=689 valid_page_ids=896-939 padding_page_ids=940-1023 tail_tokens=page=939:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed pages-only row=8 length=703 valid_page_ids=1024-1067 padding_page_ids=1068-1151 tail_tokens=page=1067:tokens=15
+[INFO] page-audit case7 no-len0-mixed pages-only row=9 length=704 valid_page_ids=1152-1195 padding_page_ids=1196-1279 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed pages-only row=10 length=705 valid_page_ids=1280-1324 padding_page_ids=1325-1407 tail_tokens=page=1324:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed pages-only row=11 length=1375 valid_page_ids=1408-1493 padding_page_ids=1494-1535 tail_tokens=page=1493:tokens=15
+[INFO] page-audit case7 no-len0-mixed pages-only row=12 length=1376 valid_page_ids=1536-1621 padding_page_ids=1622-1663 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed pages-only row=13 length=1377 valid_page_ids=1664-1750 padding_page_ids=1751-1791 tail_tokens=page=1750:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed pages-only row=14 length=1391 valid_page_ids=1792-1878 padding_page_ids=1879-1919 tail_tokens=page=1878:tokens=15
+[INFO] page-audit case7 no-len0-mixed pages-only row=15 length=1392 valid_page_ids=1920-2006 padding_page_ids=2007-2047 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed pages-only row=16 length=1393 valid_page_ids=2048-2135 padding_page_ids=2136-2175 tail_tokens=page=2135:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed pages-only row=17 length=2047 valid_page_ids=2176-2303 padding_page_ids=none tail_tokens=page=2303:tokens=15
+[INFO] page-audit case7 no-len0-mixed pages-only row=18 length=2048 valid_page_ids=2304-2431 padding_page_ids=none tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed pages-only row=19 length=1 valid_page_ids=2432 padding_page_ids=2433-2559 tail_tokens=page=2432:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed pages-only row=20 length=2 valid_page_ids=2560 padding_page_ids=2561-2687 tail_tokens=page=2560:tokens=2-15
+[INFO] page-audit case7 no-len0-mixed pages-only row=21 length=15 valid_page_ids=2688 padding_page_ids=2689-2815 tail_tokens=page=2688:tokens=15
+[INFO] page-audit case7 no-len0-mixed pages-only row=22 length=16 valid_page_ids=2816 padding_page_ids=2817-2943 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed pages-only row=23 length=17 valid_page_ids=2944-2945 padding_page_ids=2946-3071 tail_tokens=page=2945:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed pages-only row=24 length=687 valid_page_ids=3072-3114 padding_page_ids=3115-3199 tail_tokens=page=3114:tokens=15
+[INFO] page-audit case7 no-len0-mixed pages-only row=25 length=688 valid_page_ids=3200-3242 padding_page_ids=3243-3327 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed pages-only row=26 length=689 valid_page_ids=3328-3371 padding_page_ids=3372-3455 tail_tokens=page=3371:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed pages-only row=27 length=703 valid_page_ids=3456-3499 padding_page_ids=3500-3583 tail_tokens=page=3499:tokens=15
+[INFO] page-audit case7 no-len0-mixed pages-only row=28 length=704 valid_page_ids=3584-3627 padding_page_ids=3628-3711 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed pages-only row=29 length=705 valid_page_ids=3712-3756 padding_page_ids=3757-3839 tail_tokens=page=3756:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed pages-only row=30 length=1375 valid_page_ids=3840-3925 padding_page_ids=3926-3967 tail_tokens=page=3925:tokens=15
+[INFO] page-audit case7 no-len0-mixed pages-only row=31 length=1376 valid_page_ids=3968-4053 padding_page_ids=4054-4095 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed pages-only row=32 length=1377 valid_page_ids=4096-4182 padding_page_ids=4183-4223 tail_tokens=page=4182:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed pages-only row=33 length=1391 valid_page_ids=4224-4310 padding_page_ids=4311-4351 tail_tokens=page=4310:tokens=15
+[INFO] page-audit case7 no-len0-mixed pages-only row=34 length=1392 valid_page_ids=4352-4438 padding_page_ids=4439-4479 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed pages-only row=35 length=1393 valid_page_ids=4480-4567 padding_page_ids=4568-4607 tail_tokens=page=4567:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed pages-only row=36 length=2047 valid_page_ids=4608-4735 padding_page_ids=none tail_tokens=page=4735:tokens=15
+[INFO] page-audit case7 no-len0-mixed pages-only row=37 length=2048 valid_page_ids=4736-4863 padding_page_ids=none tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed pages-only row=38 length=1 valid_page_ids=4864 padding_page_ids=4865-4991 tail_tokens=page=4864:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed pages-only row=39 length=2 valid_page_ids=4992 padding_page_ids=4993-5119 tail_tokens=page=4992:tokens=2-15
+[INFO] page-audit case7 no-len0-mixed pages-only row=40 length=15 valid_page_ids=5120 padding_page_ids=5121-5247 tail_tokens=page=5120:tokens=15
+[INFO] page-audit case7 no-len0-mixed pages-only row=41 length=16 valid_page_ids=5248 padding_page_ids=5249-5375 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed pages-only row=42 length=17 valid_page_ids=5376-5377 padding_page_ids=5378-5503 tail_tokens=page=5377:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed pages-only row=43 length=687 valid_page_ids=5504-5546 padding_page_ids=5547-5631 tail_tokens=page=5546:tokens=15
+[INFO] page-audit case7 no-len0-mixed pages-only row=44 length=688 valid_page_ids=5632-5674 padding_page_ids=5675-5759 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed pages-only row=45 length=689 valid_page_ids=5760-5803 padding_page_ids=5804-5887 tail_tokens=page=5803:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed pages-only row=46 length=703 valid_page_ids=5888-5931 padding_page_ids=5932-6015 tail_tokens=page=5931:tokens=15
+[INFO] page-audit case7 no-len0-mixed pages-only row=47 length=704 valid_page_ids=6016-6059 padding_page_ids=6060-6143 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed pages-only row=48 length=705 valid_page_ids=6144-6188 padding_page_ids=6189-6271 tail_tokens=page=6188:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed pages-only row=49 length=1375 valid_page_ids=6272-6357 padding_page_ids=6358-6399 tail_tokens=page=6357:tokens=15
+[INFO] page-audit case7 no-len0-mixed pages-only row=50 length=1376 valid_page_ids=6400-6485 padding_page_ids=6486-6527 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed pages-only row=51 length=1377 valid_page_ids=6528-6614 padding_page_ids=6615-6655 tail_tokens=page=6614:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed pages-only row=52 length=1391 valid_page_ids=6656-6742 padding_page_ids=6743-6783 tail_tokens=page=6742:tokens=15
+[INFO] page-audit case7 no-len0-mixed pages-only row=53 length=1392 valid_page_ids=6784-6870 padding_page_ids=6871-6911 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed pages-only row=54 length=1393 valid_page_ids=6912-6999 padding_page_ids=7000-7039 tail_tokens=page=6999:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed pages-only row=55 length=2047 valid_page_ids=7040-7167 padding_page_ids=none tail_tokens=page=7167:tokens=15
+[INFO] page-audit case7 no-len0-mixed pages-only row=56 length=2048 valid_page_ids=7168-7295 padding_page_ids=none tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed pages-only row=57 length=1 valid_page_ids=7296 padding_page_ids=7297-7423 tail_tokens=page=7296:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed pages-only row=58 length=2 valid_page_ids=7424 padding_page_ids=7425-7551 tail_tokens=page=7424:tokens=2-15
+[INFO] page-audit case7 no-len0-mixed pages-only row=59 length=15 valid_page_ids=7552 padding_page_ids=7553-7679 tail_tokens=page=7552:tokens=15
+[INFO] page-audit case7 no-len0-mixed pages-only row=60 length=16 valid_page_ids=7680 padding_page_ids=7681-7807 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed pages-only row=61 length=17 valid_page_ids=7808-7809 padding_page_ids=7810-7935 tail_tokens=page=7809:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed pages-only row=62 length=687 valid_page_ids=7936-7978 padding_page_ids=7979-8063 tail_tokens=page=7978:tokens=15
+[INFO] page-audit case7 no-len0-mixed pages-only row=63 length=688 valid_page_ids=8064-8106 padding_page_ids=8107-8191 tail_tokens=none
+[PASS] page-audit case7 no-len0-mixed pages-only physical_page_global_unique=True entries=8192 valid_pages=3230 padding_pages=4962 valid_padding_overlap=False
+[INFO] poison-audit case7 no-len0-mixed pages-only page_poison_selected=True tail_poison_selected=False padding_page_ids_not_valid=True tail_tokens=376
+[PASS] case7 no-len0-mixed pages-only baseline candidate finite=True within_tolerance=True max_error=1.562500e-02 max_tol_ratio=0.326 guards=True
+[PASS] case7 no-len0-mixed pages-only baseline control finite=True within_tolerance=True max_error=1.562500e-02 max_tol_ratio=0.326 guards=True
+[PASS] case7 no-len0-mixed pages-only baseline reference_finite=True candidate_error=1.562500e-02 candidate_tol_ratio=0.326 control_error=1.562500e-02 control_tol_ratio=0.326 candidate_control_within_tolerance=True candidate_control_finite_bits_equal=True candidate_control_failure_set_equal=True require_control=True control_gate=PASS
+[PASS] case7 no-len0-mixed pages-only poison pages=4962 tails=0 candidate finite=True within_tolerance=True max_error=1.562500e-02 max_tol_ratio=0.326 guards=True
+[PASS] case7 no-len0-mixed pages-only poison pages=4962 tails=0 control finite=True within_tolerance=True max_error=1.562500e-02 max_tol_ratio=0.326 guards=True
+[PASS] case7 no-len0-mixed pages-only poison pages=4962 tails=0 reference_finite=True candidate_error=1.562500e-02 candidate_tol_ratio=0.326 control_error=1.562500e-02 control_tol_ratio=0.326 candidate_control_within_tolerance=True candidate_control_finite_bits_equal=True candidate_control_failure_set_equal=True require_control=True control_gate=PASS
+[PASS] case7 no-len0-mixed pages-only poison-invariant reference_unchanged=True candidate_unpoisoned_equal=True candidate_poison_matches_reference_gate=True
+[INFO] page-audit case7 single-length-17 pages-only row=0 length=17 valid_page_ids=0-1 padding_page_ids=2-127 tail_tokens=page=1:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=1 length=17 valid_page_ids=128-129 padding_page_ids=130-255 tail_tokens=page=129:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=2 length=17 valid_page_ids=256-257 padding_page_ids=258-383 tail_tokens=page=257:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=3 length=17 valid_page_ids=384-385 padding_page_ids=386-511 tail_tokens=page=385:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=4 length=17 valid_page_ids=512-513 padding_page_ids=514-639 tail_tokens=page=513:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=5 length=17 valid_page_ids=640-641 padding_page_ids=642-767 tail_tokens=page=641:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=6 length=17 valid_page_ids=768-769 padding_page_ids=770-895 tail_tokens=page=769:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=7 length=17 valid_page_ids=896-897 padding_page_ids=898-1023 tail_tokens=page=897:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=8 length=17 valid_page_ids=1024-1025 padding_page_ids=1026-1151 tail_tokens=page=1025:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=9 length=17 valid_page_ids=1152-1153 padding_page_ids=1154-1279 tail_tokens=page=1153:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=10 length=17 valid_page_ids=1280-1281 padding_page_ids=1282-1407 tail_tokens=page=1281:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=11 length=17 valid_page_ids=1408-1409 padding_page_ids=1410-1535 tail_tokens=page=1409:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=12 length=17 valid_page_ids=1536-1537 padding_page_ids=1538-1663 tail_tokens=page=1537:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=13 length=17 valid_page_ids=1664-1665 padding_page_ids=1666-1791 tail_tokens=page=1665:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=14 length=17 valid_page_ids=1792-1793 padding_page_ids=1794-1919 tail_tokens=page=1793:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=15 length=17 valid_page_ids=1920-1921 padding_page_ids=1922-2047 tail_tokens=page=1921:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=16 length=17 valid_page_ids=2048-2049 padding_page_ids=2050-2175 tail_tokens=page=2049:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=17 length=17 valid_page_ids=2176-2177 padding_page_ids=2178-2303 tail_tokens=page=2177:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=18 length=17 valid_page_ids=2304-2305 padding_page_ids=2306-2431 tail_tokens=page=2305:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=19 length=17 valid_page_ids=2432-2433 padding_page_ids=2434-2559 tail_tokens=page=2433:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=20 length=17 valid_page_ids=2560-2561 padding_page_ids=2562-2687 tail_tokens=page=2561:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=21 length=17 valid_page_ids=2688-2689 padding_page_ids=2690-2815 tail_tokens=page=2689:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=22 length=17 valid_page_ids=2816-2817 padding_page_ids=2818-2943 tail_tokens=page=2817:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=23 length=17 valid_page_ids=2944-2945 padding_page_ids=2946-3071 tail_tokens=page=2945:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=24 length=17 valid_page_ids=3072-3073 padding_page_ids=3074-3199 tail_tokens=page=3073:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=25 length=17 valid_page_ids=3200-3201 padding_page_ids=3202-3327 tail_tokens=page=3201:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=26 length=17 valid_page_ids=3328-3329 padding_page_ids=3330-3455 tail_tokens=page=3329:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=27 length=17 valid_page_ids=3456-3457 padding_page_ids=3458-3583 tail_tokens=page=3457:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=28 length=17 valid_page_ids=3584-3585 padding_page_ids=3586-3711 tail_tokens=page=3585:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=29 length=17 valid_page_ids=3712-3713 padding_page_ids=3714-3839 tail_tokens=page=3713:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=30 length=17 valid_page_ids=3840-3841 padding_page_ids=3842-3967 tail_tokens=page=3841:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=31 length=17 valid_page_ids=3968-3969 padding_page_ids=3970-4095 tail_tokens=page=3969:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=32 length=17 valid_page_ids=4096-4097 padding_page_ids=4098-4223 tail_tokens=page=4097:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=33 length=17 valid_page_ids=4224-4225 padding_page_ids=4226-4351 tail_tokens=page=4225:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=34 length=17 valid_page_ids=4352-4353 padding_page_ids=4354-4479 tail_tokens=page=4353:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=35 length=17 valid_page_ids=4480-4481 padding_page_ids=4482-4607 tail_tokens=page=4481:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=36 length=17 valid_page_ids=4608-4609 padding_page_ids=4610-4735 tail_tokens=page=4609:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=37 length=17 valid_page_ids=4736-4737 padding_page_ids=4738-4863 tail_tokens=page=4737:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=38 length=17 valid_page_ids=4864-4865 padding_page_ids=4866-4991 tail_tokens=page=4865:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=39 length=17 valid_page_ids=4992-4993 padding_page_ids=4994-5119 tail_tokens=page=4993:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=40 length=17 valid_page_ids=5120-5121 padding_page_ids=5122-5247 tail_tokens=page=5121:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=41 length=17 valid_page_ids=5248-5249 padding_page_ids=5250-5375 tail_tokens=page=5249:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=42 length=17 valid_page_ids=5376-5377 padding_page_ids=5378-5503 tail_tokens=page=5377:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=43 length=17 valid_page_ids=5504-5505 padding_page_ids=5506-5631 tail_tokens=page=5505:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=44 length=17 valid_page_ids=5632-5633 padding_page_ids=5634-5759 tail_tokens=page=5633:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=45 length=17 valid_page_ids=5760-5761 padding_page_ids=5762-5887 tail_tokens=page=5761:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=46 length=17 valid_page_ids=5888-5889 padding_page_ids=5890-6015 tail_tokens=page=5889:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=47 length=17 valid_page_ids=6016-6017 padding_page_ids=6018-6143 tail_tokens=page=6017:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=48 length=17 valid_page_ids=6144-6145 padding_page_ids=6146-6271 tail_tokens=page=6145:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=49 length=17 valid_page_ids=6272-6273 padding_page_ids=6274-6399 tail_tokens=page=6273:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=50 length=17 valid_page_ids=6400-6401 padding_page_ids=6402-6527 tail_tokens=page=6401:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=51 length=17 valid_page_ids=6528-6529 padding_page_ids=6530-6655 tail_tokens=page=6529:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=52 length=17 valid_page_ids=6656-6657 padding_page_ids=6658-6783 tail_tokens=page=6657:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=53 length=17 valid_page_ids=6784-6785 padding_page_ids=6786-6911 tail_tokens=page=6785:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=54 length=17 valid_page_ids=6912-6913 padding_page_ids=6914-7039 tail_tokens=page=6913:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=55 length=17 valid_page_ids=7040-7041 padding_page_ids=7042-7167 tail_tokens=page=7041:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=56 length=17 valid_page_ids=7168-7169 padding_page_ids=7170-7295 tail_tokens=page=7169:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=57 length=17 valid_page_ids=7296-7297 padding_page_ids=7298-7423 tail_tokens=page=7297:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=58 length=17 valid_page_ids=7424-7425 padding_page_ids=7426-7551 tail_tokens=page=7425:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=59 length=17 valid_page_ids=7552-7553 padding_page_ids=7554-7679 tail_tokens=page=7553:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=60 length=17 valid_page_ids=7680-7681 padding_page_ids=7682-7807 tail_tokens=page=7681:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=61 length=17 valid_page_ids=7808-7809 padding_page_ids=7810-7935 tail_tokens=page=7809:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=62 length=17 valid_page_ids=7936-7937 padding_page_ids=7938-8063 tail_tokens=page=7937:tokens=1-15
+[INFO] page-audit case7 single-length-17 pages-only row=63 length=17 valid_page_ids=8064-8065 padding_page_ids=8066-8191 tail_tokens=page=8065:tokens=1-15
+[PASS] page-audit case7 single-length-17 pages-only physical_page_global_unique=True entries=8192 valid_pages=128 padding_pages=8064 valid_padding_overlap=False
+[INFO] poison-audit case7 single-length-17 pages-only page_poison_selected=True tail_poison_selected=False padding_page_ids_not_valid=True tail_tokens=960
+[PASS] case7 single-length-17 pages-only baseline candidate finite=True within_tolerance=True max_error=7.812500e-03 max_tol_ratio=0.244 guards=True
+[PASS] case7 single-length-17 pages-only baseline control finite=True within_tolerance=True max_error=7.812500e-03 max_tol_ratio=0.244 guards=True
+[PASS] case7 single-length-17 pages-only baseline reference_finite=True candidate_error=7.812500e-03 candidate_tol_ratio=0.244 control_error=7.812500e-03 control_tol_ratio=0.244 candidate_control_within_tolerance=True candidate_control_finite_bits_equal=True candidate_control_failure_set_equal=True require_control=True control_gate=PASS
+[PASS] case7 single-length-17 pages-only poison pages=8064 tails=0 candidate finite=True within_tolerance=True max_error=7.812500e-03 max_tol_ratio=0.244 guards=True
+[PASS] case7 single-length-17 pages-only poison pages=8064 tails=0 control finite=True within_tolerance=True max_error=7.812500e-03 max_tol_ratio=0.244 guards=True
+[PASS] case7 single-length-17 pages-only poison pages=8064 tails=0 reference_finite=True candidate_error=7.812500e-03 candidate_tol_ratio=0.244 control_error=7.812500e-03 control_tol_ratio=0.244 candidate_control_within_tolerance=True candidate_control_finite_bits_equal=True candidate_control_failure_set_equal=True require_control=True control_gate=PASS
+[PASS] case7 single-length-17 pages-only poison-invariant reference_unchanged=True candidate_unpoisoned_equal=True candidate_poison_matches_reference_gate=True
+[INFO] page-audit case7 no-len0-mixed tails-only row=0 length=1 valid_page_ids=0 padding_page_ids=1-127 tail_tokens=page=0:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed tails-only row=1 length=2 valid_page_ids=128 padding_page_ids=129-255 tail_tokens=page=128:tokens=2-15
+[INFO] page-audit case7 no-len0-mixed tails-only row=2 length=15 valid_page_ids=256 padding_page_ids=257-383 tail_tokens=page=256:tokens=15
+[INFO] page-audit case7 no-len0-mixed tails-only row=3 length=16 valid_page_ids=384 padding_page_ids=385-511 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed tails-only row=4 length=17 valid_page_ids=512-513 padding_page_ids=514-639 tail_tokens=page=513:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed tails-only row=5 length=687 valid_page_ids=640-682 padding_page_ids=683-767 tail_tokens=page=682:tokens=15
+[INFO] page-audit case7 no-len0-mixed tails-only row=6 length=688 valid_page_ids=768-810 padding_page_ids=811-895 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed tails-only row=7 length=689 valid_page_ids=896-939 padding_page_ids=940-1023 tail_tokens=page=939:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed tails-only row=8 length=703 valid_page_ids=1024-1067 padding_page_ids=1068-1151 tail_tokens=page=1067:tokens=15
+[INFO] page-audit case7 no-len0-mixed tails-only row=9 length=704 valid_page_ids=1152-1195 padding_page_ids=1196-1279 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed tails-only row=10 length=705 valid_page_ids=1280-1324 padding_page_ids=1325-1407 tail_tokens=page=1324:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed tails-only row=11 length=1375 valid_page_ids=1408-1493 padding_page_ids=1494-1535 tail_tokens=page=1493:tokens=15
+[INFO] page-audit case7 no-len0-mixed tails-only row=12 length=1376 valid_page_ids=1536-1621 padding_page_ids=1622-1663 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed tails-only row=13 length=1377 valid_page_ids=1664-1750 padding_page_ids=1751-1791 tail_tokens=page=1750:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed tails-only row=14 length=1391 valid_page_ids=1792-1878 padding_page_ids=1879-1919 tail_tokens=page=1878:tokens=15
+[INFO] page-audit case7 no-len0-mixed tails-only row=15 length=1392 valid_page_ids=1920-2006 padding_page_ids=2007-2047 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed tails-only row=16 length=1393 valid_page_ids=2048-2135 padding_page_ids=2136-2175 tail_tokens=page=2135:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed tails-only row=17 length=2047 valid_page_ids=2176-2303 padding_page_ids=none tail_tokens=page=2303:tokens=15
+[INFO] page-audit case7 no-len0-mixed tails-only row=18 length=2048 valid_page_ids=2304-2431 padding_page_ids=none tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed tails-only row=19 length=1 valid_page_ids=2432 padding_page_ids=2433-2559 tail_tokens=page=2432:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed tails-only row=20 length=2 valid_page_ids=2560 padding_page_ids=2561-2687 tail_tokens=page=2560:tokens=2-15
+[INFO] page-audit case7 no-len0-mixed tails-only row=21 length=15 valid_page_ids=2688 padding_page_ids=2689-2815 tail_tokens=page=2688:tokens=15
+[INFO] page-audit case7 no-len0-mixed tails-only row=22 length=16 valid_page_ids=2816 padding_page_ids=2817-2943 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed tails-only row=23 length=17 valid_page_ids=2944-2945 padding_page_ids=2946-3071 tail_tokens=page=2945:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed tails-only row=24 length=687 valid_page_ids=3072-3114 padding_page_ids=3115-3199 tail_tokens=page=3114:tokens=15
+[INFO] page-audit case7 no-len0-mixed tails-only row=25 length=688 valid_page_ids=3200-3242 padding_page_ids=3243-3327 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed tails-only row=26 length=689 valid_page_ids=3328-3371 padding_page_ids=3372-3455 tail_tokens=page=3371:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed tails-only row=27 length=703 valid_page_ids=3456-3499 padding_page_ids=3500-3583 tail_tokens=page=3499:tokens=15
+[INFO] page-audit case7 no-len0-mixed tails-only row=28 length=704 valid_page_ids=3584-3627 padding_page_ids=3628-3711 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed tails-only row=29 length=705 valid_page_ids=3712-3756 padding_page_ids=3757-3839 tail_tokens=page=3756:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed tails-only row=30 length=1375 valid_page_ids=3840-3925 padding_page_ids=3926-3967 tail_tokens=page=3925:tokens=15
+[INFO] page-audit case7 no-len0-mixed tails-only row=31 length=1376 valid_page_ids=3968-4053 padding_page_ids=4054-4095 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed tails-only row=32 length=1377 valid_page_ids=4096-4182 padding_page_ids=4183-4223 tail_tokens=page=4182:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed tails-only row=33 length=1391 valid_page_ids=4224-4310 padding_page_ids=4311-4351 tail_tokens=page=4310:tokens=15
+[INFO] page-audit case7 no-len0-mixed tails-only row=34 length=1392 valid_page_ids=4352-4438 padding_page_ids=4439-4479 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed tails-only row=35 length=1393 valid_page_ids=4480-4567 padding_page_ids=4568-4607 tail_tokens=page=4567:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed tails-only row=36 length=2047 valid_page_ids=4608-4735 padding_page_ids=none tail_tokens=page=4735:tokens=15
+[INFO] page-audit case7 no-len0-mixed tails-only row=37 length=2048 valid_page_ids=4736-4863 padding_page_ids=none tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed tails-only row=38 length=1 valid_page_ids=4864 padding_page_ids=4865-4991 tail_tokens=page=4864:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed tails-only row=39 length=2 valid_page_ids=4992 padding_page_ids=4993-5119 tail_tokens=page=4992:tokens=2-15
+[INFO] page-audit case7 no-len0-mixed tails-only row=40 length=15 valid_page_ids=5120 padding_page_ids=5121-5247 tail_tokens=page=5120:tokens=15
+[INFO] page-audit case7 no-len0-mixed tails-only row=41 length=16 valid_page_ids=5248 padding_page_ids=5249-5375 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed tails-only row=42 length=17 valid_page_ids=5376-5377 padding_page_ids=5378-5503 tail_tokens=page=5377:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed tails-only row=43 length=687 valid_page_ids=5504-5546 padding_page_ids=5547-5631 tail_tokens=page=5546:tokens=15
+[INFO] page-audit case7 no-len0-mixed tails-only row=44 length=688 valid_page_ids=5632-5674 padding_page_ids=5675-5759 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed tails-only row=45 length=689 valid_page_ids=5760-5803 padding_page_ids=5804-5887 tail_tokens=page=5803:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed tails-only row=46 length=703 valid_page_ids=5888-5931 padding_page_ids=5932-6015 tail_tokens=page=5931:tokens=15
+[INFO] page-audit case7 no-len0-mixed tails-only row=47 length=704 valid_page_ids=6016-6059 padding_page_ids=6060-6143 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed tails-only row=48 length=705 valid_page_ids=6144-6188 padding_page_ids=6189-6271 tail_tokens=page=6188:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed tails-only row=49 length=1375 valid_page_ids=6272-6357 padding_page_ids=6358-6399 tail_tokens=page=6357:tokens=15
+[INFO] page-audit case7 no-len0-mixed tails-only row=50 length=1376 valid_page_ids=6400-6485 padding_page_ids=6486-6527 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed tails-only row=51 length=1377 valid_page_ids=6528-6614 padding_page_ids=6615-6655 tail_tokens=page=6614:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed tails-only row=52 length=1391 valid_page_ids=6656-6742 padding_page_ids=6743-6783 tail_tokens=page=6742:tokens=15
+[INFO] page-audit case7 no-len0-mixed tails-only row=53 length=1392 valid_page_ids=6784-6870 padding_page_ids=6871-6911 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed tails-only row=54 length=1393 valid_page_ids=6912-6999 padding_page_ids=7000-7039 tail_tokens=page=6999:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed tails-only row=55 length=2047 valid_page_ids=7040-7167 padding_page_ids=none tail_tokens=page=7167:tokens=15
+[INFO] page-audit case7 no-len0-mixed tails-only row=56 length=2048 valid_page_ids=7168-7295 padding_page_ids=none tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed tails-only row=57 length=1 valid_page_ids=7296 padding_page_ids=7297-7423 tail_tokens=page=7296:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed tails-only row=58 length=2 valid_page_ids=7424 padding_page_ids=7425-7551 tail_tokens=page=7424:tokens=2-15
+[INFO] page-audit case7 no-len0-mixed tails-only row=59 length=15 valid_page_ids=7552 padding_page_ids=7553-7679 tail_tokens=page=7552:tokens=15
+[INFO] page-audit case7 no-len0-mixed tails-only row=60 length=16 valid_page_ids=7680 padding_page_ids=7681-7807 tail_tokens=none
+[INFO] page-audit case7 no-len0-mixed tails-only row=61 length=17 valid_page_ids=7808-7809 padding_page_ids=7810-7935 tail_tokens=page=7809:tokens=1-15
+[INFO] page-audit case7 no-len0-mixed tails-only row=62 length=687 valid_page_ids=7936-7978 padding_page_ids=7979-8063 tail_tokens=page=7978:tokens=15
+[INFO] page-audit case7 no-len0-mixed tails-only row=63 length=688 valid_page_ids=8064-8106 padding_page_ids=8107-8191 tail_tokens=none
+[PASS] page-audit case7 no-len0-mixed tails-only physical_page_global_unique=True entries=8192 valid_pages=3230 padding_pages=4962 valid_padding_overlap=False
+[INFO] poison-audit case7 no-len0-mixed tails-only page_poison_selected=False tail_poison_selected=True padding_page_ids_not_valid=True tail_tokens=376
+[PASS] case7 no-len0-mixed tails-only baseline candidate finite=True within_tolerance=True max_error=1.562500e-02 max_tol_ratio=0.319 guards=True
+[PASS] case7 no-len0-mixed tails-only baseline control finite=True within_tolerance=True max_error=1.562500e-02 max_tol_ratio=0.319 guards=True
+[PASS] case7 no-len0-mixed tails-only baseline reference_finite=True candidate_error=1.562500e-02 candidate_tol_ratio=0.319 control_error=1.562500e-02 control_tol_ratio=0.319 candidate_control_within_tolerance=True candidate_control_finite_bits_equal=True candidate_control_failure_set_equal=True require_control=True control_gate=PASS
+[PASS] case7 no-len0-mixed tails-only poison pages=0 tails=376 candidate finite=True within_tolerance=True max_error=1.562500e-02 max_tol_ratio=0.319 guards=True
+[INFO] case7 no-len0-mixed tails-only poison pages=0 tails=376 control nonfinite_batches=0,2,4-5,7-8,10-11,13-14,16-17,19,21,23-24,26-27,29-30,32-33,35-36,38,40,42-43,45-46,48-49,51-52,54-55,57,59,61-62 nonfinite_batch_head_length=batch=0 length=1 heads=0-31;batch=2 length=15 heads=0-31;batch=4 length=17 heads=0-31;batch=5 length=687 heads=0-31;batch=7 length=689 heads=0-31;batch=8 length=703 heads=0-31;batch=10 length=705 heads=0-31;batch=11 length=1375 heads=0-31;batch=13 length=1377 heads=0-31;batch=14 length=1391 heads=0-31;batch=16 length=1393 heads=0-31;batch=17 length=2047 heads=0-31;batch=19 length=1 heads=0-31;batch=21 length=15 heads=0-31;batch=23 length=17 heads=0-31;batch=24 length=687 heads=0-31;batch=26 length=689 heads=0-31;batch=27 length=703 heads=0-31;batch=29 length=705 heads=0-31;batch=30 length=1375 heads=0-31;batch=32 length=1377 heads=0-31;batch=33 length=1391 heads=0-31;batch=35 length=1393 heads=0-31;batch=36 length=2047 heads=0-31;batch=38 length=1 heads=0-31;batch=40 length=15 heads=0-31;batch=42 length=17 heads=0-31;batch=43 length=687 heads=0-31;batch=45 length=689 heads=0-31;batch=46 length=703 heads=0-31;batch=48 length=705 heads=0-31;batch=49 length=1375 heads=0-31;batch=51 length=1377 heads=0-31;batch=52 length=1391 heads=0-31;batch=54 length=1393 heads=0-31;batch=55 length=2047 heads=0-31;batch=57 length=1 heads=0-31;batch=59 length=15 heads=0-31;batch=61 length=17 heads=0-31;batch=62 length=687 heads=0-31
+[FAIL] case7 no-len0-mixed tails-only poison pages=0 tails=376 control finite=False within_tolerance=False max_error=inf max_tol_ratio=inf guards=True
+[PASS] case7 no-len0-mixed tails-only poison pages=0 tails=376 reference_finite=True candidate_error=1.562500e-02 candidate_tol_ratio=0.319 control_error=inf control_tol_ratio=inf candidate_control_within_tolerance=False candidate_control_finite_bits_equal=False candidate_control_failure_set_equal=False require_control=False control_gate=FAIL
+[PASS] case7 no-len0-mixed tails-only poison-invariant reference_unchanged=True candidate_unpoisoned_equal=True candidate_poison_matches_reference_gate=True
+[PASS] case7 workspace full->short->full step=1/3 poison_pages=0 poison_tails=0 candidate finite=True within_tolerance=True max_error=9.765625e-04 max_tol_ratio=0.054 guards=True
+[PASS] case7 workspace full->short->full step=1/3 poison_pages=0 poison_tails=0 control finite=True within_tolerance=True max_error=9.765625e-04 max_tol_ratio=0.054 guards=True
+[PASS] case7 workspace full->short->full step=1/3 poison_pages=0 poison_tails=0 reference_finite=True candidate_error=9.765625e-04 candidate_tol_ratio=0.054 control_error=9.765625e-04 control_tol_ratio=0.054 candidate_control_within_tolerance=True candidate_control_finite_bits_equal=True candidate_control_failure_set_equal=True require_control=True control_gate=PASS
+[PASS] case7 workspace full->short->full step=2/3 short-unpoisoned-baseline candidate finite=True within_tolerance=True max_error=1.562500e-02 max_tol_ratio=0.324 guards=True
+[PASS] case7 workspace full->short->full step=2/3 short-unpoisoned-baseline control finite=True within_tolerance=True max_error=1.562500e-02 max_tol_ratio=0.324 guards=True
+[PASS] case7 workspace full->short->full step=2/3 short-unpoisoned-baseline reference_finite=True candidate_error=1.562500e-02 candidate_tol_ratio=0.324 control_error=1.562500e-02 control_tol_ratio=0.324 candidate_control_within_tolerance=True candidate_control_finite_bits_equal=True candidate_control_failure_set_equal=True require_control=True control_gate=PASS
+[PASS] case7 workspace full->short->full step=2/3 poison_pages=5051 poison_tails=360 candidate finite=True within_tolerance=True max_error=1.562500e-02 max_tol_ratio=0.324 guards=True
+[INFO] case7 workspace full->short->full step=2/3 poison_pages=5051 poison_tails=360 control nonfinite_batches=1,3,5-6,8-9,11-12,14-15,17-18,21,23,25-26,28-29,31-32,34-35,37-38,41,43,45-46,48-49,51-52,54-55,57-58,61,63 nonfinite_batch_head_length=batch=1 length=1 heads=0-31;batch=3 length=15 heads=0-31;batch=5 length=17 heads=0-31;batch=6 length=687 heads=0-31;batch=8 length=689 heads=0-31;batch=9 length=703 heads=0-31;batch=11 length=705 heads=0-31;batch=12 length=1375 heads=0-31;batch=14 length=1377 heads=0-31;batch=15 length=1391 heads=0-31;batch=17 length=1393 heads=0-31;batch=18 length=2047 heads=0-31;batch=21 length=1 heads=0-31;batch=23 length=15 heads=0-31;batch=25 length=17 heads=0-31;batch=26 length=687 heads=0-31;batch=28 length=689 heads=0-31;batch=29 length=703 heads=0-31;batch=31 length=705 heads=0-31;batch=32 length=1375 heads=0-31;batch=34 length=1377 heads=0-31;batch=35 length=1391 heads=0-31;batch=37 length=1393 heads=0-31;batch=38 length=2047 heads=0-31;batch=41 length=1 heads=0-31;batch=43 length=15 heads=0-31;batch=45 length=17 heads=0-31;batch=46 length=687 heads=0-31;batch=48 length=689 heads=0-31;batch=49 length=703 heads=0-31;batch=51 length=705 heads=0-31;batch=52 length=1375 heads=0-31;batch=54 length=1377 heads=0-31;batch=55 length=1391 heads=0-31;batch=57 length=1393 heads=0-31;batch=58 length=2047 heads=0-31;batch=61 length=1 heads=0-31;batch=63 length=15 heads=0-31
+[FAIL] case7 workspace full->short->full step=2/3 poison_pages=5051 poison_tails=360 control finite=False within_tolerance=False max_error=inf max_tol_ratio=inf guards=True
+[PASS] case7 workspace full->short->full step=2/3 poison_pages=5051 poison_tails=360 reference_finite=True candidate_error=1.562500e-02 candidate_tol_ratio=0.324 control_error=inf control_tol_ratio=inf candidate_control_within_tolerance=False candidate_control_finite_bits_equal=False candidate_control_failure_set_equal=False require_control=False control_gate=FAIL
+[PASS] case7 workspace full->short->full step=2/3 short-poison-invariant reference_unchanged=True candidate_unpoisoned_equal=True candidate_poison_matches_reference_gate=True
+[PASS] case7 workspace full->short->full step=3/3 poison_pages=0 poison_tails=0 candidate finite=True within_tolerance=True max_error=9.765625e-04 max_tol_ratio=0.054 guards=True
+[PASS] case7 workspace full->short->full step=3/3 poison_pages=0 poison_tails=0 control finite=True within_tolerance=True max_error=9.765625e-04 max_tol_ratio=0.054 guards=True
+[PASS] case7 workspace full->short->full step=3/3 poison_pages=0 poison_tails=0 reference_finite=True candidate_error=9.765625e-04 candidate_tol_ratio=0.054 control_error=9.765625e-04 control_tol_ratio=0.054 candidate_control_within_tolerance=True candidate_control_finite_bits_equal=True candidate_control_failure_set_equal=True require_control=True control_gate=PASS
+[PASS] case7 workspace full->short->full full-state invariant=True full_normal_repeat_deterministic=True
+[PASS] case7 workspace sequence full->short->full
+[PASS] case7 workspace short->full step=1/2 short-unpoisoned-baseline candidate finite=True within_tolerance=True max_error=1.562500e-02 max_tol_ratio=0.324 guards=True
+[PASS] case7 workspace short->full step=1/2 short-unpoisoned-baseline control finite=True within_tolerance=True max_error=1.562500e-02 max_tol_ratio=0.324 guards=True
+[PASS] case7 workspace short->full step=1/2 short-unpoisoned-baseline reference_finite=True candidate_error=1.562500e-02 candidate_tol_ratio=0.324 control_error=1.562500e-02 control_tol_ratio=0.324 candidate_control_within_tolerance=True candidate_control_finite_bits_equal=True candidate_control_failure_set_equal=True require_control=True control_gate=PASS
+[PASS] case7 workspace short->full step=1/2 poison_pages=5051 poison_tails=360 candidate finite=True within_tolerance=True max_error=1.562500e-02 max_tol_ratio=0.324 guards=True
+[INFO] case7 workspace short->full step=1/2 poison_pages=5051 poison_tails=360 control nonfinite_batches=1,3,5-6,8-9,11-12,14-15,17-18,21,23,25-26,28-29,31-32,34-35,37-38,41,43,45-46,48-49,51-52,54-55,57-58,61,63 nonfinite_batch_head_length=batch=1 length=1 heads=0-31;batch=3 length=15 heads=0-31;batch=5 length=17 heads=0-31;batch=6 length=687 heads=0-31;batch=8 length=689 heads=0-31;batch=9 length=703 heads=0-31;batch=11 length=705 heads=0-31;batch=12 length=1375 heads=0-31;batch=14 length=1377 heads=0-31;batch=15 length=1391 heads=0-31;batch=17 length=1393 heads=0-31;batch=18 length=2047 heads=0-31;batch=21 length=1 heads=0-31;batch=23 length=15 heads=0-31;batch=25 length=17 heads=0-31;batch=26 length=687 heads=0-31;batch=28 length=689 heads=0-31;batch=29 length=703 heads=0-31;batch=31 length=705 heads=0-31;batch=32 length=1375 heads=0-31;batch=34 length=1377 heads=0-31;batch=35 length=1391 heads=0-31;batch=37 length=1393 heads=0-31;batch=38 length=2047 heads=0-31;batch=41 length=1 heads=0-31;batch=43 length=15 heads=0-31;batch=45 length=17 heads=0-31;batch=46 length=687 heads=0-31;batch=48 length=689 heads=0-31;batch=49 length=703 heads=0-31;batch=51 length=705 heads=0-31;batch=52 length=1375 heads=0-31;batch=54 length=1377 heads=0-31;batch=55 length=1391 heads=0-31;batch=57 length=1393 heads=0-31;batch=58 length=2047 heads=0-31;batch=61 length=1 heads=0-31;batch=63 length=15 heads=0-31
+[FAIL] case7 workspace short->full step=1/2 poison_pages=5051 poison_tails=360 control finite=False within_tolerance=False max_error=inf max_tol_ratio=inf guards=True
+[PASS] case7 workspace short->full step=1/2 poison_pages=5051 poison_tails=360 reference_finite=True candidate_error=1.562500e-02 candidate_tol_ratio=0.324 control_error=inf control_tol_ratio=inf candidate_control_within_tolerance=False candidate_control_finite_bits_equal=False candidate_control_failure_set_equal=False require_control=False control_gate=FAIL
+[PASS] case7 workspace short->full step=1/2 short-poison-invariant reference_unchanged=True candidate_unpoisoned_equal=True candidate_poison_matches_reference_gate=True
+[PASS] case7 workspace short->full step=2/2 poison_pages=0 poison_tails=0 candidate finite=True within_tolerance=True max_error=9.765625e-04 max_tol_ratio=0.054 guards=True
+[PASS] case7 workspace short->full step=2/2 poison_pages=0 poison_tails=0 control finite=True within_tolerance=True max_error=9.765625e-04 max_tol_ratio=0.054 guards=True
+[PASS] case7 workspace short->full step=2/2 poison_pages=0 poison_tails=0 reference_finite=True candidate_error=9.765625e-04 candidate_tol_ratio=0.054 control_error=9.765625e-04 control_tol_ratio=0.054 candidate_control_within_tolerance=True candidate_control_finite_bits_equal=True candidate_control_failure_set_equal=True require_control=True control_gate=PASS
+[PASS] case7 workspace short->full full-state invariant=True full_normal_repeat_deterministic=True
+[PASS] case7 workspace sequence short->full
+case7 exp612 special correctness: PASS reference_finite=True candidate_finite=True guards=True live_splits=0/1/2/3 reuse=full->short->full,short->full

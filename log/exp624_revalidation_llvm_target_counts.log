@@ -1,0 +1,16 @@
+candidate_llvm=/tmp/exp624_revalidation.CFnpm9/candidate.ll
+candidate_target_function_count=1
+candidate_target_llvm.mxc.bsm.bpermute_count=8
+candidate_target_llvm.mxc.ldg.predicator.bsm_count=0
+candidate_target_llvm.mxc.ldg.predicator.v4i32_count=0
+candidate_target_llvm.mxc.stg.predicator.v4i32_count=0
+candidate_target_llvm.mxc.arrive_count=0
+candidate_target_llvm.mxc.barrier_count=10
+control_llvm=/tmp/exp624_revalidation.CFnpm9/control.ll
+control_target_function_count=1
+control_target_llvm.mxc.bsm.bpermute_count=0
+control_target_llvm.mxc.ldg.predicator.bsm_count=0
+control_target_llvm.mxc.ldg.predicator.v4i32_count=0
+control_target_llvm.mxc.stg.predicator.v4i32_count=0
+control_target_llvm.mxc.arrive_count=0
+control_target_llvm.mxc.barrier_count=10

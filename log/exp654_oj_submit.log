@@ -1,0 +1,21 @@
+exp654 unique OJ submit
+command: python3 tools/xpuoj_submit.py solutions/cuda_maca_optimized.cpp --submit --no-archive --poll-seconds 30 --timeout-seconds 900
+candidate: solutions/archive/2026-08-24-experiments/cuda_case9_raw_fp32_threepeer_fanin_exp654.cpp
+candidate_sha256: 314c3445e887e4e2e1e16653a3e7be28d71b44803b8d6a720f73b68d28f13bff
+control_sha256: a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+workfile_sha256_at_submit: 314c3445e887e4e2e1e16653a3e7be28d71b44803b8d6a720f73b68d28f13bff
+submit_output: created submission #124440
+submission_id: 124440
+initial_status: Pending
+submit_client_result: timeout after 900s; remote submission was not canceled
+first_watch: --watch 124440; timeout after 900s while remote was still nonterminal
+terminal_watch: --watch 124440; Finished/Accepted
+terminal_submit_time: 2026-08-23T18:09:49.000Z
+terminal_status: Accepted
+terminal_score: 66.07
+terminal_time_used_ms: 1593
+terminal_memory_used_kb: 23060644
+raw_path: results/raw/cuda_124440_raw.json
+raw_sha256: 9e6d1980a04f4e1069f87e0062758d7a661766bba53b07ae3d85146f2b102c37
+submitted_source: solutions/archive/2026-08-24-submissions/cuda_124440.cpp
+submitted_source_sha256: 314c3445e887e4e2e1e16653a3e7be28d71b44803b8d6a720f73b68d28f13bff

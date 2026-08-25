@@ -1,0 +1,4 @@
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+control:   build/exp635_control_normal.so
+candidate: build/exp635_candidate_normal.so
+case 12 B= 8 L=32768 KV=8 | control p50=0.2322 ms | candidate p50=0.2323 ms | candidate/control p10/p50/p90=0.9988/1.0013/1.0034 | speedup=0.999x

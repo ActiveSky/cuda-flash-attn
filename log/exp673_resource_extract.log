@@ -1,0 +1,96 @@
+106: maca info  : Function properties for  _Z27paged_decode_generic_kernelPK15__maca_bfloat16S1_S1_PS_PKiS4_llllllf 
+107:  0 bytes stack frame 
+109: maca info  : staticMaxWarps/PEU : 8
+110: maca info  : Function properties for  _Z32paged_decode_single_token_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKii 
+111:  0 bytes stack frame 
+113: maca info  : staticMaxWarps/PEU : 8
+114: maca info  : Function properties for  _Z32paged_decode_single_token_kernelILi8ELi4EEvPK15__maca_bfloat16PS0_PKii 
+115:  0 bytes stack frame 
+117: maca info  : staticMaxWarps/PEU : 8
+118: maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+119:  0 bytes stack frame 
+121: maca info  : staticMaxWarps/PEU : 8
+122: maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+123:  0 bytes stack frame 
+125: maca info  : staticMaxWarps/PEU : 8
+126: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+127:  0 bytes stack frame 
+129: maca info  : staticMaxWarps/PEU : 5
+130: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+131:  0 bytes stack frame 
+133: maca info  : staticMaxWarps/PEU : 6
+134: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+135:  0 bytes stack frame 
+137: maca info  : staticMaxWarps/PEU : 5
+138: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+139:  0 bytes stack frame 
+141: maca info  : staticMaxWarps/PEU : 6
+142: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+143:  0 bytes stack frame 
+145: maca info  : staticMaxWarps/PEU : 6
+146: maca info  : Function properties for  _Z34paged_decode_token_parallel_kernelILi4ELi8ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+147:  0 bytes stack frame 
+149: maca info  : staticMaxWarps/PEU : 5
+150: maca info  : Function properties for  _Z34paged_decode_token_parallel_kernelILi4ELi8ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+151:  0 bytes stack frame 
+153: maca info  : staticMaxWarps/PEU : 5
+154: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+155:  0 bytes stack frame 
+157: maca info  : staticMaxWarps/PEU : 5
+158: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+159:  0 bytes stack frame 
+161: maca info  : staticMaxWarps/PEU : 5
+162: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+163:  0 bytes stack frame 
+165: maca info  : staticMaxWarps/PEU : 5
+166: maca info  : Function properties for  _Z34paged_decode_token_parallel_kernelILi8ELi4ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+167:  0 bytes stack frame 
+169: maca info  : staticMaxWarps/PEU : 6
+170: maca info  : Function properties for  _Z34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+171:  0 bytes stack frame 
+173: maca info  : staticMaxWarps/PEU : 6
+174: maca info  : Function properties for  _Z33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+175:  0 bytes stack frame 
+177: maca info  : staticMaxWarps/PEU : 4
+178: maca info  : Function properties for  _Z25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+179:  0 bytes stack frame 
+181: maca info  : staticMaxWarps/PEU : 4
+182: maca info  : Function properties for  _Z25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+183:  0 bytes stack frame 
+185: maca info  : staticMaxWarps/PEU : 4
+186: maca info  : Function properties for  _Z31paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb0ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+187:  0 bytes stack frame 
+189: maca info  : staticMaxWarps/PEU : 8
+190: maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb1ELb1ELb0ELi0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+191:  0 bytes stack frame 
+193: maca info  : staticMaxWarps/PEU : 7
+194: maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb1ELb0ELb1ELi3EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+195:  0 bytes stack frame 
+197: maca info  : staticMaxWarps/PEU : 8
+198: maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb1ELb0ELi0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+199:  0 bytes stack frame 
+201: maca info  : staticMaxWarps/PEU : 7
+202: maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb0ELb0ELi0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+203:  0 bytes stack frame 
+205: maca info  : staticMaxWarps/PEU : 7
+206: maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb0ELb0ELb0ELb0ELi0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+207:  0 bytes stack frame 
+209: maca info  : staticMaxWarps/PEU : 7
+210: maca info  : Function properties for  _Z31paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb1ELb1ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+211:  0 bytes stack frame 
+213: maca info  : staticMaxWarps/PEU : 8
+214: maca info  : Function properties for  _Z31paged_decode_reduce_vec4_kernelILb1ELb0ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+215:  0 bytes stack frame 
+217: maca info  : staticMaxWarps/PEU : 8
+219:ies for  _Z31paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb0ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+220:  0 bytes stack frame 
+222: maca info  : staticMaxWarps/PEU : 8
+223: maca info  : Function properties for  _Z26paged_decode_reduce_kernelILb1ELb0ELb1ELb1ELb1ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+224:  0 bytes stack frame 
+226: maca info  : staticMaxWarps/PEU : 8
+227: maca info  : Function properties for  _Z26paged_decode_reduce_kernelILb1ELb0ELb0ELb0ELb0ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+228:  0 bytes stack frame 
+230: maca info  : staticMaxWarps/PEU : 8
+231: maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+232:  0 bytes stack frame 
+234: maca info  : staticMaxWarps/PEU : 5

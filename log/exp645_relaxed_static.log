@@ -1,0 +1,49 @@
+exp645 relaxed static semantic audit
+candidate_sha=2a0ffa3d23cd44950215589fae8818ad1ac283a40b0953503f460c574e8ca83c
+control_sha=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+workfile_observed_before_and_after_task=solutions/cuda_maca_optimized.cpp SHA b292a83df4e6fa54301164505aab15e69104bfcf66273a8e27c52feaf395adbf; it was already modified by another task and was not touched here.
+
+Existing build evidence (not rebuilt in this task):
+- log/exp645_candidate_normal.log: mxcc normal build exit_code=0.
+- log/exp645_candidate_resource_stdout.log: resource build completed.
+- log/exp645_candidate_only_tuples.log: one candidate-only direct kernel.
+- log/exp645_tuple_counts.log: candidate=32, control=31, common=31.
+- direct target resource: 84 MTreg / 64 STreg / 8320B / 0 stack / 5 waves.
+
+Dispatch isolation:
+- candidate run_kernel routes only exact B16/KV4/seqlen_k=4096 through
+  launch_case8_exp645 at source lines 5509-5517.
+- launch_case8_exp645 launches one dim3 grid with dim3(16,4,4) and the
+  independent paged_decode_case8_direct_fanin_kernel symbol at lines 7072-7099.
+- original case8 control specialization remains in the negative-batch
+  preserve branch and launch_case8_exp340; no other launch call was found.
+
+Tail/empty/barrier static review:
+- FULL_PAGES_ONLY computes p_beg/p_end from cache_seqlens and returns before
+  shared allocation/barriers for an empty split.
+- FUSE_TAIL_IN_LAST_SPLIT handles a tail-only sequence and the final partial
+  page; each live CTA reaches the final CTA barrier before direct state store.
+- direct state rows are disjoint: z2/z3 rows 0..15, z1 h0 rows 16..19,
+  z0 h1 rows 20..23; one __syncthreads() publishes all 24 rows before reads.
+- shared capacity assertion is valid: 24*128*2 + 24*2*4 = 6336 <= 8320.
+- no definite invalid block-table read or barrier divergence was found in the
+  above control-flow paths.
+
+DEFINITE CORRECTNESS FAILURE:
+- store_case8_normalized_z_state writes row payload at
+  s_acc + row*64 + tx*4 (lines 2419-2420).
+- merge_case8_normalized_z_peer has no tx argument and always reads
+  peer_words[0..3] (lines 2459-2468), i.e. peer row dimensions 0..7.
+- all six direct merge call sites pass only s_norm + row*64, without +tx*4
+  (lines 6695-6708 and 6752-6765).
+- Therefore tx=1..15 consume the peer's first 8 dimensions instead of their
+  own tx*8 dimensions.  This is a correctness blocker independent of the
+  +2 MTreg resource delta; do not run C500/OJ on this SHA.
+
+Static parser output:
+store_has_tx_offset=True
+merge_helper_reads_word_zero=True
+merge_helper_has_no_tx_parameter=True
+direct_calls_without_tx_offset=True
+merge_call_count=6
+result=DEFINITE_OFFSET_MISMATCH

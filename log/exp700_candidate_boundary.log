@@ -1,0 +1,9 @@
+2026-08-24T14:51:31Z
+candidate source:
+55f213e1718cb5a29cec8cb16a6641fbe8badd8c5c138a88ca95755858aef527  solutions/archive/2026-08-24-experiments/cuda_control124611_case1_shared_v_fanout_exp700.cpp
+candidate library:
+1c8368026ca34a929174c38a88a8e5ab084833315968a52cd1a55cdf3a6c6737  build/exp700_candidate_normal.so
+command: python3 tests/c500_paged_decode_harness.py --library build/exp700_candidate_normal.so --cases 1 --lengths boundary
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+[PASS] case  1 B= 1 L=    1 KV=4 lengths=boundary match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 finite=True
+exit_code=0

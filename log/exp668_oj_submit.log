@@ -1,0 +1,17 @@
+exp668 OJ submission lock record
+candidate: solutions/archive/2026-08-23-experiments/cuda_control124611_case12_v_dead_half_exp668.cpp
+candidate_sha256: 8aee7ba576d47f1ca7166abf7113096bec5ebf9db2d510749399831ccc2b2010
+workfile_sha256_before_submit: 8aee7ba576d47f1ca7166abf7113096bec5ebf9db2d510749399831ccc2b2010
+workfile_cmp_candidate: yes
+pre_submit_queue: only terminal submissions; no Pending/Running entry
+dry_run: passed; no submission created
+submit_command: python3 tools/xpuoj_submit.py solutions/cuda_maca_optimized.cpp --submit --poll-seconds 30 --timeout-seconds 900
+submission_id: 124621
+submit_count: 1
+terminal_status: Accepted
+score: 65.86
+cases: 14/14 Accepted
+case12: 392 ms field, display_score 59
+case13: 181 ms field, display_score 57
+case14: 140 ms field, display_score 55
+raw: results/raw/cuda_124621_raw.json (created by submit tool)

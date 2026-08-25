@@ -1,0 +1,10 @@
+exp597 pre-submit queue and identity check
+UTC 2026-08-18T11:56:36Z
+f529061ec94575ac1f87d80d35ca6bf02ea2137c2890b809c98f24ece8df3774  solutions/archive/2026-08-18-experiments/cuda_case12_reducer_partial_b64_native_ldg_exp597.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/cuda_maca_optimized.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+| #116571 | Accepted | 66 | cuda.maca-c500 | 2026-08-18T09:13:48.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #116314 | Accepted | 66 | cuda.maca-c500 | 2026-08-18T04:19:51.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #115902 | Accepted | 66 | cuda.maca-c500 | 2026-08-17T16:08:27.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #115744 | Accepted | 66.07 | cuda.maca-c500 | 2026-08-17T13:47:08.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #115685 | Accepted | 66.07 | cuda.maca-c500 | 2026-08-17T12:54:34.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |

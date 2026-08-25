@@ -1,0 +1,81 @@
+--- true target early-return IR prefix ---
+define protected metaxgpu_kernel void @_Z29paged_decode_two_token_kernelILi8ELi4ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch, float noundef %sm_scale) local_unnamed_addr #12 comdat {
+entry:
+  %0 = tail call noundef range(i32 0, 2147483647) i32 @llvm.mxc.block.id.x(), !range !15
+  %div241 = lshr i32 %0, 3
+  %and = and i32 %0, 7
+  %1 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.x(), !range !26
+  %and9 = and i32 %1, 31
+  %cmp = icmp ugt i32 %1, 127
+  br i1 %cmp, label %cleanup174, label %if.end
+
+if.end:                                           ; preds = %entry
+  %idxprom = zext nneg i32 %div241 to i64
+  %arrayidx = getelementptr inbounds i32, ptr addrspace(1) %cache_seqlens.coerce, i64 %idxprom
+  %2 = load i32, ptr addrspace(1) %arrayidx, align 4, !tbaa !16
+  %cmp11.not = icmp eq i32 %2, 1
+  br i1 %cmp11.not, label %cleanup174, label %cleanup.cont
+
+cleanup.cont:                                     ; preds = %if.end
+  %mul14 = mul nsw i32 %div241, %pages_per_batch
+  %idxprom15 = sext i32 %mul14 to i64
+  %arrayidx16 = getelementptr inbounds i32, ptr addrspace(1) %block_table.coerce, i64 %idxprom15
+  %3 = load i32, ptr addrspace(1) %arrayidx16, align 4, !tbaa !16
+  %4 = shl i32 %div241, 12
+  %5 = shl nuw nsw i32 %and, 9
+  %6 = shl nuw nsw i32 %1, 2
+  %7 = and i32 %6, 384
+  %8 = or disjoint i32 %5, %7
+  %mul19 = or disjoint i32 %8, %4
+  %idx.ext = sext i32 %mul19 to i64
+  %add.ptr = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %q.coerce, i64 %idx.ext
+  %idxprom20 = zext nneg i32 %and9 to i64
+  %arrayidx21 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr, i64 %idxprom20
+  %9 = load i32, ptr addrspace(4) %arrayidx21, align 4, !tbaa !16
+  %add23 = or disjoint i32 %and9, 32
+  %idxprom24 = zext nneg i32 %add23 to i64
+  %arrayidx25 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr, i64 %idxprom24
+  %10 = load i32, ptr addrspace(4) %arrayidx25, align 4, !tbaa !16
+  %conv.i260 = trunc i32 %9 to i16
+  %11 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i260)
+  %shr.i290 = lshr i32 %9, 16
+  %conv.i291 = trunc nuw i32 %shr.i290 to i16
+  %12 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i291)
+  %conv.i257 = trunc i32 %10 to i16
+  %13 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i257)
+  %shr.i286 = lshr i32 %10, 16
+  %conv.i287 = trunc nuw i32 %shr.i286 to i16
+  %14 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i287)
+  %mul34 = shl nsw i32 %3, 14
+  %idx.ext35 = sext i32 %mul34 to i64
+  %add.ptr36 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext35
+  %15 = shl nuw nsw i32 %and, 7
+  %16 = zext nneg i32 %15 to i64
+  %add.ptr42 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %add.ptr36, i64 %16
+  %arrayidx44 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr42, i64 %idxprom20
+  %17 = load i32, ptr addrspace(4) %arrayidx44, align 4, !tbaa !16
+  %arrayidx47 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr42, i64 %idxprom24
+  %18 = load i32, ptr addrspace(4) %arrayidx47, align 4, !tbaa !16
+  %conv.i254 = trunc i32 %17 to i16
+  %19 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i254)
+  %mul50 = fmul contract float %11, %19
+  %shr.i282 = lshr i32 %17, 16
+--- source-owner IR intrinsic inventory ---
+  %0 = tail call noundef range(i32 0, 2147483647) i32 @llvm.mxc.block.id.x(), !range !15
+  %2 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.x(), !range !26
+  %7 = tail call noundef <4 x i32> @llvm.mxc.ldg.predicator.v4i32(ptr addrspace(1) %6, i32 0, i64 -1, i1 true, i1 true, i1 false, i1 false), !call_argsrelate !36
+  %9 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #25
+  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %gep, i32 0, <4 x i32> %7, i64 %9, i1 true, i1 false, i1 false), !call_argsrelate !37
+  %11 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #25
+  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %gep.1, i32 0, <4 x i32> %7, i64 %11, i1 true, i1 false, i1 false), !call_argsrelate !37
+  %13 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #25
+  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %gep.2, i32 0, <4 x i32> %7, i64 %13, i1 true, i1 false, i1 false), !call_argsrelate !37
+  %15 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #25
+  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %gep.3, i32 0, <4 x i32> %7, i64 %15, i1 true, i1 false, i1 false), !call_argsrelate !37
+}
+--- source-owner forbidden backend calls ---
+PASS
+--- whole-file direct native counts ---
+     21 llvm.mxc.ldg.predicator.bsm.v4i32
+      2 llvm.mxc.ldg.predicator.v4i32
+      5 llvm.mxc.stg.predicator.v4i32

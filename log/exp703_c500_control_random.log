@@ -1,0 +1,8 @@
+exp703 control C500 case12 random correctness
+UTC 2026-08-24T17:31:16Z
+command: timeout 1200s python3 tests/c500_paged_decode_harness.py --library build/exp703_control_normal.so --cases 12 --lengths random --seed 20260824
+3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe  solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+c9d643f25e0e15193820b4809f53ce32ebe8cdfabf91505143ec169c61de137b  build/exp703_control_normal.so
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=random   match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.028 finite=True
+exit_status=0

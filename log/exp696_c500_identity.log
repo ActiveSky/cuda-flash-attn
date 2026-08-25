@@ -1,0 +1,34 @@
+exp696 C500 correctness identity and artifact binding
+UTC date: 2026-08-24
+
+Commands:
+  sha256sum solutions/archive/2026-08-24-submissions/cuda_124611.cpp \
+    solutions/archive/2026-08-24-experiments/cuda_control124611_case12_raw_wave_rebase_exp696.cpp \
+    solutions/cuda_maca_optimized.cpp build/exp695_control_normal.so \
+    /tmp/exp696_static.202L9z/candidate_normal.so \
+    /tmp/exp696_static.202L9z/control_normal.so
+  python3 - <<'PY' ... torch.cuda.is_available(), torch.cuda.get_device_name() ... PY
+
+Source SHA-256:
+  3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe  solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+  f23ce28fa2e0abdc6329b2d73af9e56b3a236c195a1c703924692e6b7e3071fe  solutions/archive/2026-08-24-experiments/cuda_control124611_case12_raw_wave_rebase_exp696.cpp
+  3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe  solutions/cuda_maca_optimized.cpp
+
+Normal artifact SHA-256:
+  856ed68df58015ecbaab33606dff6484b658f368a280b79517b619ed3763dd75  /tmp/exp696_static.202L9z/candidate_normal.so
+  c9d643f25e0e15193820b4809f53ce32ebe8cdfabf91505143ec169c61de137b  /tmp/exp696_static.202L9z/control_normal.so
+  c9d643f25e0e15193820b4809f53ce32ebe8cdfabf91505143ec169c61de137b  build/exp695_control_normal.so
+
+Artifact provenance:
+  /tmp/exp696_static.202L9z/{candidate_normal.so,control_normal.so} are the
+  normal artifacts recorded by log/exp696_static_audit.log.  The control
+  artifact hash also matches build/exp695_control_normal.so and its source-
+  bound exp695 build log.
+
+Environment:
+  torch=2.8.0+metax3.7.1.3
+  cuda_available=True
+  device=MetaX C500
+  device_count=1
+
+Post-run source/workfile SHA remained unchanged.  No OJ command was run.

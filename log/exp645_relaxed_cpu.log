@@ -1,0 +1,16 @@
+exp645 relaxed non-GPU safety check
+timestamp=2026-08-23
+candidate=solutions/archive/2026-08-22-experiments/cuda_case8_direct_fanin_normalized_bf16_exp645.cpp
+candidate_sha=2a0ffa3d23cd44950215589fae8818ad1ac283a40b0953503f460c574e8ca83c
+control_sha=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+
+command: python3 tests/test_kernel_logic.py
+result: PASS, 14/14 generic CPU attention logic cases.
+
+command: inline CPU normalized fan-in replay (200 random four-state groups,
+including empty peers; BF16 round-to-nearest emulation)
+result: intended per-tx-offset normalized fan-in math completed; the exact
+candidate no-offset peer-read model differed in 197/200 groups, max_abs_err
+8.06594.  This is a static semantic demonstration, not a GPU result.
+
+GPU/C500 execution: NOT RUN by task scope.

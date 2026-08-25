@@ -1,0 +1,29 @@
+exp709 bundle/control identity
+1499ce69d186977fb5c49ce75791238fcfcfac83d5e465a48e255a752cac7a36  solutions/archive/2026-08-24-experiments/cuda_control124611_short123_bundle_exp709.cpp
+3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe  solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+55f213e1718cb5a29cec8cb16a6641fbe8badd8c5c138a88ca95755858aef527  solutions/archive/2026-08-24-experiments/cuda_control124611_case1_shared_v_fanout_exp700.cpp
+4f9a42b487c7cd3d5b9e5cc6bfa57d68e090ff8f35aa0a68bb386a168ba28cbd  solutions/archive/2026-08-24-experiments/cuda_control124611_case2_native_b128_vcopy_exp701.cpp
+495685ed6ae609d73305b43421a961194351789ed59b0d8a6b1d0d4a4ca6310e  solutions/archive/2026-08-24-experiments/cuda_control124611_case3_native_tail_reg_bsm_exp699.cpp
+
+control_bundle_hunk_count=11
+
+component exact extraction checks (0 means exact)
+exp699_helper=0
+exp699_tail=0
+exp700_kernel=0
+exp700_dispatch=0
+exp701_helper=0
+exp701_body=0
+exp701_dispatch=0
+exp699_dispatch=0
+
+source markers
+114:// exp699: the exact B16/KV4/L17 tail page has one live token.  On the
+160:    static_assert(KV_HEADS == 4, "exp699 is isolated to case3 KV4");
+213:// exp701: case2's exact one-token rows use a distinct V memory consumer:
+234:// exp700: case1-only CTA fan-out. Sixteen owner threads read the single
+248:                  "exp700 is only the case1 B1/KV4 fan-out");
+299:    // exp701: case2 permits a mixed batch of exact one- and two-token rows.
+1986:    // exp699: consume the single legal token in case3's second page without
+5592:            // exp701 is isolated to the authoritative OJ case2 shape:
+5925:                    // Q, combined tail masking, and direct output. exp699

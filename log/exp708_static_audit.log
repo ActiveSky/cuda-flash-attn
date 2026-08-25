@@ -1,0 +1,69 @@
+exp708 static audit (2026-08-24)
+
+Scope
+-----
+Parent z4 candidate: solutions/archive/2026-08-24-experiments/cuda_control124611_z4_all_async_register_kv_exp705.cpp
+Parent z4 SHA-256: 25a637f309f8a8206a2210a1c8f6382fe9e9206507b5b0b4b41f92caefebe083
+Parent z8 candidate: solutions/archive/2026-08-24-experiments/cuda_control124611_z8_all_async_register_kv_exp704.cpp
+Parent z8 SHA-256: 53cca7e99f7d43066a7beb53323c93c0ed2f249e0438f4398d18f8e7e6c75e78
+Candidate: solutions/archive/2026-08-24-experiments/cuda_exp705_z4_plus_z8_all_async_register_kv_exp708.cpp
+Candidate SHA-256: 149232ff192cbcfe0b182ec1a1b7bb50f4be9962ebda6b2a128acdca02a8e4c3
+
+Diff audit
+----------
+Relative to exp705, the candidate only adds the existing exp704 register-returning
+async K/V backend to the four z8 producer specializations.  It adds the
+ASYNC_NEXT_GLD_WAIT template switch and enables it for case12 (1,0,0,0,1),
+case7 (1,0,1,0,1), case9 (1,1,0,0,1), and case13 (1,1,0,1,1).
+The exp705 z4 case8/case11/case10/case14 dispatches and their async backend are
+unchanged.  The shared XpuojAsyncLoadI4/xpuoj_load_global_async128 helpers are
+not duplicated.  No exp707 conditional branch is included.
+
+Static builds
+-------------
+PASS: log/exp708_candidate_normal.log -> build/exp708_candidate_normal.so
+PASS: log/exp708_candidate_resource.log -> build/exp708_candidate_resource.so
+PASS: log/exp708_candidate_llvm.log -> build/exp708_candidate_device.ll
+
+All three builds exit 0 and report only the existing ten
+-Wmaca-min-blocks-per-multiprocessor warnings.  No compile error, nonzero stack
+frame, spill, or other compiler failure is present in the logs.
+
+Candidate resource rows
+-----------------------
+z8 case12 (1,0,0,0,1): 82 MTreg / 52 STreg / 8448 BSM / 0 stack / 5 staticMaxWarps/PEU
+z8 case7  (1,0,1,0,1): 82 MTreg / 52 STreg / 8448 BSM / 0 stack / 5 staticMaxWarps/PEU
+z8 case9  (1,1,0,0,1): 82 MTreg / 50 STreg / 8448 BSM / 0 stack / 5 staticMaxWarps/PEU
+z8 case13 (1,1,0,1,1): 82 MTreg / 50 STreg / 8448 BSM / 0 stack / 5 staticMaxWarps/PEU
+z4 case8:                82 MTreg / 64 STreg / 8320 BSM / 0 stack / 5 staticMaxWarps/PEU
+z4 case11:               80 MTreg / 58 STreg / 8320 BSM / 0 stack / 6 staticMaxWarps/PEU
+z4 case10:               80 MTreg / 58 STreg / 8320 BSM / 0 stack / 6 staticMaxWarps/PEU
+z4 case14:               82 MTreg / 66 STreg / 8320 BSM / 0 stack / 5 staticMaxWarps/PEU
+
+LLVM lowering
+-------------
+Each of the four enabled z8 producer specializations contains two
+llvm.mxc.load.global.async.v4i32 calls (K and V), one llvm.mxc.arrive(i32 64),
+eight llvm.mxc.barrier() calls, three llvm.mxc.barrier.warp() calls, and no
+barrier.inst call.  The async payload is extracted only after arrive/barrier;
+the existing shared-memory publish and warp synchronization remain in place.
+
+Target function ranges in build/exp708_candidate_device.ll:
+case12: function line 18058, async calls at 18444/18450, arrive/barrier at 18621/18622
+case7:  function line 19829, async calls at 20231/20237, arrive/barrier at 20408/20409
+case9:  function line 21616, async calls at 22000/22006, arrive/barrier at 22177/22178
+case13: function line 23385, async calls at 23769/23775, arrive/barrier at 23946/23947
+
+The whole candidate LLVM file contains 25 async-load strings, 15 arrive64
+strings, 111 barrier strings, 49 warp-barrier strings, and 4 barrier.inst
+strings; the increase over exp705 is the expected four z8 producers.
+
+Risk disposition
+----------------
+Static evidence shows no explicit correctness error or illegal launch/resource
+condition: all eight target launches retain their existing geometry and ABI,
+z8 remains dim3(16,2,8) with 8448 bytes shared memory, z4 remains the exp705
+geometry with 8320 bytes shared memory, and all target functions have zero stack.
+This is only a local compile/lowering audit; no C500, GPU benchmark, or OJ
+command was run.  OJ/control admission and final attribution remain with the
+主 Agent.

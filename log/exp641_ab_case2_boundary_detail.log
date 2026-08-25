@@ -1,0 +1,25 @@
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+control:   build/exp641_ab_control_20260822.so
+candidate: build/exp641_ab_candidate_20260822.so
+case  2 B= 4 L=    2 KV=8 | control p50=0.0082 ms | candidate p50=0.0083 ms | candidate/control p10/p50/p90=0.9672/1.0139/1.0382 | speedup=0.986x
+round 01 control_ms=0.008366 candidate_ms=0.008292 ratio=0.991126075
+round 02 control_ms=0.008118 candidate_ms=0.008238 ratio=1.014821863
+round 03 control_ms=0.008379 candidate_ms=0.008323 ratio=0.993278358
+round 04 control_ms=0.008131 candidate_ms=0.008223 ratio=1.011335026
+round 05 control_ms=0.008440 candidate_ms=0.008333 ratio=0.987261191
+round 06 control_ms=0.008100 candidate_ms=0.008212 ratio=1.013906406
+round 07 control_ms=0.008166 candidate_ms=0.008576 ratio=1.050156683
+round 08 control_ms=0.008113 candidate_ms=0.008279 ratio=1.020511212
+round 09 control_ms=0.008174 candidate_ms=0.008504 ratio=1.040400819
+round 10 control_ms=0.008049 candidate_ms=0.008356 ratio=1.038167934
+round 11 control_ms=0.008182 candidate_ms=0.008261 ratio=1.009699626
+round 12 control_ms=0.008143 candidate_ms=0.008297 ratio=1.018861990
+round 13 control_ms=0.008136 candidate_ms=0.008320 ratio=1.022655784
+round 14 control_ms=0.008765 candidate_ms=0.008225 ratio=0.938376175
+round 15 control_ms=0.008136 candidate_ms=0.008292 ratio=1.019194462
+round 16 control_ms=0.008509 candidate_ms=0.008230 ratio=0.967208213
+round 17 control_ms=0.008051 candidate_ms=0.008328 ratio=1.034340262
+round 18 control_ms=0.008143 candidate_ms=0.008261 ratio=1.014460825
+round 19 control_ms=0.008525 candidate_ms=0.008443 ratio=0.990390387
+round 20 control_ms=0.008195 candidate_ms=0.008133 ratio=0.992502358
+round 21 control_ms=0.010552 candidate_ms=0.008305 ratio=0.786996573

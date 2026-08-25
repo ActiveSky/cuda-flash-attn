@@ -1,0 +1,548 @@
+18:$_Z39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if = comdat any
+76:$_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_k = comdat any
+78:$_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_v = comdat any
+118:@_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_k = linkonce_odr protected local_unnamed_addr addrspace(3) global [2 x [64 x i32]] undef, comdat, align 16
+119:@_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_v = linkonce_odr protected local_unnamed_addr addrspace(3) global [2 x [64 x i32]] undef, comdat, align 16
+313:define protected metaxgpu_kernel void @_Z27paged_decode_generic_kernelPK15__maca_bfloat16S1_S1_PS_PKiS4_llllllf(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i64 noundef %batch_size, i64 noundef %num_heads, i64 noundef %num_heads_k, i64 noundef %headdim, i64 noundef %page_block_size, i64 noundef %pages_per_batch, float noundef %sm_scale) local_unnamed_addr #3 {
+394:  %arrayidx43.epil = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %add41.epil
+407:  %arrayidx56.epil = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %add41.epil
+447:  %arrayidx43 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %add41
+460:  %arrayidx56 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %add41
+479:  %arrayidx43.1 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %add41.1
+492:  %arrayidx56.1 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %add41.1
+511:  %arrayidx43.2 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %add41.2
+524:  %arrayidx56.2 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %add41.2
+543:  %arrayidx43.3 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %add41.3
+556:  %arrayidx56.3 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %add41.3
+595:define protected metaxgpu_kernel void @_Z32paged_decode_single_token_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKii(ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch) local_unnamed_addr #7 comdat {
+614:  %add.ptr = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext
+632:define protected metaxgpu_kernel void @_Z32paged_decode_single_token_kernelILi8ELi4EEvPK15__maca_bfloat16PS0_PKii(ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch) local_unnamed_addr #7 comdat {
+651:  %add.ptr = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext
+669:define protected metaxgpu_kernel void @_Z39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch, float noundef %sm_scale) local_unnamed_addr #8 comdat {
+672:  %1 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.z(), !range !26
+691:  %add.ptr = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext
+692:  %add.ptr20 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext
+700:  %arrayidx26 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_k, i32 0, i32 %0
+706:  %arrayidx32 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_k, i32 0, i32 %add27
+710:  %arrayidx36 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_v, i32 0, i32 %0
+714:  %arrayidx42 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_v, i32 0, i32 %add27
+728:  %arrayidx50 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_k, i32 256), i32 0, i32 %0
+734:  %arrayidx56 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_k, i32 256), i32 0, i32 %add51
+738:  %arrayidx60 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_v, i32 256), i32 0, i32 %0
+742:  %arrayidx66 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_v, i32 256), i32 0, i32 %add51
+748:  tail call void @llvm.mxc.barrier()
+778:  %arrayidx92 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_k, i32 0, i32 %0
+780:  %arrayidx95 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_k, i32 0, i32 %add82
+864:  %arrayidx118 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_k, i32 256), i32 0, i32 %0
+866:  %arrayidx121 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_k, i32 256), i32 0, i32 %add82
+960:  %arrayidx167 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_v, i32 0, i32 %0
+962:  %arrayidx170 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_v, i32 0, i32 %add82
+981:  %arrayidx185 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_v, i32 256), i32 0, i32 %0
+983:  %arrayidx188 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_v, i32 256), i32 0, i32 %add82
+1066:declare i32 @llvm.mxc.thread.id.z() #5
+1069:declare void @llvm.mxc.barrier() #9
+1081:define protected metaxgpu_kernel void @_Z29paged_decode_two_token_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+1123:  %add.ptr31 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext30
+1307:  %add.ptr98 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext30
+1418:define protected metaxgpu_kernel void @_Z29paged_decode_two_token_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch, float noundef %sm_scale) local_unnamed_addr #12 comdat {
+1460:  %add.ptr31 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext30
+1644:  %add.ptr98 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext30
+1755:define protected metaxgpu_kernel void @_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #13 comdat {
+1759:  %2 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.z(), !range !26
+1902:  %add.ptr.i1263 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext.i1262
+1906:  %add.ptr.i1249 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i1262
+1918:  %invariant.gep4744 = getelementptr i32, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext29
+1919:  %invariant.gep4746 = getelementptr i32, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext29
+2003:  tail call void @llvm.mxc.barrier.warp(), !noalias !38
+2587:  tail call void @llvm.mxc.barrier()
+2607:  tail call void @llvm.mxc.barrier.warp(), !noalias !47
+3212:  tail call void @llvm.mxc.barrier.warp(), !noalias !44
+3241:  %add.ptr.i1235 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext.i1234
+3245:  %add.ptr.i1221 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i1234
+3249:  %invariant.gep = getelementptr i32, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext29
+3250:  %invariant.gep4723 = getelementptr i32, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext29
+3351:  tail call void @llvm.mxc.barrier.warp()
+4002:  tail call void @llvm.mxc.barrier.warp()
+4016:  tail call void @llvm.mxc.barrier()
+4051:  %add.ptr.i1207 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext.i1206
+4055:  %add.ptr.i = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i1206
+4060:  tail call void @llvm.mxc.barrier.warp()
+4796:  tail call void @llvm.mxc.barrier()
+4891:  tail call void @llvm.mxc.barrier()
+5025:  tail call void @llvm.mxc.barrier()
+5100:  tail call void @llvm.mxc.barrier()
+5537:declare void @llvm.mxc.barrier.warp() #9
+5540:define protected metaxgpu_kernel void @_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #13 comdat {
+5544:  %2 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.z(), !range !26
+5687:  %add.ptr.i899 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext.i898
+5693:  %add.ptr.i885 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i898
+5697:  %invariant.gep2096 = getelementptr i32, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext8.i901
+5698:  %invariant.gep2098 = getelementptr i32, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext8.i901
+5776:  tail call void @llvm.mxc.barrier.warp()
+6132:  tail call void @llvm.mxc.barrier.warp()
+6146:  tail call void @llvm.mxc.barrier()
+6181:  %add.ptr.i871 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext.i870
+6187:  %add.ptr.i = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i870
+6192:  tail call void @llvm.mxc.barrier.warp()
+6540:  tail call void @llvm.mxc.barrier()
+6635:  tail call void @llvm.mxc.barrier()
+6850:  tail call void @llvm.mxc.barrier()
+7309:define protected metaxgpu_kernel void @_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #13 comdat {
+7313:  %2 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.z(), !range !26
+7459:  %add.ptr.i1044 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext.i1043
+7465:  %add.ptr.i1030 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i1043
+7478:  %invariant.gep3077 = getelementptr i32, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext8.i1046
+7479:  %invariant.gep3079 = getelementptr i32, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext8.i1046
+7527:  tail call void @llvm.mxc.barrier.warp(), !noalias !88
+7822:  tail call void @llvm.mxc.barrier(), !noalias !88
+7844:  tail call void @llvm.mxc.barrier.warp(), !noalias !103
+8160:  tail call void @llvm.mxc.barrier.warp(), !noalias !103
+8175:  tail call void @llvm.mxc.barrier.warp(), !noalias !125
+8491:  tail call void @llvm.mxc.barrier.warp(), !noalias !125
+8520:  %add.ptr.i1016 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext.i1015
+8526:  %add.ptr.i1002 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i1015
+8530:  %invariant.gep3056 = getelementptr i32, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext8.i1018
+8531:  %invariant.gep3058 = getelementptr i32, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext8.i1018
+8608:  tail call void @llvm.mxc.barrier.warp()
+8962:  tail call void @llvm.mxc.barrier.warp()
+8976:  tail call void @llvm.mxc.barrier()
+9011:  %add.ptr.i988 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext.i987
+9017:  %add.ptr.i = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i987
+9022:  tail call void @llvm.mxc.barrier.warp()
+9376:  tail call void @llvm.mxc.barrier()
+9471:  tail call void @llvm.mxc.barrier()
+9686:  tail call void @llvm.mxc.barrier()
+10028:define protected metaxgpu_kernel void @_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #13 comdat {
+10032:  %2 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.z(), !range !26
+10175:  %add.ptr.i849 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext.i848
+10181:  %add.ptr.i835 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i848
+10185:  %invariant.gep2051 = getelementptr i32, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext8.i851
+10186:  %invariant.gep2053 = getelementptr i32, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext8.i851
+10264:  tail call void @llvm.mxc.barrier.warp()
+10620:  tail call void @llvm.mxc.barrier.warp()
+10634:  tail call void @llvm.mxc.barrier()
+10669:  %add.ptr.i821 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext.i820
+10675:  %add.ptr.i = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i820
+10680:  tail call void @llvm.mxc.barrier.warp()
+11028:  tail call void @llvm.mxc.barrier()
+11123:  tail call void @llvm.mxc.barrier()
+11257:  tail call void @llvm.mxc.barrier()
+11332:  tail call void @llvm.mxc.barrier()
+11776:define protected metaxgpu_kernel void @_Z38paged_decode_case11_headpair_z4_kernelILb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #13 comdat {
+11780:  %2 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.z(), !range !26
+11900:  %add.ptr.i1003 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext.i1002
+11908:  %add.ptr.i989 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i1002
+11914:  %invariant.gep1130 = getelementptr i32, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext8.i1005
+11915:  %invariant.gep1132 = getelementptr i32, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext8.i1005
+11976:  tail call void @llvm.mxc.barrier.inst()
+12024:  tail call void @llvm.mxc.barrier.warp()
+12316:  tail call void @llvm.mxc.barrier.warp()
+12331:  tail call void @llvm.mxc.barrier()
+12418:  tail call void @llvm.mxc.barrier()
+12552:  tail call void @llvm.mxc.barrier()
+12627:  tail call void @llvm.mxc.barrier()
+13064:declare void @llvm.mxc.barrier.inst() #9
+13067:define protected metaxgpu_kernel void @_Z34paged_decode_token_parallel_kernelILi4ELi8ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #17 comdat {
+13071:  %2 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.z(), !range !26
+13109:  tail call void @llvm.mxc.barrier()
+13135:  %add.ptr.i1276 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext.i1275
+13142:  %add.ptr.i1262 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i1275
+13148:  %invariant.gep = getelementptr i32, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext8.i1278
+13149:  %invariant.gep1422 = getelementptr i32, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext8.i1278
+13372:  tail call void @llvm.mxc.barrier.inst()
+14378:  tail call void @llvm.mxc.barrier()
+15152:  tail call void @llvm.mxc.barrier()
+15213:  tail call void @llvm.mxc.barrier()
+15504:define protected metaxgpu_kernel void @_Z34paged_decode_token_parallel_kernelILi4ELi8ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #17 comdat {
+15508:  %2 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.z(), !range !26
+15546:  tail call void @llvm.mxc.barrier()
+15572:  %add.ptr.i1288 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext.i1287
+15579:  %add.ptr.i1274 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i1287
+15585:  %invariant.gep = getelementptr i32, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext8.i1290
+15586:  %invariant.gep1444 = getelementptr i32, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext8.i1290
+15809:  tail call void @llvm.mxc.barrier.inst()
+17327:  tail call void @llvm.mxc.barrier()
+18101:  tail call void @llvm.mxc.barrier()
+18162:  tail call void @llvm.mxc.barrier()
+18453:define protected metaxgpu_kernel void @_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef readnone %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #13 comdat {
+18457:  %2 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.z(), !range !26
+18598:  %add.ptr.i1443 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext.i1442
+18602:  %add.ptr.i1429 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i1442
+18615:  %invariant.gep = getelementptr %struct.uint2.4, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext149
+18616:  %invariant.gep2256 = getelementptr %struct.uint2.4, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext149
+18679:  tail call void @llvm.mxc.barrier.warp()
+19011:  tail call void @llvm.mxc.barrier.warp()
+19025:  tail call void @llvm.mxc.barrier()
+19060:  %add.ptr.i1415 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext.i1414
+19064:  %add.ptr.i1404 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i1414
+19069:  tail call void @llvm.mxc.barrier.warp()
+19438:  tail call void @llvm.mxc.barrier()
+19538:  tail call void @llvm.mxc.barrier()
+19672:  tail call void @llvm.mxc.barrier()
+19758:  tail call void @llvm.mxc.barrier()
+19892:  tail call void @llvm.mxc.barrier()
+19973:  tail call void @llvm.mxc.barrier()
+20188:define protected metaxgpu_kernel void @_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef readnone %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #13 comdat {
+20192:  %2 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.z(), !range !26
+20349:  %add.ptr.i1474 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext.i1473
+20353:  %add.ptr.i1460 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i1473
+20366:  %invariant.gep = getelementptr %struct.uint2.4, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext167
+20367:  %invariant.gep2290 = getelementptr %struct.uint2.4, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext167
+20430:  tail call void @llvm.mxc.barrier.warp()
+20762:  tail call void @llvm.mxc.barrier.warp()
+20776:  tail call void @llvm.mxc.barrier()
+20811:  %add.ptr.i1446 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext.i1445
+20815:  %add.ptr.i1435 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i1445
+20820:  tail call void @llvm.mxc.barrier.warp()
+21189:  tail call void @llvm.mxc.barrier()
+21289:  tail call void @llvm.mxc.barrier()
+21423:  tail call void @llvm.mxc.barrier()
+21509:  tail call void @llvm.mxc.barrier()
+21643:  tail call void @llvm.mxc.barrier()
+21724:  tail call void @llvm.mxc.barrier()
+21939:define protected metaxgpu_kernel void @_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef readnone %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #13 comdat {
+21943:  %2 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.z(), !range !26
+22084:  %add.ptr.i1442 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext.i1441
+22088:  %add.ptr.i1428 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i1441
+22101:  %invariant.gep = getelementptr %struct.uint2.4, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext149
+22102:  %invariant.gep2255 = getelementptr %struct.uint2.4, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext149
+22164:  tail call void @llvm.mxc.barrier.warp()
+22495:  tail call void @llvm.mxc.barrier.warp()
+22509:  tail call void @llvm.mxc.barrier()
+22544:  %add.ptr.i1414 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext.i1413
+22548:  %add.ptr.i1403 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i1413
+22553:  tail call void @llvm.mxc.barrier.warp()
+22922:  tail call void @llvm.mxc.barrier()
+23022:  tail call void @llvm.mxc.barrier()
+23156:  tail call void @llvm.mxc.barrier()
+23242:  tail call void @llvm.mxc.barrier()
+23376:  tail call void @llvm.mxc.barrier()
+23457:  tail call void @llvm.mxc.barrier()
+23672:define protected metaxgpu_kernel void @_Z34paged_decode_token_parallel_kernelILi8ELi4ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #17 comdat {
+23676:  %2 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.z(), !range !26
+23747:  %add.ptr.i1301 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext.i1300
+23751:  %add.ptr.i1286 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i1300
+23763:  %invariant.gep1580 = getelementptr i32, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext22
+23764:  %invariant.gep1582 = getelementptr i32, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext22
+23835:  tail call void @llvm.mxc.barrier.and.wait4(i32 0, <4 x i32> %292), !noalias !209
+24060:  tail call void @llvm.mxc.barrier.and.wait4(i32 0, <4 x i32> %352), !noalias !209
+24250:  tail call void @llvm.mxc.barrier(), !noalias !209
+24265:  tail call void @llvm.mxc.barrier.and.wait4(i32 0, <4 x i32> %k_bsm_token.01585), !noalias !216
+24490:  tail call void @llvm.mxc.barrier.and.wait4(i32 0, <4 x i32> %v_bsm_token.01584), !noalias !216
+24492:  tail call void @llvm.mxc.barrier.warp(), !noalias !216
+24694:  tail call void @llvm.mxc.barrier.warp(), !noalias !226
+24709:  %invariant.gep = getelementptr i32, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext22
+24710:  %invariant.gep1562 = getelementptr i32, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext22
+24812:  tail call void @llvm.mxc.barrier.and.wait4(i32 0, <4 x i32> %k_bsm_token68.01571)
+25319:  tail call void @llvm.mxc.barrier.and.wait4(i32 0, <4 x i32> %v_bsm_token69.01570)
+25324:  tail call void @llvm.mxc.barrier.warp()
+25734:  tail call void @llvm.mxc.barrier.warp()
+25749:  tail call void @llvm.mxc.barrier()
+25805:  tail call void @llvm.mxc.barrier()
+26166:declare void @llvm.mxc.barrier.and.wait4(i32, <4 x i32>) #9
+26169:define protected metaxgpu_kernel void @_Z34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #17 comdat {
+26173:  %2 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.z(), !range !26
+26249:  %add.ptr.i1283 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext.i1282
+26253:  %add.ptr.i1269 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i1282
+26257:  %invariant.gep = getelementptr i32, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext25
+26258:  %invariant.gep1422 = getelementptr i32, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext25
+26381:  tail call void @llvm.mxc.barrier.warp()
+27288:  tail call void @llvm.mxc.barrier.warp()
+27305:  tail call void @llvm.mxc.barrier()
+27354:  tail call void @llvm.mxc.barrier()
+27764:define protected metaxgpu_kernel void @_Z33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #17 comdat {
+27846:  %arrayidx87 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %shr20, i32 %shl
+27847:  %arrayidx92 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %shr20, i32 %add27
+27848:  %arrayidx97 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %shr20, i32 %add30
+27849:  %arrayidx102 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %shr20, i32 %add33
+27854:  %arrayidx87.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.1, i32 %shl
+27855:  %arrayidx92.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.1, i32 %add27
+27856:  %arrayidx97.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.1, i32 %add30
+27857:  %arrayidx102.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.1, i32 %add33
+27862:  %arrayidx87.2 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.2, i32 %shl
+27863:  %arrayidx92.2 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.2, i32 %add27
+27864:  %arrayidx97.2 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.2, i32 %add30
+27865:  %arrayidx102.2 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.2, i32 %add33
+27870:  %arrayidx87.3 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.3, i32 %shl
+27871:  %arrayidx92.3 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.3, i32 %add27
+27872:  %arrayidx97.3 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.3, i32 %add30
+27873:  %arrayidx102.3 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.3, i32 %add33
+27878:  %arrayidx87.4 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.4, i32 %shl
+27879:  %arrayidx92.4 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.4, i32 %add27
+27880:  %arrayidx97.4 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.4, i32 %add30
+27881:  %arrayidx102.4 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.4, i32 %add33
+27886:  %arrayidx87.5 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.5, i32 %shl
+27887:  %arrayidx92.5 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.5, i32 %add27
+27888:  %arrayidx97.5 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.5, i32 %add30
+27889:  %arrayidx102.5 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.5, i32 %add33
+27894:  %arrayidx87.6 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.6, i32 %shl
+27895:  %arrayidx92.6 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.6, i32 %add27
+27896:  %arrayidx97.6 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.6, i32 %add30
+27897:  %arrayidx102.6 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.6, i32 %add33
+27902:  %arrayidx87.7 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.7, i32 %shl
+27903:  %arrayidx92.7 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.7, i32 %add27
+27904:  %arrayidx97.7 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.7, i32 %add30
+27905:  %arrayidx102.7 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %add78.7, i32 %add33
+27922:  %arrayidx195 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 0, i32 %and13
+27923:  %arrayidx200 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 0, i32 %add198
+27924:  %arrayidx195.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 1, i32 %and13
+27925:  %arrayidx200.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 1, i32 %add198
+27926:  %arrayidx195.2 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 2, i32 %and13
+27927:  %arrayidx200.2 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 2, i32 %add198
+27928:  %arrayidx195.3 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 3, i32 %and13
+27929:  %arrayidx200.3 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 3, i32 %add198
+27930:  %arrayidx195.4 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 4, i32 %and13
+27931:  %arrayidx200.4 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 4, i32 %add198
+27932:  %arrayidx195.5 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 5, i32 %and13
+27933:  %arrayidx200.5 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 5, i32 %add198
+27934:  %arrayidx195.6 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 6, i32 %and13
+27935:  %arrayidx200.6 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 6, i32 %add198
+27936:  %arrayidx195.7 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 7, i32 %and13
+27937:  %arrayidx200.7 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 7, i32 %add198
+27938:  %arrayidx195.8 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 8, i32 %and13
+27939:  %arrayidx200.8 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 8, i32 %add198
+27940:  %arrayidx195.9 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 9, i32 %and13
+27941:  %arrayidx200.9 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 9, i32 %add198
+27942:  %arrayidx195.10 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 10, i32 %and13
+27943:  %arrayidx200.10 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 10, i32 %add198
+27944:  %arrayidx195.11 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 11, i32 %and13
+27945:  %arrayidx200.11 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 11, i32 %add198
+27946:  %arrayidx195.12 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 12, i32 %and13
+27947:  %arrayidx200.12 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 12, i32 %add198
+27948:  %arrayidx195.13 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 13, i32 %and13
+27949:  %arrayidx200.13 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 13, i32 %add198
+27950:  %arrayidx195.14 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 14, i32 %and13
+27951:  %arrayidx200.14 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 14, i32 %add198
+27952:  %arrayidx195.15 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 15, i32 %and13
+27953:  %arrayidx200.15 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 15, i32 %add198
+27973:  %add.ptr64 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext63
+27974:  %add.ptr70 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext63
+27987:  %arrayidx9.i = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %shr1.i, i32 %shl.i
+27989:  %arrayidx14.i = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 %shr1.i, i32 %shl.i
+27997:  tail call void @llvm.mxc.barrier()
+29551:  tail call void @llvm.mxc.barrier()
+29625:define protected metaxgpu_kernel void @_Z25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #17 comdat {
+29682:  %arrayidx66 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 0, i32 %and13
+29683:  %arrayidx71 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 0, i32 %add24
+29684:  %arrayidx66.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 1, i32 %and13
+29685:  %arrayidx71.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 1, i32 %add24
+29686:  %arrayidx66.2 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 2, i32 %and13
+29687:  %arrayidx71.2 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 2, i32 %add24
+29688:  %arrayidx66.3 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 3, i32 %and13
+29689:  %arrayidx71.3 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 3, i32 %add24
+29690:  %arrayidx66.4 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 4, i32 %and13
+29691:  %arrayidx71.4 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 4, i32 %add24
+29692:  %arrayidx66.5 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 5, i32 %and13
+29693:  %arrayidx71.5 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 5, i32 %add24
+29694:  %arrayidx66.6 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 6, i32 %and13
+29695:  %arrayidx71.6 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 6, i32 %add24
+29696:  %arrayidx66.7 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 7, i32 %and13
+29697:  %arrayidx71.7 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 7, i32 %add24
+29698:  %arrayidx66.8 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 8, i32 %and13
+29699:  %arrayidx71.8 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 8, i32 %add24
+29700:  %arrayidx66.9 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 9, i32 %and13
+29701:  %arrayidx71.9 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 9, i32 %add24
+29702:  %arrayidx66.10 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 10, i32 %and13
+29703:  %arrayidx71.10 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 10, i32 %add24
+29704:  %arrayidx66.11 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 11, i32 %and13
+29705:  %arrayidx71.11 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 11, i32 %add24
+29706:  %arrayidx66.12 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 12, i32 %and13
+29707:  %arrayidx71.12 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 12, i32 %add24
+29708:  %arrayidx66.13 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 13, i32 %and13
+29709:  %arrayidx71.13 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 13, i32 %add24
+29710:  %arrayidx66.14 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 14, i32 %and13
+29711:  %arrayidx71.14 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 14, i32 %add24
+29712:  %arrayidx66.15 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 15, i32 %and13
+29713:  %arrayidx71.15 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 15, i32 %add24
+29714:  %arrayidx134 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 0, i32 %and13
+29715:  %arrayidx139 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 0, i32 %add24
+29716:  %arrayidx134.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 1, i32 %and13
+29717:  %arrayidx139.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 1, i32 %add24
+29718:  %arrayidx134.2 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 2, i32 %and13
+29719:  %arrayidx139.2 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 2, i32 %add24
+29720:  %arrayidx134.3 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 3, i32 %and13
+29721:  %arrayidx139.3 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 3, i32 %add24
+29722:  %arrayidx134.4 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 4, i32 %and13
+29723:  %arrayidx139.4 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 4, i32 %add24
+29724:  %arrayidx134.5 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 5, i32 %and13
+29725:  %arrayidx139.5 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 5, i32 %add24
+29726:  %arrayidx134.6 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 6, i32 %and13
+29727:  %arrayidx139.6 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 6, i32 %add24
+29728:  %arrayidx134.7 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 7, i32 %and13
+29729:  %arrayidx139.7 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 7, i32 %add24
+29730:  %arrayidx134.8 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 8, i32 %and13
+29731:  %arrayidx139.8 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 8, i32 %add24
+29732:  %arrayidx134.9 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 9, i32 %and13
+29733:  %arrayidx139.9 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 9, i32 %add24
+29734:  %arrayidx134.10 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 10, i32 %and13
+29735:  %arrayidx139.10 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 10, i32 %add24
+29736:  %arrayidx134.11 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 11, i32 %and13
+29737:  %arrayidx139.11 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 11, i32 %add24
+29738:  %arrayidx134.12 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 12, i32 %and13
+29739:  %arrayidx139.12 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 12, i32 %add24
+29740:  %arrayidx134.13 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 13, i32 %and13
+29741:  %arrayidx139.13 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 13, i32 %add24
+29742:  %arrayidx134.14 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 14, i32 %and13
+29743:  %arrayidx139.14 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 14, i32 %add24
+29744:  %arrayidx134.15 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 15, i32 %and13
+29745:  %arrayidx139.15 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 15, i32 %add24
+29765:  %add.ptr47 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext46
+29766:  %add.ptr53 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext46
+29779:  %arrayidx9.i = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %shr1.i, i32 %shl.i
+29781:  %arrayidx14.i = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 %shr1.i, i32 %shl.i
+29789:  tail call void @llvm.mxc.barrier()
+31787:  tail call void @llvm.mxc.barrier()
+31860:define protected metaxgpu_kernel void @_Z25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #17 comdat {
+31917:  %arrayidx66 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 0, i32 %and13
+31918:  %arrayidx71 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 0, i32 %add24
+31919:  %arrayidx66.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 1, i32 %and13
+31920:  %arrayidx71.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 1, i32 %add24
+31921:  %arrayidx66.2 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 2, i32 %and13
+31922:  %arrayidx71.2 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 2, i32 %add24
+31923:  %arrayidx66.3 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 3, i32 %and13
+31924:  %arrayidx71.3 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 3, i32 %add24
+31925:  %arrayidx66.4 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 4, i32 %and13
+31926:  %arrayidx71.4 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 4, i32 %add24
+31927:  %arrayidx66.5 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 5, i32 %and13
+31928:  %arrayidx71.5 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 5, i32 %add24
+31929:  %arrayidx66.6 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 6, i32 %and13
+31930:  %arrayidx71.6 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 6, i32 %add24
+31931:  %arrayidx66.7 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 7, i32 %and13
+31932:  %arrayidx71.7 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 7, i32 %add24
+31933:  %arrayidx66.8 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 8, i32 %and13
+31934:  %arrayidx71.8 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 8, i32 %add24
+31935:  %arrayidx66.9 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 9, i32 %and13
+31936:  %arrayidx71.9 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 9, i32 %add24
+31937:  %arrayidx66.10 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 10, i32 %and13
+31938:  %arrayidx71.10 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 10, i32 %add24
+31939:  %arrayidx66.11 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 11, i32 %and13
+31940:  %arrayidx71.11 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 11, i32 %add24
+31941:  %arrayidx66.12 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 12, i32 %and13
+31942:  %arrayidx71.12 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 12, i32 %add24
+31943:  %arrayidx66.13 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 13, i32 %and13
+31944:  %arrayidx71.13 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 13, i32 %add24
+31945:  %arrayidx66.14 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 14, i32 %and13
+31946:  %arrayidx71.14 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 14, i32 %add24
+31947:  %arrayidx66.15 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 15, i32 %and13
+31948:  %arrayidx71.15 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 15, i32 %add24
+31949:  %arrayidx134 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 0, i32 %and13
+31950:  %arrayidx139 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 0, i32 %add24
+31951:  %arrayidx134.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 1, i32 %and13
+31952:  %arrayidx139.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 1, i32 %add24
+31953:  %arrayidx134.2 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 2, i32 %and13
+31954:  %arrayidx139.2 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 2, i32 %add24
+31955:  %arrayidx134.3 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 3, i32 %and13
+31956:  %arrayidx139.3 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 3, i32 %add24
+31957:  %arrayidx134.4 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 4, i32 %and13
+31958:  %arrayidx139.4 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 4, i32 %add24
+31959:  %arrayidx134.5 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 5, i32 %and13
+31960:  %arrayidx139.5 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 5, i32 %add24
+31961:  %arrayidx134.6 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 6, i32 %and13
+31962:  %arrayidx139.6 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 6, i32 %add24
+31963:  %arrayidx134.7 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 7, i32 %and13
+31964:  %arrayidx139.7 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 7, i32 %add24
+31965:  %arrayidx134.8 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 8, i32 %and13
+31966:  %arrayidx139.8 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 8, i32 %add24
+31967:  %arrayidx134.9 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 9, i32 %and13
+31968:  %arrayidx139.9 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 9, i32 %add24
+31969:  %arrayidx134.10 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 10, i32 %and13
+31970:  %arrayidx139.10 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 10, i32 %add24
+31971:  %arrayidx134.11 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 11, i32 %and13
+31972:  %arrayidx139.11 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 11, i32 %add24
+31973:  %arrayidx134.12 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 12, i32 %and13
+31974:  %arrayidx139.12 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 12, i32 %add24
+31975:  %arrayidx134.13 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 13, i32 %and13
+31976:  %arrayidx139.13 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 13, i32 %add24
+31977:  %arrayidx134.14 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 14, i32 %and13
+31978:  %arrayidx139.14 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 14, i32 %add24
+31979:  %arrayidx134.15 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 15, i32 %and13
+31980:  %arrayidx139.15 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 15, i32 %add24
+32000:  %add.ptr47 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext46
+32001:  %add.ptr53 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext46
+32014:  %arrayidx9.i = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_k, i32 %shr1.i, i32 %shl.i
+32016:  %arrayidx14.i = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE3s_v, i32 %shr1.i, i32 %shl.i
+32024:  tail call void @llvm.mxc.barrier()
+34022:  tail call void @llvm.mxc.barrier()
+34268:  tail call void @llvm.mxc.barrier()
+34352:  tail call void @llvm.mxc.barrier()
+34444:  tail call void @llvm.mxc.barrier()
+34527:  tail call void @llvm.mxc.barrier()
+37635:  tail call void @llvm.mxc.barrier()
+38164:  tail call void @llvm.mxc.barrier()
+38185:  tail call void @llvm.mxc.barrier()
+38239:  tail call void @llvm.mxc.barrier()
+38259:  tail call void @llvm.mxc.barrier()
+38744:  tail call void @llvm.mxc.barrier()
+39268:  tail call void @llvm.mxc.barrier()
+39302:  tail call void @llvm.mxc.barrier()
+39369:  tail call void @llvm.mxc.barrier()
+39402:  tail call void @llvm.mxc.barrier()
+39767:  tail call void @llvm.mxc.barrier()
+39851:  tail call void @llvm.mxc.barrier()
+39961:  tail call void @llvm.mxc.barrier()
+40044:  tail call void @llvm.mxc.barrier()
+40243:define protected metaxgpu_kernel void @_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #13 comdat {
+40247:  %2 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.z(), !range !26
+40393:  %add.ptr.i998 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext.i997
+40399:  %add.ptr.i984 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i997
+40412:  %invariant.gep2994 = getelementptr i32, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext8.i1000
+40413:  %invariant.gep2996 = getelementptr i32, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext8.i1000
+40461:  tail call void @llvm.mxc.barrier.warp(), !noalias !288
+40750:  tail call void @llvm.mxc.barrier(), !noalias !288
+40772:  tail call void @llvm.mxc.barrier.warp(), !noalias !303
+41082:  tail call void @llvm.mxc.barrier.warp(), !noalias !303
+41097:  tail call void @llvm.mxc.barrier.warp(), !noalias !325
+41407:  tail call void @llvm.mxc.barrier.warp(), !noalias !325
+41436:  %add.ptr.i970 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext.i969
+41442:  %add.ptr.i956 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i969
+41446:  %invariant.gep2972 = getelementptr i32, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext8.i972
+41447:  %invariant.gep2974 = getelementptr i32, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext8.i972
+41525:  tail call void @llvm.mxc.barrier.warp()
+41881:  tail call void @llvm.mxc.barrier.warp()
+41895:  tail call void @llvm.mxc.barrier()
+41930:  %add.ptr.i942 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext.i941
+41936:  %add.ptr.i = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i941
+41941:  tail call void @llvm.mxc.barrier.warp()
+42289:  tail call void @llvm.mxc.barrier()
+42384:  tail call void @llvm.mxc.barrier()
+42599:  tail call void @llvm.mxc.barrier()
+43487:$_Z54__device_stub__paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if = comdat any
+43555:@4 = private unnamed_addr constant [92 x i8] c"_Z39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if\00", align 1
+43665:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z42__device_stub__paged_decode_generic_kernelPK15__maca_bfloat16S1_S1_PS_PKiS4_llllllf, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %13, ptr noundef %14)
+43671:declare i32 @mcLaunchKernel(ptr, i64, i32, i64, i32, ptr, i64, ptr) local_unnamed_addr
+43801:  %call.i = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z42__device_stub__paged_decode_generic_kernelPK15__maca_bfloat16S1_S1_PS_PKiS4_llllllf, i64 %grid_dim.coerce.sroa.0.0.copyload.i, i32 %grid_dim.coerce.sroa.2.0.copyload.i, i64 %block_dim.coerce.sroa.0.0.copyload.i, i32 %block_dim.coerce.sroa.2.0.copyload.i, ptr noundef nonnull %kernel_args1.i, i64 noundef %13, ptr noundef %14)
+43874:  tail call void @_Z54__device_stub__paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr noundef %q, ptr noundef %k_cache_paged, ptr noundef %v_cache_paged, ptr noundef %output, ptr noundef %cache_seqlens, ptr noundef %block_table, i32 noundef %conv65, float noundef 0x3FB6A09E60000000) #9
+44627:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z47__device_stub__paged_decode_single_token_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKii, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %4, ptr noundef %5)
+44663:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z47__device_stub__paged_decode_single_token_kernelILi8ELi4EEvPK15__maca_bfloat16PS0_PKii, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %4, ptr noundef %5)
+44668:define linkonce_odr void @_Z54__device_stub__paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr noalias noundef %q, ptr noalias noundef %k_cache, ptr noalias noundef %v_cache, ptr noalias noundef %out, ptr noalias noundef %cache_seqlens, ptr noalias noundef %block_table, i32 noundef %pages_per_batch, float noundef %sm_scale) #1 comdat {
+44715:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z54__device_stub__paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %8, ptr noundef %9)
+44767:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z44__device_stub__paged_decode_two_token_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %8, ptr noundef %9)
+44819:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z44__device_stub__paged_decode_two_token_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %8, ptr noundef %9)
+44895:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z53__device_stub__paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %14, ptr noundef %15)
+44995:  %call.i = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z53__device_stub__paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif, i64 %grid_dim.coerce.sroa.0.0.copyload.i, i32 %grid_dim.coerce.sroa.2.0.copyload.i, i64 %block_dim.coerce.sroa.0.0.copyload.i, i32 %block_dim.coerce.sroa.2.0.copyload.i, ptr noundef nonnull %kernel_args1.i, i64 noundef %14, ptr noundef %15)
+45093:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z53__device_stub__paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %14, ptr noundef %15)
+45169:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z53__device_stub__paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %14, ptr noundef %15)
+45245:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z53__device_stub__paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %14, ptr noundef %15)
+45321:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z53__device_stub__paged_decode_case11_headpair_z4_kernelILb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %14, ptr noundef %15)
+45397:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z49__device_stub__paged_decode_token_parallel_kernelILi4ELi8ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %14, ptr noundef %15)
+45473:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z49__device_stub__paged_decode_token_parallel_kernelILi4ELi8ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %14, ptr noundef %15)
+45549:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z57__device_stub__paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %14, ptr noundef %15)
+45625:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z57__device_stub__paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %14, ptr noundef %15)
+45701:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z57__device_stub__paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %14, ptr noundef %15)
+45777:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z49__device_stub__paged_decode_token_parallel_kernelILi8ELi4ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %14, ptr noundef %15)
+45853:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z49__device_stub__paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %14, ptr noundef %15)
+45929:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z48__device_stub__paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %14, ptr noundef %15)
+46005:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z40__device_stub__paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %14, ptr noundef %15)
+46081:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z40__device_stub__paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %14, ptr noundef %15)
+46133:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z46__device_stub__paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %8, ptr noundef %9)
+46185:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z48__device_stub__paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb1ELb1ELb0ELi0EEvPKfS1_S1_P15__maca_bfloat16PKiiii, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %8, ptr noundef %9)
+46237:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z48__device_stub__paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb1ELb0ELb1ELi3EEvPKfS1_S1_P15__maca_bfloat16PKiiii, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %8, ptr noundef %9)
+46289:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z48__device_stub__paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb1ELb0ELi0EEvPKfS1_S1_P15__maca_bfloat16PKiiii, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %8, ptr noundef %9)
+46341:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z48__device_stub__paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb0ELb0ELi0EEvPKfS1_S1_P15__maca_bfloat16PKiiii, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %8, ptr noundef %9)
+46393:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z48__device_stub__paged_decode_reduce_group8_kernelILb1ELb0ELb0ELb0ELb0ELb0ELi0EEvPKfS1_S1_P15__maca_bfloat16PKiiii, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %8, ptr noundef %9)
+46445:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z46__device_stub__paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %8, ptr noundef %9)
+46497:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z46__device_stub__paged_decode_reduce_vec4_kernelILb1ELb0ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %8, ptr noundef %9)
+46549:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z41__device_stub__paged_decode_reduce_kernelILb1ELb0ELb1ELb1ELb1ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %8, ptr noundef %9)
+46601:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z41__device_stub__paged_decode_reduce_kernelILb1ELb0ELb0ELb0ELb0ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %8, ptr noundef %9)
+46677:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z53__device_stub__paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %14, ptr noundef %15)
+46708:  %8 = tail call i32 @__mcRegisterFunction(ptr %3, ptr nonnull @_Z54__device_stub__paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if, ptr nonnull @4, ptr nonnull @4, i32 -1, ptr null, ptr null, ptr null, ptr null, ptr null)

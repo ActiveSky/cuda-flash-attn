@@ -1,0 +1,4 @@
+command: python3 tests/c500_paged_decode_harness.py --library build/exp646_c500_candidate.so --cases 3 --lengths boundary --seed 20260823
+exit: 0
+[PASS] case 3 B=16 L=17 KV=4 lengths=boundary match=1.000000 max_error=7.812500e-03 max_tol_ratio=0.244 finite=True
+purpose: non-target dispatch smoke only; no timing conclusion

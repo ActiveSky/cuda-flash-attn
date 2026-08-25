@@ -1,0 +1,41 @@
+diff --git a/solutions/archive/2026-08-24-submissions/cuda_124611.cpp b/solutions/archive/2026-08-24-experiments/cuda_control124611_case9_bf16_row16_exp673.cpp
+index 0c740c7..fb4f04b 100644
+--- a/solutions/archive/2026-08-24-submissions/cuda_124611.cpp
++++ b/solutions/archive/2026-08-24-experiments/cuda_control124611_case9_bf16_row16_exp673.cpp
+@@ -5761,11 +5761,14 @@ extern "C" void run_kernel(
+                     // the packed-aware vec2 reducer below. exp415 tests
+                     // split6/43 pages per partial, fused-tail ownership, synchronous
+                     // K+V-over-PV, Q prescale and the global partial count.
+                     // exp439 changes only QK/token ownership to the bit1
+                     // all-native network already validated on case13.
+-                    paged_decode_case13_kv8_headpair_z8_kernel<true, true><<<
++                    // exp673 changes only the producer partial accumulator to
++                    // normalized BF16 for the matching row16 vec2 consumer.
++                    paged_decode_case13_kv8_headpair_z8_kernel<
++                        true, true, false, true><<<
+                         grid, dim3(16, 2, 8)>>>(
+                         q, k_cache_paged, v_cache_paged, output,
+                         cache_seqlens, block_table,
+                         s_partial_m, s_partial_l, s_partial_acc,
+                         (int)batch_size, (int)pages_per_batch,
+@@ -5880,15 +5883,18 @@ extern "C" void run_kernel(
+         if (num_heads_k == 8 && batch_size == 32 && seqlen_k == 4096) {
+             // exp389: the head-pair/z8 producer packs (m,l) as FP16x2 in
+             // partial_m, matching the already-validated case12/13 producer
+             // contract. Use the packed-aware full-wave vec2 reducer while
+             // retaining case9's fused-tail partial slots and owner count.
++            // exp673 pairs the producer's normalized-BF16 accumulator ABI
++            // with physical-row serial reduction and four leader slots.
+             const int rgrid = (int)(batch_size * 32);
+             const size_t vec2_smem =
+-                ((size_t)2 * (size_t)reduce_splits + 2) * sizeof(float);
++                ((size_t)2 * (size_t)reduce_splits + 4) * sizeof(float);
+             paged_decode_reduce_vec2_kernel<
+-                (XPUOJ_USE_BASE2 != 0), false, true><<<
++                (XPUOJ_USE_BASE2 != 0), false, true, false, true,
++                true><<<
+                 rgrid, 64, vec2_smem>>>(
+                 s_partial_m, s_partial_l, s_partial_acc, output,
+                 cache_seqlens, (int)batch_size,
+                 (int)pages_per_split, reduce_splits);
+         } else if (reduce_splits <= 32) {

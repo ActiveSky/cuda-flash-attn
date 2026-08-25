@@ -1,0 +1,27 @@
+exp610 relaxed C500 correctness/safety smoke (2026-08-23)
+
+Candidate:
+  source: solutions/archive/2026-08-20-experiments/cuda_case12_duplicate_global_v_exp610.cpp
+  source SHA-256: c71eb9aaca4a25b2e0c3114a5176147a71f48d62391d641141239a21c98961cb
+  isolated build: build/exp610_relaxed_candidate.so
+  binary SHA-256: ed8733fa317d0d46f801da136f3717d5e9807118a748534b998b3b7dd3e8c182
+
+Commands/results:
+  PYTHONPATH=tests python3 tests/c500_paged_decode_harness.py --library build/exp610_relaxed_candidate.so --cases 12 --full-length
+    PASS, match=1.000000, max_tol_ratio=0.008, finite=True
+  same harness --lengths random --seed 20260823
+    PASS, match=1.000000, max_tol_ratio=0.029, finite=True
+  same harness --lengths boundary --seed 20260824
+    PASS, match=1.000000, max_tol_ratio=0.244, finite=True
+  same harness --length-values 1,2,15,16,17,831,832,833,1663,1664,1665,32767,32768
+    13/13 PASS, all finite, match=1.000000
+
+Special C500 smoke (aligned 256-BF16 guards):
+  mixed tail/no-tail lengths 1,16,17,831,832,833,1663,32768:
+    baseline and NaN padding/tail poison PASS; reference finite; candidate finite;
+    match=1.000000; guards and input metadata intact; 14,071 pages and 47 tail tokens poisoned;
+    reference/output poison invariance exact.
+  workspace 32768->1->32768: all 3 PASS, endpoint raw output deterministic.
+  workspace 1->32768: both steps PASS.
+
+All requested safety checks passed. No resource audit, A/B, OJ, work-file, or project-document operation performed.

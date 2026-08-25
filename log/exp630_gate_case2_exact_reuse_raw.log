@@ -1,0 +1,14 @@
+exp630 gate: C500 case2 exact/mixed/reuse/raw-bit/GQA/padding-sentinel
+UTC 2026-08-22T07:56:41Z
+e96b60455098002d684167531399d6620e8e7427918cadbf5609b64b126866c1  solutions/archive/2026-08-22-experiments/cuda_case2_source_owner_native_b128_exp630.cpp
+2b927d76b90100ff2f4a5e02d9e440b15f8413d95a95bf69ac6221941cb99625  build/exp630_candidate.so
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/cuda_maca_optimized.cpp
+command: inline Python using tests/c500_paged_decode_harness.py assets
+Traceback (most recent call last):
+  File "<stdin>", line 8, in <module>
+  File "/data/cuda-flash-attn/tests/c500_paged_decode_harness.py", line 132, in load_kernel
+    if not path.is_file():
+           ^^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'is_file'
+exit_status=1

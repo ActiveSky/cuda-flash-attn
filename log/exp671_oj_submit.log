@@ -1,0 +1,26 @@
+exp671 OJ probe
+date_utc=2026-08-24
+candidate=solutions/archive/2026-08-24-experiments/cuda_control124611_case12_bf16_normalized_row16_exp671.cpp
+candidate_sha256=ef83ee20dca76b3a1cfaa8b734115b264b6f1acc98423a5bffbf832b619c5bd1
+control_sha256=3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+workfile_sha256_before=3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+queue_before=empty_nonterminal
+dry_run=python3 tools/xpuoj_submit.py solutions/cuda_maca_optimized.cpp
+dry_run_result=ok_no_submission_created
+workfile_sha256_submitted=ef83ee20dca76b3a1cfaa8b734115b264b6f1acc98423a5bffbf832b619c5bd1
+queue_before_submit=empty_nonterminal
+submit=python3 tools/xpuoj_submit.py solutions/cuda_maca_optimized.cpp --submit
+submission_id=124647
+submit_time=2026-08-24T00:42:12.000Z
+watch=python3 tools/xpuoj_submit.py --watch 124647
+status=Accepted
+progress=Finished
+total_score=66
+case_results=1:3ms/92,2:4ms/90,3:10ms/82,4:23ms/72,5:17ms/73,6:28ms/63,7:225ms/55,8:94ms/54,9:236ms/57,10:38ms/62,11:224ms/52,12:372ms/60,13:181ms/57,14:139ms/55
+case12_target=372ms/60
+all_cases=14/14 Accepted
+time_used_ms=1594
+memory_used_kb=23060504
+raw_archive=results/raw/cuda_124647_raw.json
+workfile_sha256_after=ef83ee20dca76b3a1cfaa8b734115b264b6f1acc98423a5bffbf832b619c5bd1
+queue_after=124647 Accepted, then prior submissions all terminal

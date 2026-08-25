@@ -1,0 +1,35 @@
+exp631 final static gate identity
+2026-08-22T08:09:41Z
+candidate:
+a61ef873b62fe81fa96b714d1a4ce44cb10c9a7e0ade61d4487e23697dd222af  solutions/archive/2026-08-22-experiments/cuda_case2_source_owner_native_b128_single_launch_exp631.cpp
+control:
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+workfile:
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/cuda_maca_optimized.cpp
+candidate/control diff stat:
+ ...rce_owner_native_b128_single_launch_exp631.cpp} | 79 +++++++++++++++++++++-
+ 1 file changed, 78 insertions(+), 1 deletion(-)
+dispatch and contract references:
+169:xpuoj_case2_source_owner_native_b128(
+196:// exp631: fuse the exact case2 one-token V fan-out into the original
+202:template <int KV_HEADS, int GQA, bool SOURCE_OWNER_FANOUT = false>
+215:    static_assert(!SOURCE_OWNER_FANOUT ||
+217:                  "exp631 source-owner fan-out is case2-only");
+223:    if constexpr (SOURCE_OWNER_FANOUT) {
+228:                xpuoj_case2_source_owner_native_b128(
+5274:            // exp631 is the single-launch case2 source-owner probe.  Only
+5277:            paged_decode_two_token_kernel<8, 4, true><<<grid, 128>>>(
+5281:            paged_decode_two_token_kernel<8, 4><<<grid, 128>>>(
+resource evidence from completed build:
+121: maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi4ELi8ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+122-  0 bytes stack frame 
+123- maca info  : Used  22 MTregisters, 26 STregisters, 0 bytes shared mem  
+124- maca info  : staticMaxWarps/PEU : 8
+125: maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi8ELi4ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+126-  0 bytes stack frame 
+127- maca info  : Used  23 MTregisters, 37 STregisters, 0 bytes shared mem  
+128- maca info  : staticMaxWarps/PEU : 8
+129: maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi8ELi4ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+130-  0 bytes stack frame 
+131- maca info  : Used  22 MTregisters, 26 STregisters, 0 bytes shared mem  
+132- maca info  : staticMaxWarps/PEU : 8

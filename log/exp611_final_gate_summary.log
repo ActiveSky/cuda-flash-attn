@@ -1,0 +1,33 @@
+exp611 final C500 numerical safety gate summary
+UTC 2026-08-21T05:28:43Z
+candidate source SHA256: 27a2dbc6b44eee0d2016d6c6a2dc8a2ff40367b077118043d11603093952eec2  solutions/archive/2026-08-21-experiments/cuda_case12_q_bsm_partial_b128_stg_exp611.cpp
+control source SHA256: a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+OJ live queue (read-only):
+| #118862 | Accepted | 66.07 | cuda.maca-c500 | 2026-08-20T07:34:53.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #117052 | Accepted | 66.07 | cuda.maca-c500 | 2026-08-18T17:36:12.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #117007 | Accepted | 66 | cuda.maca-c500 | 2026-08-18T16:28:30.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #116965 | Accepted | 66.14 | cuda.maca-c500 | 2026-08-18T15:30:13.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #116797 | Accepted | 66 | cuda.maca-c500 | 2026-08-18T12:57:22.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+required log exit statuses:
+log/exp611_cpu_logic.log: 总计: 14/14 通过
+log/exp611_candidate_full.log: [PASS] case 14 B= 1 L=61519 KV=4 lengths=full     match=1.000000 max_error=1.220703e-04 max_tol_ratio=0.008 finite=True
+log/exp611_control_full.log: [PASS] case 14 B= 1 L=61519 KV=4 lengths=full     match=1.000000 max_error=1.220703e-04 max_tol_ratio=0.008 finite=True
+log/exp611_candidate_random.log: [PASS] case 14 B= 1 L=61519 KV=4 lengths=random   match=1.000000 max_error=1.220703e-04 max_tol_ratio=0.008 finite=True
+log/exp611_control_random.log: [PASS] case 14 B= 1 L=61519 KV=4 lengths=random   match=1.000000 max_error=1.220703e-04 max_tol_ratio=0.008 finite=True
+log/exp611_candidate_boundary.log: [PASS] case 14 B= 1 L=61519 KV=4 lengths=boundary match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 finite=True
+log/exp611_control_boundary.log: [PASS] case 14 B= 1 L=61519 KV=4 lengths=boundary match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 finite=True
+log/exp611_candidate_case12_exact241.log: exit_status=0
+log/exp611_control_case12_exact241.log: exit_status=0
+log/exp611_candidate_case12_reuse.log: exit_status=0
+log/exp611_control_case12_reuse.log: exit_status=0
+log/exp611_candidate_case12_padding_trap.log: exit_status=0
+log/exp611_control_case12_padding_trap.log: exit_status=0
+log/exp611_case12_raw_bits.log: exit_status=0
+log/exp611_ab_case12_full.log: exit_status=0
+log/exp611_ab_case12_random.log: exit_status=0
+log/exp611_ab_case12_boundary.log: exit_status=0
+pass-line counts:
+log/exp611_candidate_case12_exact241.log: 241
+log/exp611_control_case12_exact241.log: 241
+raw-bit pass line: raw_bit_pass=241/241
+exit_status=0

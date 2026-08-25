@@ -1,0 +1,87 @@
+exp601 static gate extraction
+UTC 2026-08-18T17:12:00Z
+source and work SHA256:
+2eb8cbdcbc8727f4d9d1fd2861663c37d02b3402ad341829a2f786d4b032e4bf  solutions/archive/2026-08-18-experiments/cuda_case12_partial_b128_stg_exp601.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+2eb8cbdcbc8727f4d9d1fd2861663c37d02b3402ad341829a2f786d4b032e4bf  solutions/cuda_maca_optimized.cpp
+build exit statuses:
+build_exit_status=0
+build_exit_status=0
+build_exit_status=0
+build_exit_status=0
+build_exit_status=0
+LLVM intrinsic counts:
+candidate total llvm.mxc.stg.predicator.v4i32 lines: 5
+candidate real call lines: 4
+control total llvm.mxc.stg.predicator.v4i32 lines: control real call lines: candidate target function and calls:
+target_lines=18048-19776
+1692:  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %add.ptr521, i32 0, <4 x i32> %ref.tmp528.sroa.0.12.vec.insert, i64 %408, i1 true, i1 false, i1 false), !alias.scope !187, !call_argsrelate !190
+1703:  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %add.ptr534, i32 0, <4 x i32> %ref.tmp535.sroa.0.12.vec.insert, i64 %411, i1 true, i1 false, i1 false), !alias.scope !191, !call_argsrelate !190
+1713:  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %add.ptr527, i32 0, <4 x i32> %ref.tmp541.sroa.0.12.vec.insert, i64 %414, i1 true, i1 false, i1 false), !alias.scope !194, !call_argsrelate !190
+1724:  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %add.ptr547, i32 0, <4 x i32> %ref.tmp548.sroa.0.12.vec.insert, i64 %417, i1 true, i1 false, i1 false), !alias.scope !197, !call_argsrelate !190
+target native STG call count: 4
+target ordinary global store count: 4
+candidate all native STG call locations:
+19739:  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %add.ptr521, i32 0, <4 x i32> %ref.tmp528.sroa.0.12.vec.insert, i64 %408, i1 true, i1 false, i1 false), !alias.scope !187, !call_argsrelate !190
+19750:  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %add.ptr534, i32 0, <4 x i32> %ref.tmp535.sroa.0.12.vec.insert, i64 %411, i1 true, i1 false, i1 false), !alias.scope !191, !call_argsrelate !190
+19760:  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %add.ptr527, i32 0, <4 x i32> %ref.tmp541.sroa.0.12.vec.insert, i64 %414, i1 true, i1 false, i1 false), !alias.scope !194, !call_argsrelate !190
+19771:  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %add.ptr547, i32 0, <4 x i32> %ref.tmp548.sroa.0.12.vec.insert, i64 %417, i1 true, i1 false, i1 false), !alias.scope !197, !call_argsrelate !190
+resource target/reducer excerpts:
+157- maca info  : staticMaxWarps/PEU : 5
+158: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+159-  0 bytes stack frame 
+160- maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+161- maca info  : staticMaxWarps/PEU : 5
+162: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+163-  0 bytes stack frame 
+164- maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+165- maca info  : staticMaxWarps/PEU : 5
+166: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+167-  0 bytes stack frame 
+168- maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+169- maca info  : staticMaxWarps/PEU : 5
+170- maca info  : Function properties for  _Z34paged_decode_token_parallel_kernelILi8ELi4ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+--
+189- maca info  : staticMaxWarps/PEU : 4
+190: maca info  : Function properties for  _Z31paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+191-  0 bytes stack frame 
+192- maca info  : Used  38 MTregisters, 39 STregisters, 0 bytes shared mem  
+193- maca info  : staticMaxWarps/PEU : 8
+194- maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb1ELb1ELb0ELi0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+--
+213- maca info  : staticMaxWarps/PEU : 7
+214: maca info  : Function properties for  _Z31paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+215-  0 bytes stack frame 
+216- maca info  : Used  38 MTregisters, 36 STregisters, 0 bytes shared mem  
+217- maca info  : staticMaxWarps/PEU : 8
+218- maca info  : Function properties for  _Z31paged_decode_reduce_vec4_kernelILb1ELb0ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+control resource target/reducer excerpts:
+158- maca info  : staticMaxWarps/PEU : 5
+159: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+160-  0 bytes stack frame 
+161- maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+162- maca info  : staticMaxWarps/PEU : 5
+163: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+164-  0 bytes stack frame 
+165- maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+166- maca info  : staticMaxWarps/PEU : 5
+167: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+168-  0 bytes stack frame 
+169- maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+170- maca info  : staticMaxWarps/PEU : 5
+171- maca info  : Function properties for  _Z34paged_decode_token_parallel_kernelILi8ELi4ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+--
+190- maca info  : staticMaxWarps/PEU : 4
+191: maca info  : Function properties for  _Z31paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+192-  0 bytes stack frame 
+193- maca info  : Used  38 MTregisters, 39 STregisters, 0 bytes shared mem  
+194- maca info  : staticMaxWarps/PEU : 8
+195- maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb1ELb1ELb0ELi0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+--
+214- maca info  : staticMaxWarps/PEU : 7
+215: maca info  : Function properties for  _Z31paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+216-  0 bytes stack frame 
+217- maca info  : Used  38 MTregisters, 36 STregisters, 0 bytes shared mem  
+218- maca info  : staticMaxWarps/PEU : 8
+219- maca info  : Function properties for  _Z31paged_decode_reduce_vec4_kernelILb1ELb0ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+static_gate_extraction_exit_status=0

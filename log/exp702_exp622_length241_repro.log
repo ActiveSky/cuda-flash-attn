@@ -1,0 +1,8 @@
+[INFO] length=241 live_splits=1 reference_finite=True
+[FAIL] exp622 length=241 pages+tails poison candidate finite=False reference_finite=True within_tolerance=False max_error=inf max_tol_ratio=inf inputs_untouched=True guards=True
+[FAIL] exp622 length=241 pages+tails poison control finite=False reference_finite=True within_tolerance=False max_error=inf max_tol_ratio=inf inputs_untouched=True guards=True
+[FAIL] exp622 length=241 pages+tails poison require_control=False candidate_finite=False control_finite=False candidate_control_within_tolerance=False
+[INFO] exp622 length=241 pages+tails poison control_diagnostic_tail_nonfinite=True control_pass=False
+[RESULT] pair_gate=False candidate_finite=False control_finite=False
+[RESULT] candidate_nonfinite=4096 control_nonfinite=4096
+[RESULT] candidate_control_finite_diff=False

@@ -1,0 +1,34 @@
+exp623 static resource gate summary
+Date: 2026-08-21 UTC
+
+Candidate: solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp
+Candidate SHA-256: 8daf875522d473d4c19aa44e6f3523190e098ef22ec3036f6a7ef4320ff4cc43
+Control: solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+Control SHA-256: a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+
+Commands (all completed with exit 0):
+  tools/build_local_maca.sh solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp build/exp623_candidate_normal.so
+  tools/build_local_maca.sh solutions/archive/2026-08-16-submissions/cuda_113889.cpp build/exp623_control_normal.so
+  tools/build_local_maca.sh solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp build/exp623_candidate_resource.so -resource-usage
+  tools/build_local_maca.sh solutions/archive/2026-08-16-submissions/cuda_113889.cpp build/exp623_control_resource.so -resource-usage
+
+Normal build: PASS (candidate and control).
+
+Target producer resource, mangled case13 z8 kernel <true,false,false>:
+  candidate: 76 MTreg / 52 STreg / 8448 B shared / 0 stack / 6 staticMaxWarps
+  control:   82 MTreg / 50 STreg / 8448 B shared / 0 stack / 5 staticMaxWarps
+Target gate: FAIL. Candidate STreg is +2 over the <=50 gate (and target occupancy is not a degradation: 6 vs 5); the required resource gate is not met.
+
+Target vec2 reducer (mangled paged_decode_reduce_vec2_kernel<true,false,true,false,false>):
+  candidate: 38 MTreg / 39 STreg / 0 B shared / 0 stack / 8 staticMaxWarps
+  control:   38 MTreg / 39 STreg / 0 B shared / 0 stack / 8 staticMaxWarps
+Reducer gate: PASS.
+
+Source-level target isolation checks (no LLVM because resource gate failed):
+  PASS: case12 dispatch is the only <true> case13 z8 call at source lines 5696-5710; other z8 calls retain their control template variants.
+  PASS: direct-K helper uses same-wave lane^16 raw BSM and direct global current-page K only (lines 2433-2467).
+  PASS: active direct-K path does not stage/read K through s_k; legacy s_k accesses are under if constexpr false for the active target (lines 2642-2683 and 2795-2829).
+  PASS: active direct-K path has no next-K load/store; next-K lookahead is under if constexpr (!DIRECT_K_WAVE_BSM_EXP623) (lines 2703-2731 and corresponding store block).
+
+No LLVM, CPU correctness, real C500, A/B, or OJ was run after the resource failure.
+Final result: STATIC RESOURCE GATE FAILED / CLOSED / NO C500 / NO A-B / NO OJ.

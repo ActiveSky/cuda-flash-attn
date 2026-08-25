@@ -1,0 +1,533 @@
+[candidate] sha256=34596da5ed5de07826199126eb6652d3c12732b1bfaf4a1a6cf79b98e6fcdc95 bytes=285711 lines=3387
+barrier_intrinsic=4
+barrier_inst=0
+barrier_warp=8
+shared_float_store=4
+shared_float_load=12
+shared_half_store=0
+shared_half_load=0
+shared_vector_store=0
+shared_vector_load=40
+bf16_to_f32=208
+f32_to_bf16=0
+exp2=27
+mxc_bsm=0
+mma=40
+shared_memcpy=6
+global_float_store=0
+global_float_load=0
+BARRIER_CONTEXT
+219:   tail call void @llvm.mxc.barrier.warp(), !noalias !88
+514:   tail call void @llvm.mxc.barrier(), !noalias !88
+536:   tail call void @llvm.mxc.barrier.warp(), !noalias !103
+852:   tail call void @llvm.mxc.barrier.warp(), !noalias !103
+867:   tail call void @llvm.mxc.barrier.warp(), !noalias !125
+1183:   tail call void @llvm.mxc.barrier.warp(), !noalias !125
+1300:   tail call void @llvm.mxc.barrier.warp()
+1654:   tail call void @llvm.mxc.barrier.warp()
+1668:   tail call void @llvm.mxc.barrier()
+1714:   tail call void @llvm.mxc.barrier.warp()
+2068:   tail call void @llvm.mxc.barrier()
+2704:   tail call void @llvm.mxc.barrier()
+BF16_CONVERSION_CONTEXT
+324:   %67 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i251.i.i1827)
+327:   %68 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i257.i.i1833)
+337:   %71 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i262.i.i1854)
+340:   %72 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i268.i.i1860)
+346:   %75 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i275.i.i1883)
+349:   %76 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i281.i.i1889)
+355:   %79 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i288.i.i1912)
+358:   %80 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i294.i.i1918)
+374:   %87 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i178.i.i1948)
+377:   %88 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i184.i.i1954)
+387:   %91 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i189.i.i1975)
+390:   %92 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i195.i.i1981)
+396:   %95 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i202.i.i2004)
+399:   %96 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i208.i.i2010)
+405:   %99 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i215.i.i2033)
+408:   %100 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i221.i.i2039)
+424:   %107 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i105.i.i2069)
+427:   %108 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i111.i.i2075)
+437:   %111 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i116.i.i2096)
+440:   %112 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i122.i.i2102)
+446:   %115 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i129.i.i2125)
+449:   %116 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i135.i.i2131)
+455:   %119 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i142.i.i2154)
+458:   %120 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i148.i.i2160)
+474:   %127 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i.i.i2190)
+477:   %128 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i.i.i2196)
+487:   %131 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i.i.i2217)
+490:   %132 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i.i.i2223)
+496:   %135 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i.i.i2246)
+499:   %136 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i.i.i2252)
+505:   %139 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i.i.i2275)
+508:   %140 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i.i.i2281)
+662:   %184 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i251.i.i)
+665:   %185 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i257.i.i)
+675:   %188 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i262.i.i)
+678:   %189 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i268.i.i)
+684:   %192 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i275.i.i)
+687:   %193 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i281.i.i)
+693:   %196 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i288.i.i)
+696:   %197 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i294.i.i)
+712:   %204 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i178.i.i)
+715:   %205 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i184.i.i)
+725:   %208 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i189.i.i)
+728:   %209 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i195.i.i)
+734:   %212 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i202.i.i)
+737:   %213 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i208.i.i)
+743:   %216 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i215.i.i)
+746:   %217 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i221.i.i)
+762:   %224 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i105.i.i)
+765:   %225 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i111.i.i)
+775:   %228 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i116.i.i)
+778:   %229 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i122.i.i)
+784:   %232 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i129.i.i)
+787:   %233 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i135.i.i)
+793:   %236 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i142.i.i)
+796:   %237 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i148.i.i)
+812:   %244 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i.i.i)
+815:   %245 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i.i.i)
+825:   %248 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i.i.i)
+828:   %249 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i.i.i)
+834:   %252 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i.i.i)
+837:   %253 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i.i.i)
+843:   %256 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i.i.i)
+846:   %257 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i.i.i)
+993:   %301 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i251.i.i.1)
+996:   %302 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i257.i.i.1)
+1006:   %305 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i262.i.i.1)
+1009:   %306 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i268.i.i.1)
+1015:   %309 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i275.i.i.1)
+1018:   %310 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i281.i.i.1)
+1024:   %313 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i288.i.i.1)
+1027:   %314 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i294.i.i.1)
+1043:   %321 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i178.i.i.1)
+1046:   %322 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i184.i.i.1)
+1056:   %325 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i189.i.i.1)
+1059:   %326 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i195.i.i.1)
+1065:   %329 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i202.i.i.1)
+1068:   %330 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i208.i.i.1)
+1074:   %333 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i215.i.i.1)
+1077:   %334 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i221.i.i.1)
+1093:   %341 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i105.i.i.1)
+1096:   %342 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i111.i.i.1)
+1106:   %345 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i116.i.i.1)
+1109:   %346 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i122.i.i.1)
+1115:   %349 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i129.i.i.1)
+1118:   %350 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i135.i.i.1)
+1124:   %353 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i142.i.i.1)
+1127:   %354 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i148.i.i.1)
+1143:   %361 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i.i.i.1)
+1146:   %362 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i.i.i.1)
+1156:   %365 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i.i.i.1)
+1159:   %366 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i.i.i.1)
+1165:   %369 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i.i.i.1)
+1168:   %370 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i.i.i.1)
+1174:   %373 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i.i.i.1)
+1177:   %374 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i.i.i.1)
+1446:   %423 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i251.i1202)
+1449:   %424 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i257.i1208)
+1459:   %427 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i262.i1229)
+1462:   %428 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i268.i1235)
+1468:   %431 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i275.i1258)
+1471:   %432 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i281.i1264)
+1477:   %435 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i288.i1287)
+1480:   %436 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i294.i1293)
+1496:   %443 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i178.i1324)
+1499:   %444 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i184.i1330)
+1509:   %447 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i189.i1351)
+1512:   %448 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i195.i1357)
+1518:   %451 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i202.i1380)
+1521:   %452 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i208.i1386)
+1527:   %455 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i215.i1409)
+1530:   %456 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i221.i1415)
+1546:   %463 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i105.i1446)
+1549:   %464 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i111.i1452)
+1559:   %467 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i116.i1473)
+1562:   %468 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i122.i1479)
+1568:   %471 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i129.i1502)
+1571:   %472 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i135.i1508)
+1577:   %475 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i142.i1531)
+1580:   %476 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i148.i1537)
+1596:   %483 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i.i1568)
+1599:   %484 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i.i1574)
+1609:   %487 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i.i1595)
+1612:   %488 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i.i1601)
+1618:   %491 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i.i1624)
+1621:   %492 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i.i1630)
+1627:   %495 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i.i1653)
+1630:   %496 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i.i1659)
+1847:   %539 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i251.i)
+1850:   %540 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i257.i)
+1860:   %543 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i262.i)
+1863:   %544 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i268.i)
+1869:   %547 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i275.i)
+1872:   %548 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i281.i)
+1878:   %551 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i288.i)
+1881:   %552 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i294.i)
+1903:   %560 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i178.i)
+1906:   %561 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i184.i)
+1916:   %564 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i189.i)
+1919:   %565 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i195.i)
+1925:   %568 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i202.i)
+1928:   %569 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i208.i)
+1934:   %572 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i215.i)
+1937:   %573 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i221.i)
+1958:   %580 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i105.i)
+1961:   %581 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i111.i)
+1971:   %584 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i116.i)
+1974:   %585 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i122.i)
+1980:   %588 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i129.i)
+1983:   %589 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i135.i)
+1989:   %592 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i142.i)
+1992:   %593 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i148.i)
+2013:   %600 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i.i)
+2016:   %601 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i.i)
+2026:   %604 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i.i)
+2029:   %605 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i.i)
+2035:   %608 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i.i)
+2038:   %609 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i.i)
+2044:   %612 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i.i)
+2047:   %613 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i.i)
+2742:   %690 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i81.i3106)
+2745:   %691 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i96.i3112)
+2749:   %693 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i78.i3117)
+2752:   %694 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i92.i3123)
+2756:   %696 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i75.i3128)
+2759:   %697 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i88.i3134)
+2763:   %699 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i3139)
+2766:   %700 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i84.i3145)
+2817:   %715 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i81.i2971)
+2820:   %716 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i96.i2977)
+2824:   %718 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i78.i2982)
+2827:   %719 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i92.i2988)
+2831:   %721 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i75.i2993)
+2834:   %722 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i88.i2999)
+2838:   %724 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i3004)
+2841:   %725 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i84.i3010)
+2893:   %740 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i81.i2836)
+2896:   %741 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i96.i2842)
+2900:   %743 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i78.i2847)
+2903:   %744 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i92.i2853)
+2907:   %746 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i75.i2858)
+2910:   %747 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i88.i2864)
+2914:   %749 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i2869)
+2917:   %750 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i84.i2875)
+3023:   %771 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i81.i2701)
+3026:   %772 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i96.i2707)
+3030:   %774 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i78.i2712)
+3033:   %775 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i92.i2718)
+3037:   %777 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i75.i2723)
+3040:   %778 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i88.i2729)
+3044:   %780 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i2734)
+3047:   %781 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i84.i2740)
+3098:   %796 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i81.i2566)
+3101:   %797 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i96.i2572)
+3105:   %799 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i78.i2577)
+3108:   %800 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i92.i2583)
+3112:   %802 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i75.i2588)
+3115:   %803 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i88.i2594)
+3119:   %805 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i2599)
+3122:   %806 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i84.i2605)
+3174:   %821 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i81.i)
+3177:   %822 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i96.i)
+3181:   %824 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i78.i)
+3184:   %825 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i92.i)
+3188:   %827 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i75.i)
+3191:   %828 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i88.i)
+3195:   %830 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i)
+3198:   %831 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i84.i)
+SHARED_FLOAT_STORE_CONTEXT
+2240:   store float %cond23.i2463, ptr addrspace(3) %arrayidx25.i2465, align 8, !tbaa !73
+2242:   store float %cond31.i2462, ptr addrspace(3) %arrayidx34.i2466, align 4, !tbaa !73
+2697:   store float %cond23.i.sink, ptr addrspace(3) %arrayidx25.i, align 8, !tbaa !73
+2699:   store float %cond31.i.sink, ptr addrspace(3) %arrayidx34.i, align 4, !tbaa !73
+SHARED_FLOAT_LOAD_CONTEXT
+2714:   %680 = load float, ptr addrspace(3) %arrayidx350, align 8, !tbaa !73
+2716:   %681 = load float, ptr addrspace(3) %arrayidx355, align 4, !tbaa !73
+2789:   %705 = load float, ptr addrspace(3) %arrayidx362, align 8, !tbaa !73
+2791:   %706 = load float, ptr addrspace(3) %arrayidx366, align 4, !tbaa !73
+2865:   %730 = load float, ptr addrspace(3) %arrayidx373, align 8, !tbaa !73
+2867:   %731 = load float, ptr addrspace(3) %arrayidx378, align 4, !tbaa !73
+2995:   %761 = load float, ptr addrspace(3) %arrayidx473, align 8, !tbaa !73
+2997:   %762 = load float, ptr addrspace(3) %arrayidx479, align 4, !tbaa !73
+3070:   %786 = load float, ptr addrspace(3) %arrayidx487, align 8, !tbaa !73
+3072:   %787 = load float, ptr addrspace(3) %arrayidx491, align 4, !tbaa !73
+3146:   %811 = load float, ptr addrspace(3) %arrayidx498, align 8, !tbaa !73
+3148:   %812 = load float, ptr addrspace(3) %arrayidx503, align 4, !tbaa !73
+
+[control] sha256=da2c6a20c25e507c3881f4926802b8e8a51c34c1fa16d225fcb4ea52dbfd2de6 bytes=239130 lines=2717
+barrier_intrinsic=5
+barrier_inst=0
+barrier_warp=8
+shared_float_store=38
+shared_float_load=40
+shared_half_store=0
+shared_half_load=0
+shared_vector_store=0
+shared_vector_load=40
+bf16_to_f32=160
+f32_to_bf16=0
+exp2=23
+mxc_bsm=0
+mma=40
+shared_memcpy=6
+global_float_store=0
+global_float_load=0
+BARRIER_CONTEXT
+219:   tail call void @llvm.mxc.barrier.warp(), !noalias !88
+514:   tail call void @llvm.mxc.barrier(), !noalias !88
+536:   tail call void @llvm.mxc.barrier.warp(), !noalias !103
+852:   tail call void @llvm.mxc.barrier.warp(), !noalias !103
+867:   tail call void @llvm.mxc.barrier.warp(), !noalias !125
+1183:   tail call void @llvm.mxc.barrier.warp(), !noalias !125
+1300:   tail call void @llvm.mxc.barrier.warp()
+1654:   tail call void @llvm.mxc.barrier.warp()
+1668:   tail call void @llvm.mxc.barrier()
+1714:   tail call void @llvm.mxc.barrier.warp()
+2068:   tail call void @llvm.mxc.barrier()
+2163:   tail call void @llvm.mxc.barrier()
+2378:   tail call void @llvm.mxc.barrier()
+BF16_CONVERSION_CONTEXT
+324:   %67 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i251.i.i2194)
+327:   %68 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i257.i.i2200)
+337:   %71 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i262.i.i2221)
+340:   %72 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i268.i.i2227)
+346:   %75 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i275.i.i2250)
+349:   %76 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i281.i.i2256)
+355:   %79 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i288.i.i2279)
+358:   %80 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i294.i.i2285)
+374:   %87 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i178.i.i2315)
+377:   %88 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i184.i.i2321)
+387:   %91 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i189.i.i2342)
+390:   %92 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i195.i.i2348)
+396:   %95 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i202.i.i2371)
+399:   %96 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i208.i.i2377)
+405:   %99 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i215.i.i2400)
+408:   %100 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i221.i.i2406)
+424:   %107 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i105.i.i2436)
+427:   %108 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i111.i.i2442)
+437:   %111 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i116.i.i2463)
+440:   %112 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i122.i.i2469)
+446:   %115 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i129.i.i2492)
+449:   %116 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i135.i.i2498)
+455:   %119 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i142.i.i2521)
+458:   %120 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i148.i.i2527)
+474:   %127 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i.i.i2557)
+477:   %128 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i.i.i2563)
+487:   %131 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i.i.i2584)
+490:   %132 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i.i.i2590)
+496:   %135 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i.i.i2613)
+499:   %136 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i.i.i2619)
+505:   %139 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i.i.i2642)
+508:   %140 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i.i.i2648)
+662:   %184 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i251.i.i)
+665:   %185 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i257.i.i)
+675:   %188 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i262.i.i)
+678:   %189 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i268.i.i)
+684:   %192 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i275.i.i)
+687:   %193 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i281.i.i)
+693:   %196 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i288.i.i)
+696:   %197 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i294.i.i)
+712:   %204 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i178.i.i)
+715:   %205 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i184.i.i)
+725:   %208 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i189.i.i)
+728:   %209 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i195.i.i)
+734:   %212 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i202.i.i)
+737:   %213 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i208.i.i)
+743:   %216 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i215.i.i)
+746:   %217 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i221.i.i)
+762:   %224 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i105.i.i)
+765:   %225 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i111.i.i)
+775:   %228 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i116.i.i)
+778:   %229 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i122.i.i)
+784:   %232 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i129.i.i)
+787:   %233 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i135.i.i)
+793:   %236 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i142.i.i)
+796:   %237 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i148.i.i)
+812:   %244 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i.i.i)
+815:   %245 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i.i.i)
+825:   %248 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i.i.i)
+828:   %249 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i.i.i)
+834:   %252 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i.i.i)
+837:   %253 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i.i.i)
+843:   %256 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i.i.i)
+846:   %257 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i.i.i)
+993:   %301 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i251.i.i.1)
+996:   %302 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i257.i.i.1)
+1006:   %305 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i262.i.i.1)
+1009:   %306 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i268.i.i.1)
+1015:   %309 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i275.i.i.1)
+1018:   %310 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i281.i.i.1)
+1024:   %313 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i288.i.i.1)
+1027:   %314 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i294.i.i.1)
+1043:   %321 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i178.i.i.1)
+1046:   %322 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i184.i.i.1)
+1056:   %325 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i189.i.i.1)
+1059:   %326 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i195.i.i.1)
+1065:   %329 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i202.i.i.1)
+1068:   %330 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i208.i.i.1)
+1074:   %333 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i215.i.i.1)
+1077:   %334 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i221.i.i.1)
+1093:   %341 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i105.i.i.1)
+1096:   %342 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i111.i.i.1)
+1106:   %345 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i116.i.i.1)
+1109:   %346 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i122.i.i.1)
+1115:   %349 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i129.i.i.1)
+1118:   %350 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i135.i.i.1)
+1124:   %353 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i142.i.i.1)
+1127:   %354 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i148.i.i.1)
+1143:   %361 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i.i.i.1)
+1146:   %362 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i.i.i.1)
+1156:   %365 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i.i.i.1)
+1159:   %366 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i.i.i.1)
+1165:   %369 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i.i.i.1)
+1168:   %370 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i.i.i.1)
+1174:   %373 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i.i.i.1)
+1177:   %374 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i.i.i.1)
+1446:   %423 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i251.i1569)
+1449:   %424 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i257.i1575)
+1459:   %427 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i262.i1596)
+1462:   %428 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i268.i1602)
+1468:   %431 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i275.i1625)
+1471:   %432 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i281.i1631)
+1477:   %435 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i288.i1654)
+1480:   %436 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i294.i1660)
+1496:   %443 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i178.i1691)
+1499:   %444 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i184.i1697)
+1509:   %447 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i189.i1718)
+1512:   %448 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i195.i1724)
+1518:   %451 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i202.i1747)
+1521:   %452 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i208.i1753)
+1527:   %455 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i215.i1776)
+1530:   %456 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i221.i1782)
+1546:   %463 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i105.i1813)
+1549:   %464 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i111.i1819)
+1559:   %467 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i116.i1840)
+1562:   %468 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i122.i1846)
+1568:   %471 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i129.i1869)
+1571:   %472 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i135.i1875)
+1577:   %475 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i142.i1898)
+1580:   %476 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i148.i1904)
+1596:   %483 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i.i1935)
+1599:   %484 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i.i1941)
+1609:   %487 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i.i1962)
+1612:   %488 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i.i1968)
+1618:   %491 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i.i1991)
+1621:   %492 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i.i1997)
+1627:   %495 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i.i2020)
+1630:   %496 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i.i2026)
+1847:   %539 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i251.i)
+1850:   %540 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i257.i)
+1860:   %543 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i262.i)
+1863:   %544 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i268.i)
+1869:   %547 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i275.i)
+1872:   %548 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i281.i)
+1878:   %551 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i288.i)
+1881:   %552 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i294.i)
+1903:   %560 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i178.i)
+1906:   %561 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i184.i)
+1916:   %564 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i189.i)
+1919:   %565 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i195.i)
+1925:   %568 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i202.i)
+1928:   %569 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i208.i)
+1934:   %572 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i215.i)
+1937:   %573 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i221.i)
+1958:   %580 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i105.i)
+1961:   %581 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i111.i)
+1971:   %584 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i116.i)
+1974:   %585 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i122.i)
+1980:   %588 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i129.i)
+1983:   %589 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i135.i)
+1989:   %592 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i142.i)
+1992:   %593 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i148.i)
+2013:   %600 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i55.i.i)
+2016:   %601 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i70.i.i)
+2026:   %604 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i52.i.i)
+2029:   %605 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i66.i.i)
+2035:   %608 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i49.i.i)
+2038:   %609 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i62.i.i)
+2044:   %612 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i.i)
+2047:   %613 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i58.i.i)
+SHARED_FLOAT_STORE_CONTEXT
+2102:   store float %acc0.sroa.0.0.vec.extract3620, ptr addrspace(3) %add.ptr337, align 16, !tbaa !73
+2104:   store float %acc1.sroa.0.0.vec.extract3188, ptr addrspace(3) %add.ptr343, align 16, !tbaa !73
+2107:   store float %acc0.sroa.0.4.vec.extract3678, ptr addrspace(3) %arrayidx351.1, align 4, !tbaa !73
+2110:   store float %acc1.sroa.0.4.vec.extract3246, ptr addrspace(3) %arrayidx355.1, align 4, !tbaa !73
+2113:   store float %acc0.sroa.83.8.vec.extract3728, ptr addrspace(3) %arrayidx351.2, align 8, !tbaa !73
+2116:   store float %acc1.sroa.83.8.vec.extract3296, ptr addrspace(3) %arrayidx355.2, align 8, !tbaa !73
+2119:   store float %acc0.sroa.83.12.vec.extract3782, ptr addrspace(3) %arrayidx351.3, align 4, !tbaa !73
+2122:   store float %acc1.sroa.83.12.vec.extract3350, ptr addrspace(3) %arrayidx355.3, align 4, !tbaa !73
+2125:   store float %acc0.sroa.163.16.vec.extract3836, ptr addrspace(3) %arrayidx351.4, align 16, !tbaa !73
+2128:   store float %acc1.sroa.163.16.vec.extract3404, ptr addrspace(3) %arrayidx355.4, align 16, !tbaa !73
+2131:   store float %acc0.sroa.163.20.vec.extract3890, ptr addrspace(3) %arrayidx351.5, align 4, !tbaa !73
+2134:   store float %acc1.sroa.163.20.vec.extract3458, ptr addrspace(3) %arrayidx355.5, align 4, !tbaa !73
+2137:   store float %acc0.sroa.243.24.vec.extract3944, ptr addrspace(3) %arrayidx351.6, align 8, !tbaa !73
+2140:   store float %acc1.sroa.243.24.vec.extract3512, ptr addrspace(3) %arrayidx355.6, align 8, !tbaa !73
+2143:   store float %acc0.sroa.243.28.vec.extract3998, ptr addrspace(3) %arrayidx351.7, align 4, !tbaa !73
+2146:   store float %acc1.sroa.243.28.vec.extract3566, ptr addrspace(3) %arrayidx355.7, align 4, !tbaa !73
+2155:   store float %m0.5, ptr addrspace(3) %arrayidx362, align 8, !tbaa !73
+2156:   store float %l0.9, ptr addrspace(3) %arrayidx366, align 4, !tbaa !73
+2157:   store float %m1.5, ptr addrspace(3) %arrayidx368, align 8, !tbaa !73
+2158:   store float %l1.9, ptr addrspace(3) %arrayidx372, align 4, !tbaa !73
+2305:   store float %acc1.sroa.0.0.vec.extract3190, ptr addrspace(3) %add.ptr417, align 16, !tbaa !73
+2308:   store float %acc1.sroa.0.4.vec.extract3248, ptr addrspace(3) %arrayidx426.1, align 4, !tbaa !73
+2311:   store float %acc1.sroa.83.8.vec.extract3298, ptr addrspace(3) %arrayidx426.2, align 8, !tbaa !73
+2314:   store float %acc1.sroa.83.12.vec.extract3352, ptr addrspace(3) %arrayidx426.3, align 4, !tbaa !73
+2317:   store float %acc1.sroa.163.16.vec.extract3406, ptr addrspace(3) %arrayidx426.4, align 16, !tbaa !73
+2320:   store float %acc1.sroa.163.20.vec.extract3460, ptr addrspace(3) %arrayidx426.5, align 4, !tbaa !73
+2323:   store float %acc1.sroa.243.24.vec.extract3514, ptr addrspace(3) %arrayidx426.6, align 8, !tbaa !73
+2326:   store float %acc1.sroa.243.28.vec.extract3568, ptr addrspace(3) %arrayidx426.7, align 4, !tbaa !73
+2341:   store float %acc0.sroa.0.0.vec.extract3622, ptr addrspace(3) %add.ptr450, align 16, !tbaa !73
+2344:   store float %acc0.sroa.0.4.vec.extract3680, ptr addrspace(3) %arrayidx459.1, align 4, !tbaa !73
+2347:   store float %acc0.sroa.83.8.vec.extract3730, ptr addrspace(3) %arrayidx459.2, align 8, !tbaa !73
+2350:   store float %acc0.sroa.83.12.vec.extract3784, ptr addrspace(3) %arrayidx459.3, align 4, !tbaa !73
+2353:   store float %acc0.sroa.163.16.vec.extract3838, ptr addrspace(3) %arrayidx459.4, align 16, !tbaa !73
+2356:   store float %acc0.sroa.163.20.vec.extract3892, ptr addrspace(3) %arrayidx459.5, align 4, !tbaa !73
+2359:   store float %acc0.sroa.243.24.vec.extract3946, ptr addrspace(3) %arrayidx459.6, align 8, !tbaa !73
+2362:   store float %acc0.sroa.243.28.vec.extract4000, ptr addrspace(3) %arrayidx459.7, align 4, !tbaa !73
+2372:   store float %m0.6.sink, ptr addrspace(3) %arrayidx466, align 8, !tbaa !73
+2373:   store float %l0.10.sink, ptr addrspace(3) %arrayidx470, align 4, !tbaa !73
+SHARED_FLOAT_LOAD_CONTEXT
+2173:   %616 = load float, ptr addrspace(3) %arrayidx383, align 8, !tbaa !73
+2175:   %617 = load float, ptr addrspace(3) %arrayidx387, align 4, !tbaa !73
+2198:   %625 = load float, ptr addrspace(3) %add.ptr393, align 16, !tbaa !73
+2201:   %626 = load float, ptr addrspace(3) %arrayidx1.i1313, align 4, !tbaa !73
+2207:   %628 = load float, ptr addrspace(3) %add.ptr14.i1133, align 8, !tbaa !73
+2210:   %629 = load float, ptr addrspace(3) %arrayidx1.i1305, align 4, !tbaa !73
+2214:   %631 = load float, ptr addrspace(3) %add.ptr16.i1134, align 16, !tbaa !73
+2217:   %632 = load float, ptr addrspace(3) %arrayidx1.i1297, align 4, !tbaa !73
+2221:   %634 = load float, ptr addrspace(3) %add.ptr18.i1135, align 8, !tbaa !73
+2224:   %635 = load float, ptr addrspace(3) %arrayidx1.i1292, align 4, !tbaa !73
+2228:   %637 = load float, ptr addrspace(3) %arrayidx396, align 8, !tbaa !73
+2230:   %638 = load float, ptr addrspace(3) %arrayidx400, align 4, !tbaa !73
+2252:   %646 = load float, ptr addrspace(3) %add.ptr406, align 16, !tbaa !73
+2255:   %647 = load float, ptr addrspace(3) %arrayidx1.i1345, align 4, !tbaa !73
+2261:   %649 = load float, ptr addrspace(3) %add.ptr14.i1117, align 8, !tbaa !73
+2264:   %650 = load float, ptr addrspace(3) %arrayidx1.i1337, align 4, !tbaa !73
+2268:   %652 = load float, ptr addrspace(3) %add.ptr16.i1118, align 16, !tbaa !73
+2271:   %653 = load float, ptr addrspace(3) %arrayidx1.i1329, align 4, !tbaa !73
+2275:   %655 = load float, ptr addrspace(3) %add.ptr18.i1119, align 8, !tbaa !73
+2278:   %656 = load float, ptr addrspace(3) %arrayidx1.i1321, align 4, !tbaa !73
+2385:   %658 = load float, ptr addrspace(3) %arrayidx480, align 8, !tbaa !73
+2387:   %659 = load float, ptr addrspace(3) %arrayidx484, align 4, !tbaa !73
+2410:   %667 = load float, ptr addrspace(3) %add.ptr490, align 16, !tbaa !73
+2413:   %668 = load float, ptr addrspace(3) %arrayidx1.i1377, align 4, !tbaa !73
+2419:   %670 = load float, ptr addrspace(3) %add.ptr14.i1101, align 8, !tbaa !73
+2422:   %671 = load float, ptr addrspace(3) %arrayidx1.i1369, align 4, !tbaa !73
+2426:   %673 = load float, ptr addrspace(3) %add.ptr16.i1102, align 16, !tbaa !73
+2429:   %674 = load float, ptr addrspace(3) %arrayidx1.i1361, align 4, !tbaa !73
+2433:   %676 = load float, ptr addrspace(3) %add.ptr18.i1103, align 8, !tbaa !73
+2436:   %677 = load float, ptr addrspace(3) %arrayidx1.i1353, align 4, !tbaa !73
+2497:   %685 = load float, ptr addrspace(3) %arrayidx581, align 8, !tbaa !73
+2499:   %686 = load float, ptr addrspace(3) %arrayidx585, align 4, !tbaa !73
+2522:   %694 = load float, ptr addrspace(3) %add.ptr591, align 16, !tbaa !73
+2525:   %695 = load float, ptr addrspace(3) %arrayidx1.i1409, align 4, !tbaa !73
+2531:   %697 = load float, ptr addrspace(3) %add.ptr14.i, align 8, !tbaa !73
+2534:   %698 = load float, ptr addrspace(3) %arrayidx1.i1401, align 4, !tbaa !73
+2538:   %700 = load float, ptr addrspace(3) %add.ptr16.i, align 16, !tbaa !73
+2541:   %701 = load float, ptr addrspace(3) %arrayidx1.i1393, align 4, !tbaa !73
+2545:   %703 = load float, ptr addrspace(3) %add.ptr18.i, align 8, !tbaa !73
+2548:   %704 = load float, ptr addrspace(3) %arrayidx1.i1385, align 4, !tbaa !73
+

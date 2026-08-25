@@ -1,0 +1,12 @@
+exp599 OJ probe immediate control restore
+UTC 2026-08-18T15:39:21Z
+pre-restore work/candidate/control SHA256:
+35013de595b082974e0b59de7b87b1f9bfd3476afb2affae1c8aeb8d73635da7  solutions/cuda_maca_optimized.cpp
+35013de595b082974e0b59de7b87b1f9bfd3476afb2affae1c8aeb8d73635da7  solutions/archive/2026-08-18-experiments/cuda_case14_scalar_b16_stx_output_exp599.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+command: cp immutable control -> unique work file
+post-restore work/control SHA256:
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/cuda_maca_optimized.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+control_restore_guard=PASS
+exit_status=0

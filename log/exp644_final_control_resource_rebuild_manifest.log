@@ -1,0 +1,8 @@
+exp644 final control resource clean rebuild
+UTC 2026-08-22T21:53:49Z
+source SHA before:
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+command: tools/build_local_maca.sh solutions/archive/2026-08-16-submissions/cuda_113889.cpp build/exp644_final_control_resource.so -resource-usage
+build_exit_status=0
+source SHA after:
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp

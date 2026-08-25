@@ -1,0 +1,8 @@
+candidate tuple count:
+32
+control tuple count:
+31
+candidate-only tuples:
+_Z60paged_decode_case12_kv8_headpair_z8_direct_three_peer_kernelILb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif |82|50|8448|0|5
+control-only tuples:
+common tuple/resource differences (join by symbol):

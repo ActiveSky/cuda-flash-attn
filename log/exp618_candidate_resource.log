@@ -1,0 +1,20 @@
+exp618 candidate resource build
+UTC 2026-08-21T10:24:59Z
+source: solutions/archive/2026-08-21-experiments/cuda_case11_single_wave_two_token_raw_partial_exp618.cpp
+source SHA-256: 2d7907dc004f406aa81ed5761189bc9ba7b5c847565906474bdd123508357479
+command: tools/build_local_maca.sh solutions/archive/2026-08-21-experiments/cuda_case11_single_wave_two_token_raw_partial_exp618.cpp build/exp618_candidate_resource.so -resource-usage
+compiler: /opt/maca/mxgpu_llvm/bin/mxcc; target: xcore1000
+exit: 0 (PASS)
+artifact: build/exp618_candidate_resource.so
+artifact SHA-256: a2e6806d9ca8dc275ebaea0592492cde40427e1c593541196a421360cc92b7d5
+
+Target dispatch identity (case11 B16/KV4/L12251; exact final bool enables exp618):
+  paged_decode_case11_headpair_z4_kernel<true, true, false, true, true, true, true, true, false, true, false, false, false, true, true, true, true, true, true, true>
+  mangled: _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EE...
+  0 bytes stack frame; 80 MTregisters; 62 STregisters; 8320 bytes shared mem; staticMaxWarps/PEU 6
+
+Target reducer identity:
+  paged_decode_reduce_vec4_kernel<true, false, true>
+  0 bytes stack frame; 64 MTregisters; 35 STregisters; 0 bytes shared mem; staticMaxWarps/PEU 8
+
+Other emitted case11 headpair specializations include dead/alternate templates; the identity above is the dispatched exp618 target.

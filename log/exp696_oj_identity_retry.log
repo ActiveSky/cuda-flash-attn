@@ -1,0 +1,10 @@
+UTC 2026-08-24T18:09:02Z
+submission_id=125658 status=Accepted total_score=66 accepted=14/14 target_case12=60 time_us=375
+candidate_file=solutions/archive/2026-08-24-experiments/cuda_control124611_case12_raw_wave_rebase_exp696.cpp
+f23ce28fa2e0abdc6329b2d73af9e56b3a236c195a1c703924692e6b7e3071fe  solutions/archive/2026-08-24-experiments/cuda_control124611_case12_raw_wave_rebase_exp696.cpp
+5480da96dc15dca3a3a39cdf02cf763822cb91f3f762869e19c08d05c15a5132  results/raw/cuda_125658_raw.json
+raw_detail_content_code_sha256=f23ce28fa2e0abdc6329b2d73af9e56b3a236c195a1c703924692e6b7e3071fe
+raw_detail_content_code_bytes=273629
+expected_candidate_sha=f23ce28fa2e0abdc6329b2d73af9e56b3a236c195a1c703924692e6b7e3071fe
+target_decision=case12<61; retain control; branch A exp705 approved
+exit_status=0

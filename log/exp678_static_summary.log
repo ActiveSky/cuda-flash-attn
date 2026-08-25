@@ -1,0 +1,100 @@
+exp678 resource and LLVM summary (corrected)
+candidate source SHA: 385b32b680e1a58294917a5c6c345b899f1dd87b603152e1dabc38418d52835a  solutions/archive/2026-08-24-experiments/cuda_control124611_case8_runtime_row16_exp678.cpp
+control source SHA:   3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe  solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+
+[control group8 instances]
+ maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb1ELb1ELb0ELi0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+  0 bytes stack frame 
+ maca info  : Used  66 MTregisters, 24 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 7
+ maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb1ELb0ELb1ELi3EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+  0 bytes stack frame 
+ maca info  : Used  54 MTregisters, 25 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 8
+ maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb1ELb0ELi0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+  0 bytes stack frame 
+ maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 7
+ maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb0ELb0ELi0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+  0 bytes stack frame 
+ maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 7
+ maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb0ELb0ELb0ELb0ELi0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+  0 bytes stack frame 
+ maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 7
+
+[candidate group8 instances]
+ maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb1ELb1ELb0ELi0ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+  0 bytes stack frame 
+ maca info  : Used  32 MTregisters, 24 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 8
+ maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb1ELb0ELb1ELi3ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+  0 bytes stack frame 
+ maca info  : Used  54 MTregisters, 25 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 8
+ maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb1ELb0ELi0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+  0 bytes stack frame 
+ maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 7
+ maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb0ELb0ELi0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+  0 bytes stack frame 
+ maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 7
+ maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb0ELb0ELb0ELb0ELi0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+  0 bytes stack frame 
+ maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 7
+
+[target LLVM intrinsic counts]
+candidate:       1 llvm.mxc.block.id.x;     24 llvm.mxc.mov.shfl.i32;      4 llvm.mxc.pk.fma.f32;      1 llvm.mxc.thread.id.x;      1 llvm.mxc.thread.id.y;
+control:         1 llvm.mxc.block.id.x;      5 llvm.mxc.bsm.bpermute;      5 llvm.mxc.mbcnt.hi;      5 llvm.mxc.mbcnt.lo;      8 llvm.mxc.mov.shfl.i32;     20 llvm.mxc.pk.fma.f32;      1 llvm.mxc.thread.id.x;      1 llvm.mxc.thread.id.y;
+
+[candidate native dynamic-source lowering]
+230:for.cond.cleanup:                                 ; preds = %_Z14__shfl_sync_16mfi.exit
+317:for.body:                                         ; preds = %if.end110, %_Z14__shfl_sync_16mfi.exit
+318:  %indvars.iv = phi i64 [ 0, %if.end110 ], [ %indvars.iv.next, %_Z14__shfl_sync_16mfi.exit ]
+319:  %acc.sroa.18.0435 = phi <2 x float> [ zeroinitializer, %if.end110 ], [ %87, %_Z14__shfl_sync_16mfi.exit ]
+320:  %acc.sroa.13.0434 = phi <2 x float> [ zeroinitializer, %if.end110 ], [ %86, %_Z14__shfl_sync_16mfi.exit ]
+321:  %acc.sroa.8.0433 = phi <2 x float> [ zeroinitializer, %if.end110 ], [ %85, %_Z14__shfl_sync_16mfi.exit ]
+322:  %acc.sroa.0.0432 = phi <2 x float> [ zeroinitializer, %if.end110 ], [ %84, %_Z14__shfl_sync_16mfi.exit ]
+367:  %67 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %w_lane.0, i32 336, i32 15, i32 15, i1 false)
+368:  br label %_Z14__shfl_sync_16mfi.exit
+371:  %68 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %w_lane.0, i32 337, i32 15, i32 15, i1 false)
+372:  br label %_Z14__shfl_sync_16mfi.exit
+375:  %69 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %w_lane.0, i32 338, i32 15, i32 15, i1 false)
+376:  br label %_Z14__shfl_sync_16mfi.exit
+379:  %70 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %w_lane.0, i32 339, i32 15, i32 15, i1 false)
+380:  br label %_Z14__shfl_sync_16mfi.exit
+383:  %71 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %w_lane.0, i32 340, i32 15, i32 15, i1 false)
+384:  br label %_Z14__shfl_sync_16mfi.exit
+387:  %72 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %w_lane.0, i32 341, i32 15, i32 15, i1 false)
+388:  br label %_Z14__shfl_sync_16mfi.exit
+391:  %73 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %w_lane.0, i32 342, i32 15, i32 15, i1 false)
+392:  br label %_Z14__shfl_sync_16mfi.exit
+395:  %74 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %w_lane.0, i32 343, i32 15, i32 15, i1 false)
+396:  br label %_Z14__shfl_sync_16mfi.exit
+399:  %75 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %w_lane.0, i32 344, i32 15, i32 15, i1 false)
+400:  br label %_Z14__shfl_sync_16mfi.exit
+403:  %76 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %w_lane.0, i32 345, i32 15, i32 15, i1 false)
+404:  br label %_Z14__shfl_sync_16mfi.exit
+407:  %77 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %w_lane.0, i32 346, i32 15, i32 15, i1 false)
+408:  br label %_Z14__shfl_sync_16mfi.exit
+411:  %78 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %w_lane.0, i32 347, i32 15, i32 15, i1 false)
+412:  br label %_Z14__shfl_sync_16mfi.exit
+415:  %79 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %w_lane.0, i32 348, i32 15, i32 15, i1 false)
+416:  br label %_Z14__shfl_sync_16mfi.exit
+419:  %80 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %w_lane.0, i32 349, i32 15, i32 15, i1 false)
+420:  br label %_Z14__shfl_sync_16mfi.exit
+423:  %81 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %w_lane.0, i32 350, i32 15, i32 15, i1 false)
+424:  br label %_Z14__shfl_sync_16mfi.exit
+430:  %82 = tail call i32 @llvm.mxc.mov.shfl.i32(i32 %w_lane.0, i32 351, i32 15, i32 15, i1 false)
+431:  br label %_Z14__shfl_sync_16mfi.exit
+433:_Z14__shfl_sync_16mfi.exit:                       ; preds = %if.then.i.i, %if.then3.i.i, %if.then7.i.i, %if.then11.i.i, %if.then15.i.i, %if.then19.i.i, %if.then23.i.i, %if.then27.i.i, %if.then31.i.i, %if.then35.i.i, %if.then39.i.i, %if.then43.i.i, %if.then47.i.i, %if.then51.i.i, %if.then55.i.i, %if.else56.i.i
+
+[control BSM dynamic-source lowering]
+285:  %58 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.epil, i32 %w_lane.0)
+433:  %83 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i, i32 %w_lane.0)
+479:  %96 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.1, i32 %w_lane.0)
+525:  %109 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.2, i32 %w_lane.0)
+571:  %122 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.3, i32 %w_lane.0)

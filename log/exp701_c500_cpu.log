@@ -1,0 +1,6 @@
+exp701 CPU semantic manifest check
+date=2026-08-24T15:11:42Z
+command=python3 tests/test_kernel_logic.py
+script_sha256=fa2b8807079c2f91b6ea18862da305694752ba59f8456fb52ecdf46c392fa084
+result=PASS 14/14; all cases finite and max_err <= 1.443e-15 in the CPU mathematical replay
+note=CPU replay is semantic/tooling validation only, not GPU or OJ validation.

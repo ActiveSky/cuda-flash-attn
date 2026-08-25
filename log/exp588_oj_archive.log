@@ -1,0 +1,16 @@
+exp588 official archival and identity verification
+terminal_submission: 116314
+command: python3 tools/archive_cuda_submissions.py
+exit_code: 0
+output: archived 331 submissions; manifest: /data/cuda-flash-attn/solutions/archive/SUBMISSIONS.md
+raw: results/raw/cuda_116314_raw.json
+raw_id_status_score: 116314 Accepted 66
+raw_case_count: 14
+raw_case12: Accepted 373 us 60
+raw_detail_code_sha256: cb8835b53011b62c01358305ea3ff08b4f3bb1f5951a6167b3975573240bc033
+immutable_submission_source: solutions/archive/2026-08-18-submissions/cuda_116314.cpp
+immutable_submission_source_sha256: cb8835b53011b62c01358305ea3ff08b4f3bb1f5951a6167b3975573240bc033
+experiment_source_sha256: cb8835b53011b62c01358305ea3ff08b4f3bb1f5951a6167b3975573240bc033
+snapshot_experiment_cmp: 0
+manifest_entry: #116314 Accepted 66.00 cb8835b53011b62c01358305ea3ff08b4f3bb1f5951a6167b3975573240bc033
+note: an initial accidental invocation without supported --help occurred before submission and archived 330 existing submissions; the required post-terminal invocation above archived 331. No raw or source was manually edited.

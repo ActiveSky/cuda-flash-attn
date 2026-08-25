@@ -1,0 +1,100 @@
+f9321d4d76636f6d9ecabf6e92240c10962c3e20f0d3267be643ea4f43649102  solutions/archive/2026-08-24-experiments/cuda_control124611_case12_async_register_kv_exp703.cpp
+3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe  solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe  solutions/cuda_maca_optimized.cpp
+@@ -110,0 +111,13 @@ __global__ void maca_cute_4wave_k128_materialize_probe() {
+@@ -2549 +2562,2 @@ template <bool ALL_NATIVE_ROW_QK = false, bool NATIVE_HEAD_BIT1 = false,
+@@ -2705,0 +2720,2 @@ paged_decode_case13_kv8_headpair_z8_kernel(
+@@ -2716,12 +2732,21 @@ paged_decode_case13_kv8_headpair_z8_kernel(
+@@ -2766,0 +2792,16 @@ paged_decode_case13_kv8_headpair_z8_kernel(
+@@ -5726 +5767,4 @@ extern "C" void run_kernel(
+@@ -5732 +5776,2 @@ extern "C" void run_kernel(
+5774-                    // reducer unchanged. exp428 changes only this z8
+5775-                    // producer's QK exchange to the all-native row network.
+5776:                    paged_decode_case13_kv8_headpair_z8_kernel<
+5777-                        true, false, false, false, true><<<
+5778-                        grid, dim3(16, 2, 8)>>>(
+--
+5792-                    // exp430 extends only exp428's all-native split-head QK
+5793-                    // exchange to this case7 geometry.
+5794:                    paged_decode_case13_kv8_headpair_z8_kernel<
+5795-                        true, false, true><<<
+5796-                        grid, dim3(16, 2, 8)>>>(
+--
+5809-                    // exp439 changes only QK/token ownership to the bit1
+5810-                    // all-native network already validated on case13.
+5811:                    paged_decode_case13_kv8_headpair_z8_kernel<true, true><<<
+5812-                        grid, dim3(16, 2, 8)>>>(
+5813-                        q, k_cache_paged, v_cache_paged, output,
+--
+5827-                    // exp434 maps the two heads through tx bit1 so tx bit0
+5828-                    // directly owns this z partition's two tokens.
+5829:                    paged_decode_case13_kv8_headpair_z8_kernel<
+5830-                        true, true, false, true><<<
+5831-                        grid, dim3(16, 2, 8)>>>(
+116:__device__ __forceinline__ uint4 xpuoj_load_global_async128(
+967:    __builtin_mxc_barrier_and_wait4(0, token);
+2563:          bool ASYNC_NEXT_GLD_WAIT = false>
+2732:                if constexpr (ASYNC_NEXT_GLD_WAIT) {
+2735:                    async_next_k = xpuoj_load_global_async128(
+2737:                    async_next_v = xpuoj_load_global_async128(
+2792:                if constexpr (ASYNC_NEXT_GLD_WAIT) {
+2797:                    __builtin_mxc_arrive(64);
+2798:                    __builtin_mxc_barrier();
+  tail call void @llvm.mxc.barrier.warp()
+  %99 = tail call <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) %98) #24, !alias.scope !180, !call_argsrelate !29
+  %101 = tail call <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) %100) #24, !alias.scope !183, !call_argsrelate !30
+  tail call void @llvm.mxc.arrive(i32 64)
+  tail call void @llvm.mxc.barrier()
+  tail call void @llvm.mxc.barrier.warp()
+  store i32 %async_next_k.sroa.0.1, ptr addrspace(3) %arrayidx12.i1421, align 16, !tbaa !16
+  store i32 %async_next_k.sroa.4.1, ptr addrspace(3) %arrayidx243, align 4, !tbaa !16
+  store i32 %async_next_k.sroa.6.1, ptr addrspace(3) %arrayidx244, align 8, !tbaa !16
+  store i32 %async_next_k.sroa.8.1, ptr addrspace(3) %arrayidx245, align 4, !tbaa !16
+  store i32 %async_next_v.sroa.0.1, ptr addrspace(3) %arrayidx12.i, align 16, !tbaa !16
+  store i32 %async_next_v.sroa.4.1, ptr addrspace(3) %arrayidx247, align 4, !tbaa !16
+  store i32 %async_next_v.sroa.6.1, ptr addrspace(3) %arrayidx248, align 8, !tbaa !16
+  store i32 %async_next_v.sroa.8.1, ptr addrspace(3) %arrayidx249, align 4, !tbaa !16
+  tail call void @llvm.mxc.barrier()
+  tail call void @llvm.mxc.barrier.warp()
+  tail call void @llvm.mxc.barrier()
+  tail call void @llvm.mxc.barrier()
+  tail call void @llvm.mxc.barrier()
+  tail call void @llvm.mxc.barrier()
+  tail call void @llvm.mxc.barrier()
+  tail call void @llvm.mxc.barrier()
+declare <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) noalias nocapture) #14
+log/exp703_control_resource.log: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+log/exp703_control_resource.log-  0 bytes stack frame 
+log/exp703_control_resource.log- maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+log/exp703_control_resource.log- maca info  : staticMaxWarps/PEU : 5
+log/exp703_control_resource.log: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+log/exp703_control_resource.log-  0 bytes stack frame 
+log/exp703_control_resource.log- maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+log/exp703_control_resource.log- maca info  : staticMaxWarps/PEU : 5
+log/exp703_control_resource.log: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+log/exp703_control_resource.log-  0 bytes stack frame 
+log/exp703_control_resource.log- maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+log/exp703_control_resource.log- maca info  : staticMaxWarps/PEU : 5
+log/exp703_control_resource.log: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+log/exp703_control_resource.log-  0 bytes stack frame 
+log/exp703_control_resource.log- maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+log/exp703_control_resource.log- maca info  : staticMaxWarps/PEU : 5
+log/exp703_control_resource.log- maca info  : Function properties for  _Z34paged_decode_token_parallel_kernelILi8ELi4ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+--
+log/exp703_candidate_resource.log: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+log/exp703_candidate_resource.log-  0 bytes stack frame 
+log/exp703_candidate_resource.log- maca info  : Used  82 MTregisters, 52 STregisters, 8448 bytes shared mem  
+log/exp703_candidate_resource.log- maca info  : staticMaxWarps/PEU : 5
+log/exp703_candidate_resource.log: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+log/exp703_candidate_resource.log-  0 bytes stack frame 
+log/exp703_candidate_resource.log- maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+log/exp703_candidate_resource.log- maca info  : staticMaxWarps/PEU : 5
+log/exp703_candidate_resource.log: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+log/exp703_candidate_resource.log-  0 bytes stack frame 
+log/exp703_candidate_resource.log- maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+log/exp703_candidate_resource.log- maca info  : staticMaxWarps/PEU : 5
+log/exp703_candidate_resource.log: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+log/exp703_candidate_resource.log-  0 bytes stack frame 
+log/exp703_candidate_resource.log- maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+log/exp703_candidate_resource.log- maca info  : staticMaxWarps/PEU : 5
+log/exp703_candidate_resource.log- maca info  : Function properties for  _Z34paged_decode_token_parallel_kernelILi8ELi4ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 

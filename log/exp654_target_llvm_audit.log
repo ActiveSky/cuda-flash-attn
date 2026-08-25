@@ -1,0 +1,24 @@
+target_found True
+target_udiv_count 0
+target_umulhi_count 0
+target_cta_barrier_count 3
+target_bpermute_count 20
+target_alloca_count 0
+target_stack_resource True
+@llvm.mxc.barrier() 3
+tail call void @llvm.mxc.barrier()
+tail call void @llvm.mxc.barrier()
+tail call void @llvm.mxc.barrier()
+@llvm.mxc.barrier.warp() 3
+tail call void @llvm.mxc.barrier.warp()
+tail call void @llvm.mxc.barrier.warp()
+tail call void @llvm.mxc.barrier.warp()
+bpermute 20
+%274 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1954, i32 %273)
+%278 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i, i32 %277)
+%287 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i19.i2002, i32 %286)
+%291 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i2006, i32 %290)
+%300 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i19.i1986, i32 %299)
+%304 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i1990, i32 %303)
+%313 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i19.i1970, i32 %312)
+%317 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i1974, i32 %316)

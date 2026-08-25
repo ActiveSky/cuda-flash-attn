@@ -1,0 +1,3 @@
+GPU: MetaX C500
+[PASS] exp605 lane^16 exchanges all four uint32 words with the same tx/tz and opposite ty in every physical z-pair wave
+exit=0

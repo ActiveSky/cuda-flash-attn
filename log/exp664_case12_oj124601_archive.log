@@ -1,0 +1,42 @@
+exp664 OJ serial archive and control restore
+submission=124601
+candidate=solutions/archive/2026-08-23-experiments/cuda_case12_dead_half_k_token_bsm_wave_release_exp664.cpp
+candidate_sha256=676ee8b331d5618f5ddfa8ffcc6276f1cea9d279529ca4a11ca3bb6b5b44a893
+raw=results/raw/cuda_124601_raw.json
+raw_sha256=6408e63c6a82ca86677ff38af20418142a34e88177d70874c37e7fe8066a97db
+raw_status=Accepted
+raw_score=66
+raw_time_used_ms=1598
+raw_memory_used_kb=23060776
+embedded_code_sha256=676ee8b331d5618f5ddfa8ffcc6276f1cea9d279529ca4a11ca3bb6b5b44a893
+archive_command=python tools/archive_cuda_submissions.py
+archive_output=archived 367 submissions; manifest: /data/cuda-flash-attn/solutions/archive/SUBMISSIONS.md
+immutable_source=solutions/archive/2026-08-24-submissions/cuda_124601.cpp
+immutable_source_sha256=676ee8b331d5618f5ddfa8ffcc6276f1cea9d279529ca4a11ca3bb6b5b44a893
+
+testcase status time_us display_score
+1 Accepted 3 92
+2 Accepted 4 90
+3 Accepted 9 83
+4 Accepted 23 72
+5 Accepted 17 73
+6 Accepted 28 63
+7 Accepted 228 55
+8 Accepted 94 54
+9 Accepted 234 57
+10 Accepted 39 62
+11 Accepted 223 52
+12 Accepted 375 60
+13 Accepted 182 56
+14 Accepted 139 55
+
+case12_control_time_us=378
+case12_control_display_score=60
+case12_candidate_time_us=375
+case12_candidate_display_score=60
+case12_crossed_display_score_ge_61=no
+
+control=solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+control_sha256=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+work_sha256_after_restore=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+queue_final=latest listed submissions are terminal; no Pending/Running submission

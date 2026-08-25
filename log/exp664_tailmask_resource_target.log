@@ -1,0 +1,65 @@
+ maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+ maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+ maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+ maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+ maca info  : Function properties for  _Z34paged_decode_token_parallel_kernelILi8ELi4ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  74 MTregisters, 44 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 6
+ maca info  : Function properties for  _Z34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  80 MTregisters, 44 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 6
+ maca info  : Function properties for  _Z33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  118 MTregisters, 50 STregisters, 8192 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 4
+ maca info  : Function properties for  _Z25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  104 MTregisters, 74 STregisters, 8192 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 4
+ maca info  : Function properties for  _Z25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  104 MTregisters, 74 STregisters, 8192 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 4
+ maca info  : Function properties for  _Z31paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb0ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+  0 bytes stack frame 
+ maca info  : Used  38 MTregisters, 39 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 8
+ maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb1ELb1ELb0ELi0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+  0 bytes stack frame 
+ maca info  : Used  66 MTregisters, 24 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 7
+ maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb1ELb0ELb1ELi3EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+  0 bytes stack frame 
+ maca info  : Used  54 MTregisters, 25 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 8
+ maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb1ELb0ELi0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+  0 bytes stack frame 
+ maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 7
+ maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb0ELb0ELi0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+  0 bytes stack frame 
+ maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 7
+ maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb0ELb0ELb0ELb0ELi0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+  0 bytes stack frame 
+ maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 7
+ maca info  : Function properties for  _Z31paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb1ELb1ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+  0 bytes stack frame 
+ maca info  : Used  38 MTregisters, 36 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU :10 warnings generated when compiling for xcore1000.
+ 8
+ maca info  : Function properties for  _Z31paged_decode_reduce_vec4_kernelILb1ELb0ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+  0 bytes stack frame 

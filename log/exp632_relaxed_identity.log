@@ -1,0 +1,6 @@
+exp632 relaxed C500 identity
+d43be08ccec3ccbf6bb332870c15e69b70055440170fac352626d259fe87fc9b  solutions/archive/2026-08-22-experiments/cuda_case2_source_owner_streaming_b32_exp632.cpp
+b3665f9d48bea7a15fc7a1fb533ecd325fee1fd9c4d06aacc9a49d12fa071544  build/exp632_relaxed_candidate.so
+Building solutions/archive/2026-08-22-experiments/cuda_case2_source_owner_streaming_b32_exp632.cpp
+Output: build/exp632_relaxed_candidate.so
+Built build/exp632_relaxed_candidate.so

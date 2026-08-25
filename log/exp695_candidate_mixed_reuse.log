@@ -1,0 +1,14 @@
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+library: build/exp695_candidate_normal.so | seed: 20260828
+[PASS] mixed-rows finite=True match=1.000000 max_error=1.562500e-02 max_tol_ratio=0.322 inputs_unchanged=True
+[PASS] legal-padding-finite-poison finite=True match=1.000000 max_error=1.562500e-02 max_tol_ratio=0.322 inputs_unchanged=True
+[PASS] legal-padding-finite-poison pages=6326 reference_unchanged=True reference_error=0.000000e+00 reference_tol_ratio=0.000 candidate_unchanged=True candidate_error=0.000000e+00 candidate_tol_ratio=0.000
+[PASS] tail-baseline finite=True match=1.000000 max_error=1.562500e-02 max_tol_ratio=0.322 inputs_unchanged=True
+[PASS] tail-finite-poison finite=True match=1.000000 max_error=1.562500e-02 max_tol_ratio=0.322 inputs_unchanged=True
+[PASS] tail-finite-poison tokens=188 reference_unchanged=True reference_error=0.000000e+00 reference_tol_ratio=0.000 candidate_unchanged=True candidate_error=0.000000e+00 candidate_tol_ratio=0.000
+[PASS] reuse-4096-first finite=True match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.054 inputs_unchanged=True
+[PASS] reuse-1 finite=True match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 inputs_unchanged=True
+[PASS] reuse-4096-second finite=True match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.054 inputs_unchanged=True
+[PASS] reuse-1-first finite=True match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 inputs_unchanged=True
+[PASS] reuse-4096-after-1 finite=True match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 inputs_unchanged=True
+case=9 exp695 mixed/poison/guards/reuse: PASS

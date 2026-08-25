@@ -1,0 +1,343 @@
+=== identity ===
+3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe  solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+850123279b7106ca6ed77df0f7c17f4af6456d76edf6382266f7912da9fcb8bd  solutions/archive/2026-08-20-experiments/cuda_case11_pair_output_b128_exp604.cpp
+e0fbec43542bfc6a1c3b4980347d1eaab581086f34d24e26231a4fc8b881b167  solutions/archive/2026-08-24-experiments/cuda_control124611_case11_pair_output_b128_exp692.cpp
+=== exact control diff ===
+diff --git a/solutions/archive/2026-08-24-submissions/cuda_124611.cpp b/solutions/archive/2026-08-24-experiments/cuda_control124611_case11_pair_output_b128_exp692.cpp
+index 0c740c7..d4ad205 100644
+--- a/solutions/archive/2026-08-24-submissions/cuda_124611.cpp
++++ b/solutions/archive/2026-08-24-experiments/cuda_control124611_case11_pair_output_b128_exp692.cpp
+@@ -109,4 +109,24 @@ __global__ void maca_cute_4wave_k128_materialize_probe() {
+ #define LOGIT_STRIDE 8       // 每页最多 8 个 query head（gqa_ratio <= 8）
+ 
++// exp692: pair the vec4 reducer's adjacent lanes after BF16 conversion.  An
++// even lane owns the first four values and receives the odd lane's four values
++// as two packed BF16 register words, so one aligned B128 store covers the
++// contiguous eight-element output slice.
++using XpuojNativeStgU4 = __NATIVE_VECTOR__(4, uint32_t);
++__device__ __forceinline__ void xpuoj_native_stg_b128_u4(
++    void* __restrict__ dst, const uint4& value)
++{
++    __builtin_mxc_stg_b128_predicator(
++        reinterpret_cast<XpuojNativeStgU4*>(dst), 0,
++        *reinterpret_cast<const XpuojNativeStgU4*>(&value),
++        true, false, false, true, 1, MACA_ICMP_EQ);
++}
++
++__device__ __forceinline__ uint32_t xpuoj_bf16x2_bits(
++    const __nv_bfloat162& value)
++{
++    return *reinterpret_cast<const uint32_t*>(&value);
++}
++
+ __device__ __forceinline__ float bf16_lo(uint32_t u);
+ __device__ __forceinline__ float bf16_hi(uint32_t u);
+@@ -4631,5 +4651,6 @@ paged_decode_reduce_kernel(
+ // same split weights and coalesced workspace traffic.
+ template <bool BASE2, bool SEPARATE_TAIL = false,
+-          bool FUSE_TAIL_IN_LAST_SPLIT = false>
++          bool FUSE_TAIL_IN_LAST_SPLIT = false,
++          bool PAIR_BF16_OUTPUT = false>
+ __global__ void __launch_bounds__(32)
+ paged_decode_reduce_vec4_kernel(
+@@ -4683,7 +4704,25 @@ paged_decode_reduce_vec4_kernel(
+             value[3] = a.w * inv_l;
+         }
+-        __nv_bfloat162* out2 = reinterpret_cast<__nv_bfloat162*>(out_ptr);
+-        out2[0] = __floats2bfloat162_rn(value[0], value[1]);
+-        out2[1] = __floats2bfloat162_rn(value[2], value[3]);
++        const __nv_bfloat162 out0 =
++            __floats2bfloat162_rn(value[0], value[1]);
++        const __nv_bfloat162 out1 =
++            __floats2bfloat162_rn(value[2], value[3]);
++        if constexpr (PAIR_BF16_OUTPUT) {
++            const uint32_t own0 = xpuoj_bf16x2_bits(out0);
++            const uint32_t own1 = xpuoj_bf16x2_bits(out1);
++            const uint32_t peer0 = __shfl_sync(
++                0xffffffffu, own0, lane ^ 1);
++            const uint32_t peer1 = __shfl_sync(
++                0xffffffffu, own1, lane ^ 1);
++            if ((lane & 1) == 0) {
++                xpuoj_native_stg_b128_u4(
++                    out_ptr, make_uint4(own0, own1, peer0, peer1));
++            }
++        } else {
++            __nv_bfloat162* out2 =
++                reinterpret_cast<__nv_bfloat162*>(out_ptr);
++            out2[0] = out0;
++            out2[1] = out1;
++        }
+         return;
+     }
+@@ -4728,7 +4767,25 @@ paged_decode_reduce_vec4_kernel(
+ 
+     const float inv_l = l_sum > 0.f ? 1.f / l_sum : 0.f;
+-    __nv_bfloat162* out2 = reinterpret_cast<__nv_bfloat162*>(out_ptr);
+-    out2[0] = __floats2bfloat162_rn(acc[0] * inv_l, acc[1] * inv_l);
+-    out2[1] = __floats2bfloat162_rn(acc[2] * inv_l, acc[3] * inv_l);
++    const __nv_bfloat162 out0 = __floats2bfloat162_rn(
++        acc[0] * inv_l, acc[1] * inv_l);
++    const __nv_bfloat162 out1 = __floats2bfloat162_rn(
++        acc[2] * inv_l, acc[3] * inv_l);
++    if constexpr (PAIR_BF16_OUTPUT) {
++        const uint32_t own0 = xpuoj_bf16x2_bits(out0);
++        const uint32_t own1 = xpuoj_bf16x2_bits(out1);
++        const uint32_t peer0 = __shfl_sync(
++            0xffffffffu, own0, lane ^ 1);
++        const uint32_t peer1 = __shfl_sync(
++            0xffffffffu, own1, lane ^ 1);
++        if ((lane & 1) == 0) {
++            xpuoj_native_stg_b128_u4(
++                out_ptr, make_uint4(own0, own1, peer0, peer1));
++        }
++    } else {
++        __nv_bfloat162* out2 =
++            reinterpret_cast<__nv_bfloat162*>(out_ptr);
++        out2[0] = out0;
++        out2[1] = out1;
++    }
+ }
+ 
+@@ -6011,5 +6068,5 @@ extern "C" void run_kernel(
+                     (size_t)2 * (size_t)reduce_splits * sizeof(float);
+                 paged_decode_reduce_vec4_kernel<
+-                    (XPUOJ_USE_BASE2 != 0), false, true><<<
++                    (XPUOJ_USE_BASE2 != 0), false, true, true><<<
+                     rgrid, 32, vec4_smem>>>(
+                     s_partial_m, s_partial_l, s_partial_acc, output,
+=== candidate source-only scope ===
+116:__device__ __forceinline__ void xpuoj_native_stg_b128_u4(
+836:            logits[tt] = __shfl_sync(0xffffffffu, logits[tt], src);
+1082:    return __shfl_sync(0xffffffffu, value, SOURCE_LANE, 16);
+4654:          bool PAIR_BF16_OUTPUT = false>
+4710:        if constexpr (PAIR_BF16_OUTPUT) {
+4713:            const uint32_t peer0 = __shfl_sync(
+4715:            const uint32_t peer1 = __shfl_sync(
+4718:                xpuoj_native_stg_b128_u4(
+4773:    if constexpr (PAIR_BF16_OUTPUT) {
+4776:        const uint32_t peer0 = __shfl_sync(
+4778:        const uint32_t peer1 = __shfl_sync(
+4781:            xpuoj_native_stg_b128_u4(
+5225:                w = __shfl_sync(0xffffffffu, w_lane, s, 16);
+6057:                paged_decode_reduce_vec4_kernel<
+6069:                paged_decode_reduce_vec4_kernel<
+=== target source checks ===
+5411-    // exp422: lane-local BF16 MMA shifts case 11's producer/reducer balance.
+5412-    // Use 39 slots (20 cache pages per live partial); split 39/40 were the
+5413-    // only sweep points that improved full, random and boundary distributions.
+5414:    if (num_heads_k == 4 && batch_size == 16 && seqlen_k == 12251) {
+5415-        n_split = 39;
+5416-    }
+5417-    // Case 8 is the remaining B=16 KV4 MMA-QK shape at 16 pages/partial.
+5418-    // Test the same 8-page granularity proven on the KV8 long paths.
+--
+5521-    if (use_token_parallel) {
+5522-        if (num_heads_k == 4) {
+5523-            const bool sync_kv4 = batch_size == 16 &&
+5524:                (seqlen_k == 4096 || seqlen_k == 12251);
+5525-            if (sync_kv4) {
+5526-                if constexpr (separate_tail) {
+5527-#if 0  // exp384: unreachable since exp109; avoid dead template instances.
+5528-                    // Long B16/KV4: pair two query heads while using four
+--
+6061-                    cache_seqlens, (int)batch_size,
+6062-                    (int)pages_per_split, reduce_splits);
+6063-            } else if (num_heads_k == 4 && batch_size == 16 &&
+6064:                       seqlen_k == 12251) {
+6065:                // exp105: case11 now has fused-tail partial slots; preserve
+6066-                // exp89's vec4 ownership and count only full-page owners.
+6067-                const size_t vec4_smem =
+6068-                    (size_t)2 * (size_t)reduce_splits * sizeof(float);
+6069-                paged_decode_reduce_vec4_kernel<
+cudaDeviceSynchronize count:
+=== artifact hashes ===
+3ac1e575c025eacbb8bb95f814a158e2764b79028f48b840a0a3db795c33284b  build/exp692_normal.so
+0be24462f7e2f10b2199311f13fbd6bd97ac506ccb9d84471cf971eec24c1f23  build/exp692_resource.so
+ed0d2c9511e009f9bab8d63ba0144ab3f73bda5faf3bac98f58bd5fa4a5accd4  build/exp692_device.ll
+=== resource target records ===
+ maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+   0 bytes stack frame 
+  maca info  : Used  86 MTregisters, 70 STregisters, 8320 bytes shared mem  
+  maca info  : staticMaxWarps/PEU : 5
+ maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+   0 bytes stack frame 
+  maca info  : Used  80 MTregisters, 58 STregisters, 8320 bytes shared mem  
+  maca info  : staticMaxWarps/PEU : 6
+ maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+   0 bytes stack frame 
+  maca info  : Used  82 MTregisters, 66 STregisters, 8320 bytes shared mem  
+  maca info  : staticMaxWarps/PEU : 5
+ maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+   0 bytes stack frame 
+  maca info  : Used  80 MTregisters, 58 STregisters, 8320 bytes shared mem  
+  maca info  : staticMaxWarps/PEU : 6
+ maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+   0 bytes stack frame 
+  maca info  : Used  74 MTregisters, 52 STregisters, 8320 bytes shared mem  
+  maca info  : staticMaxWarps/PEU : 6
+--
+ maca info  : Function properties for  _Z31paged_decode_reduce_vec4_kernelILb1ELb0ELb1ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+   0 bytes stack frame 
+  maca info  : Used  62 MTregisters, 39 STregisters, 0 bytes shared mem  
+  maca info  : staticMaxWarps/PEU : 8
+ maca info  : Function properties for  _Z31paged_decode_reduce_vec4_kernelILb1ELb0ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+   0 bytes stack frame 
+  maca info  : Used  66 MTregisters, 35 STregisters, 0 bytes shared mem  
+  maca info  : staticMaxWarps/PEU : 7
+--
+ maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+   0 bytes stack frame 
+  maca info  : Used  82 MTregisters, 64 STregisters, 8320 bytes shared mem  
+  maca info  : staticMaxWarps/PEU : 5
+=== control resource baseline records ===
+ maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+   0 bytes stack frame 
+  maca info  : Used  86 MTregisters, 70 STregisters, 8320 bytes shared mem  
+  maca info  : staticMaxWarps/PEU : 5
+ maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+   0 bytes stack frame 
+  maca info  : Used  80 MTregisters, 58 STregisters, 8320 bytes shared mem  
+  maca info  : staticMaxWarps/PEU : 6
+ maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+   0 bytes stack frame 
+  maca info  : Used  82 MTregisters, 66 STregisters, 8320 bytes shared mem  
+  maca info  : staticMaxWarps/PEU : 5
+ maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+   0 bytes stack frame 
+  maca info  : Used  80 MTregisters, 58 STregisters, 8320 bytes shared mem  
+  maca info  : staticMaxWarps/PEU : 6
+ maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+   0 bytes stack frame 
+  maca info  : Used  74 MTregisters, 52 STregisters, 8320 bytes shared mem  
+  maca info  : staticMaxWarps/PEU : 6
+--
+ maca info  : Function properties for  _Z31paged_decode_reduce_vec4_kernelILb1ELb0ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+   0 bytes stack frame 
+  maca info  : Used  64 MTregisters, 35 STregisters, 0 bytes shared mem  
+  maca info  : staticMaxWarps/PEU : 8
+--
+ maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+   0 bytes stack frame 
+  maca info  : Used  82 MTregisters, 64 STregisters, 8320 bytes shared mem  
+  maca info  : staticMaxWarps/PEU : 5
+=== resource global checks ===
+candidate stack-frame records=34
+candidate nonzero stack records=261
+candidate spill mentions==== LLVM target symbols and lowering ===
+37272:  %73 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i380.3, i32 %69)
+37955:  %58 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.epil, i32 %w_lane.0)
+38103:  %83 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i, i32 %w_lane.0)
+38149:  %96 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.1, i32 %w_lane.0)
+38195:  %109 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.2, i32 %w_lane.0)
+38241:  %122 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.3, i32 %w_lane.0)
+38459:  %22 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i, i32 %18)
+38471:  %29 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.1, i32 %25)
+38483:  %36 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.2, i32 %32)
+38495:  %43 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.3, i32 %39)
+38526:  %53 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i362, i32 %49)
+38538:  %59 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i362.1, i32 %55)
+38550:  %65 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i362.2, i32 %61)
+38562:  %71 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i362.3, i32 %67)
+38626:  %82 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i433.epil, i32 %w_lane.0)
+38774:  %107 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i433, i32 %w_lane.0)
+38820:  %120 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i433.1, i32 %w_lane.0)
+38866:  %133 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i433.2, i32 %w_lane.0)
+38912:  %146 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i433.3, i32 %w_lane.0)
+39133:  %27 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i, i32 %23)
+39145:  %34 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.1, i32 %30)
+39157:  %41 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.2, i32 %37)
+39169:  %48 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.3, i32 %44)
+39210:  %65 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i399, i32 %61)
+39222:  %71 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i399.1, i32 %67)
+39234:  %77 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i399.2, i32 %73)
+39246:  %83 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i399.3, i32 %79)
+40103:define protected metaxgpu_kernel void @_Z31paged_decode_reduce_vec4_kernelILb1ELb0ELb1ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii(ptr addrspace(1) noalias nocapture noundef readonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readonly %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef readonly %partial_acc.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, i32 noundef %batch_size, i32 noundef %pages_per_split, i32 noundef %n_split) local_unnamed_addr #20 comdat {
+40209:  %17 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i, i32 %13)
+40221:  %24 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.1, i32 %20)
+40233:  %31 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.2, i32 %27)
+40245:  %38 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.3, i32 %34)
+40257:  %45 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.4, i32 %41)
+40298:  %64 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i270, i32 %60)
+40310:  %70 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i270.1, i32 %66)
+40322:  %76 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i270.2, i32 %72)
+40334:  %82 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i270.3, i32 %78)
+40346:  %88 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i270.4, i32 %84)
+40717:define protected metaxgpu_kernel void @_Z31paged_decode_reduce_vec4_kernelILb1ELb0ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii(ptr addrspace(1) noalias nocapture noundef readonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readonly %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef readonly %partial_acc.coerce, ptr addrspace(1) noalias nocapture noundef %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, i32 noundef %batch_size, i32 noundef %pages_per_split, i32 noundef %n_split) local_unnamed_addr #20 comdat {
+40826:  %14 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i, i32 %out0.sroa.0.0.insert.insert)
+40832:  %17 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i291, i32 %out1.sroa.0.0.insert.insert)
+40842:  %18 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #24
+40843:  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %add.ptr15, i32 0, <4 x i32> %ref.tmp.sroa.0.12.vec.insert, i64 %18, i1 true, i1 false, i1 false), !alias.scope !289, !call_argsrelate !292
+40870:  %28 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i294, i32 %24)
+40882:  %35 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i294.1, i32 %31)
+40894:  %42 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i294.2, i32 %38)
+40906:  %49 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i294.3, i32 %45)
+40918:  %56 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i294.4, i32 %52)
+40959:  %75 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i300, i32 %71)
+40971:  %81 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i300.1, i32 %77)
+40983:  %87 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i300.2, i32 %83)
+40995:  %93 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i300.3, i32 %89)
+41007:  %99 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i300.4, i32 %95)
+41146:  %129 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i334, i32 %out0159.sroa.0.0.insert.insert)
+41152:  %132 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i338, i32 %out1164.sroa.0.0.insert.insert)
+41379:  %197 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #24
+41380:  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %add.ptr15, i32 0, <4 x i32> %ref.tmp182.sroa.0.12.vec.insert, i64 %197, i1 true, i1 false, i1 false), !alias.scope !297, !call_argsrelate !292
+41388:declare void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) noalias nocapture, i32 immarg, <4 x i32>, i64, i1 immarg, i1 immarg, i1 immarg) #14
+42438:  %20 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i, i32 %16)
+42450:  %27 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.1, i32 %23)
+42462:  %34 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.2, i32 %30)
+42474:  %41 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.3, i32 %37)
+42486:  %48 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.4, i32 %44)
+42541:  %63 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i323, i32 %59)
+42553:  %70 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i323.1, i32 %66)
+42565:  %77 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i323.2, i32 %73)
+42577:  %84 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i323.3, i32 %80)
+42589:  %91 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i323.4, i32 %87)
+42628:  %108 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i329, i32 %104)
+42640:  %114 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i329.1, i32 %110)
+42652:  %120 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i329.2, i32 %116)
+42664:  %126 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i329.3, i32 %122)
+42676:  %132 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i329.4, i32 %128)
+42734:  %147 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i335, i32 %143)
+42746:  %153 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i335.1, i32 %149)
+42758:  %159 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i335.2, i32 %155)
+42770:  %165 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i335.3, i32 %161)
+42782:  %171 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i335.4, i32 %167)
+46355:@29 = private unnamed_addr constant [88 x i8] c"_Z31paged_decode_reduce_vec4_kernelILb1ELb0ELb1ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii\00", align 1
+46356:@30 = private unnamed_addr constant [88 x i8] c"_Z31paged_decode_reduce_vec4_kernelILb1ELb0ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii\00", align 1
+=== corrected resource global checks ===
+candidate stack-frame records=34
+candidate nonzero stack records=0
+candidate spill mentions=0
+=== exact target LLVM function audit ===
+20
+target stg calls: 2
+target peer bpermute calls: 14
+target native icmp calls: 2
+target even-lane branches: 1
+target lane-xor expressions: 1
+non-paired stg calls:
+target source out_ptr expression:
+21:    __nv_bfloat16* out_ptr =
+22:        out + (b * 32 + h) * HEAD_DIM + lane * 4;
+31:                partial_acc + hidx * HEAD_DIM + lane * 4);
+44:            const uint32_t peer0 = __shfl_sync(
+46:            const uint32_t peer1 = __shfl_sync(
+48:            if ((lane & 1) == 0) {
+49:                xpuoj_native_stg_b128_u4(
+50:                    out_ptr, make_uint4(own0, own1, peer0, peer1));
+54:                reinterpret_cast<__nv_bfloat162*>(out_ptr);
+93:            partial_acc + hidx * HEAD_DIM + lane * 4);
+107:        const uint32_t peer0 = __shfl_sync(
+109:        const uint32_t peer1 = __shfl_sync(
+111:        if ((lane & 1) == 0) {
+112:            xpuoj_native_stg_b128_u4(
+113:                out_ptr, make_uint4(own0, own1, peer0, peer1));
+117:            reinterpret_cast<__nv_bfloat162*>(out_ptr);
+=== target-only / pair geometry audit ===
+case8 dispatch remains <BASE2,false,true>; case11 dispatch is the only <BASE2,false,true,true> call (source lines 6057-6074).
+PAIR_BF16_OUTPUT has one default=false declaration and exactly two source if constexpr branches (the live_splits<=1 and multi-split output paths).
+Each pair branch has two peer fetches with lane ^ 1 and one even-lane guard; LLVM target has two xor-with-1 peer-index expressions, two even-lane guards, four handoff bpermutes (two per output path), and exactly two native STG calls.
+out_ptr = row_base + lane*4 BF16; row_base is a 256-byte HEAD_DIM row. For lane=2k, offset is 2B*(4*2k)=16k bytes, so every issuing even lane is 16B aligned; packed own0/own1/peer0/peer1 is 4x32-bit = 16B and covers BF16 dims [4*2k, 4*2k+7]. Pairs cover lanes (0,1)...(30,31), all 128 dimensions exactly once.
+Non-paired vec4 specialization has zero STG calls in candidate LLVM.
+=== static conclusion ===
+Normal, resource-usage, and device LLVM builds exit 0. Target reducer resource is 66 MTreg / 35 STreg / 0 B shared / 0 B stack / staticMaxWarps=7; current-control vec4 baseline is 64 MTreg / 35 STreg / 0 B shared / 0 B stack / staticMaxWarps=8. The known 7-wave historical tier is retained for parent judgment per task instruction; no spill or nonzero stack was observed. No C500 correctness, timing/A-B, or OJ was run.

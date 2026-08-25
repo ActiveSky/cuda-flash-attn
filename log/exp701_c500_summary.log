@@ -1,0 +1,24 @@
+exp701 C500 safety summary
+date=2026-08-24T15:11:42Z
+candidate=solutions/archive/2026-08-24-experiments/cuda_control124611_case2_native_b128_vcopy_exp701.cpp
+candidate_source_sha256=4f9a42b487c7cd3d5b9e5cc6bfa57d68e090ff8f35aa0a68bb386a168ba28cbd
+candidate_artifact=build/exp701_candidate_normal.so
+candidate_artifact_sha256=b04852a3d2c27d472dbdc3677738c7510fbdc281b6fe699ef99c9448f194d924
+control=solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+control_source_sha256=3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+control_artifact=build/exp666_control_normal.so
+control_artifact_sha256=4bbe97993b7ad219dc607e95a8a45a11c26c8c96042d857084f91098d00ea873
+workfile_sha256_after=3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+
+VERDICT=PASS candidate-only correctness/safety gate
+- generic case2 boundary/random/full and exact 1/2: PASS for candidate and control
+- token1 sentinel, tail/padding and second-PID poison: PASS
+- mixed and reverse {1,2} GQA/page ownership: PASS
+- nonzero/permuted block table: PASS
+- raw BF16 bit preservation and all 16-byte output slices: PASS
+- output guards, input invariance and deterministic repeat: PASS
+- case2->case14->case2 and case14->case2 same-process reuse: PASS
+- CPU manifest replay: 14/14 PASS
+- no illegal launch, nonfinite valid output, guard overwrite, input mutation, or candidate/control divergence observed
+
+No local timing/A-B, OJ submission, workfile/source edit, AGENTS/goal/notes/results/raw/archive edit, or subagent operation was performed.

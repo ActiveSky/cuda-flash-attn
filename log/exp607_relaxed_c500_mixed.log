@@ -1,0 +1,5 @@
+GPU: MetaX C500
+library: build/exp607_relaxed_audit_normal.so
+reference finite nonzero: True all: True
+[PASS] mixed batch baseline match=1.000000 max_error=7.812500e-03 max_tol_ratio=0.244 finite=True zero_exact=True guards=True inputs_untouched=True
+[FAIL] mixed batch padding/tail poison match=0.266667 max_error=nan max_tol_ratio=nan finite=False zero_exact=True guards=True inputs_untouched=True

@@ -1,0 +1,20 @@
+exp605 relaxed resource comparison (2026-08-23)
+
+Exact target symbols from -resource-usage:
+  candidate paged_decode_case13_kv8_headpair_z8_kernel<true,false,false,true>
+    90 MTregisters / 54 STregisters / 8448 bytes shared / 0 bytes stack / 5 static waves
+  control   paged_decode_case13_kv8_headpair_z8_kernel<true,false,false>
+    82 MTregisters / 50 STregisters / 8448 bytes shared / 0 bytes stack / 5 static waves
+
+Other case13 z8 specializations are unchanged in the same builds:
+  candidate <true,false,true,false>  = 82 / 50 / 8448 / 0 / 5
+  control   <true,false,true>        = 82 / 50 / 8448 / 0 / 5
+  candidate <true,true,false,false>  = 82 / 48 / 8448 / 0 / 5
+  control   <true,true,false>        = 82 / 48 / 8448 / 0 / 5
+
+The candidate has no stack frame or spill and keeps the five-wave residency
+tier, but the active target adds 8 MTregisters and 4 STregisters. Therefore:
+  strict resource non-regression gate: FAIL;
+  relaxed exploratory OJ safety gate: PASS with an explicit resource-risk flag.
+The local resource delta alone is not a correctness or illegal-launch failure;
+the main Agent owns the OJ admission decision.

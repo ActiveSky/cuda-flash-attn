@@ -1,0 +1,12 @@
+candidate run_kernel direct __device_stub__ call count: 35
+control run_kernel direct __device_stub__ call count: 34
+candidate-only raw launch multiset (direct target is the only allowed extra):
+_Z75__device_stub__paged_decode_case12_kv8_headpair_z8_direct_three_peer_kernelILb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif
+control-only raw launch multiset:
+
+noncase12 launch multiset after removing direct target:
+candidate count: 34
+control count: 34
+candidate-only:
+control-only:
+PASS

@@ -1,0 +1,25 @@
+GPU: MetaX C500
+library: build/exp650_c500_candidate.so
+padding poison: NaN in all physical pages beyond exact cache_seqlens per batch
+[PASS] exact_length=1 match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 finite=True guard=True
+[PASS] exact_length=2 match=1.000000 max_error=1.562500e-02 max_tol_ratio=0.322 finite=True guard=True
+[PASS] exact_length=15 match=1.000000 max_error=7.812500e-03 max_tol_ratio=0.244 finite=True guard=True
+[PASS] exact_length=16 match=1.000000 max_error=1.562500e-02 max_tol_ratio=0.299 finite=True guard=True
+[PASS] exact_length=17 match=1.000000 max_error=1.562500e-02 max_tol_ratio=0.305 finite=True guard=True
+[PASS] exact_length=319 match=1.000000 max_error=1.953125e-03 max_tol_ratio=0.098 finite=True guard=True
+[PASS] exact_length=320 match=1.000000 max_error=1.953125e-03 max_tol_ratio=0.098 finite=True guard=True
+[PASS] exact_length=321 match=1.000000 max_error=1.953125e-03 max_tol_ratio=0.098 finite=True guard=True
+[PASS] exact_length=639 match=1.000000 max_error=1.953125e-03 max_tol_ratio=0.098 finite=True guard=True
+[PASS] exact_length=640 match=1.000000 max_error=1.953125e-03 max_tol_ratio=0.096 finite=True guard=True
+[PASS] exact_length=641 match=1.000000 max_error=1.953125e-03 max_tol_ratio=0.096 finite=True guard=True
+[PASS] exact_length=12160 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True guard=True
+[PASS] exact_length=12240 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True guard=True
+[PASS] exact_length=12241 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True guard=True
+[PASS] exact_length=12250 match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True guard=True
+[PASS] full-short-full length=12251 match=1.000000 max_error=2.441406e-04 finite=True guard=True
+[PASS] full-short-full length=1 match=1.000000 max_error=0.000000e+00 finite=True guard=True
+[PASS] full-short-full length=12251 match=1.000000 max_error=2.441406e-04 finite=True guard=True
+[PASS] short-full length=1 match=1.000000 max_error=0.000000e+00 finite=True guard=True
+[PASS] short-full length=12251 match=1.000000 max_error=2.441406e-04 finite=True guard=True
+[PASS] deterministic full output raw-BF16 equality=True finite=True
+overall=PASS

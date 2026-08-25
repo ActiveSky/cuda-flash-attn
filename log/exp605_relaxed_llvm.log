@@ -1,0 +1,40 @@
+exp605 relaxed LLVM target contract (2026-08-23)
+
+Candidate target definition:
+  build/exp605_relaxed_device.ll:18048
+  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EE...
+  target body ends at LLVM line 19887.
+
+Target-only observations:
+  * 16 real calls to llvm.mxc.bsm.bpermute occur in the target body. They are
+    four-word exchanges in each of the ty==0/ty!=0 hot-loop branches and in
+    each corresponding tail branch; one runtime branch executes four calls per
+    token exchange, not sixteen calls per iteration.
+  * Candidate whole-IR BSM count is 398 versus control 382. The delta is 16,
+    and all 16 are inside the new direct-V target definition; no non-target
+    function gained the intrinsic.
+  * The direct target has three v_cache global vector-load sites (initial page,
+    next page, fused tail), lowered to 12 scalar i32 loads. The peer payload is
+    obtained only through BSM. There is no target addrspace(3) access at the
+    control V-shared base offset 4096; the two addrspace(3) memcpy calls are K
+    publication only. The target's shared state writes/reads are unrelated
+    partial state, not V PV loads.
+  * Source guards at lines 2648, 2715, 2747, 2787, 2813, and 2875 make the
+    direct path compile-time exclusive. The fallback s_v path is eliminated
+    from the <true,false,false,true> LLVM body.
+  * The target has the established lane mapping lane=(tz&1)*32+ty*16+tx;
+    lane^16 toggles ty while preserving tx and tz parity. Each V row is loaded
+    once by its owning ty and four words are handed to the peer; no duplicated
+    global V load appears in the direct target.
+
+Dispatch/source identity:
+  * Candidate lines 5716-5731 select the fourth template flag only under
+    batch_size==8 && seqlen_k==32768 (case12), with the unchanged
+    dim3(16,2,8) launch and existing split/grid/partial arguments.
+  * Other case13 dispatches remain <true,false,true>, <true,true>, or the
+    original fallbacks; DIRECT_V_BSM has a static_assert restricting it to
+    ALL_NATIVE_ROW_QK && !NATIVE_HEAD_BIT1 && !FIXED_LIVE_BUCKETS.
+
+No new __syncthreads, __syncwarp, cudaDeviceSynchronize, dynamic launch, or
+launch-bound change was added. The candidate source SHA remained unchanged
+after all builds.

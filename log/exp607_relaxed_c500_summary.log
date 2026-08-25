@@ -1,0 +1,35 @@
+exp607 relaxed C500 smoke summary (2026-08-23)
+
+Candidate source:
+  solutions/archive/2026-08-20-experiments/cuda_case11_last_live_split_finalizer_exp607.cpp
+  SHA-256 bac7e4727f490224af6d1b30cc0165131203181a5b7950ca09f40a13927df655
+Build reused after identity check:
+  build/exp607_relaxed_audit_normal.so
+  binary SHA-256 e4ebbaf3fedba09f1e73185ee3744f427e82f2342cc69586eabe77bf76a9155e
+  build log log/exp607_relaxed_audit_normal.log names the candidate source and output
+
+PASS before the safety failure:
+  C500 full case11: match=1.000000, finite=True
+  C500 boundary case11: match=1.000000, finite=True
+  C500 random case11 (seed 20260823): match=1.000000, finite=True
+  exact lengths 1,2,15,16,17,319,320,321,639,640,641,
+    12159,12160,12161,12239,12240,12241,12250,12251: 19/19 PASS
+  mixed baseline lengths 0,1,2,15,16,17,319,320,321,639,640,641,
+    12159,12160,12241,12250: PASS; finite, zero row exact, guards intact
+
+FAIL (stop immediately):
+  Mixed-batch padding/tail poison with private contiguous block-table pages.
+  All invalid pages and tail tokens after each true cache_seqlens were filled
+  with BF16 NaN. Candidate output was nonfinite: match=0.266667,
+  max_error=nan, max_tol_ratio=nan; guards and metadata remained intact.
+  Per-row diagnosis: lengths 1,2,15,17,319,321,639,641,12159,12241,12250
+  each produced 4096 NaNs; exact-page rows stayed finite. This is a genuine
+  tail-mask/data-read safety failure, not an OJ result. No workspace-reuse or
+  further C500 checks were run after this failure.
+
+Harness note:
+  An earlier guard attempt used 257 BF16 prefix elements and triggered a
+  C500 alignment trap; it was discarded and rerun with 256-element aligned
+  guards. The failure above is from the aligned rerun.
+
+No OJ, A/B, docs, or work-file operation was performed.

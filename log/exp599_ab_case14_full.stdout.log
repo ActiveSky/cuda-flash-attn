@@ -1,0 +1,4 @@
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+control:   build/exp599_ab_control.so
+candidate: build/exp599_ab_candidate.so
+case 14 B= 1 L=61519 KV=4 | control p50=0.1448 ms | candidate p50=0.1451 ms | candidate/control p10/p50/p90=0.9909/0.9997/1.0042 | speedup=1.000x

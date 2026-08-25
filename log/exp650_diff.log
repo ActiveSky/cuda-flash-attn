@@ -1,0 +1,58 @@
+--- solutions/archive/2026-08-22-experiments/cuda_case11_direct_fanin_normalized_bf16_exp640.cpp	2026-08-22 17:41:45.627309679 +0000
++++ solutions/archive/2026-08-23-experiments/cuda_case11_direct_fanin_normalized_bf16_txfix_exp650.cpp	2026-08-23 11:47:29.886150817 +0000
+@@ -2436,6 +2436,7 @@
+     float& m,
+     float& l,
+     float* acc,
++    int tx,
+     float peer_m,
+     float peer_l,
+     const __nv_bfloat162* peer_acc)
+@@ -2455,6 +2456,7 @@
+     packed_scale(acc + 4, acc + 4, self_scale);
+     packed_scale(acc + 6, acc + 6, self_scale);
+     if (peer_valid) {
++        peer_acc += tx * 4;
+         const uint32_t* peer_words =
+             reinterpret_cast<const uint32_t*>(peer_acc);
+         const float peer0[2] = {
+@@ -3858,16 +3860,16 @@
+         if (tz == 0) {
+             // z0: local h0 plus z1/z2/z3 h0.
+             merge_case11_direct_fanin_z_peer(
+-                m0, l0, acc0,
++                m0, l0, acc0, tx,
+                 s_direct_md[16 + head0][0],
+                 s_direct_md[16 + head0][1],
+                 s_norm + (16 + head0) * (HEAD_DIM / 2));
+             merge_case11_direct_fanin_z_peer(
+-                m0, l0, acc0,
++                m0, l0, acc0, tx,
+                 s_direct_md[head0][0], s_direct_md[head0][1],
+                 s_norm + head0 * (HEAD_DIM / 2));
+             merge_case11_direct_fanin_z_peer(
+-                m0, l0, acc0,
++                m0, l0, acc0, tx,
+                 s_direct_md[8 + head0][0],
+                 s_direct_md[8 + head0][1],
+                 s_norm + (8 + head0) * (HEAD_DIM / 2));
+@@ -3915,16 +3917,16 @@
+         } else if (tz == 1) {
+             // z1: local h1 plus z0/z2/z3 h1.
+             merge_case11_direct_fanin_z_peer(
+-                m1, l1, acc1,
++                m1, l1, acc1, tx,
+                 s_direct_md[20 + (head1 - 4)][0],
+                 s_direct_md[20 + (head1 - 4)][1],
+                 s_norm + (20 + (head1 - 4)) * (HEAD_DIM / 2));
+             merge_case11_direct_fanin_z_peer(
+-                m1, l1, acc1,
++                m1, l1, acc1, tx,
+                 s_direct_md[head1][0], s_direct_md[head1][1],
+                 s_norm + head1 * (HEAD_DIM / 2));
+             merge_case11_direct_fanin_z_peer(
+-                m1, l1, acc1,
++                m1, l1, acc1, tx,
+                 s_direct_md[8 + head1][0],
+                 s_direct_md[8 + head1][1],
+                 s_norm + (8 + head1) * (HEAD_DIM / 2));

@@ -1,0 +1,5 @@
+[FAIL] mixed tail-only/no-tail/full+tail padding-poison guard repeat=1/3 match=0.250000 max_error=nan max_tol_ratio=nan finite=False unchanged=True guards=True deterministic=True
+Traceback (most recent call last):
+  File "<stdin>", line 153, in <module>
+  File "<stdin>", line 142, in run_one
+AssertionError: mixed tail-only/no-tail/full+tail padding-poison guard: safety/correctness failure at repeat 1

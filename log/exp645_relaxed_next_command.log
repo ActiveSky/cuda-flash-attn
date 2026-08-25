@@ -1,0 +1,16 @@
+exp645 next-step command (DO NOT RUN until the peer tx-offset defect is fixed
+and the new candidate SHA is approved by the main agent):
+
+tools/build_local_maca.sh \
+  solutions/archive/2026-08-22-experiments/cuda_case8_direct_fanin_normalized_bf16_exp645.cpp \
+  build/exp645_relaxed_candidate.so
+
+Minimum exact target smoke after the fix, using the built candidate:
+python3 tests/c500_paged_decode_harness.py \
+  --library build/exp645_relaxed_candidate.so \
+  --cases 8 --length-values 4096
+
+The smoke is intentionally not executed in this task because it uses the
+real C500 device.  Before execution, rebuild from the fixed source, freeze and
+record its SHA, then add at least boundary exact lengths (1,2,15,16,17 and a
+tail) before considering any OJ probe.

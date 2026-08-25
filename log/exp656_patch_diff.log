@@ -1,0 +1,127 @@
+diff --git a/solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_exp655.cpp b/solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp
+index 1e9c19e..6790127 100644
+--- a/solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_exp655.cpp
++++ b/solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_fanin_tailmask_exp656.cpp
+@@ -2478,6 +2478,24 @@ __device__ __forceinline__ void issue_case13_kv8_headpair_z8_page(
+         *reinterpret_cast<const uint4*>(src);
+ }
+ 
++// exp656: the fused case13 tail owns only the valid prefix of its page.
++// Keep the established full-page loader above unchanged; invalid rows are not
++// touched so padding traps (including NaN sentinels) cannot enter shared K/V.
++__device__ __forceinline__ void issue_exp656_case13_direct_tail_page(
++    const __nv_bfloat16* __restrict__ cache,
++    uint32_t (*smem)[U32_PER_ROW],
++    int pid, int kv_head, int tx, int ty, int tz, int tail_tokens)
++{
++    const int token = tz * 2 + ty;
++    if (token >= tail_tokens) return;
++    const int cache_row =
++        (pid * PAGE_TOKENS * 8 + token * 8 + kv_head) * HEAD_DIM;
++    const uint32_t* src =
++        reinterpret_cast<const uint32_t*>(cache + cache_row) + tx * 4;
++    *reinterpret_cast<uint4*>(&smem[token][tx * 4]) =
++        *reinterpret_cast<const uint4*>(src);
++}
++
+ template <int HEAD1_LANE = 8>
+ __device__ __forceinline__ void case13_headpair_two_token_pv(
+     float owned_score,
+@@ -2517,6 +2535,52 @@ __device__ __forceinline__ void case13_headpair_two_token_pv(
+     }
+ }
+ 
++// exp656: tail-only PV path.  Both token predicates are required because a
++// z partition can contain zero valid rows, or one valid row at an odd tail.
++// This helper is case13-local; the full-page helper above remains shared by
++// the other z8 dispatches without a changed ABI or dataflow.
++template <int HEAD1_LANE = 8>
++__device__ __forceinline__ void exp656_case13_direct_tail_two_token_pv(
++    float owned_score,
++    float m_new0,
++    float m_new1,
++    uint32_t (*s_v)[U32_PER_ROW],
++    int token_base,
++    int tail_tokens,
++    int tx,
++    float& l0,
++    float& l1,
++    float* acc0,
++    float* acc1)
++{
++    static_assert(HEAD1_LANE == 2 || HEAD1_LANE == 4 || HEAD1_LANE == 8,
++                  "head1 owner must start at lane 2, 4 or 8");
++    if (token_base < tail_tokens) {
++        const float owned_exp_arg =
++            owned_score - ((tx & HEAD1_LANE) ? m_new1 : m_new0);
++        const float owned_weight = __builtin_exp2f(owned_exp_arg);
++        const float w0 = native_row16_broadcast<0>(owned_weight);
++        const float w1 = native_row16_broadcast<HEAD1_LANE>(owned_weight);
++        l0 += w0;
++        l1 += w1;
++        const uint4 vpack = *reinterpret_cast<const uint4*>(
++            &s_v[token_base][tx * 4]);
++        pv_two_heads_same_v(acc0, acc1, vpack, w0, w1);
++    }
++    if (token_base + 1 < tail_tokens) {
++        const float owned_exp_arg =
++            owned_score - ((tx & HEAD1_LANE) ? m_new1 : m_new0);
++        const float owned_weight = __builtin_exp2f(owned_exp_arg);
++        const float w0 = native_row16_broadcast<1>(owned_weight);
++        const float w1 = native_row16_broadcast<HEAD1_LANE + 1>(owned_weight);
++        l0 += w0;
++        l1 += w1;
++        const uint4 vpack = *reinterpret_cast<const uint4*>(
++            &s_v[token_base + 1][tx * 4]);
++        pv_two_heads_same_v(acc0, acc1, vpack, w0, w1);
++    }
++}
++
+ __device__ __forceinline__ void store_case13_headpair_state(
+     float* s_acc,
+     float (*s_md)[2],
+@@ -3566,15 +3630,15 @@ paged_decode_case13_kv8_headpair_z8_direct_three_peer_kernel(
+ 
+     if (owns_fused_tail) {
+         const int32_t pid = bt_row[full_pages];
+-        issue_case13_kv8_headpair_z8_page(
+-            k_cache, s_k, pid, kv_head, tx, ty, tz);
+-        issue_case13_kv8_headpair_z8_page(
+-            v_cache, s_v, pid, kv_head, tx, ty, tz);
++        const int tail_tokens = seqlen & (PAGE_TOKENS - 1);
++        issue_exp656_case13_direct_tail_page(
++            k_cache, s_k, pid, kv_head, tx, ty, tz, tail_tokens);
++        issue_exp656_case13_direct_tail_page(
++            v_cache, s_v, pid, kv_head, tx, ty, tz, tail_tokens);
+         __syncwarp();
+ 
+         float owned_score = -CUDART_INF_F;
+         float owned_page_max = -CUDART_INF_F;
+-        const int tail_tokens = seqlen & (PAGE_TOKENS - 1);
+ #pragma unroll
+         for (int j = 0; j < 2; ++j) {
+             const int token = tz * 2 + j;
+@@ -3622,16 +3686,16 @@ paged_decode_case13_kv8_headpair_z8_direct_three_peer_kernel(
+                 packed_scale(acc1 + 6, acc1 + 6, alpha1);
+             }
+             if constexpr (NATIVE_HEAD_BIT1) {
+-                case13_headpair_two_token_pv<2>(
+-                    owned_score, m_new0, m_new1, s_v, tz * 2, tx,
++                exp656_case13_direct_tail_two_token_pv<2>(
++                    owned_score, m_new0, m_new1, s_v, tz * 2, tail_tokens, tx,
+                     l0, l1, acc0, acc1);
+             } else if constexpr (ALL_NATIVE_ROW_QK) {
+-                case13_headpair_two_token_pv<4>(
+-                    owned_score, m_new0, m_new1, s_v, tz * 2, tx,
++                exp656_case13_direct_tail_two_token_pv<4>(
++                    owned_score, m_new0, m_new1, s_v, tz * 2, tail_tokens, tx,
+                     l0, l1, acc0, acc1);
+             } else {
+-                case13_headpair_two_token_pv<8>(
+-                    owned_score, m_new0, m_new1, s_v, tz * 2, tx,
++                exp656_case13_direct_tail_two_token_pv<8>(
++                    owned_score, m_new0, m_new1, s_v, tz * 2, tail_tokens, tx,
+                     l0, l1, acc0, acc1);
+             }
+             m0 = m_new0;
+diff_exit=1

@@ -1,0 +1,19 @@
+exp624 revalidation compile manifest
+2026-08-21T13:20:56Z
+artifacts=/tmp/exp624_revalidation.CFnpm9
+candidate_sha=8daf875522d473d4c19aa44e6f3523190e098ef22ec3036f6a7ef4320ff4cc43
+control_sha=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+candidate_normal_command=tools/build_local_maca.sh solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp /tmp/exp624_revalidation.CFnpm9/candidate_normal.so
+candidate_resource_command=tools/build_local_maca.sh solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp /tmp/exp624_revalidation.CFnpm9/candidate_resource.so -resource-usage
+candidate_llvm_command=tools/build_local_maca.sh solutions/archive/2026-08-21-experiments/cuda_case12_direct_k_wave_bsm_no_lookahead_exp623.cpp /tmp/exp624_revalidation.CFnpm9/candidate.ll -c -emit-llvm -S
+control_normal_command=tools/build_local_maca.sh solutions/archive/2026-08-16-submissions/cuda_113889.cpp /tmp/exp624_revalidation.CFnpm9/control_normal.so
+control_resource_command=tools/build_local_maca.sh solutions/archive/2026-08-16-submissions/cuda_113889.cpp /tmp/exp624_revalidation.CFnpm9/control_resource.so -resource-usage
+control_llvm_command=tools/build_local_maca.sh solutions/archive/2026-08-16-submissions/cuda_113889.cpp /tmp/exp624_revalidation.CFnpm9/control.ll -c -emit-llvm -S
+status=PASS
+2026-08-21T13:21:34Z
+602afb7f73e7ed64f4b96ad0c77b7bf8af167ee226242d29e17f2273715a4c43  /tmp/exp624_revalidation.CFnpm9/candidate.ll
+603ef19393006a039fa301643e31e1018b5bd2f0481b45d29da7ad4712344903  /tmp/exp624_revalidation.CFnpm9/candidate_normal.so
+7bf631af11f8d792d175fa4f7cc7e69039ddea0555cbc7f4423a99c67224b923  /tmp/exp624_revalidation.CFnpm9/candidate_resource.so
+25509a2cb9cfae61b302b18a5e4ab0f8a6e2bfe7687e8a8763b88eeb85910df1  /tmp/exp624_revalidation.CFnpm9/control.ll
+4bbe97993b7ad219dc607e95a8a45a11c26c8c96042d857084f91098d00ea873  /tmp/exp624_revalidation.CFnpm9/control_normal.so
+b6c698cb46553eece3a907dd820881887f7c5b05776d178419f0f6cba81a2fe5  /tmp/exp624_revalidation.CFnpm9/control_resource.so

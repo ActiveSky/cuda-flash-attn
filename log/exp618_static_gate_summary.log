@@ -1,0 +1,20 @@
+exp618 static resource gate summary
+UTC 2026-08-21T10:24:59Z
+candidate source SHA pre-build: 2d7907dc004f406aa81ed5761189bc9ba7b5c847565906474bdd123508357479
+candidate source SHA post-build: 2d7907dc004f406aa81ed5761189bc9ba7b5c847565906474bdd123508357479
+control source SHA: a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+source SHA gate: PASS (candidate pre == post; control unchanged)
+normal build: PASS; command/log: tools/build_local_maca.sh ... build/exp618_candidate_normal.so / log/exp618_candidate_build.log
+candidate resource build: PASS; log: log/exp618_candidate_resource.log
+control resource build: PASS; log: log/exp618_control_resource.log
+
+Hard gate (case11 producer <= 80 MTreg / 58 STreg / 8320B shared / 0 stack / 6 waves): FAIL
+  candidate target producer: 80 MTreg / 62 STreg / 8320B shared / 0 stack / 6 waves
+  control target producer:   80 MTreg / 58 STreg / 8320B shared / 0 stack / 6 waves
+  delta candidate-control:   0 MTreg / +4 STreg / 0B / 0 stack / 0 waves
+Reducer gate (must remain 64 / 35 / 0 / 0 / 8): PASS
+  candidate: 64 MTreg / 35 STreg / 0B shared / 0 stack / 8 waves
+  control:   64 MTreg / 35 STreg / 0B shared / 0 stack / 8 waves
+
+FINAL: STATIC RESOURCE GATE FAILED
+NO C500 / NO A-B / NO OJ. Do not modify candidate to compensate in this gate.

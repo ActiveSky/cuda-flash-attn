@@ -1,0 +1,71 @@
+6647-  %339 = shufflevector <2 x i32> %bc2721, <2 x i32> poison, <4 x i32> <i32 0, i32 poison, i32 poison, i32 poison>
+6648-  %bc2722 = bitcast <2 x float> %314 to <2 x i32>
+6649-  %340 = shufflevector <2 x i32> %bc2722, <2 x i32> poison, <4 x i32> <i32 poison, i32 1, i32 poison, i32 poison>
+6650-  %ref.tmp499.sroa.0.4.vec.insert.uncasted = shufflevector <2 x float> %311, <2 x float> poison, <4 x i32> <i32 0, i32 1, i32 poison, i32 poison>
+6651-  %ref.tmp499.sroa.0.4.vec.insert = bitcast <4 x float> %ref.tmp499.sroa.0.4.vec.insert.uncasted to <4 x i32>
+6652-  %ref.tmp499.sroa.0.8.vec.insert = shufflevector <4 x i32> %ref.tmp499.sroa.0.4.vec.insert, <4 x i32> %339, <4 x i32> <i32 0, i32 1, i32 4, i32 poison>
+6653-  %ref.tmp499.sroa.0.12.vec.insert = shufflevector <4 x i32> %ref.tmp499.sroa.0.8.vec.insert, <4 x i32> %340, <4 x i32> <i32 0, i32 1, i32 2, i32 5>
+6654-  %341 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #24
+6655:  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %add.ptr498, i32 0, <4 x i32> %ref.tmp499.sroa.0.12.vec.insert, i64 %341, i1 true, i1 false, i1 false), !alias.scope !88, !call_argsrelate !91
+6656-  %add.ptr505 = getelementptr inbounds i8, ptr addrspace(1) %add.ptr498, i64 16
+6657-  %bc2724 = bitcast <2 x float> %320 to <2 x i32>
+6658-  %342 = shufflevector <2 x i32> %bc2724, <2 x i32> poison, <4 x i32> <i32 0, i32 poison, i32 poison, i32 poison>
+6659-  %bc2725 = bitcast <2 x float> %320 to <2 x i32>
+6660-  %343 = shufflevector <2 x i32> %bc2725, <2 x i32> poison, <4 x i32> <i32 poison, i32 1, i32 poison, i32 poison>
+6661-  %ref.tmp506.sroa.0.4.vec.insert.uncasted = shufflevector <2 x float> %317, <2 x float> poison, <4 x i32> <i32 0, i32 1, i32 poison, i32 poison>
+6662-  %ref.tmp506.sroa.0.4.vec.insert = bitcast <4 x float> %ref.tmp506.sroa.0.4.vec.insert.uncasted to <4 x i32>
+6663-  %ref.tmp506.sroa.0.8.vec.insert = shufflevector <4 x i32> %ref.tmp506.sroa.0.4.vec.insert, <4 x i32> %342, <4 x i32> <i32 0, i32 1, i32 4, i32 poison>
+6664-  %ref.tmp506.sroa.0.12.vec.insert = shufflevector <4 x i32> %ref.tmp506.sroa.0.8.vec.insert, <4 x i32> %343, <4 x i32> <i32 0, i32 1, i32 2, i32 5>
+6665-  %344 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #24
+6666:  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %add.ptr505, i32 0, <4 x i32> %ref.tmp506.sroa.0.12.vec.insert, i64 %344, i1 true, i1 false, i1 false), !alias.scope !92, !call_argsrelate !91
+6667-  br label %cleanup
+6668-
+6669-if.else513:                                       ; preds = %if.end426
+6670-  %cmp514 = icmp eq i32 %2, 1
+6671-  br i1 %cmp514, label %if.then515, label %cleanup
+6672-
+6673-if.then515:                                       ; preds = %if.else513
+6674-  %arrayidx519 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add276
+--
+6870-  %384 = shufflevector <2 x i32> %bc2715, <2 x i32> poison, <4 x i32> <i32 0, i32 poison, i32 poison, i32 poison>
+6871-  %bc2716 = bitcast <2 x float> %359 to <2 x i32>
+6872-  %385 = shufflevector <2 x i32> %bc2716, <2 x i32> poison, <4 x i32> <i32 poison, i32 1, i32 poison, i32 poison>
+6873-  %ref.tmp585.sroa.0.4.vec.insert.uncasted = shufflevector <2 x float> %356, <2 x float> poison, <4 x i32> <i32 0, i32 1, i32 poison, i32 poison>
+6874-  %ref.tmp585.sroa.0.4.vec.insert = bitcast <4 x float> %ref.tmp585.sroa.0.4.vec.insert.uncasted to <4 x i32>
+6875-  %ref.tmp585.sroa.0.8.vec.insert = shufflevector <4 x i32> %ref.tmp585.sroa.0.4.vec.insert, <4 x i32> %384, <4 x i32> <i32 0, i32 1, i32 4, i32 poison>
+6876-  %ref.tmp585.sroa.0.12.vec.insert = shufflevector <4 x i32> %ref.tmp585.sroa.0.8.vec.insert, <4 x i32> %385, <4 x i32> <i32 0, i32 1, i32 2, i32 5>
+6877-  %386 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #24
+6878:  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %add.ptr584, i32 0, <4 x i32> %ref.tmp585.sroa.0.12.vec.insert, i64 %386, i1 true, i1 false, i1 false), !alias.scope !95, !call_argsrelate !91
+6879-  %add.ptr591 = getelementptr inbounds i8, ptr addrspace(1) %add.ptr584, i64 16
+6880-  %bc2718 = bitcast <2 x float> %365 to <2 x i32>
+6881-  %387 = shufflevector <2 x i32> %bc2718, <2 x i32> poison, <4 x i32> <i32 0, i32 poison, i32 poison, i32 poison>
+6882-  %bc2719 = bitcast <2 x float> %365 to <2 x i32>
+6883-  %388 = shufflevector <2 x i32> %bc2719, <2 x i32> poison, <4 x i32> <i32 poison, i32 1, i32 poison, i32 poison>
+6884-  %ref.tmp592.sroa.0.4.vec.insert.uncasted = shufflevector <2 x float> %362, <2 x float> poison, <4 x i32> <i32 0, i32 1, i32 poison, i32 poison>
+6885-  %ref.tmp592.sroa.0.4.vec.insert = bitcast <4 x float> %ref.tmp592.sroa.0.4.vec.insert.uncasted to <4 x i32>
+6886-  %ref.tmp592.sroa.0.8.vec.insert = shufflevector <4 x i32> %ref.tmp592.sroa.0.4.vec.insert, <4 x i32> %387, <4 x i32> <i32 0, i32 1, i32 4, i32 poison>
+6887-  %ref.tmp592.sroa.0.12.vec.insert = shufflevector <4 x i32> %ref.tmp592.sroa.0.8.vec.insert, <4 x i32> %388, <4 x i32> <i32 0, i32 1, i32 2, i32 5>
+6888-  %389 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #24
+6889:  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %add.ptr591, i32 0, <4 x i32> %ref.tmp592.sroa.0.12.vec.insert, i64 %389, i1 true, i1 false, i1 false), !alias.scope !98, !call_argsrelate !91
+6890-  br label %cleanup
+6891-
+6892-cleanup:                                          ; preds = %if.else513, %if.end492, %if.end578, %if.then445, %if.then531, %land.end
+6893-  ret void
+6894-}
+6895-
+6896-; Function Attrs: convergent mustprogress nofree nounwind willreturn memory(none)
+6897-declare <4 x float> @llvm.mxc.mma.f32.16x16x2bf16(<4 x half>, <4 x half>, <4 x float>) #9
+6898-
+6899-; Function Attrs: convergent mustprogress nofree nounwind willreturn memory(none)
+6900-declare i64 @llvm.mxc.icmp.i64.i32(i32, i32, i32 immarg) #9
+6901-
+6902-; Function Attrs: mustprogress nounwind willreturn memory(argmem: readwrite)
+6903:declare void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) noalias nocapture, i32 immarg, <4 x i32>, i64, i1 immarg, i1 immarg, i1 immarg) #14
+6904-
+6905-; Function Attrs: convergent mustprogress norecurse nounwind
+6906-define protected metaxgpu_kernel void @_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+6907-entry:
+6908-  %0 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.x(), !range !26
+6909-  %1 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.y(), !range !26
+6910-  %2 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.z(), !range !26
+6911-  %3 = tail call noundef range(i32 0, 2147483647) i32 @llvm.mxc.block.id.x(), !range !15

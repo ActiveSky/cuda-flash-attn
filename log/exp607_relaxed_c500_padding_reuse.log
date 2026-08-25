@@ -1,0 +1,41 @@
+[13:58:22.919][MXC][E]memory violation(0x4): memory access offset is negative, out of bounds, or misaligned in kernel
+[13:58:22.919][MCR][E]mx_trapProcess.cpp       :128 : trapping pipeID=1,queueID=0!
+[13:58:22.919][MCR][E]mx_trapProcess.cpp       :129 : trapping virtualDevice=0x7fb9b8000c70!
+[13:58:22.923][MCR][E]mx_trapProcess.cpp       :1000: Node ID is 2, Wave ID is 32696
+[13:58:22.923][MCR][E]mx_trapProcess.cpp       :1023: debug info: 0x90,0x23,0x00,0x00,0x40,0x04,0x00,0x00,0xe0,0x23,0x00,0x00,0x00,0x20,0x00,0x00,
+[13:58:22.923][MCR][E]mx_device.cpp            :10101: trap:precise positioning.
+[13:58:22.923][MCR][E]mx_device.cpp            :10106: trapping: kernelName: _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif ,commandIndex: 57 , trapType: Memory Violation(0x4)
+[13:58:22.923][MCR][E]mx_trapProcess.cpp       :914 : Memory violation(0x4) exception happened in the shader, the mcruntime api will be disabled
+[13:58:23.949][MCR][E]mx_signal.cpp            :590 : Failed signal [0x7fbda960fec0] wait
+[13:58:23.949][MCR][E]mx_signal.cpp            :590 : Failed signal [0x7fbda960fec0] wait
+[13:58:23.949][MCR][E]mx_command.cpp           :129 : command 0x55b2547eefc0 status invalid! Current status : 0,try to set status : -1
+[13:58:23.949][MCR][E]mc_runtime_api.cpp       :215 : 1019435: [7fbf586b6740] mcGetDevice: Returned mcErrorIllegalAddress
+GPU: MetaX C500
+library: build/exp607_relaxed_audit_normal.so
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.12/site-packages/torch/cuda/__init__.py", line 1159, in synchronize
+    return torch._C._cuda_synchronize()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.AcceleratorError: CUDA error: an illegal memory access was encountered
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<stdin>", line 74, in <module>
+  File "<stdin>", line 36, in runcheck
+  File "/opt/conda/lib/python3.12/site-packages/torch/cuda/__init__.py", line 1158, in synchronize
+    with torch.cuda.device(device):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.12/site-packages/torch/cuda/__init__.py", line 545, in __exit__
+    self.idx = torch.cuda._maybe_exchange_device(self.prev_idx)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.AcceleratorError: CUDA error: an illegal memory access was encountered
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+[13:58:24.140][MCR][E]mx_signal.cpp            :160 : shouldn't destroy a profiling signal 0x7fb9b8005950 that is still busy!

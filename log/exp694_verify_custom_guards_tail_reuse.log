@@ -1,0 +1,28 @@
+GPU: MetaX C500 | case7 B=64 L=2048 KV=8
+[INFO] mixed-tail-poison rows=64 poisoned_tail_tokens=376
+[PASS] mixed-tail-guards-input-invariance candidate finite=True within=True max_error=1.562500e-02 max_tol_ratio=0.322 guards=True inputs_untouched=True
+[PASS] mixed-tail-guards-input-invariance control finite=True within=True max_error=1.562500e-02 max_tol_ratio=0.322 guards=True inputs_untouched=True
+[PASS] mixed-tail-guards-input-invariance pair candidate_control_match=True require_control=True
+[PASS] padding-random-baseline candidate finite=True within=True max_error=1.562500e-02 max_tol_ratio=0.324 guards=True inputs_untouched=True
+[PASS] padding-random-baseline control finite=True within=True max_error=1.562500e-02 max_tol_ratio=0.324 guards=True inputs_untouched=True
+[PASS] padding-random-baseline pair candidate_control_match=True require_control=True
+[PASS] padding-legal-sentinel candidate finite=True within=True max_error=1.562500e-02 max_tol_ratio=0.324 guards=True inputs_untouched=True
+[PASS] padding-legal-sentinel control finite=True within=True max_error=1.562500e-02 max_tol_ratio=0.324 guards=True inputs_untouched=True
+[PASS] padding-legal-sentinel pair candidate_control_match=True require_control=True
+[PASS] padding-sentinel-invariance pages=5056 reference_unchanged=True candidate_unchanged=True control_unchanged=True
+[PASS] reuse-2048-first candidate finite=True within=True max_error=9.765625e-04 max_tol_ratio=0.054 guards=True inputs_untouched=True
+[PASS] reuse-2048-first control finite=True within=True max_error=9.765625e-04 max_tol_ratio=0.054 guards=True inputs_untouched=True
+[PASS] reuse-2048-first pair candidate_control_match=True require_control=True
+[PASS] reuse-1 candidate finite=True within=True max_error=0.000000e+00 max_tol_ratio=0.000 guards=True inputs_untouched=True
+[PASS] reuse-1 control finite=True within=True max_error=0.000000e+00 max_tol_ratio=0.000 guards=True inputs_untouched=True
+[PASS] reuse-1 pair candidate_control_match=True require_control=True
+[PASS] reuse-2048-second candidate finite=True within=True max_error=9.765625e-04 max_tol_ratio=0.054 guards=True inputs_untouched=True
+[PASS] reuse-2048-second control finite=True within=True max_error=9.765625e-04 max_tol_ratio=0.054 guards=True inputs_untouched=True
+[PASS] reuse-2048-second pair candidate_control_match=True require_control=True
+[PASS] reuse-1-first candidate finite=True within=True max_error=0.000000e+00 max_tol_ratio=0.000 guards=True inputs_untouched=True
+[PASS] reuse-1-first control finite=True within=True max_error=0.000000e+00 max_tol_ratio=0.000 guards=True inputs_untouched=True
+[PASS] reuse-1-first pair candidate_control_match=True require_control=True
+[PASS] reuse-1-to-2048 candidate finite=True within=True max_error=9.765625e-04 max_tol_ratio=0.054 guards=True inputs_untouched=True
+[PASS] reuse-1-to-2048 control finite=True within=True max_error=9.765625e-04 max_tol_ratio=0.054 guards=True inputs_untouched=True
+[PASS] reuse-1-to-2048 pair candidate_control_match=True require_control=True
+exp694 custom case7 guards/tail/input/reuse: PASS

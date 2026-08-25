@@ -1,0 +1,30 @@
+normalized LLVM comparisons (metadata annotations stripped)
+single_token <8,4>: IDENTICAL
+two_token <8,4>: IDENTICAL
+resource target excerpts
+110: maca info  : Function properties for  _Z32paged_decode_single_token_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKii 
+111-  0 bytes stack frame 
+112- maca info  : Used  6 MTregisters, 18 STregisters, 0 bytes shared mem  
+113- maca info  : staticMaxWarps/PEU : 8
+114: maca info  : Function properties for  _Z32paged_decode_single_token_kernelILi8ELi4EEvPK15__maca_bfloat16PS0_PKii 
+115-  0 bytes stack frame 
+116- maca info  : Used  6 MTregisters, 18 STregisters, 0 bytes shared mem  
+117- maca info  : staticMaxWarps/PEU : 8
+--
+122: maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+123-  0 bytes stack frame 
+124- maca info  : Used  22 MTregisters, 26 STregisters, 0 bytes shared mem  
+125- maca info  : staticMaxWarps/PEU : 8
+110: maca info  : Function properties for  _Z32paged_decode_single_token_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKii 
+111-  0 bytes stack frame 
+112- maca info  : Used  20 MTregisters, 18 STregisters, 0 bytes shared mem  
+113- maca info  : staticMaxWarps/PEU : 8
+114: maca info  : Function properties for  _Z32paged_decode_single_token_kernelILi8ELi4EEvPK15__maca_bfloat16PS0_PKii 
+115-  0 bytes stack frame 
+116- maca info  : Used  6 MTregisters, 18 STregisters, 0 bytes shared mem  
+117- maca info  : staticMaxWarps/PEU : 8
+--
+122: maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+123-  0 bytes stack frame 
+124- maca info  : Used  22 MTregisters, 26 STregisters, 0 bytes shared mem  
+125- maca info  : staticMaxWarps/PEU : 8

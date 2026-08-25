@@ -1,0 +1,54 @@
+candidate_sha=ee2e466667b9811d4ad7d5225f08f4bf6e2fc6c1d0250bc682f0e42c5a3d2a18
+workfile_sha=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+control_sha=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+normal_build=PASS candidate_resource_build=PASS control_resource_build=PASS
+target_candidate=80 MTreg / 62 STreg / 8320B shared / 0B stack / 6 waves
+target_control=80 MTreg / 58 STreg / 8320B shared / 0B stack / 6 waves
+vec4_reducer_candidate=64 MTreg / 35 STreg / 0B shared / 0B stack / 8 waves
+vec4_reducer_control=64 MTreg / 35 STreg / 0B shared / 0B stack / 8 waves
+STATIC RESOURCE GATE FAILED / NO C500 / NO A-B / NO OJ
+
+case11 dispatch source (exp617 final template arg true):
+  5505	    if (use_token_parallel) {
+  5506	        if (num_heads_k == 4) {
+  5507	            const bool sync_kv4 = batch_size == 16 &&
+  5508	                (seqlen_k == 4096 || seqlen_k == 12251);
+  5509	            if (sync_kv4) {
+  5510	                if constexpr (separate_tail) {
+  5593	                    } else {
+  5594	                        // exp308 extends exp307 only for case11: each lane
+  5595	                        // maintains one tx-selected head max and lane 0/4
+  5596	                        // publish the two values, avoiding a quad max network.
+  5597	                        // Keep exp114's full K/V register pipeline,
+  5598	                        // resolve the next page-table ID before QK, and
+  5599	                        // exp151 folds the invariant score scale into Q once
+  5600	                        // per split instead of multiplying every token score.
+  5601	                        // exp464: symmetric z-state finalizer ownership.
+  5602	                        paged_decode_case11_headpair_z4_kernel<
+  5603	                            true, true, false, true, true, true, true, true,
+  5604	                            false, true, false, false, false, true, true, true,
+  5605	                            true, true, true, true><<<
+  5606	                            grid, dim3(16, 4, 4)>>>(
+
+Candidate demangled exact-true producer symbol:
+0000000000005730 W void __device_stub__paged_decode_case11_headpair_z4_kernel<true, true, false, true, true, true, true, true, false, true, false, false, false, true, true, true, true, true, true, true>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+
+Resource log target producer and reducer excerpts:
+ maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  80 MTregisters, 62 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 6
+ maca info  : Function properties for  _Z31paged_decode_reduce_vec4_kernelILb1ELb0ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+  0 bytes stack frame 
+ maca info  : Used  64 MTregisters, 35 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 8
+
+Control resource log target producer and reducer excerpts:
+ maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  80 MTregisters, 58 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 6
+ maca info  : Function properties for  _Z31paged_decode_reduce_vec4_kernelILb1ELb0ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+  0 bytes stack frame 
+ maca info  : Used  64 MTregisters, 35 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 8

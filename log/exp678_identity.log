@@ -1,0 +1,8 @@
+exp678 identity
+candidate=385b32b680e1a58294917a5c6c345b899f1dd87b603152e1dabc38418d52835a  solutions/archive/2026-08-24-experiments/cuda_control124611_case8_runtime_row16_exp678.cpp
+parent=3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe  solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+candidate_bytes=270272
+parent_bytes=269538
+expected_changed_regions=4
+changed_mechanism=runtime template bool + static_assert + __shfl_sync_16 branch + case8 explicit instantiation
+unchanged_contract=producer partial ABI metadata grid output ownership and all non-case8 dispatches

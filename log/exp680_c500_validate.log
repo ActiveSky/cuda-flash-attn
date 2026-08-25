@@ -1,0 +1,20 @@
+exp680 C500 correctness validation
+UTC: 2026-08-24
+candidate: solutions/archive/2026-08-24-experiments/cuda_control124611_case14_bf16_hier_tree_exp680.cpp
+candidate_sha256: f9d6677a9d63b149205c2d5316cb92d557f86873bde16c99dd1bd638dba2a01e
+candidate_library: build/exp680_candidate_normal.so
+control_source: solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+control_sha256: 3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+control_library: build/exp678_control_resource.so
+
+Commands (real MetaX C500, no timing/A-B/OJ):
+- exp659 _run_lengths(EXACT_LENGTHS): PASS 37/37; live_splits 0,1,2+,16,256,257; finite, reference tolerance, input immutability, guards, candidate/control pair all pass.
+- exp659 _run_lengths(BOUNDARY_LENGTHS): PASS 23/23; candidate/control pair and safety checks pass.
+- exp659 _run_lengths(RANDOM_LENGTHS): PASS 7/7; candidate/control pair and safety checks pass.
+- exp659 poison baseline and pages-only: PASS; candidate/control finite and poison-invariant.
+- tail-only poison (15 invalid tail tokens): candidate FAIL finite/reference and control FAIL identically; diagnostic only, not candidate-specific.
+- pages+tails poison (3843 padding pages + 15 invalid tail tokens): candidate/control both FAIL identically; diagnostic only, not candidate-specific.
+- exp659 _run_reuse: PASS for 61519->17->61519 and 17->61519; deterministic outputs, candidate/control pair and safety checks pass.
+- case13 full smoke: candidate PASS (match=1.0, max_error=1.220703e-4, finite); control PASS with same result.
+
+Conclusion: no candidate-specific correctness or illegal-launch failure observed. Do not treat tail-poison failures as candidate regressions; current control has the same historical tail-read diagnostic.

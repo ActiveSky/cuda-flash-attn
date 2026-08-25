@@ -1,0 +1,41 @@
+exp668 isolated rebase static audit (no C500/OJ)
+
+source: solutions/archive/2026-08-23-experiments/cuda_control124611_case12_v_dead_half_exp668.cpp
+source_sha256: 8aee7ba576d47f1ca7166abf7113096bec5ebf9db2d510749399831ccc2b2010
+parent: solutions/archive/2026-08-23-experiments/cuda_case13_bf16_normalized_partial_row16_exp666.cpp
+parent_sha256: 3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+mechanism_reference: solutions/archive/2026-08-23-experiments/cuda_case12_v_dead_half_token_bsm_swap_exp667.cpp
+mechanism_reference_sha256: 3ee81bb62888e4978db3673bbe944907ad64365112c94643d530ad8fcb8bfe95
+
+diff audit:
+- exp666 BF16 normalized partial, valid-tail path, and row16 reducer remain enabled
+  only on the existing case13 BF16 producer/reducer dispatch.
+- case12 alone uses V_DEAD_HALF_TOKEN_BSM: token=tz*2+ty, V-next tokenized BSM
+  into dead s_k, scalar K-next into dead s_v, warp release/acquire and pointer
+  half swap. case12 split40, partial ABI, and reducer dispatch are unchanged.
+- all other producer instances keep V_DEAD_HALF_TOKEN_BSM=false; BF16 false
+  instances retain the pre-exp666 tail path so the case12 resource lowering is
+  isolated without changing the case13 BF16 contract.
+
+build gates:
+- normal build: PASS, build/exp668_normal.so
+- resource build: PASS, build/exp668_resource.so
+- device LLVM build: PASS, build/exp668_device.ll
+- no stack frame or spill reported; no illegal synchronization introduced.
+
+resource evidence (xcore1000):
+- case12 producer _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1ELb0EE:
+  76 MT / 54 ST / 8448 shared / 0 stack / 6 waves
+- case13 BF16 producer _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb0ELb1EE:
+  82 MT / 48 ST / 8448 shared / 0 stack / 5 waves
+- case13 row16+BF16 reducer _Z31paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb0ELb1ELb1EE:
+  36 MT / 33 ST / 0 shared / 0 stack / 8 waves
+
+LLVM evidence:
+- case12 contains llvm.mxc.barrier.and.wait4, warp release/acquire around the
+  tokenized predicator BSM load, llvm.mxc.ldg.predicator.bsm.v4i32, and s_k/s_v
+  pointer PHIs for the half swap.
+- case13 reducer contains BF16-to-FP32 loads, 8 row16 shuffle operations, and
+  4 barriers.
+
+No C500, benchmark, OJ submission, archive, or control decision was performed.

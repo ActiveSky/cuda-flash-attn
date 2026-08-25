@@ -1,0 +1,13 @@
+UTC 2026-08-24T18:09:43Z
+command: python3 tools/xpuoj_submit.py --list 20
+| #125658 | Accepted | 66 | cuda.maca-c500 | 2026-08-24T16:30:04.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125636 | Accepted | 66 | cuda.maca-c500 | 2026-08-24T16:11:28.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125625 | Accepted | 66 | cuda.maca-c500 | 2026-08-24T15:57:15.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125585 | Accepted | 65.86 | cuda.maca-c500 | 2026-08-24T15:32:14.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125561 | Accepted | 65.86 | cuda.maca-c500 | 2026-08-24T15:11:40.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125434 | Accepted | 66.14 | cuda.maca-c500 | 2026-08-24T13:11:30.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125388 | Accepted | 65.71 | cuda.maca-c500 | 2026-08-24T12:25:57.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125367 | Accepted | 65.93 | cuda.maca-c500 | 2026-08-24T12:03:18.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125311 | Accepted | 65.86 | cuda.maca-c500 | 2026-08-24T11:12:03.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #125281 | Accepted | 66 | cuda.maca-c500 | 2026-08-24T10:49:21.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+exit_status=0

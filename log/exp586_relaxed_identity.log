@@ -1,0 +1,6 @@
+exp586 relaxed C500 identity
+a5e7b9a3f41a71747478417ab2f8b1cf9288d594367567a1405e4c06f36ee1ad  solutions/archive/2026-08-18-experiments/cuda_case8_single_live_direct_output_exp586.cpp
+3e7ea579efaa60f347b83d91ada55b51ec5b450ed36b5262b12f624214fd333c  build/exp586_relaxed_candidate.so
+Building solutions/archive/2026-08-18-experiments/cuda_case8_single_live_direct_output_exp586.cpp
+Output: build/exp586_relaxed_candidate.so
+Built build/exp586_relaxed_candidate.so

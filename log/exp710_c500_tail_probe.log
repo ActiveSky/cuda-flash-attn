@@ -1,0 +1,34 @@
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3 | candidate=build/exp710_candidate.so | control=build/exp710_control.so | seed=20260910
+[INFO] case8 B=16 length=321 valid_pages=21 tail_tokens=1..15 selected_tail_words=240 block_table=disjoint
+[PASS] case8 baseline candidate/control finite=True inputs_untouched=True
+[PASS] case8 NaN poison reference_unchanged_raw_words=True
+[PASS] case8 candidate NaN-poison finite=True inputs_untouched=True
+[FAIL] case8 control NaN-poison finite=False inputs_untouched=True
+[INFO] case8 NaN tail result candidate_finite=True control_finite=False candidate_control_raw_equal=False nonfinite_words=0/65536
+[PASS] case8 finite-sentinel reference_unchanged_raw_words=True
+[INFO] case8 finite-sentinel output_unchanged candidate=True control=True
+[INFO] case10 B=1 length=321 valid_pages=21 tail_tokens=1..15 selected_tail_words=15 block_table=disjoint
+[PASS] case10 baseline candidate/control finite=True inputs_untouched=True
+[PASS] case10 NaN poison reference_unchanged_raw_words=True
+[PASS] case10 candidate NaN-poison finite=True inputs_untouched=True
+[FAIL] case10 control NaN-poison finite=False inputs_untouched=True
+[INFO] case10 NaN tail result candidate_finite=True control_finite=False candidate_control_raw_equal=False nonfinite_words=0/4096
+[PASS] case10 finite-sentinel reference_unchanged_raw_words=True
+[INFO] case10 finite-sentinel output_unchanged candidate=True control=True
+[INFO] case11 B=16 length=17 valid_pages=2 tail_tokens=1..15 selected_tail_words=240 block_table=disjoint
+[PASS] case11 baseline candidate/control finite=True inputs_untouched=True
+[PASS] case11 NaN poison reference_unchanged_raw_words=True
+[PASS] case11 candidate NaN-poison finite=True inputs_untouched=True
+[FAIL] case11 control NaN-poison finite=False inputs_untouched=True
+[INFO] case11 NaN tail result candidate_finite=True control_finite=False candidate_control_raw_equal=False nonfinite_words=0/65536
+[PASS] case11 finite-sentinel reference_unchanged_raw_words=True
+[INFO] case11 finite-sentinel output_unchanged candidate=True control=True
+[INFO] case14 B=1 length=17 valid_pages=2 tail_tokens=1..15 selected_tail_words=15 block_table=disjoint
+[PASS] case14 baseline candidate/control finite=True inputs_untouched=True
+[PASS] case14 NaN poison reference_unchanged_raw_words=True
+[PASS] case14 candidate NaN-poison finite=True inputs_untouched=True
+[FAIL] case14 control NaN-poison finite=False inputs_untouched=True
+[INFO] case14 NaN tail result candidate_finite=True control_finite=False candidate_control_raw_equal=False nonfinite_words=0/4096
+[PASS] case14 finite-sentinel reference_unchanged_raw_words=True
+[INFO] case14 finite-sentinel output_unchanged candidate=True control=True
+TAIL_PROBE_RESULT=PASS

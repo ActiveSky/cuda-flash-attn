@@ -1,0 +1,36 @@
+exp692 C500 correctness/risk validation
+date=2026-08-24
+gpu=MetaX C500
+torch=2.8.0+metax3.7.1.3
+
+Identity (verified before and after execution):
+candidate_source_sha256=e0fbec43542bfc6a1c3b4980347d1eaab581086f34d24e26231a4fc8b881b167
+control_source_sha256=3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+candidate_library_sha256=3ac1e575c025eacbb8bb95f814a158e2764b79028f48b840a0a3db795c33284b
+control_library_sha256=4bbe97993b7ad219dc607e95a8a45a11c26c8c96042d857084f91098d00ea873
+
+Commands and results (no timing, A/B, OJ, source/workfile/docs/results edits):
+
+1. `python3 tests/c500_exp604_pair_output_b128_special.py --candidate build/exp692_normal.so --control build/exp666_control_normal.so --seed 20260824`
+   exit=1 only because the inherited current-control tail-poison behavior is exposed.
+   - exact lengths 0,1,2,15,16,17,319,320,321,12250,12251: candidate/control PASS; finite, tolerance, and guards all true.
+   - raw BF16 output, all 32 query heads and all 128 dimensions: unpoisoned and padding-pages-only PASS; word order and even-lane B128 slices PASS.
+   - raw tails-only and pages+tails: candidate and control both produced 65536/65536 nonfinite output elements; guards stayed true. This is not candidate-unique: finite masks and output bits were equal for candidate/control.
+
+2. Follow-up `_run_mixed_poison` / `_run_reuse` from the same special harness:
+   - mixed baseline and padding-pages-only: candidate/control PASS.
+   - mixed tails-only and pages+tails: candidate/control both FAIL with the same nonfinite behavior.
+   - poisoned short steps in full->short->full and short->full: candidate/control both expose the same inherited failure; subsequent full steps pass and full-state invariants hold.
+
+3. Generic C500 correctness harness, candidate and control separately:
+   - case11 `--lengths boundary`: PASS, match=1.000000, finite=True (both).
+   - case11 `--lengths random`: PASS, match=1.000000, finite=True (both).
+   - case8 `--lengths full` dispatch smoke: PASS, match=1.000000, finite=True (both).
+
+4. Dedicated in-process input/guard check, candidate and control over full, mixed boundary, mixed random, and zero-length inputs:
+   - all 8 checks PASS: finite=True, inputs=True, guards=True.
+
+5. Dedicated no-poison workspace reuse, same process:
+   - full->short->full and short->full: candidate/control PASS at every step; candidate/control output bits equal; full-state invariants PASS.
+
+Verdict: no candidate-unique correctness failure, input mutation, guard overwrite, or illegal launch was observed. The pair-output B128 path passes valid, boundary, random, full, exact, raw-lane, and no-poison-reuse checks. The current control itself fails the NaN tail-poison test, so that shared inherited issue is retained as a risk flag; no OJ submission was made by this task.

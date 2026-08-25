@@ -1,0 +1,36 @@
+GPU=MetaX C500 torch=2.8.0+metax3.7.1.3
+candidate_library=build/exp700_candidate_normal.so
+control_library=build/exp700_control_resource.so
+[INFO] case1 custom B=1 L=1 KV=4 num_blocks=2 table=[[1, 0]]
+[PASS] case1 reference finite
+[PASS] case1 candidate baseline page-table/GQA/BF16 finite=True tol=True guards=True inputs=True tags=True max_error=0.000000e+00
+[PASS] case1 control baseline page-table/GQA/BF16 finite=True tol=True guards=True inputs=True tags=True max_error=0.000000e+00
+[PASS] case1 candidate/control bit equality
+[PASS] case1 candidate deterministic repeat finite=True tol=True guards=True inputs=True tags=True max_error=0.000000e+00
+[PASS] case1 control deterministic repeat finite=True tol=True guards=True inputs=True tags=True max_error=0.000000e+00
+[PASS] case1 candidate deterministic bits
+[PASS] case1 control deterministic bits
+[INFO] computing case14 full reference for reuse sequence
+[PASS] case14 full reference finite
+[PASS] case14 candidate full (after case1) finite=True tol=True guards=True inputs=True tags=True max_error=1.220703e-04
+[PASS] case14 control full (after case1) finite=True tol=True guards=True inputs=True tags=True max_error=1.220703e-04
+[PASS] case14 candidate short reuse step finite=True tol=True guards=True inputs=True tags=True max_error=3.906250e-03
+[PASS] case14 control short reuse step finite=True tol=True guards=True inputs=True tags=True max_error=3.906250e-03
+[PASS] case14 candidate full after short finite=True tol=True guards=True inputs=True tags=True max_error=1.220703e-04
+[PASS] case14 control full after short finite=True tol=True guards=True inputs=True tags=True max_error=1.220703e-04
+[PASS] case14 candidate full-state reuse invariant
+[PASS] case14 control full-state reuse invariant
+[PASS] case1 candidate after case14 finite=True tol=True guards=True inputs=True tags=True max_error=0.000000e+00
+[PASS] case1 control after case14 finite=True tol=True guards=True inputs=True tags=True max_error=0.000000e+00
+[PASS] case1 candidate case1->case14->case1 invariant
+[PASS] case1 control case1->case14->case1 invariant
+[PASS] case14 candidate reverse-sequence full finite=True tol=True guards=True inputs=True tags=True max_error=1.220703e-04
+[PASS] case14 control reverse-sequence full finite=True tol=True guards=True inputs=True tags=True max_error=1.220703e-04
+[PASS] case1 candidate reverse-sequence final finite=True tol=True guards=True inputs=True tags=True max_error=0.000000e+00
+[PASS] case1 control reverse-sequence final finite=True tol=True guards=True inputs=True tags=True max_error=0.000000e+00
+[PASS] case14 candidate case14->case1 full invariant
+[PASS] case14 control case14->case1 full invariant
+[PASS] case1 candidate reverse final invariant
+[PASS] case1 control reverse final invariant
+SPECIAL_RESULT=PASS
+exit_code=0

@@ -1,0 +1,38 @@
+exp700 final identity UTC
+2026-08-24T14:58:22Z
+55f213e1718cb5a29cec8cb16a6641fbe8badd8c5c138a88ca95755858aef527  solutions/archive/2026-08-24-experiments/cuda_control124611_case1_shared_v_fanout_exp700.cpp
+3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe  solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+1c8368026ca34a929174c38a88a8e5ab084833315968a52cd1a55cdf3a6c6737  build/exp700_candidate_normal.so
+73e52a81f0c8d87e3d14a2b2e9b338801339a488f16eea20c7d75f07973dc2e8  build/exp700_candidate_resource.so
+608c93c732180e8cb96db73586d9866918972b64e47907aaa415d4b54cdf2374  build/exp700_control_resource.so
+source diff stat
+candidate target resource
+ maca info  : Function properties for  _Z41paged_decode_case1_shared_v_fanout_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKiS5_i 
+  32 bytes stack frame 
+ maca info  : Used  8 MTregisters, 38 STregisters, 256 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 8
+ maca info  : Function properties for  _Z32paged_decode_single_token_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKii 
+control single-token resource
+ maca info  : Function properties for  _Z32paged_decode_single_token_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKii 
+  0 bytes stack frame 
+ maca info  : Used  6 MTregisters, 18 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 8
+ maca info  : Function properties for  _Z32paged_decode_single_token_kernelILi8ELi4EEvPK15__maca_bfloat16PS0_PKii 
+candidate lowering target
+1:define protected metaxgpu_kernel void @_Z41paged_decode_case1_shared_v_fanout_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKiS5_i(ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch) local_unnamed_addr #7 comdat {
+32:  call void @llvm.memcpy.p5.p4.i64(ptr addrspace(5) noundef align 16 dereferenceable(16) %value, ptr addrspace(4) noundef align 16 dereferenceable(16) %arrayidx15, i64 16, i1 false), !tbaa.struct !34, !call_argsrelate !35
+43:  tail call void @llvm.mxc.barrier()
+80:  ret void
+target symbol counts
+12
+control_target_symbol=absent
+CPU special status
+[PASS] case1 candidate reverse final invariant
+[PASS] case1 control reverse final invariant
+SPECIAL_RESULT=PASS
+exit_code=0
+CPU logic status
+[PASS] case14: kv4-z4-mma bounded   batch=   1 seqlen_k=    64 kv=4 split=    257 | max_err=5.551e-16 mean_err=7.073e-17 | seqlen 范围 [37,37]
+
+总计: 14/14 通过
+direct_exit_code=0

@@ -1,0 +1,10 @@
+exp608 relaxed OJ archive and SHA verification
+command: python3 tools/archive_cuda_submissions.py
+result: archived 346 submissions; manifest: /data/cuda-flash-attn/solutions/archive/SUBMISSIONS.md
+
+raw: results/raw/cuda_123872_raw.json
+raw SHA-256: adf1cd9d51b92451779368c4550c6fa53c3580173cb810ecf97b7f46dc3ea6c3
+immutable submission: solutions/archive/2026-08-23-submissions/cuda_123872.cpp
+immutable submission SHA-256: 1ed233b3ba65106c80024d0aece5c006f9b05678d8f36069800c1f84fd6d4f5f
+candidate SHA-256: 1ed233b3ba65106c80024d0aece5c006f9b05678d8f36069800c1f84fd6d4f5f
+raw, candidate, and immutable submission are identity-verified.

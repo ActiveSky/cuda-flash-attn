@@ -1,0 +1,50 @@
+bundle_sha 1499ce69d186977fb5c49ce75791238fcfcfac83d5e465a48e255a752cac7a36  solutions/archive/2026-08-24-experiments/cuda_control124611_short123_bundle_exp709.cpp
+
+normal/resource/llvm outputs
+-rw-r--r-- 1 root root 3705570 Aug 24 18:23 build/exp709_device.ll
+-rwxr-xr-x 1 root root  804608 Aug 24 18:23 build/exp709_normal.so
+-rwxr-xr-x 1 root root  804608 Aug 24 18:23 build/exp709_resource.so
+
+case1 exp700 lowering/resource
+IR kernel: 601:define protected metaxgpu_kernel void @_Z41paged_decode_case1_shared_v_fanout_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKiS5_i(ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch) local_unnamed_addr #7 comdat {
+110: maca info  : Function properties for  _Z41paged_decode_case1_shared_v_fanout_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKiS5_i 
+111-  32 bytes stack frame 
+112- maca info  : Used  8 MTregisters, 38 STregisters, 256 bytes shared mem  
+113- maca info  : staticMaxWarps/PEU : 8
+
+case2 exp701 lowering/resource
+IR kernel: 1107:define protected metaxgpu_kernel void @_Z29paged_decode_two_token_kernelILi8ELi4ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch, float noundef %sm_scale) local_unnamed_addr #12 comdat {
+1151:  %8 = tail call noundef <4 x i32> @llvm.mxc.ldg.predicator.v4i32(ptr addrspace(1) %7, i32 0, i64 -1, i1 true, i1 true, i1 false, i1 false), !call_argsrelate !37
+1153:  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %add.ptr32, i32 0, <4 x i32> %8, i64 %9, i1 true, i1 false, i1 false), !call_argsrelate !38
+1479:declare <4 x i32> @llvm.mxc.ldg.predicator.v4i32(ptr addrspace(1) noalias nocapture, i32 immarg, i64, i1 immarg, i1 immarg, i1 immarg, i1 immarg) #13
+1485:declare void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) noalias nocapture, i32 immarg, <4 x i32>, i64, i1 immarg, i1 immarg, i1 immarg) #13
+126: maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi8ELi4ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+127-  0 bytes stack frame 
+128- maca info  : Used  23 MTregisters, 32 STregisters, 0 bytes shared mem  
+129- maca info  : staticMaxWarps/PEU : 8
+
+case3 exp699 lowering/resource
+IR kernel: 13137:define protected metaxgpu_kernel void @_Z34paged_decode_token_parallel_kernelILi4ELi8ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #18 comdat {
+13181:  tail call void @llvm.mxc.barrier()
+13444:  tail call void @llvm.mxc.barrier.inst()
+14450:  tail call void @llvm.mxc.barrier()
+15224:  tail call void @llvm.mxc.barrier()
+15263:  %670 = tail call <4 x i32> @llvm.mxc.ldg.predicator.v4i32(ptr addrspace(1) %669, i32 0, i64 -1, i1 true, i1 true, i1 false, i1 false), !alias.scope !181, !call_argsrelate !184
+15279:  %673 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1720, i32 %owned.sroa.0.0.i1682)
+15284:  %676 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1717, i32 %owned.sroa.5.0.i1681)
+15289:  %679 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1714, i32 %owned.sroa.7.0.i1680)
+15294:  %682 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i, i32 %owned.sroa.9.0.i1679)
+15403:  %717 = tail call <4 x i32> @llvm.mxc.ldg.predicator.v4i32(ptr addrspace(1) %716, i32 0, i64 -1, i1 true, i1 true, i1 false, i1 false), !alias.scope !185, !call_argsrelate !37
+15419:  %720 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1732, i32 %owned.sroa.0.0.i)
+15424:  %723 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1729, i32 %owned.sroa.5.0.i)
+15429:  %726 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1726, i32 %owned.sroa.7.0.i)
+15434:  %729 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1723, i32 %owned.sroa.9.0.i)
+15479:  tail call void @llvm.mxc.barrier()
+15530:  tail call void @llvm.mxc.barrier()
+
+resource risk assessment
+normal/resource/LLVM all exit 0; no compilation error.
+case1: 32-byte stack, 256-byte shared, 8 static waves; no illegal launch/resource diagnostic.
+case2: 0-byte stack, 0 shared, 8 static waves; native B128 load/store lowered.
+case3: 0-byte stack, 8320-byte shared, 4 static waves; native vector loads plus BSM lowered; no illegal launch/resource diagnostic.
+No correctness execution was run by this isolated implementation task; no new correctness failure was observed in compile/static checks.

@@ -1,0 +1,64 @@
+exp619 static resource gate summary
+UTC 2026-08-21T11:38:30Z
+candidate frozen SHA / control SHA / restored work SHA:
+4740515a16d64cf559c90b7eec029cb59daf3cc7910f8d410c87bccf97a4f038  solutions/archive/2026-08-21-experiments/cuda_case2_exact_single_token_vcopy_exp619.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/cuda_maca_optimized.cpp
+
+normal build status/artifact hashes:
+log/exp619_control_build.log:4:source SHA-256:
+log/exp619_control_build.log:6:command: tools/build_local_maca.sh solutions/archive/2026-08-16-submissions/cuda_113889.cpp build/exp619_control_normal.so
+log/exp619_control_build.log:164:exit: 0
+log/exp619_control_build.log:165:artifact: build/exp619_control_normal.so
+log/exp619_control_build.log:166:4bbe97993b7ad219dc607e95a8a45a11c26c8c96042d857084f91098d00ea873  build/exp619_control_normal.so
+log/exp619_candidate_build.log:4:source SHA-256:
+log/exp619_candidate_build.log:6:command: tools/build_local_maca.sh solutions/cuda_maca_optimized.cpp build/exp619_candidate_normal.so
+log/exp619_candidate_build.log:164:exit: 0
+log/exp619_candidate_build.log:165:artifact: build/exp619_candidate_normal.so
+log/exp619_candidate_build.log:166:02cce09a6af15c4f8efc8550bbcba87b22a21d0d0bce8589f76ab527415eab87  build/exp619_candidate_normal.so
+
+target two-token resource records:
+-- candidate --
+123- maca info  : staticMaxWarps/PEU : 8
+124: maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi4ELi8ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+125-  0 bytes stack frame 
+126- maca info  : Used  22 MTregisters, 24 STregisters, 0 bytes shared mem  
+127- maca info  : staticMaxWarps/PEU : 8
+128: maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi8ELi4ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+129-  0 bytes stack frame 
+130- maca info  : Used  24 MTregisters, 30 STregisters, 0 bytes shared mem  
+131- maca info  : staticMaxWarps/PEU : 8
+132: maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi8ELi4ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+133-  0 bytes stack frame 
+134- maca info  : Used  22 MTregisters, 24 STregisters, 0 bytes shared mem  
+135- maca info  : staticMaxWarps/PEU : 8
+136- maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+-- control --
+123- maca info  : staticMaxWarps/PEU : 8
+124: maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+125-  0 bytes stack frame 
+126- maca info  : Used  22 MTregisters, 26 STregisters, 0 bytes shared mem  
+127- maca info  : staticMaxWarps/PEU : 8
+128: maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+129-  0 bytes stack frame 
+130- maca info  : Used  22 MTregisters, 26 STregisters, 0 bytes shared mem  
+131- maca info  : staticMaxWarps/PEU : 8
+132- maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+
+candidate dispatch source references:
+solutions/archive/2026-08-21-experiments/cuda_case2_exact_single_token_vcopy_exp619.cpp:147:template <int KV_HEADS, int GQA, bool EXACT_SINGLE_TOKEN_VCOPY = false>
+solutions/archive/2026-08-21-experiments/cuda_case2_exact_single_token_vcopy_exp619.cpp:172:    if constexpr (EXACT_SINGLE_TOKEN_VCOPY) {
+solutions/archive/2026-08-21-experiments/cuda_case2_exact_single_token_vcopy_exp619.cpp:5222:            paged_decode_two_token_kernel<4, 8, false><<<grid, 256>>>(
+solutions/archive/2026-08-21-experiments/cuda_case2_exact_single_token_vcopy_exp619.cpp:5228:            paged_decode_two_token_kernel<8, 4, true><<<grid, 128>>>(
+solutions/archive/2026-08-21-experiments/cuda_case2_exact_single_token_vcopy_exp619.cpp:5232:            paged_decode_two_token_kernel<8, 4, false><<<grid, 128>>>(
+solutions/cuda_maca_optimized.cpp:5200:            paged_decode_two_token_kernel<4, 8><<<grid, 256>>>(
+
+compiled candidate two-token stubs:
+0000000000005480 W void __device_stub__paged_decode_two_token_kernel<4, 8, false>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, int, float)
+0000000000005640 W void __device_stub__paged_decode_two_token_kernel<8, 4, false>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, int, float)
+0000000000005560 W void __device_stub__paged_decode_two_token_kernel<8, 4, true>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, int, float)
+compiled control two-token stubs:
+0000000000004430 W void __device_stub__paged_decode_two_token_kernel<4, 8>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, int, float)
+0000000000004510 W void __device_stub__paged_decode_two_token_kernel<8, 4>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, int, float)
+
+gate decision: STATIC RESOURCE GATE FAILED; candidate <8,4,true> is 24 MT / 30 ST / 0 shared / 0 stack / 8 waves versus control <8,4> 22 MT / 26 ST / 0 shared / 0 stack / 8 waves. No CPU/C500 correctness, A/B, OJ, or archive submission performed.

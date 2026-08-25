@@ -1,0 +1,8 @@
+exp631 prebuild identity
+2026-08-22T08:05:13Z
+a2dd82e5b36496d02f5c3a3cd1919277e7a4327a956694d36ea45fa8969c8754  solutions/archive/2026-08-22-experiments/cuda_case2_source_owner_native_b128_single_launch_exp631.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/cuda_maca_optimized.cpp
+diff candidate/control:
+ ...rce_owner_native_b128_single_launch_exp631.cpp} | 63 +++++++++++++++++++++-
+ 1 file changed, 62 insertions(+), 1 deletion(-)

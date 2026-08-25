@@ -1,0 +1,35 @@
+usage: c500_paged_decode_harness.py [-h] [--library LIBRARY] [--cases CASES]
+                                    [--seed SEED]
+                                    [--lengths {boundary,random,full}]
+                                    [--length-values LENGTH_VALUES]
+                                    [--full-length] [--benchmark]
+                                    [--warmup WARMUP]
+                                    [--iterations ITERATIONS]
+                                    [--samples SAMPLES]
+
+Local GPU correctness harness for the XPUOJ paged-KV decode kernel. This loads
+a MACA-built shared object with ctypes, invokes its ``run_kernel`` entry point
+with the exact OJ ABI, and compares against the installed
+``flash_attn_with_kvcache`` reference. Test shapes are obtained exclusively
+from :mod:`c500_case_manifest`, which parses an accepted OJ SPJ response.
+Examples: tools/build_local_maca.sh solutions/cuda_maca_optimized.cpp
+build/cuda_maca_optimized.so python tests/c500_paged_decode_harness.py
+--library build/cuda_maca_optimized.so python
+tests/c500_paged_decode_harness.py --cases 7,9 --benchmark
+
+options:
+  -h, --help            show this help message and exit
+  --library LIBRARY
+  --cases CASES
+  --seed SEED
+  --lengths {boundary,random,full}
+  --length-values LENGTH_VALUES
+                        comma-separated exact cache lengths; each value is
+                        broadcast to the selected case's whole batch and
+                        tested in the same process
+  --full-length         run every selected case at cache capacity (equivalent
+                        to --lengths full)
+  --benchmark
+  --warmup WARMUP
+  --iterations ITERATIONS
+  --samples SAMPLES

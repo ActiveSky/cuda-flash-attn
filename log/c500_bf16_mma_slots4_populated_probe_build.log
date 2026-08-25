@@ -1,0 +1,7 @@
+Building tests/c500_bf16_mma_slots4_populated_probe.cpp
+Compiler: /opt/maca/mxgpu_llvm/bin/mxcc
+MACA path: /opt/maca
+CUDA bridge: /opt/maca-3.7.1/tools/cu-bridge
+Target: xcore1000
+Output: build/c500_bf16_mma_slots4_populated_probe.so
+Built build/c500_bf16_mma_slots4_populated_probe.so

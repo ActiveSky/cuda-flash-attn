@@ -1,0 +1,4 @@
+command: tools/build_local_maca.sh solutions/archive/2026-08-16-submissions/cuda_113889.cpp build/exp625_control_resource.so -resource-usage
+exit: 0
+target: _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0EE
+resource: 0 stack, 82 MTregisters, 50 STregisters, 8448 bytes shared mem, staticMaxWarps/PEU 5

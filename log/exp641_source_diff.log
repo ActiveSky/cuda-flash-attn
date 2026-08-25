@@ -1,0 +1,158 @@
+--- solutions/archive/2026-08-16-submissions/cuda_113889.cpp	2026-08-22 13:42:53.194281162 +0000
++++ solutions/archive/2026-08-22-experiments/cuda_case2_cta_shared_kv_exp641.cpp	2026-08-22 18:30:31.596885250 +0000
+@@ -226,6 +226,137 @@
+         __floats2bfloat162_rn(outv[2] * inv_l, outv[3] * inv_l);
+ }
+ 
++// Case-2-only KV owner path (exp641).  The four query-head warps in a
++// KV_HEADS=8/GQA=4 CTA otherwise issue the same two token loads four times.
++// Keep one physical owner warp for the two legal token rows, publish their
++// raw-BF16 K/V bytes through exactly 1 KiB of shared memory, and retain the
++// scalar FP32 QK/softmax/PV math below.  The host enables this specialization
++// only for the fixed B=4, KV8, capacity-2 display shape.
++template <int KV_HEADS, int GQA>
++__global__ void __launch_bounds__(GQA * 32, 8)
++paged_decode_two_token_shared_kv_kernel(
++    const __nv_bfloat16* __restrict__ q,
++    const __nv_bfloat16* __restrict__ k_cache,
++    const __nv_bfloat16* __restrict__ v_cache,
++    __nv_bfloat16* __restrict__ out,
++    const int32_t* __restrict__ cache_seqlens,
++    const int32_t* __restrict__ block_table,
++    int pages_per_batch,
++    float sm_scale)
++{
++    static_assert(KV_HEADS == 8 && GQA == 4,
++                  "exp641 is only admitted for B4/KV8/GQA4");
++    static_assert(KV_HEADS * GQA == 32, "fixed h32 GQA mapping");
++
++    const int lane = threadIdx.x;
++    const int warp = threadIdx.z;
++    const int b = blockIdx.x / KV_HEADS;
++    const int kv_head = blockIdx.x & (KV_HEADS - 1);
++    const int seqlen = cache_seqlens[b];
++    const int pid = block_table[b * pages_per_batch];
++
++    // [token][K/V][128 bf16] = 1024 bytes.  The two 512-byte planes are
++    // deliberately raw BF16 (uint32_t pairs) so consumers do not introduce a
++    // format conversion or a second shared allocation.
++    __shared__ __align__(16) uint32_t s_k[2][U32_PER_ROW];
++    __shared__ __align__(16) uint32_t s_v[2][U32_PER_ROW];
++
++    if (warp == 0) {
++        const int kv_stride_u32 = KV_HEADS * U32_PER_ROW;
++        const uint32_t* k_page = reinterpret_cast<const uint32_t*>(
++            k_cache + (pid * PAGE_TOKENS * KV_HEADS + kv_head) * HEAD_DIM);
++        const uint32_t* v_page = reinterpret_cast<const uint32_t*>(
++            v_cache + (pid * PAGE_TOKENS * KV_HEADS + kv_head) * HEAD_DIM);
++
++        // Token zero is the first legal row for this capacity-2 fast path.
++        // Only the owner warp touches global K/V, two uint32 pairs per row.
++        if (seqlen >= 1) {
++            const uint32_t* k0 = k_page;
++            const uint32_t* v0 = v_page;
++            s_k[0][lane] = k0[lane];
++            s_k[0][lane + 32] = k0[lane + 32];
++            s_v[0][lane] = v0[lane];
++            s_v[0][lane + 32] = v0[lane + 32];
++        }
++
++        // Do not touch the padding slot: cache_seqlens, not capacity, is the
++        // read boundary.  The branch is CTA-uniform and token one is loaded
++        // only for the exact two-token logical length.
++        if (seqlen == 2) {
++            const uint32_t* k1 = k_page + kv_stride_u32;
++            const uint32_t* v1 = v_page + kv_stride_u32;
++            s_k[1][lane] = k1[lane];
++            s_k[1][lane + 32] = k1[lane + 32];
++            s_v[1][lane] = v1[lane];
++            s_v[1][lane + 32] = v1[lane + 32];
++        }
++    }
++
++    // One unconditional CTA barrier publishes both token rows before any of
++    // the four query-head warps consume them, including the logical-length-1
++    // case where only token zero was written.
++    __syncthreads();
++    if (seqlen <= 0) return;
++
++    const int h = kv_head * GQA + warp;
++    const uint32_t* q_u32 = reinterpret_cast<const uint32_t*>(
++        q + (b * 32 + h) * HEAD_DIM);
++    const uint32_t q0 = q_u32[lane];
++    const uint32_t q1 = q_u32[lane + 32];
++    const float qr[4] = {
++        bf16_lo(q0), bf16_hi(q0), bf16_lo(q1), bf16_hi(q1)
++    };
++
++    const uint32_t k00 = s_k[0][lane];
++    const uint32_t k01 = s_k[0][lane + 32];
++    float part0 = qr[0] * bf16_lo(k00) + qr[1] * bf16_hi(k00)
++                + qr[2] * bf16_lo(k01) + qr[3] * bf16_hi(k01);
++#pragma unroll
++    for (int off = 16; off > 0; off >>= 1) {
++        part0 += __shfl_xor_sync(0xffffffffu, part0, off);
++    }
++    const float score0 = part0 * sm_scale;
++
++    float score1 = 0.f;
++    if (seqlen == 2) {
++        const uint32_t k10 = s_k[1][lane];
++        const uint32_t k11 = s_k[1][lane + 32];
++        float part1 = qr[0] * bf16_lo(k10) + qr[1] * bf16_hi(k10)
++                    + qr[2] * bf16_lo(k11) + qr[3] * bf16_hi(k11);
++#pragma unroll
++        for (int off = 16; off > 0; off >>= 1) {
++            part1 += __shfl_xor_sync(0xffffffffu, part1, off);
++        }
++        score1 = part1 * sm_scale;
++    }
++
++    const float m = seqlen == 2 ? fmaxf(score0, score1) : score0;
++    const float w0_scaled = seqlen == 2 ? __expf(score0 - m) : 1.f;
++    const float w1 = seqlen == 2 ? __expf(score1 - m) : 0.f;
++    const float inv_l = 1.f / (w0_scaled + w1);
++
++    const uint32_t v00 = s_v[0][lane];
++    const uint32_t v01 = s_v[0][lane + 32];
++    float outv[4] = {
++        w0_scaled * bf16_lo(v00), w0_scaled * bf16_hi(v00),
++        w0_scaled * bf16_lo(v01), w0_scaled * bf16_hi(v01)
++    };
++    if (seqlen == 2) {
++        const uint32_t v10 = s_v[1][lane];
++        const uint32_t v11 = s_v[1][lane + 32];
++        outv[0] += w1 * bf16_lo(v10);
++        outv[1] += w1 * bf16_hi(v10);
++        outv[2] += w1 * bf16_lo(v11);
++        outv[3] += w1 * bf16_hi(v11);
++    }
++
++    __nv_bfloat16* out_row = out + (b * 32 + h) * HEAD_DIM;
++    __nv_bfloat162* out2 = reinterpret_cast<__nv_bfloat162*>(out_row);
++    out2[lane] = __floats2bfloat162_rn(outv[0] * inv_l, outv[1] * inv_l);
++    out2[lane + 32] =
++        __floats2bfloat162_rn(outv[2] * inv_l, outv[3] * inv_l);
++}
++
+ // bf16 -> fp32 转换。
+ // 注意：评测环境的 maca cute 移植版未提供 cute::convert（编译报
+ // "no member named 'convert' in namespace 'cute'"），因此统一使用原生
+@@ -5196,7 +5327,16 @@
+     }
+     if (seqlen_k == 2) {
+         const int grid = (int)(batch_size * num_heads_k);
+-        if (num_heads_k == 4) {
++        if (num_heads_k == 8 && batch_size == 4) {
++            // exp641: only case2's B4/KV8 capacity-2 shape uses a single
++            // physical warp to publish both legal K/V rows through 1 KiB of
++            // raw-BF16 shared memory before the four query-head warps run.
++            // All other two-token dispatches retain the control kernel.
++            paged_decode_two_token_shared_kv_kernel<8, 4><<<
++                grid, dim3(32, 1, 4)>>>(
++                q, k_cache_paged, v_cache_paged, output,
++                cache_seqlens, block_table, (int)pages_per_batch, sm_scale);
++        } else if (num_heads_k == 4) {
+             paged_decode_two_token_kernel<4, 8><<<grid, 256>>>(
+                 q, k_cache_paged, v_cache_paged, output,
+                 cache_seqlens, block_table, (int)pages_per_batch, sm_scale);

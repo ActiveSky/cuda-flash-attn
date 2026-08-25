@@ -1,0 +1,32 @@
+exp673 OJ submission log
+started_utc: 2026-08-24T01:29:02Z
+candidate: solutions/archive/2026-08-24-experiments/cuda_control124611_case9_bf16_row16_exp673.cpp
+workfile: solutions/cuda_maca_optimized.cpp
+candidate_sha256: 730c05bfb34fd113a16a69822ed5ce93c841ba57c2ceebcb8ccfd2213b194341
+control_sha256: 3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+initial_workfile_sha256: 2956d31cbc3ff45a80605bcfa766632f68e64cb36a8a3f04e8b5332cb1973b98
+preflight_queue_command: python3 tools/xpuoj_submit.py --list 10
+preflight_queue_result: all 10 listed submissions were terminal Accepted; newest #124660 Accepted 66
+candidate_applied_with: apply_patch (exact exp672 to exp673 diff)
+post_apply_workfile_sha256: 730c05bfb34fd113a16a69822ed5ce93c841ba57c2ceebcb8ccfd2213b194341
+dry_run_command: python3 tools/xpuoj_submit.py solutions/cuda_maca_optimized.cpp
+dry_run_result: target contest #11 problem #1; language cuda.maca-c500; 269915 bytes; no submission created
+pre_submit_sha256: 730c05bfb34fd113a16a69822ed5ce93c841ba57c2ceebcb8ccfd2213b194341
+pre_submit_queue: all 10 listed submissions were terminal Accepted
+submit_command: python3 tools/xpuoj_submit.py solutions/cuda_maca_optimized.cpp --submit --poll-seconds 30 --timeout-seconds 900
+submit_invocation: exactly once authorized; submission ID and terminal watch output follow
+submission_id: 124669
+submit_output_initial: created submission #124669; progress=None status=Pending
+watch_output: submission=124669 progress=Running status=Pending
+terminal_status: Accepted
+progress_type: Finished
+submit_time_utc: 2026-08-24T01:30:18.000Z
+total_score: 66.07
+time_used_ms: 1595
+memory_used_kb: 23060404
+case_results: 1=3ms/92, 2=4ms/90, 3=9ms/83, 4=23ms/72, 5=17ms/73, 6=28ms/63, 7=227ms/55, 8=94ms/54, 9=235ms/57, 10=39ms/62, 11=222ms/52, 12=374ms/60, 13=181ms/57, 14=139ms/55
+target_case9: 235ms/57 (control 236us/57; target threshold >=58 not reached)
+raw_archive: results/raw/cuda_124669_raw.json
+final_queue: #124669 Accepted 66.07; no nonterminal submissions in --list 10
+final_workfile_sha256: 730c05bfb34fd113a16a69822ed5ce93c841ba57c2ceebcb8ccfd2213b194341
+final_candidate_sha256: 730c05bfb34fd113a16a69822ed5ce93c841ba57c2ceebcb8ccfd2213b194341

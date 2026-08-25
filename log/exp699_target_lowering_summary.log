@@ -1,0 +1,6 @@
+target_function=case3_optin
+native_ldg_predicator_v4i32=3
+raw_bsm_bpermute=8
+global_to_shared_ldg_bsm=4
+addrspace5=alloca=memcpy=1
+barrier=6

@@ -1,0 +1,108 @@
+Building solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp
+Compiler: /opt/maca/mxgpu_llvm/bin/mxcc
+MACA path: /opt/maca
+CUDA bridge: /opt/maca-3.7.1/tools/cu-bridge
+Target: xcore1000
+Output: build/exp596_candidate.ll
+mxcc: warning: argument unused during compilation: '-shared' [-Wunused-command-line-argument]
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:359:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  359 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:725:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  725 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:1253:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1253 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:1253:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:5626:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, true, false, false, false, false, false, true, false, false, false>' requested here
+ 5626 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:1253:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1253 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:5638:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false>' requested here
+ 5638 |                     paged_decode_token_parallel_kernel<4, 8, false><<<
+      |                     ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:1253:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1253 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:5773:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, false, false, false, false, false, true, false, false, false, false, true, true, true, true, false>' requested here
+ 5773 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:1253:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1253 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:5795:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, true, false, false, false, false, true, false, false, true, false, true, true, false, false, true>' requested here
+ 5795 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:725:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  725 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:5810:9: note: in instantiation of function template specialization 'paged_decode_split_qk_pair_kernel<8, 4>' requested here
+ 5810 |         paged_decode_split_qk_pair_kernel<8, 4><<<grid, 128>>>(
+      |         ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:359:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  359 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:5817:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<4, 8>' requested here
+ 5817 |             paged_decode_split_kernel<4, 8><<<grid, 256>>>(
+      |             ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:359:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  359 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:5823:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<8, 4>' requested here
+ 5823 |             paged_decode_split_kernel<8, 4><<<grid, 128>>>(
+      |             ^
+10 warnings generated when compiling for xcore1000.
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:359:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  359 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:725:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  725 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:1253:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1253 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:1253:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:5626:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, true, false, false, false, false, false, true, false, false, false>' requested here
+ 5626 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:1253:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1253 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:5638:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false>' requested here
+ 5638 |                     paged_decode_token_parallel_kernel<4, 8, false><<<
+      |                     ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:1253:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1253 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:5773:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, false, false, false, false, false, true, false, false, false, false, true, true, true, true, false>' requested here
+ 5773 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:1253:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+ 1253 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:5795:21: note: in instantiation of function template specialization 'paged_decode_token_parallel_kernel<8, 4, true, false, false, false, false, true, false, false, true, false, true, true, false, false, true>' requested here
+ 5795 |                     paged_decode_token_parallel_kernel<
+      |                     ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:725:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  725 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:5810:9: note: in instantiation of function template specialization 'paged_decode_split_qk_pair_kernel<8, 4>' requested here
+ 5810 |         paged_decode_split_qk_pair_kernel<8, 4><<<grid, 128>>>(
+      |         ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:359:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  359 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:5817:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<4, 8>' requested here
+ 5817 |             paged_decode_split_kernel<4, 8><<<grid, 256>>>(
+      |             ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:359:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+  359 | __global__ void __launch_bounds__(256, 6)
+      |                                        ^
+solutions/archive/2026-08-18-experiments/cuda_case14_final_state_store_handoff_exp596.cpp:5823:13: note: in instantiation of function template specialization 'paged_decode_split_kernel<8, 4>' requested here
+ 5823 |             paged_decode_split_kernel<8, 4><<<grid, 128>>>(
+      |             ^
+10 warnings generated when compiling for host.
+Built build/exp596_candidate.ll

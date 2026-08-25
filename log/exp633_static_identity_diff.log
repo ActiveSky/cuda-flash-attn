@@ -1,0 +1,45 @@
+control_sha=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+candidate_sha=ca09ee17906429df954c42611e458ee964c4120c7ec85f3e57ca6f3502230411
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+ca09ee17906429df954c42611e458ee964c4120c7ec85f3e57ca6f3502230411  solutions/archive/2026-08-22-experiments/cuda_case1_source_owner_v_fanout_exp633.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/cuda_maca_optimized.cpp
+diff_stat:
+ .../cuda_case1_source_owner_v_fanout_exp633.cpp}   | 27 ++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+diff:
+--- solutions/archive/2026-08-16-submissions/cuda_113889.cpp	2026-08-22 06:20:06.719697178 +0000
++++ solutions/archive/2026-08-22-experiments/cuda_case1_source_owner_v_fanout_exp633.cpp	2026-08-22 09:48:10.729749797 +0000
+@@ -129,6 +129,33 @@
+     static_assert(GQA * U4_PER_ROW <= 128, "single-token CTA is at most 128 threads");
+ 
+     const int copy = threadIdx.x;
++
++    // Case1 has one KV head with eight GQA query heads.  Make the sixteen
++    // aligned V chunks source-owned: each chunk is loaded once and fanned out
++    // to all eight output rows.  The other single-token specialization keeps
++    // the control per-query-head copy below unchanged.
++    if constexpr (KV_HEADS == 4 && GQA == 8) {
++        static_assert(U4_PER_ROW == 16, "case1 V row has sixteen uint4 chunks");
++        if (copy >= U4_PER_ROW) return;
++        const int b = blockIdx.x / KV_HEADS;
++        const int kv_head = blockIdx.x & (KV_HEADS - 1);
++        const int pid = block_table[b * pages_per_batch];
++
++        const __nv_bfloat16* v_row =
++            v_cache + (pid * PAGE_TOKENS * KV_HEADS + kv_head) * HEAD_DIM;
++        const uint4 payload =
++            reinterpret_cast<const uint4*>(v_row)[copy];
++
++#pragma unroll
++        for (int q_head_in_group = 0; q_head_in_group < GQA;
++             ++q_head_in_group) {
++            __nv_bfloat16* out_row =
++                out + (b * 32 + kv_head * GQA + q_head_in_group) * HEAD_DIM;
++            reinterpret_cast<uint4*>(out_row)[copy] = payload;
++        }
++        return;
++    }
++
+     if (copy >= GQA * U4_PER_ROW) return;
+     const int b = blockIdx.x / KV_HEADS;
+     const int kv_head = blockIdx.x & (KV_HEADS - 1);

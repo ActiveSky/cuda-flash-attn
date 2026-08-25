@@ -1,0 +1,4 @@
+target: contest #11, problem #1
+language: cuda.maca-c500
+code: solutions/archive/2026-08-24-experiments/cuda_control124611_case14_pair_aggregate_fix_exp687.cpp (287255 bytes)
+dry-run: no submission created; use --submit to submit

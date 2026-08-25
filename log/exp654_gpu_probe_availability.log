@@ -1,0 +1,2 @@
+cuda_available True
+device MetaX C500

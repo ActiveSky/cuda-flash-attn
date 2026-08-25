@@ -1,0 +1,40 @@
+exp694 independent verification summary
+UTC 2026-08-24T13:20:00Z (summary assembled after all runs)
+
+Identity
+candidate=solutions/archive/2026-08-24-experiments/cuda_control124611_case7_raw_wave_rebase_exp694.cpp
+candidate_sha256=abd65ca70ef44da9f39eec2a0d1fe86af4178eb928a8c21acf0c4df040b934b2
+control=solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+control_sha256=3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+target_only_diff=PASS (raw physical-wave lane^32 first z-pair merge; case7 dispatch only)
+workfile_sha256_after=3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+
+Builds
+candidate_normal=PASS artifact_sha256=cdc96ab8b19ea0b1f3ad39d02d658169e479d2c65f955dd30cd298ee628fd9cd
+control_normal=PASS artifact_sha256=c9d643f25e0e15193820b4809f53ce32ebe8cdfabf91505143ec169c61de137b
+candidate_resource=PASS artifact_sha256=938879ff78f799a0d8f573705fae133aab1f5916f8855f85d6a71d75eee613d8
+control_resource=PASS artifact_sha256=608c93c732180e8cb96db73586d9866918972b64e47907aaa415d4b54cdf2374
+candidate_llvm=PASS artifact_sha256=9c5b0c244088bd3d6a17082b3555e58c09050e1c18cd00cfdb8c594572828b7b
+control_llvm=PASS artifact_sha256=c0b1feacbfa1f793737da57fe0104013a92ac56e7408de40deb789d8fd7b29b7
+compiler_warnings=existing __launch_bounds__ minimum-blocks warning only
+
+Target resource / lowering
+candidate_case7=80 MTreg / 50 STreg / 8448 B shared / 0 B stack / 6 waves
+control_case7=82 MTreg / 50 STreg / 8448 B shared / 0 B stack / 5 waves
+candidate_target_llvm=20 llvm.mxc.bsm.bpermute calls, 28 llvm.mxc.mov.shfl calls, 7 llvm.mxc.barrier calls
+control_target_llvm=0 llvm.mxc.bsm.bpermute calls, 28 llvm.mxc.mov.shfl calls, 10 llvm.mxc.barrier calls
+raw_backend_lowering=PASS
+
+Correctness
+candidate_full_boundary_random=PASS (case7, finite, 1.000000 match; logs candidate_c500_{full,boundary,random})
+control_full_boundary_random=PASS (case7, finite, 1.000000 match; logs control_c500_{full,boundary,random})
+candidate_exact=PASS (1,2,15,16,17,687,688,689,703,704,705,1375,1376,1377,2047,2048; all finite and 1.000000 match)
+control_exact=PASS (same 16 lengths; all finite and 1.000000 match)
+candidate_control_mixed_padding_reuse=PASS (existing exp592 runner; logs candidate/control_c500_mixed_reuse)
+custom_tail_guards_input_reuse=PASS (376 NaN tail tokens; 5056 legal padding pages; output guards and Q/K/V/cache_seqlens/block_table byte invariance; candidate/control pair match; 2048->1->2048 and 1->2048)
+cpu_manifest_logic=PASS (14/14)
+
+Final gate
+candidate独有错误=none
+OJ/A-B/timing=not run (outside assigned verification scope)
+verification_result=PASS

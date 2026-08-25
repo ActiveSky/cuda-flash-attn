@@ -1,0 +1,250 @@
+exp695 resource/LLVM summary
+candidate active case9 resource:
+ maca info  : Used  80 MTregisters, 58 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 6
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 66 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+  0 bytes stack frame 
+ maca info  : Used  80 MTregisters, 58 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 6
+  0 bytes stack frame 
+ maca info  : Used  74 MTregisters, 52 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 6
+  0 bytes stack frame 
+ maca info  : Used  92 MTregisters, 48 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+  0 bytes stack frame 
+ maca info  : Used  92 MTregisters, 48 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+ maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  80 MTregisters, 48 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 6
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+  0 bytes stack frame 
+ maca info  : Used  74 MTregisters, 44 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 6
+  0 bytes stack frame 
+ maca info  : Used  80 MTregisters, 44 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 6
+  0 bytes stack frame 
+ maca info  : Used  118 MTregisters, 50 STregisters, 8192 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 4
+  0 bytes stack frame 
+ maca info  : Used  104 MTregisters, 74 STregisters, 8192 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 4
+  0 bytes stack frame 
+ maca info  : Used  104 MTregisters, 74 STregisters, 8192 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 4
+  0 bytes stack frame 
+ maca info  : Used  38 MTregisters, 39 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 8
+  0 bytes stack frame 
+ maca info  : Used  66 MTregisters, 24 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 7
+  0 bytes stack frame 
+ maca info  : Used  54 MTregisters, 25 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 8
+  0 bytes stack frame 
+ maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 7
+  0 bytes stack frame 
+ maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 7
+  0 bytes stack frame 
+ maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 7
+  0 bytes stack frame 
+ maca info  : Used  38 MTregisters, 36 STregisters, 0 bytes shared mem  
+  0 bytes stack frame 
+ maca info  : Used  64 MTregisters, 35 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 8
+  0 bytes stack frame 
+ maca info  : Used  36 MTregisters, 33 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 8
+  0 bytes stack frame 
+ maca info  : Used  40 MTregisters, 28 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 8
+  0 bytes stack frame 
+ maca info  : Used  40 MTregisters, 36 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 8
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 64 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+control active case9 resource:
+ maca info  : staticMaxWarps/PEU : 6
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 66 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+  0 bytes stack frame 
+ maca info  : Used  80 MTregisters, 58 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 6
+  0 bytes stack frame 
+ maca info  : Used  74 MTregisters, 52 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 6
+  0 bytes stack frame 
+ maca info  : Used  92 MTregisters, 48 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+  0 bytes stack frame 
+ maca info  : Used  92 MTregisters, 48 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+ maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+  0 bytes stack frame 
+ maca info  : Used  74 MTregisters, 44 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 6
+  0 bytes stack frame 
+ maca info  : Used  80 MTregisters, 44 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 6
+  0 bytes stack frame 
+ maca info  : Used  118 MTregisters, 50 STregisters, 8192 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 4
+  0 bytes stack frame 
+ maca info  : Used  104 MTregisters, 74 STregisters, 8192 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 4
+  0 bytes stack frame 
+ maca info  : Used  104 MTregisters, 74 STregisters, 8192 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 4
+  0 bytes stack frame 
+ maca info  : Used  38 MTregisters, 39 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 8
+  0 bytes stack frame 
+ maca info  : Used  66 MTregisters, 24 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 7
+  0 bytes stack frame 
+ maca info  : Used  54 MTregisters, 25 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 8
+  0 bytes stack frame 
+ maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 7
+  0 bytes stack frame 
+ maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 7
+  0 bytes stack frame 
+ maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 7
+  0 bytes stack frame 
+ maca info  : Used  38 MTregisters, 36 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU :10 warnings generated when compiling for xcore1000.
+  0 bytes stack frame 
+ maca info  : Used  64 MTregisters, 35 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 8
+  0 bytes stack frame 
+ maca info  : Used  36 MTregisters, 33 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 8
+  0 bytes stack frame 
+ maca info  : Used  40 MTregisters, 28 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 8
+  0 bytes stack frame 
+ maca info  : Used  40 MTregisters, 36 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 8
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 64 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+forbidden resource diagnostics:
+none
+LLVM candidate/control raw intrinsic counts:
+candidate total bsm.bpermute=402
+control total bsm.bpermute=382
+candidate case9 raw function bsm.bpermute=20
+control case9 function bsm.bpermute=candidate raw intrinsic declaration/call evidence:
+--
+1169-  %287 = extractelement <2 x i32> %bc, i64 0
+1170:  %288 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i14.i1717, i32 %287)
+1171-  %289 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+--
+1176-  %291 = extractelement <2 x i32> %bc2543, i64 1
+1177:  %292 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i1722, i32 %291)
+1178-  %vecinit3.i.i1726 = insertelement <2 x float> poison, float %cond.i1637, i64 0
+--
+1192-  %299 = extractelement <2 x i32> %bc2544, i64 0
+1193:  %300 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i14.i1694, i32 %299)
+1194-  %301 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+--
+1199-  %303 = extractelement <2 x i32> %bc2545, i64 1
+1200:  %304 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i1699, i32 %303)
+1201-  %305 = tail call contract <2 x float> @llvm.mxc.pk.fma.f32(<2 x float> %acc0.sroa.45.6, <2 x float> %vecinit4.i.i1727, <2 x float> zeroinitializer)
+--
+1211-  %311 = extractelement <2 x i32> %bc2546, i64 0
+1212:  %312 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i14.i1671, i32 %311)
+1213-  %313 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+--
+1218-  %315 = extractelement <2 x i32> %bc2547, i64 1
+1219:  %316 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i1676, i32 %315)
+1220-  %317 = tail call contract <2 x float> @llvm.mxc.pk.fma.f32(<2 x float> %acc0.sroa.87.6, <2 x float> %vecinit4.i.i1727, <2 x float> zeroinitializer)
+--
+1230-  %323 = extractelement <2 x i32> %bc2548, i64 0
+1231:  %324 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i14.i, i32 %323)
+1232-  %325 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+--
+1237-  %327 = extractelement <2 x i32> %bc2549, i64 1
+1238:  %328 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i, i32 %327)
+1239-  %329 = tail call contract <2 x float> @llvm.mxc.pk.fma.f32(<2 x float> %acc0.sroa.129.6, <2 x float> %vecinit4.i.i1727, <2 x float> zeroinitializer)
+--
+1248-  %335 = bitcast float %m1.3 to i32
+1249:  %336 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1656, i32 %335)
+1250-  %337 = bitcast i32 %336 to float
+--
+1255-  %340 = bitcast float %l1.7 to i32
+1256:  %341 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1653, i32 %340)
+1257-  %342 = bitcast i32 %341 to float
+--
+1275-  %348 = extractelement <2 x i32> %bc2550, i64 0
+1276:  %349 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i14.i1809, i32 %348)
+1277-  %350 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+--
+1282-  %352 = extractelement <2 x i32> %bc2551, i64 1
+1283:  %353 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i1814, i32 %352)
+1284-  %vecinit3.i.i1818 = insertelement <2 x float> poison, float %cond.i1627, i64 0
+--
+1298-  %360 = extractelement <2 x i32> %bc2552, i64 0
+1299:  %361 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i14.i1786, i32 %360)
+1300-  %362 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+--
+1305-  %364 = extractelement <2 x i32> %bc2553, i64 1
+1306:  %365 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i1791, i32 %364)
+1307-  %366 = tail call contract <2 x float> @llvm.mxc.pk.fma.f32(<2 x float> %acc1.sroa.45.6, <2 x float> %vecinit4.i.i1819, <2 x float> zeroinitializer)
+--
+1317-  %372 = extractelement <2 x i32> %bc2554, i64 0
+1318:  %373 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i14.i1763, i32 %372)
+1319-  %374 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+--
+1324-  %376 = extractelement <2 x i32> %bc2555, i64 1
+1325:  %377 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i1768, i32 %376)
+1326-  %378 = tail call contract <2 x float> @llvm.mxc.pk.fma.f32(<2 x float> %acc1.sroa.87.6, <2 x float> %vecinit4.i.i1819, <2 x float> zeroinitializer)
+--
+1336-  %384 = extractelement <2 x i32> %bc2556, i64 0
+1337:  %385 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i14.i1740, i32 %384)
+1338-  %386 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+--
+1343-  %388 = extractelement <2 x i32> %bc2557, i64 1
+1344:  %389 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i1745, i32 %388)
+1345-  %390 = tail call contract <2 x float> @llvm.mxc.pk.fma.f32(<2 x float> %acc1.sroa.129.6, <2 x float> %vecinit4.i.i1819, <2 x float> zeroinitializer)
+--
+1433-  fence syncscope("block") release
+1434:  tail call void @llvm.mxc.barrier()
+1435-  fence syncscope("block") acquire
+--
+1650-  fence syncscope("block") release
+1651:  tail call void @llvm.mxc.barrier()
+1652-  fence syncscope("block") acquire

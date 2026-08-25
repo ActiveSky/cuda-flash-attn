@@ -1,0 +1,99 @@
+candidate_count=31
+00 (28, 50, 0, 8) paged_decode_generic_kernel(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, long, long, long, long, long, long, float)
+01 (6, 18, 0, 8) void paged_decode_single_token_kernel<4, 8>(__maca_bfloat16 const*, __maca_bfloat16*, int const*, int)
+02 (6, 18, 0, 8) void paged_decode_single_token_kernel<8, 4>(__maca_bfloat16 const*, __maca_bfloat16*, int const*, int)
+03 (22, 26, 0, 8) void paged_decode_two_token_kernel<4, 8>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, int, float)
+04 (22, 26, 0, 8) void paged_decode_two_token_kernel<8, 4>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, int, float)
+05 (86, 70, 8320, 5) void paged_decode_case11_headpair_z4_kernel<true, true, false, true, true, true, true, true, false, true, true, false, false, true, true, true, false, false, false>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+06 (80, 58, 8320, 6) void paged_decode_case11_headpair_z4_kernel<true, true, false, true, true, true, true, true, false, true, false, false, false, true, true, true, true, true, true>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+07 (84, 66, 8320, 5) void paged_decode_case11_headpair_z4_kernel<true, true, false, true, true, true, false, true, true, true, false, true, true, false, false, false, false, true, true>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+08 (80, 58, 8320, 6) void paged_decode_case11_headpair_z4_kernel<true, true, false, true, true, true, true, true, false, true, false, false, true, true, true, true, true, true, false>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+09 (74, 52, 8320, 6) void paged_decode_case11_headpair_z4_kernel<false, false, false, false, false, false, false, false, false, true, false, false, false, true, true, true, false, true, false>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+10 (92, 48, 8320, 5) void paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, true, false, false, false, false, false, true, false, false, false>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+11 (92, 48, 8320, 5) void paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+12 (82, 50, 8448, 5) void paged_decode_case13_kv8_headpair_z8_kernel<true, false, false>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+13 (82, 50, 8448, 5) void paged_decode_case13_kv8_headpair_z8_kernel<true, false, true>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+14 (82, 48, 8448, 5) void paged_decode_case13_kv8_headpair_z8_kernel<true, true, false>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+15 (74, 44, 8320, 6) void paged_decode_token_parallel_kernel<8, 4, false, false, false, false, false, true, false, false, false, false, true, true, true, true, false>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+16 (80, 44, 8320, 6) void paged_decode_token_parallel_kernel<8, 4, true, false, false, false, false, true, false, false, true, false, true, true, false, false, true>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+17 (118, 50, 8192, 4) void paged_decode_split_qk_pair_kernel<8, 4>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+18 (104, 74, 8192, 4) void paged_decode_split_kernel<4, 8>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+19 (104, 74, 8192, 4) void paged_decode_split_kernel<8, 4>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+20 (38, 39, 0, 8) void paged_decode_reduce_vec2_kernel<true, false, true, false, false>(float const*, float const*, float const*, __maca_bfloat16*, int const*, int, int, int)
+21 (66, 24, 0, 7) void paged_decode_reduce_group8_kernel<true, false, true, true, true, false, 0>(float const*, float const*, float const*, __maca_bfloat16*, int const*, int, int, int)
+22 (54, 25, 0, 8) void paged_decode_reduce_group8_kernel<true, false, true, true, false, true, 3>(float const*, float const*, float const*, __maca_bfloat16*, int const*, int, int, int)
+23 (66, 26, 0, 7) void paged_decode_reduce_group8_kernel<true, false, true, false, true, false, 0>(float const*, float const*, float const*, __maca_bfloat16*, int const*, int, int, int)
+24 (66, 26, 0, 7) void paged_decode_reduce_group8_kernel<true, false, true, false, false, false, 0>(float const*, float const*, float const*, __maca_bfloat16*, int const*, int, int, int)
+25 (66, 26, 0, 7) void paged_decode_reduce_group8_kernel<true, false, false, false, false, false, 0>(float const*, float const*, float const*, __maca_bfloat16*, int const*, int, int, int)
+26 (38, 36, 0, 8) void paged_decode_reduce_vec2_kernel<true, false, true, true, true>(float const*, float const*, float const*, __maca_bfloat16*, int const*, int, int, int)
+27 (64, 35, 0, 8) void paged_decode_reduce_vec4_kernel<true, false, true>(float const*, float const*, float const*, __maca_bfloat16*, int const*, int, int, int)
+28 (40, 28, 0, 8) void paged_decode_reduce_kernel<true, false, true, true, true, true, true>(float const*, float const*, float const*, __maca_bfloat16*, int const*, int, int, int)
+29 (40, 36, 0, 8) void paged_decode_reduce_kernel<true, false, false, false, false, false, false>(float const*, float const*, float const*, __maca_bfloat16*, int const*, int, int, int)
+30 (82, 64, 8320, 5) void paged_decode_case11_headpair_z4_kernel<true, true, false, true, true, true, true, true, false, true, true, false, false, true, true, true, true, true, true>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+
+control_count=31
+00 (28, 50, 0, 8) paged_decode_generic_kernel(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, long, long, long, long, long, long, float)
+01 (6, 18, 0, 8) void paged_decode_single_token_kernel<4, 8>(__maca_bfloat16 const*, __maca_bfloat16*, int const*, int)
+02 (6, 18, 0, 8) void paged_decode_single_token_kernel<8, 4>(__maca_bfloat16 const*, __maca_bfloat16*, int const*, int)
+03 (22, 26, 0, 8) void paged_decode_two_token_kernel<4, 8>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, int, float)
+04 (22, 26, 0, 8) void paged_decode_two_token_kernel<8, 4>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, int, float)
+05 (86, 70, 8320, 5) void paged_decode_case11_headpair_z4_kernel<true, true, false, true, true, true, true, true, false, true, true, false, false, true, true, true, false, false, false>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+06 (80, 58, 8320, 6) void paged_decode_case11_headpair_z4_kernel<true, true, false, true, true, true, true, true, false, true, false, false, false, true, true, true, true, true, true>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+07 (82, 66, 8320, 5) void paged_decode_case11_headpair_z4_kernel<true, true, false, true, true, true, false, true, true, true, false, true, true, false, false, false, false, true, true>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+08 (80, 58, 8320, 6) void paged_decode_case11_headpair_z4_kernel<true, true, false, true, true, true, true, true, false, true, false, false, true, true, true, true, true, true, false>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+09 (74, 52, 8320, 6) void paged_decode_case11_headpair_z4_kernel<false, false, false, false, false, false, false, false, false, true, false, false, false, true, true, true, false, true, false>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+10 (92, 48, 8320, 5) void paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, true, false, false, false, false, false, true, false, false, false>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+11 (92, 48, 8320, 5) void paged_decode_token_parallel_kernel<4, 8, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+12 (82, 50, 8448, 5) void paged_decode_case13_kv8_headpair_z8_kernel<true, false, false>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+13 (82, 50, 8448, 5) void paged_decode_case13_kv8_headpair_z8_kernel<true, false, true>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+14 (82, 48, 8448, 5) void paged_decode_case13_kv8_headpair_z8_kernel<true, true, false>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+15 (74, 44, 8320, 6) void paged_decode_token_parallel_kernel<8, 4, false, false, false, false, false, true, false, false, false, false, true, true, true, true, false>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+16 (80, 44, 8320, 6) void paged_decode_token_parallel_kernel<8, 4, true, false, false, false, false, true, false, false, true, false, true, true, false, false, true>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+17 (118, 50, 8192, 4) void paged_decode_split_qk_pair_kernel<8, 4>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+18 (104, 74, 8192, 4) void paged_decode_split_kernel<4, 8>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+19 (104, 74, 8192, 4) void paged_decode_split_kernel<8, 4>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+20 (38, 39, 0, 8) void paged_decode_reduce_vec2_kernel<true, false, true, false, false>(float const*, float const*, float const*, __maca_bfloat16*, int const*, int, int, int)
+21 (66, 24, 0, 7) void paged_decode_reduce_group8_kernel<true, false, true, true, true, false, 0>(float const*, float const*, float const*, __maca_bfloat16*, int const*, int, int, int)
+22 (54, 25, 0, 8) void paged_decode_reduce_group8_kernel<true, false, true, true, false, true, 3>(float const*, float const*, float const*, __maca_bfloat16*, int const*, int, int, int)
+23 (66, 26, 0, 7) void paged_decode_reduce_group8_kernel<true, false, true, false, true, false, 0>(float const*, float const*, float const*, __maca_bfloat16*, int const*, int, int, int)
+24 (66, 26, 0, 7) void paged_decode_reduce_group8_kernel<true, false, true, false, false, false, 0>(float const*, float const*, float const*, __maca_bfloat16*, int const*, int, int, int)
+25 (66, 26, 0, 7) void paged_decode_reduce_group8_kernel<true, false, false, false, false, false, 0>(float const*, float const*, float const*, __maca_bfloat16*, int const*, int, int, int)
+26 (38, 36, 0, 8) void paged_decode_reduce_vec2_kernel<true, false, true, true, true>(float const*, float const*, float const*, __maca_bfloat16*, int const*, int, int, int)
+27 (64, 35, 0, 8) void paged_decode_reduce_vec4_kernel<true, false, true>(float const*, float const*, float const*, __maca_bfloat16*, int const*, int, int, int)
+28 (40, 28, 0, 8) void paged_decode_reduce_kernel<true, false, true, true, true, true, true>(float const*, float const*, float const*, __maca_bfloat16*, int const*, int, int, int)
+29 (40, 36, 0, 8) void paged_decode_reduce_kernel<true, false, false, false, false, false, false>(float const*, float const*, float const*, __maca_bfloat16*, int const*, int, int, int)
+30 (82, 64, 8320, 5) void paged_decode_case11_headpair_z4_kernel<true, true, false, true, true, true, true, true, false, true, true, false, false, true, true, true, true, true, true>(__maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16 const*, __maca_bfloat16*, int const*, int const*, float*, float*, float*, int, int, int, int, float)
+
+ORDER_AND_TUPLE_COMPARISON
+00 name_equal=True candidate=(28, 50, 0, 8) control=(28, 50, 0, 8) delta=(0, 0, 0, 0) same_tuple=True
+01 name_equal=True candidate=(6, 18, 0, 8) control=(6, 18, 0, 8) delta=(0, 0, 0, 0) same_tuple=True
+02 name_equal=True candidate=(6, 18, 0, 8) control=(6, 18, 0, 8) delta=(0, 0, 0, 0) same_tuple=True
+03 name_equal=True candidate=(22, 26, 0, 8) control=(22, 26, 0, 8) delta=(0, 0, 0, 0) same_tuple=True
+04 name_equal=True candidate=(22, 26, 0, 8) control=(22, 26, 0, 8) delta=(0, 0, 0, 0) same_tuple=True
+05 name_equal=True candidate=(86, 70, 8320, 5) control=(86, 70, 8320, 5) delta=(0, 0, 0, 0) same_tuple=True
+06 name_equal=True candidate=(80, 58, 8320, 6) control=(80, 58, 8320, 6) delta=(0, 0, 0, 0) same_tuple=True
+07 name_equal=True candidate=(84, 66, 8320, 5) control=(82, 66, 8320, 5) delta=(2, 0, 0, 0) same_tuple=False
+08 name_equal=True candidate=(80, 58, 8320, 6) control=(80, 58, 8320, 6) delta=(0, 0, 0, 0) same_tuple=True
+09 name_equal=True candidate=(74, 52, 8320, 6) control=(74, 52, 8320, 6) delta=(0, 0, 0, 0) same_tuple=True
+10 name_equal=True candidate=(92, 48, 8320, 5) control=(92, 48, 8320, 5) delta=(0, 0, 0, 0) same_tuple=True
+11 name_equal=True candidate=(92, 48, 8320, 5) control=(92, 48, 8320, 5) delta=(0, 0, 0, 0) same_tuple=True
+12 name_equal=True candidate=(82, 50, 8448, 5) control=(82, 50, 8448, 5) delta=(0, 0, 0, 0) same_tuple=True
+13 name_equal=True candidate=(82, 50, 8448, 5) control=(82, 50, 8448, 5) delta=(0, 0, 0, 0) same_tuple=True
+14 name_equal=True candidate=(82, 48, 8448, 5) control=(82, 48, 8448, 5) delta=(0, 0, 0, 0) same_tuple=True
+15 name_equal=True candidate=(74, 44, 8320, 6) control=(74, 44, 8320, 6) delta=(0, 0, 0, 0) same_tuple=True
+16 name_equal=True candidate=(80, 44, 8320, 6) control=(80, 44, 8320, 6) delta=(0, 0, 0, 0) same_tuple=True
+17 name_equal=True candidate=(118, 50, 8192, 4) control=(118, 50, 8192, 4) delta=(0, 0, 0, 0) same_tuple=True
+18 name_equal=True candidate=(104, 74, 8192, 4) control=(104, 74, 8192, 4) delta=(0, 0, 0, 0) same_tuple=True
+19 name_equal=True candidate=(104, 74, 8192, 4) control=(104, 74, 8192, 4) delta=(0, 0, 0, 0) same_tuple=True
+20 name_equal=True candidate=(38, 39, 0, 8) control=(38, 39, 0, 8) delta=(0, 0, 0, 0) same_tuple=True
+21 name_equal=True candidate=(66, 24, 0, 7) control=(66, 24, 0, 7) delta=(0, 0, 0, 0) same_tuple=True
+22 name_equal=True candidate=(54, 25, 0, 8) control=(54, 25, 0, 8) delta=(0, 0, 0, 0) same_tuple=True
+23 name_equal=True candidate=(66, 26, 0, 7) control=(66, 26, 0, 7) delta=(0, 0, 0, 0) same_tuple=True
+24 name_equal=True candidate=(66, 26, 0, 7) control=(66, 26, 0, 7) delta=(0, 0, 0, 0) same_tuple=True
+25 name_equal=True candidate=(66, 26, 0, 7) control=(66, 26, 0, 7) delta=(0, 0, 0, 0) same_tuple=True
+26 name_equal=True candidate=(38, 36, 0, 8) control=(38, 36, 0, 8) delta=(0, 0, 0, 0) same_tuple=True
+27 name_equal=True candidate=(64, 35, 0, 8) control=(64, 35, 0, 8) delta=(0, 0, 0, 0) same_tuple=True
+28 name_equal=True candidate=(40, 28, 0, 8) control=(40, 28, 0, 8) delta=(0, 0, 0, 0) same_tuple=True
+29 name_equal=True candidate=(40, 36, 0, 8) control=(40, 36, 0, 8) delta=(0, 0, 0, 0) same_tuple=True
+30 name_equal=True candidate=(82, 64, 8320, 5) control=(82, 64, 8320, 5) delta=(0, 0, 0, 0) same_tuple=True
+DIFFERING_INDICES: [7]

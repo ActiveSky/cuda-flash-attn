@@ -1,0 +1,225 @@
+--- solutions/archive/2026-08-16-submissions/cuda_113889.cpp	2026-08-23 20:13:43.747900870 +0000
++++ solutions/archive/2026-08-24-experiments/cuda_case14_single_lse_state_rebase_exp659.cpp	2026-08-23 20:23:51.946191064 +0000
+@@ -143,7 +143,6 @@
+     reinterpret_cast<uint4*>(out_row)[d4] =
+         reinterpret_cast<const uint4*>(v_row)[d4];
+ }
+-
+ template <int KV_HEADS, int GQA>
+ __global__ void __launch_bounds__(GQA * 32)
+ paged_decode_two_token_kernel(
+@@ -3831,7 +3830,14 @@
+             } else {
+                 const int idx0 = (out_split * batch_size + b) * 32 + h0;
+                 if (tx == 0) {
+-                    if constexpr (FP16_PACKED_ML_PARTIAL) {
++                    if constexpr (CASE14_FIXED_15_PAGES &&
++                                  FP16_PACKED_ML_PARTIAL &&
++                                  BF16_NORMALIZED_PARTIAL && BF16_MMA_QK) {
++                        // exp659: the case14 normalized partial keeps the
++                        // four-byte slot but stores a single FP32 LSE.
++                        partial_m[idx0] = l0 > 0.f
++                            ? m0 + __builtin_log2f(l0) : -CUDART_INF_F;
++                    } else if constexpr (FP16_PACKED_ML_PARTIAL) {
+                         *reinterpret_cast<__half2*>(partial_m + idx0) =
+                             __floats2half2_rn(m0, l0);
+                     } else {
+@@ -3878,7 +3884,14 @@
+             } else {
+                 const int idx1 = (out_split * batch_size + b) * 32 + h1;
+                 if (tx == 0) {
+-                    if constexpr (FP16_PACKED_ML_PARTIAL) {
++                    if constexpr (CASE14_FIXED_15_PAGES &&
++                                  FP16_PACKED_ML_PARTIAL &&
++                                  BF16_NORMALIZED_PARTIAL && BF16_MMA_QK) {
++                        // exp659: the case14 normalized partial keeps the
++                        // four-byte slot but stores a single FP32 LSE.
++                        partial_m[idx1] = l1 > 0.f
++                            ? m1 + __builtin_log2f(l1) : -CUDART_INF_F;
++                    } else if constexpr (FP16_PACKED_ML_PARTIAL) {
+                         *reinterpret_cast<__half2*>(partial_m + idx1) =
+                             __floats2half2_rn(m1, l1);
+                     } else {
+@@ -3954,7 +3967,16 @@
+                 const int idx0 = (out_split * batch_size + b) * 32 + h0;
+                 const int idx1 = (out_split * batch_size + b) * 32 + h1;
+                 if (tx == 0) {
+-                    if constexpr (FP16_PACKED_ML_PARTIAL) {
++                    if constexpr (CASE14_FIXED_15_PAGES &&
++                                  FP16_PACKED_ML_PARTIAL &&
++                                  BF16_NORMALIZED_PARTIAL && BF16_MMA_QK) {
++                        // exp659: the case14 normalized partial keeps the
++                        // four-byte slot but stores one FP32 LSE per head.
++                        partial_m[idx0] = l0 > 0.f
++                            ? m0 + __builtin_log2f(l0) : -CUDART_INF_F;
++                        partial_m[idx1] = l1 > 0.f
++                            ? m1 + __builtin_log2f(l1) : -CUDART_INF_F;
++                    } else if constexpr (FP16_PACKED_ML_PARTIAL) {
+                         // exp288/291: case14 already stores normalized BF16
+                         // accumulators. Pack both scalar merge statistics in the
+                         // existing four-byte partial_m slot and omit partial_l.
+@@ -4529,6 +4551,144 @@
+     }
+ }
+ 
++// exp451 case14 reducer: every producer partial already stores its normalized
++// BF16 output, so a single FP32 lse=m+log2(l) is sufficient metadata.  Keep
++// the register-owned split layout and the one-array shared-memory footprint of
++// exp291, but turn lse differences directly into normalized merge weights.
++template <bool BASE2>
++__global__ void __launch_bounds__(128)
++paged_decode_reduce_case14_single_lse_kernel(
++    const float* __restrict__ partial_lse,
++    const float* __restrict__ partial_acc,
++    __nv_bfloat16* __restrict__ out,
++    const int32_t* __restrict__ cache_seqlens,
++    int batch_size,
++    int pages_per_split,
++    int n_split)
++{
++    const int tid = threadIdx.x;
++    const int lane = tid & 31;
++    const int warp = tid >> 5;
++    const int bh = blockIdx.x;
++    const int b = bh >> 5;
++    const int h = bh & 31;
++    const int seqlen = cache_seqlens[b];
++    const int full_pages = seqlen / PAGE_TOKENS;
++    const int live_splits = full_pages > 0
++        ? min(n_split, (full_pages + pages_per_split - 1) / pages_per_split)
++        : ((seqlen & (PAGE_TOKENS - 1)) != 0);
++
++    // The producer writes normalized BF16 partials.  A one-split result is
++    // therefore already final and does not need to consult its lse metadata.
++    if (live_splits <= 1) {
++        if (tid < HEAD_DIM) {
++            if (live_splits == 1) {
++                const int hidx = b * 32 + h;
++                const __nv_bfloat16* partial_bf16 =
++                    reinterpret_cast<const __nv_bfloat16*>(partial_acc);
++                out[(b * 32 + h) * HEAD_DIM + tid] =
++                    partial_bf16[hidx * HEAD_DIM + tid];
++            } else {
++                out[(b * 32 + h) * HEAD_DIM + tid] = __float2bfloat16(0.f);
++            }
++        }
++        return;
++    }
++
++    extern __shared__ float smem[];
++    float* s_w = smem;                  // [n_split] normalized LSE weights
++    float* s_warp = s_w + n_split;      // four warp partial reductions
++
++    // case14 has at most 257 live splits and exactly 128 reducer threads.
++    // Keep two split LSEs per thread (plus split 256 on tid 0) in registers
++    // across the max reduction; this retains exp291's global-memory traffic.
++    const int s0 = tid;
++    const int s1 = tid + 128;
++    const int s2 = tid + 256;
++    float own_lse0 = -CUDART_INF_F;
++    float own_lse1 = -CUDART_INF_F;
++    float own_lse2 = -CUDART_INF_F;
++    if (s0 < live_splits) {
++        own_lse0 = partial_lse[(s0 * batch_size + b) * 32 + h];
++    }
++    if (s1 < live_splits) {
++        own_lse1 = partial_lse[(s1 * batch_size + b) * 32 + h];
++    }
++    if (s2 < live_splits) {
++        own_lse2 = partial_lse[(s2 * batch_size + b) * 32 + h];
++    }
++
++    float lse_local = fmaxf(own_lse0, fmaxf(own_lse1, own_lse2));
++#pragma unroll
++    for (int off = 16; off > 0; off >>= 1) {
++        lse_local = fmaxf(
++            lse_local, __shfl_xor_sync(0xffffffffu, lse_local, off));
++    }
++    if (lane == 0) s_warp[warp] = lse_local;
++    __syncthreads();
++
++    if (warp == 0) {
++        float lse = lane < 4 ? s_warp[lane] : -CUDART_INF_F;
++#pragma unroll
++        for (int off = 16; off > 0; off >>= 1) {
++            lse = fmaxf(lse, __shfl_xor_sync(0xffffffffu, lse, off));
++        }
++        if (lane == 0) s_warp[0] = lse;
++    }
++    __syncthreads();
++    const float lse_max = s_warp[0];
++
++    float weight_local = 0.f;
++    if (s0 < live_splits) {
++        const float weight = own_lse0 > -CUDART_INF_F
++            ? softmax_exp<BASE2>(own_lse0 - lse_max) : 0.f;
++        s_w[s0] = weight;
++        weight_local += weight;
++    }
++    if (s1 < live_splits) {
++        const float weight = own_lse1 > -CUDART_INF_F
++            ? softmax_exp<BASE2>(own_lse1 - lse_max) : 0.f;
++        s_w[s1] = weight;
++        weight_local += weight;
++    }
++    if (s2 < live_splits) {
++        const float weight = own_lse2 > -CUDART_INF_F
++            ? softmax_exp<BASE2>(own_lse2 - lse_max) : 0.f;
++        s_w[s2] = weight;
++        weight_local += weight;
++    }
++#pragma unroll
++    for (int off = 16; off > 0; off >>= 1) {
++        weight_local += __shfl_xor_sync(0xffffffffu, weight_local, off);
++    }
++    if (lane == 0) s_warp[warp] = weight_local;
++    __syncthreads();
++
++    if (warp == 0) {
++        float weight_sum = lane < 4 ? s_warp[lane] : 0.f;
++#pragma unroll
++        for (int off = 16; off > 0; off >>= 1) {
++            weight_sum += __shfl_xor_sync(0xffffffffu, weight_sum, off);
++        }
++        if (lane == 0) s_warp[0] = weight_sum;
++    }
++    __syncthreads();
++    const float weight_sum = s_warp[0];
++
++    if (tid < HEAD_DIM) {
++        const __nv_bfloat16* partial_bf16 =
++            reinterpret_cast<const __nv_bfloat16*>(partial_acc);
++        float acc_sum = 0.f;
++        for (int s = 0; s < live_splits; ++s) {
++            const int hidx = (s * batch_size + b) * 32 + h;
++            acc_sum += __bfloat162float(
++                partial_bf16[hidx * HEAD_DIM + tid]) * s_w[s];
++        }
++        out[(b * 32 + h) * HEAD_DIM + tid] =
++            __float2bfloat16(weight_sum > 0.f ? acc_sum / weight_sum : 0.f);
++    }
++}
++
+ // exp87 case10 reducer: preserve one CTA per (batch, head), but let one
+ // 32-lane row own the 128 output dimensions as four adjacent values per lane.
+ // This removes the original four-warp max/l second stage while retaining the
+@@ -5918,13 +6078,12 @@
+                     cache_seqlens, (int)batch_size,
+                     (int)pages_per_split, reduce_splits);
+             } else if (num_heads_k == 4 && batch_size == 1 && seqlen_k == 61519) {
+-                const size_t packed_rsmem =
+-                    ((size_t)reduce_splits + 8) * sizeof(float);
+-                paged_decode_reduce_kernel<
+-                    (XPUOJ_USE_BASE2 != 0), false, true, true, true, true,
+-                    true><<<
+-                    rgrid, rthreads, packed_rsmem>>>(
+-                    s_partial_m, s_partial_l, s_partial_acc, output,
++                const size_t lse_rsmem =
++                    ((size_t)reduce_splits + 4) * sizeof(float);
++                paged_decode_reduce_case14_single_lse_kernel<
++                    (XPUOJ_USE_BASE2 != 0)><<<
++                    rgrid, rthreads, lse_rsmem>>>(
++                    s_partial_m, s_partial_acc, output,
+                     cache_seqlens, (int)batch_size,
+                     (int)pages_per_split, reduce_splits);
+             } else if constexpr (separate_tail) {

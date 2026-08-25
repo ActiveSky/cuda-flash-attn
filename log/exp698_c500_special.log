@@ -1,0 +1,41 @@
+CASE5 B=16 L=141 KV=4
+[PASS] candidate exact:0 finite=True tol=True guard=True inputs=True baseline=True max_error=0.000000e+00 baseline_max=0.000000e+00
+[PASS] candidate exact:1 finite=True tol=True guard=True inputs=True baseline=True max_error=0.000000e+00 baseline_max=0.000000e+00
+[PASS] candidate exact:2 finite=True tol=True guard=True inputs=True baseline=True max_error=1.562500e-02 baseline_max=0.000000e+00
+[PASS] candidate exact:15 finite=True tol=True guard=True inputs=True baseline=True max_error=1.562500e-02 baseline_max=0.000000e+00
+[PASS] candidate exact:16 finite=True tol=True guard=True inputs=True baseline=True max_error=7.812500e-03 baseline_max=0.000000e+00
+[PASS] candidate exact:17 finite=True tol=True guard=True inputs=True baseline=True max_error=7.812500e-03 baseline_max=0.000000e+00
+[PASS] candidate exact:31 finite=True tol=True guard=True inputs=True baseline=True max_error=7.812500e-03 baseline_max=0.000000e+00
+[PASS] candidate exact:32 finite=True tol=True guard=True inputs=True baseline=True max_error=3.906250e-03 baseline_max=0.000000e+00
+[PASS] candidate exact:33 finite=True tol=True guard=True inputs=True baseline=True max_error=7.812500e-03 baseline_max=0.000000e+00
+[PASS] candidate exact:140 finite=True tol=True guard=True inputs=True baseline=True max_error=1.953125e-03 baseline_max=0.000000e+00
+[PASS] candidate exact:141 finite=True tol=True guard=True inputs=True baseline=True max_error=3.906250e-03 baseline_max=0.000000e+00
+[PASS] candidate mixed-short-full finite=True tol=True guard=True inputs=True baseline=True max_error=7.812500e-03 baseline_max=0.000000e+00
+[PASS] control exact:0 finite=True tol=True guard=True inputs=True baseline=True max_error=0.000000e+00 baseline_max=0.000000e+00
+[PASS] control exact:1 finite=True tol=True guard=True inputs=True baseline=True max_error=0.000000e+00 baseline_max=0.000000e+00
+[PASS] control exact:2 finite=True tol=True guard=True inputs=True baseline=True max_error=1.562500e-02 baseline_max=0.000000e+00
+[PASS] control exact:15 finite=True tol=True guard=True inputs=True baseline=True max_error=1.562500e-02 baseline_max=0.000000e+00
+[PASS] control exact:16 finite=True tol=True guard=True inputs=True baseline=True max_error=7.812500e-03 baseline_max=0.000000e+00
+[PASS] control exact:17 finite=True tol=True guard=True inputs=True baseline=True max_error=7.812500e-03 baseline_max=0.000000e+00
+[PASS] control exact:31 finite=True tol=True guard=True inputs=True baseline=True max_error=7.812500e-03 baseline_max=0.000000e+00
+[PASS] control exact:32 finite=True tol=True guard=True inputs=True baseline=True max_error=3.906250e-03 baseline_max=0.000000e+00
+[PASS] control exact:33 finite=True tol=True guard=True inputs=True baseline=True max_error=7.812500e-03 baseline_max=0.000000e+00
+[PASS] control exact:140 finite=True tol=True guard=True inputs=True baseline=True max_error=1.953125e-03 baseline_max=0.000000e+00
+[PASS] control exact:141 finite=True tol=True guard=True inputs=True baseline=True max_error=3.906250e-03 baseline_max=0.000000e+00
+[PASS] control mixed-short-full finite=True tol=True guard=True inputs=True baseline=True max_error=7.812500e-03 baseline_max=0.000000e+00
+[PASS] candidate poison-baseline finite=True tol=True guard=True inputs=True baseline=True max_error=1.562500e-02 baseline_max=0.000000e+00
+[FAIL] candidate poison-padding finite=False tol=False guard=True inputs=True baseline=False max_error=nan baseline_max=nan
+[PASS] candidate poison-reference-unchanged pages=97 tails=101
+[PASS] control poison-baseline finite=True tol=True guard=True inputs=True baseline=True max_error=1.562500e-02 baseline_max=0.000000e+00
+[FAIL] control poison-padding finite=False tol=False guard=True inputs=True baseline=False max_error=nan baseline_max=nan
+[PASS] control poison-reference-unchanged pages=97 tails=101
+[PASS] candidate reuse:full-A finite=True tol=True guard=True inputs=True baseline=True max_error=3.906250e-03 baseline_max=0.000000e+00
+[PASS] candidate reuse:short finite=True tol=True guard=True inputs=True baseline=True max_error=7.812500e-03 baseline_max=0.000000e+00
+[PASS] candidate reuse:full-B finite=True tol=True guard=True inputs=True baseline=True max_error=3.906250e-03 baseline_max=0.000000e+00
+[PASS] candidate reuse:short-again finite=True tol=True guard=True inputs=True baseline=True max_error=7.812500e-03 baseline_max=0.000000e+00
+[PASS] candidate reuse:full-C finite=True tol=True guard=True inputs=True baseline=True max_error=3.906250e-03 baseline_max=0.000000e+00
+[PASS] control reuse:full-A finite=True tol=True guard=True inputs=True baseline=True max_error=3.906250e-03 baseline_max=0.000000e+00
+[PASS] control reuse:short finite=True tol=True guard=True inputs=True baseline=True max_error=7.812500e-03 baseline_max=0.000000e+00
+[PASS] control reuse:full-B finite=True tol=True guard=True inputs=True baseline=True max_error=3.906250e-03 baseline_max=0.000000e+00
+[PASS] control reuse:short-again finite=True tol=True guard=True inputs=True baseline=True max_error=7.812500e-03 baseline_max=0.000000e+00
+[PASS] control reuse:full-C finite=True tol=True guard=True inputs=True baseline=True max_error=3.906250e-03 baseline_max=0.000000e+00

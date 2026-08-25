@@ -1,0 +1,27 @@
+exp622 relaxed C500 correctness/safety smoke (2026-08-23)
+
+Candidate:
+  source: solutions/archive/2026-08-21-experiments/cuda_case14_single_lse_current_exp622.cpp
+  source SHA-256: 5477c2430e721a8d9a075814b9d8ad42ad438693b616e1df39f1280f2430d58a
+  isolated build: build/exp622_relaxed_candidate.so
+  binary SHA-256 is recorded in log/exp622_relaxed_identity.log
+
+Correctness passes before the safety failure:
+  full: match=1.000000, max_tol_ratio=0.008, finite=True
+  random seed 20260823: match=1.000000, max_tol_ratio=0.008, finite=True
+  boundary seed 20260824: match=1.000000, max_tol_ratio=0.000, finite=True
+  exact lengths 1,2,15,16,17,239,240,241,255,256,257,479,480,481,
+    3839,3840,3841,61439,61440,61441,61455,61456,61457,61503,61504,
+    61505,61518,61519: 28/28 PASS, all finite
+
+Safety failure (stop immediately):
+  padding/tail poison probe at cache length 241. Baseline passed with
+  match=1.000000, max_tol_ratio=0.098, finite=True, aligned guards intact.
+  After filling all padding pages and invalid tail tokens with BF16 NaN,
+  reference remained finite but candidate output became nonfinite:
+  match=0.000000, max_error=nan, max_tol_ratio=nan. Guards and metadata
+  remained intact. This is a candidate tail/padding read or mask failure.
+
+No further poison cases or workspace reuse were run after the determined
+correctness failure. No resource audit, A/B, OJ, work-file, or project-document
+operation was performed.

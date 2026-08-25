@@ -1,0 +1,6 @@
+exp610 relaxed C500 identity
+c71eb9aaca4a25b2e0c3114a5176147a71f48d62391d641141239a21c98961cb  solutions/archive/2026-08-20-experiments/cuda_case12_duplicate_global_v_exp610.cpp
+ed8733fa317d0d46f801da136f3717d5e9807118a748534b998b3b7dd3e8c182  build/exp610_relaxed_candidate.so
+Building solutions/archive/2026-08-20-experiments/cuda_case12_duplicate_global_v_exp610.cpp
+Output: build/exp610_relaxed_candidate.so
+Built build/exp610_relaxed_candidate.so

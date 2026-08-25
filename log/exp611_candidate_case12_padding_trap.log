@@ -1,0 +1,12 @@
+exp611 candidate C500 case12 explicit legal-padding sentinel trap
+UTC 2026-08-21T05:21:56Z
+candidate source SHA256: 27a2dbc6b44eee0d2016d6c6a2dc8a2ff40367b077118043d11603093952eec2  solutions/archive/2026-08-21-experiments/cuda_case12_q_bsm_partial_b128_stg_exp611.cpp
+command: PYTHONPATH=tests python3 - inline case12 mixed-length disjoint-page sentinel trap
+case=12 mixed_lengths=(1, 15, 16, 17, 831, 832, 833, 32767)
+padding_sentinel_pages=14174 num_blocks=16384
+baseline passed=True finite=True match=1.000000 max_error=7.812500e-03 max_tol_ratio=0.241
+sentinel passed=True finite=True match=1.000000 max_error=7.812500e-03 max_tol_ratio=0.241
+reference_unchanged=True reference_max_delta=0.000000e+00
+candidate_unchanged=True candidate_max_delta=0.000000e+00 finite_all=True
+padding_trap=PASS
+exit_status=0

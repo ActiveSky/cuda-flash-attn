@@ -1,0 +1,6 @@
+method: ephemeral Python ABI smoke with case1; valid V token placed at physical page 1, page 0 poison/padding, GQA8 BF16 tags per KV head/dimension
+safety: 16-element prefix/suffix guards around q, k, v, and output
+candidate: pass=True match=1.000000 max_error=0.000000e+00 finite=True tag_max_abs=0.000000e+00 gqa8_exact=True guards=True
+control: pass=True match=1.000000 max_error=0.000000e+00 finite=True tag_max_abs=0.000000e+00 gqa8_exact=True guards=True
+exit: 0; no timeout/hang
+scope: custom ABI page1 supplement; manifest case1 has only one physical page

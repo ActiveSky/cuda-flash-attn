@@ -1,0 +1,2 @@
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+[FAIL] case 11 B=16 L=12251 KV=4 lengths=random   match=0.919968 max_error=1.029053e-01 max_tol_ratio=5.982 finite=True

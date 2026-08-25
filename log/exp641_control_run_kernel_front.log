@@ -1,0 +1,236 @@
+define void @run_kernel(ptr noundef %q, ptr noundef %k_cache_paged, ptr noundef %v_cache_paged, ptr noundef %output, ptr noundef %cache_seqlens, ptr noundef %block_table, i64 noundef %batch_size, i64 noundef %seqlen_k, i64 noundef %seqlen_q, i64 noundef %num_heads, i64 noundef %num_heads_k, i64 noundef %headdim, i64 noundef %page_block_size, i64 noundef %num_blocks, i64 noundef %causal) local_unnamed_addr #0 {
+entry:
+  %q.addr.i = alloca ptr, align 8
+  %k_cache.addr.i = alloca ptr, align 8
+  %v_cache.addr.i = alloca ptr, align 8
+  %out.addr.i = alloca ptr, align 8
+  %cache_seqlens.addr.i = alloca ptr, align 8
+  %block_table.addr.i = alloca ptr, align 8
+  %batch_size.addr.i = alloca i64, align 8
+  %num_heads.addr.i = alloca i64, align 8
+  %num_heads_k.addr.i = alloca i64, align 8
+  %headdim.addr.i = alloca i64, align 8
+  %page_block_size.addr.i = alloca i64, align 8
+  %pages_per_batch.addr.i = alloca i64, align 8
+  %sm_scale.addr.i = alloca float, align 4
+  %grid_dim.i = alloca %struct.dim3, align 8
+  %block_dim.i = alloca %struct.dim3, align 8
+  %shmem_size.i = alloca i64, align 8
+  %stream.i = alloca ptr, align 8
+  %kernel_args1.i = alloca [13 x ptr], align 16
+  %preserve_case8_control = alloca i64, align 8
+  %cmp = icmp eq i64 %headdim, 128
+  %cmp1 = icmp eq i64 %page_block_size, 16
+  %or.cond = and i1 %cmp, %cmp1
+  %cmp3 = icmp eq i64 %seqlen_q, 1
+  %or.cond752 = and i1 %cmp3, %or.cond
+  %cmp5 = icmp eq i64 %causal, 0
+  %or.cond753 = and i1 %or.cond752, %cmp5
+  %cmp7 = icmp eq i64 %num_heads, 32
+  %or.cond754 = and i1 %cmp7, %or.cond753
+  br i1 %or.cond754, label %land.lhs.true8, label %if.then
+
+land.lhs.true8:                                   ; preds = %entry
+  switch i64 %num_heads_k, label %if.then [
+    i64 8, label %land.rhs
+    i64 4, label %land.rhs
+  ]
+
+land.rhs:                                         ; preds = %land.lhs.true8, %land.lhs.true8
+  %num_heads_k.tr = trunc i64 %num_heads_k to i32
+  %div.rhs.trunc = shl nuw nsw i32 %num_heads_k.tr, 11
+  %div1429 = udiv i32 2147483647, %div.rhs.trunc
+  %div.zext = zext nneg i32 %div1429 to i64
+  %cmp12.not = icmp slt i64 %div.zext, %num_blocks
+  br i1 %cmp12.not, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry, %land.lhs.true8, %land.rhs
+  %mul13 = mul nsw i64 %num_heads, %batch_size
+  %mul14 = mul nsw i64 %mul13, %headdim
+  %sub = add nsw i64 %mul14, 255
+  %div15 = sdiv i64 %sub, 256
+  %agg.tmp.sroa.0.0.insert.ext = and i64 %div15, 4294967295
+  %agg.tmp.sroa.0.0.insert.insert = or disjoint i64 %agg.tmp.sroa.0.0.insert.ext, 4294967296
+  %call = tail call i32 @__mcPushCallConfiguration(i64 %agg.tmp.sroa.0.0.insert.insert, i32 1, i64 4294967552, i32 1, i64 noundef 0, ptr noundef null)
+  %tobool.not = icmp eq i32 %call, 0
+  br i1 %tobool.not, label %kcall.configok, label %cleanup751
+
+kcall.configok:                                   ; preds = %if.then
+  %div17 = sdiv i64 %num_blocks, %batch_size
+  %conv18 = sitofp i64 %headdim to float
+  %call19 = tail call float @sqrtf(float noundef %conv18) #8
+  %div20 = fdiv float 1.000000e+00, %call19
+  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %q.addr.i)
+  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %k_cache.addr.i)
+  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %v_cache.addr.i)
+  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %out.addr.i)
+  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %cache_seqlens.addr.i)
+  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %block_table.addr.i)
+  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %batch_size.addr.i)
+  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %num_heads.addr.i)
+  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %num_heads_k.addr.i)
+  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %headdim.addr.i)
+  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %page_block_size.addr.i)
+  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %pages_per_batch.addr.i)
+  call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %sm_scale.addr.i)
+  call void @llvm.lifetime.start.p0(i64 12, ptr nonnull %grid_dim.i)
+  call void @llvm.lifetime.start.p0(i64 12, ptr nonnull %block_dim.i)
+  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %shmem_size.i)
+  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %stream.i)
+  call void @llvm.lifetime.start.p0(i64 104, ptr nonnull %kernel_args1.i)
+  store ptr %q, ptr %q.addr.i, align 8, !tbaa !7, !noalias !13
+  store ptr %k_cache_paged, ptr %k_cache.addr.i, align 8, !tbaa !7, !noalias !13
+  store ptr %v_cache_paged, ptr %v_cache.addr.i, align 8, !tbaa !7, !noalias !13
+  store ptr %output, ptr %out.addr.i, align 8, !tbaa !7, !noalias !13
+  store ptr %cache_seqlens, ptr %cache_seqlens.addr.i, align 8, !tbaa !7, !noalias !13
+  store ptr %block_table, ptr %block_table.addr.i, align 8, !tbaa !7, !noalias !13
+  store i64 %batch_size, ptr %batch_size.addr.i, align 8, !tbaa !9, !noalias !13
+  store i64 %num_heads, ptr %num_heads.addr.i, align 8, !tbaa !9, !noalias !13
+  store i64 %num_heads_k, ptr %num_heads_k.addr.i, align 8, !tbaa !9, !noalias !13
+  store i64 %headdim, ptr %headdim.addr.i, align 8, !tbaa !9, !noalias !13
+  store i64 %page_block_size, ptr %page_block_size.addr.i, align 8, !tbaa !9, !noalias !13
+  store i64 %div17, ptr %pages_per_batch.addr.i, align 8, !tbaa !9, !noalias !13
+  store float %div20, ptr %sm_scale.addr.i, align 4, !tbaa !11, !noalias !13
+  store ptr %q.addr.i, ptr %kernel_args1.i, align 16, !noalias !13
+  %0 = getelementptr inbounds i8, ptr %kernel_args1.i, i64 8
+  store ptr %k_cache.addr.i, ptr %0, align 8, !noalias !13
+  %1 = getelementptr inbounds i8, ptr %kernel_args1.i, i64 16
+  store ptr %v_cache.addr.i, ptr %1, align 16, !noalias !13
+  %2 = getelementptr inbounds i8, ptr %kernel_args1.i, i64 24
+  store ptr %out.addr.i, ptr %2, align 8, !noalias !13
+  %3 = getelementptr inbounds i8, ptr %kernel_args1.i, i64 32
+  store ptr %cache_seqlens.addr.i, ptr %3, align 16, !noalias !13
+  %4 = getelementptr inbounds i8, ptr %kernel_args1.i, i64 40
+  store ptr %block_table.addr.i, ptr %4, align 8, !noalias !13
+  %5 = getelementptr inbounds i8, ptr %kernel_args1.i, i64 48
+  store ptr %batch_size.addr.i, ptr %5, align 16, !noalias !13
+  %6 = getelementptr inbounds i8, ptr %kernel_args1.i, i64 56
+  store ptr %num_heads.addr.i, ptr %6, align 8, !noalias !13
+  %7 = getelementptr inbounds i8, ptr %kernel_args1.i, i64 64
+  store ptr %num_heads_k.addr.i, ptr %7, align 16, !noalias !13
+  %8 = getelementptr inbounds i8, ptr %kernel_args1.i, i64 72
+  store ptr %headdim.addr.i, ptr %8, align 8, !noalias !13
+  %9 = getelementptr inbounds i8, ptr %kernel_args1.i, i64 80
+  store ptr %page_block_size.addr.i, ptr %9, align 16, !noalias !13
+  %10 = getelementptr inbounds i8, ptr %kernel_args1.i, i64 88
+  store ptr %pages_per_batch.addr.i, ptr %10, align 8, !noalias !13
+  %11 = getelementptr inbounds i8, ptr %kernel_args1.i, i64 96
+  store ptr %sm_scale.addr.i, ptr %11, align 16, !noalias !13
+  %12 = call i32 @__mcPopCallConfiguration(ptr nonnull %grid_dim.i, ptr nonnull %block_dim.i, ptr nonnull %shmem_size.i, ptr nonnull %stream.i)
+  %13 = load i64, ptr %shmem_size.i, align 8, !noalias !13
+  %14 = load ptr, ptr %stream.i, align 8, !noalias !13
+  %grid_dim.coerce.sroa.0.0.copyload.i = load i64, ptr %grid_dim.i, align 8, !noalias !13
+  %grid_dim.coerce.sroa.2.0.grid_dim.sroa_idx.i = getelementptr inbounds i8, ptr %grid_dim.i, i64 8
+  %grid_dim.coerce.sroa.2.0.copyload.i = load i32, ptr %grid_dim.coerce.sroa.2.0.grid_dim.sroa_idx.i, align 8, !noalias !13
+  %block_dim.coerce.sroa.0.0.copyload.i = load i64, ptr %block_dim.i, align 8, !noalias !13
+  %block_dim.coerce.sroa.2.0.block_dim.sroa_idx.i = getelementptr inbounds i8, ptr %block_dim.i, i64 8
+  %block_dim.coerce.sroa.2.0.copyload.i = load i32, ptr %block_dim.coerce.sroa.2.0.block_dim.sroa_idx.i, align 8, !noalias !13
+  %call.i = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z42__device_stub__paged_decode_generic_kernelPK15__maca_bfloat16S1_S1_PS_PKiS4_llllllf, i64 %grid_dim.coerce.sroa.0.0.copyload.i, i32 %grid_dim.coerce.sroa.2.0.copyload.i, i64 %block_dim.coerce.sroa.0.0.copyload.i, i32 %block_dim.coerce.sroa.2.0.copyload.i, ptr noundef nonnull %kernel_args1.i, i64 noundef %13, ptr noundef %14)
+  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %q.addr.i)
+  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %k_cache.addr.i)
+  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %v_cache.addr.i)
+  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %out.addr.i)
+  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %cache_seqlens.addr.i)
+  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %block_table.addr.i)
+  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %batch_size.addr.i)
+  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %num_heads.addr.i)
+  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %num_heads_k.addr.i)
+  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %headdim.addr.i)
+  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %page_block_size.addr.i)
+  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %pages_per_batch.addr.i)
+  call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %sm_scale.addr.i)
+  call void @llvm.lifetime.end.p0(i64 12, ptr nonnull %grid_dim.i)
+  call void @llvm.lifetime.end.p0(i64 12, ptr nonnull %block_dim.i)
+  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %shmem_size.i)
+  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %stream.i)
+  call void @llvm.lifetime.end.p0(i64 104, ptr nonnull %kernel_args1.i)
+  br label %cleanup751
+
+if.end:                                           ; preds = %land.rhs
+  %div24 = sdiv i64 %num_blocks, %batch_size
+  %sub26 = add nsw i64 %seqlen_k, 15
+  %div27 = sdiv i64 %sub26, 16
+  switch i64 %seqlen_k, label %if.end74 [
+    i64 1, label %if.then29
+    i64 2, label %if.then52
+  ]
+
+if.then29:                                        ; preds = %if.end
+  %mul31 = mul nsw i64 %num_heads_k, %batch_size
+  %cmp33 = icmp eq i64 %num_heads_k, 4
+  br i1 %cmp33, label %if.then34, label %if.else
+
+if.then34:                                        ; preds = %if.then29
+  %agg.tmp35.sroa.0.0.insert.ext = and i64 %mul31, 4294967292
+  %agg.tmp35.sroa.0.0.insert.insert = or disjoint i64 %agg.tmp35.sroa.0.0.insert.ext, 4294967296
+  %call37 = tail call i32 @__mcPushCallConfiguration(i64 %agg.tmp35.sroa.0.0.insert.insert, i32 1, i64 4294967424, i32 1, i64 noundef 0, ptr noundef null)
+  %tobool38.not = icmp eq i32 %call37, 0
+  br i1 %tobool38.not, label %kcall.configok39, label %cleanup751
+
+kcall.configok39:                                 ; preds = %if.then34
+  %conv40 = trunc i64 %div24 to i32
+  tail call void @_Z47__device_stub__paged_decode_single_token_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKii(ptr noundef %v_cache_paged, ptr noundef %output, ptr noundef %block_table, i32 noundef %conv40) #9
+  br label %cleanup751
+
+if.else:                                          ; preds = %if.then29
+  %agg.tmp42.sroa.0.0.insert.ext = and i64 %mul31, 4294967295
+  %agg.tmp42.sroa.0.0.insert.insert = or disjoint i64 %agg.tmp42.sroa.0.0.insert.ext, 4294967296
+  %call44 = tail call i32 @__mcPushCallConfiguration(i64 %agg.tmp42.sroa.0.0.insert.insert, i32 1, i64 4294967360, i32 1, i64 noundef 0, ptr noundef null)
+  %tobool45.not = icmp eq i32 %call44, 0
+  br i1 %tobool45.not, label %kcall.configok46, label %cleanup751
+
+kcall.configok46:                                 ; preds = %if.else
+  %conv47 = trunc i64 %div24 to i32
+  tail call void @_Z47__device_stub__paged_decode_single_token_kernelILi8ELi4EEvPK15__maca_bfloat16PS0_PKii(ptr noundef %v_cache_paged, ptr noundef %output, ptr noundef %block_table, i32 noundef %conv47) #9
+  br label %cleanup751
+
+if.then52:                                        ; preds = %if.end
+  %mul54 = mul nsw i64 %num_heads_k, %batch_size
+  %cmp56 = icmp eq i64 %num_heads_k, 4
+  br i1 %cmp56, label %if.then57, label %if.else65
+
+if.then57:                                        ; preds = %if.then52
+  %agg.tmp58.sroa.0.0.insert.ext = and i64 %mul54, 4294967292
+  %agg.tmp58.sroa.0.0.insert.insert = or disjoint i64 %agg.tmp58.sroa.0.0.insert.ext, 4294967296
+  %call60 = tail call i32 @__mcPushCallConfiguration(i64 %agg.tmp58.sroa.0.0.insert.insert, i32 1, i64 4294967552, i32 1, i64 noundef 0, ptr noundef null)
+  %tobool61.not = icmp eq i32 %call60, 0
+  br i1 %tobool61.not, label %kcall.configok62, label %cleanup751
+
+kcall.configok62:                                 ; preds = %if.then57
+  %conv63 = trunc i64 %div24 to i32
+  tail call void @_Z44__device_stub__paged_decode_two_token_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr noundef %q, ptr noundef %k_cache_paged, ptr noundef %v_cache_paged, ptr noundef %output, ptr noundef %cache_seqlens, ptr noundef %block_table, i32 noundef %conv63, float noundef 0x3FB6A09E60000000) #9
+  br label %cleanup751
+
+if.else65:                                        ; preds = %if.then52
+  %agg.tmp66.sroa.0.0.insert.ext = and i64 %mul54, 4294967295
+  %agg.tmp66.sroa.0.0.insert.insert = or disjoint i64 %agg.tmp66.sroa.0.0.insert.ext, 4294967296
+  %call68 = tail call i32 @__mcPushCallConfiguration(i64 %agg.tmp66.sroa.0.0.insert.insert, i32 1, i64 4294967424, i32 1, i64 noundef 0, ptr noundef null)
+  %tobool69.not = icmp eq i32 %call68, 0
+  br i1 %tobool69.not, label %kcall.configok70, label %cleanup751
+
+kcall.configok70:                                 ; preds = %if.else65
+  %conv71 = trunc i64 %div24 to i32
+  tail call void @_Z44__device_stub__paged_decode_two_token_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr noundef %q, ptr noundef %k_cache_paged, ptr noundef %v_cache_paged, ptr noundef %output, ptr noundef %cache_seqlens, ptr noundef %block_table, i32 noundef %conv71, float noundef 0x3FB6A09E60000000) #9
+  br label %cleanup751
+
+if.end74:                                         ; preds = %if.end
+  %add75 = add nsw i64 %seqlen_k, 127
+  %div76 = sdiv i64 %add75, 128
+  %mul78 = mul nsw i64 %num_heads_k, %batch_size
+  %sub80 = add nsw i64 %mul78, 1023
+  %div82 = sdiv i64 %sub80, %mul78
+  %sext = shl i64 %div76, 32
+  %conv83 = ashr exact i64 %sext, 32
+  %cmp84 = icmp sgt i64 %conv83, %div82
+  %spec.select = select i1 %cmp84, i64 %div82, i64 %div76
+  %n_split.0 = trunc i64 %spec.select to i32
+  %spec.store.select = tail call i32 @llvm.smax.i32(i32 %n_split.0, i32 1)
+  %cmp91 = icmp eq i64 %num_heads_k, 8
+  br i1 %cmp91, label %land.lhs.true92, label %if.end102
+
+land.lhs.true92:                                  ; preds = %if.end74
+  %cmp93 = icmp eq i64 %batch_size, 64
+  %cmp95 = icmp eq i64 %seqlen_k, 2048
+  %or.cond756 = and i1 %cmp93, %cmp95
+  br i1 %or.cond756, label %if.then100, label %lor.lhs.false96
+

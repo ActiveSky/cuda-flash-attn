@@ -1,0 +1,19 @@
+exp630 gate: C500 case2 exact/mixed/reuse/raw-bit/GQA/padding-sentinel v2
+UTC 2026-08-22T07:57:28Z
+e96b60455098002d684167531399d6620e8e7427918cadbf5609b64b126866c1  solutions/archive/2026-08-22-experiments/cuda_case2_source_owner_native_b128_exp630.cpp
+2b927d76b90100ff2f4a5e02d9e440b15f8413d95a95bf69ac6221941cb99625  build/exp630_candidate.so
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/cuda_maca_optimized.cpp
+command: inline Python using tests/c500_paged_decode_harness.py assets
+[PASS] all-one token1 poison/sentinel: numeric all=True finite=True max_error=0.000000e+00 max_tol_ratio=0.000
+[PASS] all-one token1 poison/sentinel: raw BF16 bits exact across 4 GQA query heads per KV head
+[PASS] all-two: numeric all=True finite=True max_error=1.562500e-02 max_tol_ratio=0.319
+[PASS] mixed [1,2,1,2]: numeric all=True finite=True max_error=1.562500e-02 max_tol_ratio=0.324
+[PASS] reverse mixed [2,1,2,1]: numeric all=True finite=True max_error=1.562500e-02 max_tol_ratio=0.324
+[PASS] reuse full->short->full / full-1: numeric all=True finite=True max_error=1.562500e-02 max_tol_ratio=0.322
+[PASS] reuse full->short->full / short: numeric all=True finite=True max_error=0.000000e+00 max_tol_ratio=0.000
+[PASS] reuse full->short->full / full-2: numeric all=True finite=True max_error=1.562500e-02 max_tol_ratio=0.322
+[PASS] reuse short->full / short: numeric all=True finite=True max_error=0.000000e+00 max_tol_ratio=0.000
+[PASS] reuse short->full / full: numeric all=True finite=True max_error=1.562500e-02 max_tol_ratio=0.322
+[PASS] case2 exact/mixed/reuse/raw-bit/GQA/padding-sentinel suite complete
+exit_status=0

@@ -1,0 +1,20 @@
+exp615 static gate summary (2026-08-21)
+parent/control source: solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+parent/control SHA-256: a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+candidate source: solutions/archive/2026-08-21-experiments/cuda_case11_single_token_partial_vcopy_exp615.cpp
+candidate SHA-256: f184577e9d7d3eb62c5b63008e392a1454f29cf1b25bdbf67989bd89369d2db7
+normal build command: tools/build_local_maca.sh solutions/cuda_maca_optimized.cpp build/exp615_candidate.so
+normal build log: log/exp615_candidate_build.log (PASS)
+candidate resource command: tools/build_local_maca.sh solutions/cuda_maca_optimized.cpp build/exp615_candidate_resource.so -resource-usage
+candidate resource log: log/exp615_candidate_resource.log (PASS)
+control resource command: tools/build_local_maca.sh solutions/archive/2026-08-16-submissions/cuda_113889.cpp build/exp615_control_resource.so -resource-usage
+control resource log: log/exp615_control_resource.log (PASS)
+candidate normal binary SHA-256: 987b8c5baed4d1be99f0d514ad85b7b3cbb1ad3c04286892bda8d851bc8b70d5
+candidate resource binary SHA-256: f747c1fb3deb9ec5e40515bc37e8999f8a68ff67d20cd5bee739022b4a1332cd
+control resource binary SHA-256: b6c698cb46553eece3a907dd820881887f7c5b05776d178419f0f6cba81a2fe5
+target producer candidate (20-bool exp615 specialization): 80 MTreg / 60 STreg / 8320 B shared / 0 B stack / 6 waves
+target producer control (19-bool control specialization): 80 MTreg / 58 STreg / 8320 B shared / 0 B stack / 6 waves
+target reducer candidate/control: 64 MTreg / 35 STreg / 0 B shared / 0 B stack / 8 waves
+target producer STreg exceeds the hard <=80/58/8320/0/6 gate.
+terminal: STATIC RESOURCE GATE FAILED / NO C500 / NO A-B / NO OJ
+work-file restore: solutions/cuda_maca_optimized.cpp == control SHA a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972

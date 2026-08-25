@@ -1,0 +1,5 @@
+target: contest #11, problem #1
+language: cuda.maca-c500
+code: solutions/cuda_maca_optimized.cpp (265229 bytes)
+created submission #116571
+submission=116571 progress=None status=Pending

@@ -1,0 +1,32 @@
+candidate_source_sha=655996d41d65e82e89817675fa10bd96f4b573f9cbd51c1aa5c9eb1df0571595
+candidate_normal_so=e4d85d134b30a287c5ad14d152f229f9123f893fd9ca0417b679071fa1fe84a1
+candidate_resource_so=56ef3c3e3bf5791ca515aad3eef65f817835eaef9d110c22aff10784109267b2
+candidate_llvm=3c458a575536699c980521cf98794204713d1d1f3563cbffe16093d38a04ba50
+control_source_sha=3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+control_normal_so=c9d643f25e0e15193820b4809f53ce32ebe8cdfabf91505143ec169c61de137b
+control_resource_so=608c93c732180e8cb96db73586d9866918972b64e47907aaa415d4b54cdf2374
+control_llvm=c0b1feacbfa1f793737da57fe0104013a92ac56e7408de40deb789d8fd7b29b7
+candidate_pair_resource:
+ maca info  : Function properties for  _Z41paged_decode_case14_pair_aggregate_kernelPK15__maca_bfloat16S1_S1_PS_PKiS4_PfS5_S5_iiif 
+  72 bytes stack frame 
+ maca info  : Used  112 MTregisters, 68 STregisters, 12480 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 4
+candidate_matching_reducer_resource:
+ maca info  : Function properties for  _Z26paged_decode_reduce_kernelILb1ELb0ELb1ELb1ELb1ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+  0 bytes stack frame 
+ maca info  : Used  40 MTregisters, 28 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 8
+control_case14_producer_resource:
+ maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb0ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 66 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+control_matching_reducer_resource:
+ maca info  : Function properties for  _Z26paged_decode_reduce_kernelILb1ELb0ELb1ELb1ELb1ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+  0 bytes stack frame 
+ maca info  : Used  40 MTregisters, 28 STregisters, 0 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 8
+candidate_build_failures:
+log/exp686_candidate_llvm_build.log:108:Built build/exp686_candidate_device.ll
+log/exp686_candidate_resource_build.log:293:Built build/exp686_candidate_resource.so
+log/exp686_candidate_normal_build.log:157:Built build/exp686_candidate_normal.so

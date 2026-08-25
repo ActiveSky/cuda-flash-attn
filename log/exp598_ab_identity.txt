@@ -1,0 +1,19 @@
+exp598 strict interleaved A/B identity
+date_utc=2026-08-18
+control_source=solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+control_sha256=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+candidate_source=solutions/archive/2026-08-18-experiments/cuda_case11_partial_fp32_native_stg_exp598.cpp
+candidate_sha256=5f9d7631a48dd8e63a51c5692887f0df17fdddd90f593e28dafc79f4af279d12
+workfile=solutions/cuda_maca_optimized.cpp
+workfile_sha256=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+preflight_process_check=pgrep relevant c500/harness/benchmark returned no residual process
+build_policy=fresh sequential builds; no prior exp598_ab binaries existed
+control_binary_sha256=4bbe97993b7ad219dc607e95a8a45a11c26c8c96042d857084f91098d00ea873
+candidate_binary_sha256=01307b312a317d35b5f426e265dbaf79473bc2dd535df20a3270c1bca06fca85
+benchmark_command=python3 tests/c500_benchmark.py --control build/exp598_ab_control.so --candidate build/exp598_ab_candidate.so --cases 11 --lengths {full,random,boundary} --seed 20260809 --warmup 5 --iterations 20 --rounds 9
+full_exit=0; full_correctness=passed; full_ratio_p10_p50_p90=0.9981/1.0011/1.0026
+random_exit=0; random_correctness=passed; random_ratio_p10_p50_p90=0.9964/1.0002/1.0022
+boundary_exit=0; boundary_correctness=passed; boundary_ratio_p10_p50_p90=0.9921/1.0000/1.0066
+confirmation=not_run; initial three distributions were neutral/mixed, not systematic rollback
+gate_conclusion=PASS_OJ_ELIGIBLE; no performance benefit claim; online OJ case11 tier is decisive
+postflight_process_check=ps scan found no c500 benchmark/harness/run_kernel/xpuoj_submit residual

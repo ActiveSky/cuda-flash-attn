@@ -1,0 +1,17 @@
+exp618 control resource build
+UTC 2026-08-21T10:24:59Z
+source: solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+source SHA-256: a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+command: tools/build_local_maca.sh solutions/archive/2026-08-16-submissions/cuda_113889.cpp build/exp618_control_resource.so -resource-usage
+compiler: /opt/maca/mxgpu_llvm/bin/mxcc; target: xcore1000
+exit: 0 (PASS)
+artifact: build/exp618_control_resource.so
+artifact SHA-256: b6c698cb46553eece3a907dd820881887f7c5b05776d178419f0f6cba81a2fe5
+
+Control case11 producer identity:
+  paged_decode_case11_headpair_z4_kernel<true, true, false, true, true, true, true, true, false, true, false, false, false, true, true, true, true, true, true>
+  0 bytes stack frame; 80 MTregisters; 58 STregisters; 8320 bytes shared mem; staticMaxWarps/PEU 6
+
+Control reducer identity:
+  paged_decode_reduce_vec4_kernel<true, false, true>
+  0 bytes stack frame; 64 MTregisters; 35 STregisters; 0 bytes shared mem; staticMaxWarps/PEU 8

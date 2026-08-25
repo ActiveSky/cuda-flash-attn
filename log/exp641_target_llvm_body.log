@@ -1,0 +1,412 @@
+define protected metaxgpu_kernel void @_Z39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch, float noundef %sm_scale) local_unnamed_addr #8 comdat {
+entry:
+  %0 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.x(), !range !26
+  %1 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.z(), !range !26
+  %2 = tail call noundef range(i32 0, 2147483647) i32 @llvm.mxc.block.id.x(), !range !15
+  %div324 = lshr i32 %2, 3
+  %and = and i32 %2, 7
+  %idxprom = zext nneg i32 %div324 to i64
+  %arrayidx = getelementptr inbounds i32, ptr addrspace(1) %cache_seqlens.coerce, i64 %idxprom
+  %3 = load i32, ptr addrspace(1) %arrayidx, align 4, !tbaa !16
+  %cmp = icmp eq i32 %1, 0
+  br i1 %cmp, label %if.then, label %if.end68
+
+if.then:                                          ; preds = %entry
+  %mul = mul nsw i32 %div324, %pages_per_batch
+  %idxprom10 = sext i32 %mul to i64
+  %arrayidx11 = getelementptr inbounds i32, ptr addrspace(1) %block_table.coerce, i64 %idxprom10
+  %4 = load i32, ptr addrspace(1) %arrayidx11, align 4, !tbaa !16
+  %5 = shl i32 %4, 14
+  %6 = shl nuw nsw i32 %and, 7
+  %mul14 = or disjoint i32 %5, %6
+  %idx.ext = sext i32 %mul14 to i64
+  %add.ptr = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext
+  %add.ptr20 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext
+  %cmp21 = icmp sgt i32 %3, 0
+  br i1 %cmp21, label %if.then22, label %if.end
+
+if.then22:                                        ; preds = %if.then
+  %idxprom23 = zext nneg i32 %0 to i64
+  %arrayidx24 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr, i64 %idxprom23
+  %7 = load i32, ptr addrspace(4) %arrayidx24, align 4, !tbaa !16
+  %arrayidx26 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_k, i32 0, i32 %0
+  store i32 %7, ptr addrspace(3) %arrayidx26, align 4, !tbaa !16
+  %add27 = add nuw nsw i32 %0, 32
+  %idxprom28 = zext nneg i32 %add27 to i64
+  %arrayidx29 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr, i64 %idxprom28
+  %8 = load i32, ptr addrspace(4) %arrayidx29, align 4, !tbaa !16
+  %arrayidx32 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_k, i32 0, i32 %add27
+  store i32 %8, ptr addrspace(3) %arrayidx32, align 4, !tbaa !16
+  %arrayidx34 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr20, i64 %idxprom23
+  %9 = load i32, ptr addrspace(4) %arrayidx34, align 4, !tbaa !16
+  %arrayidx36 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_v, i32 0, i32 %0
+  store i32 %9, ptr addrspace(3) %arrayidx36, align 4, !tbaa !16
+  %arrayidx39 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr20, i64 %idxprom28
+  %10 = load i32, ptr addrspace(4) %arrayidx39, align 4, !tbaa !16
+  %arrayidx42 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_v, i32 0, i32 %add27
+  store i32 %10, ptr addrspace(3) %arrayidx42, align 4, !tbaa !16
+  br label %if.end
+
+if.end:                                           ; preds = %if.then22, %if.then
+  %cmp43 = icmp eq i32 %3, 2
+  br i1 %cmp43, label %if.then44, label %if.end68
+
+if.then44:                                        ; preds = %if.end
+  %add.ptr45 = getelementptr inbounds i8, ptr addrspace(4) %add.ptr, i64 2048
+  %add.ptr46 = getelementptr inbounds i8, ptr addrspace(4) %add.ptr20, i64 2048
+  %idxprom47 = zext nneg i32 %0 to i64
+  %arrayidx48 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr45, i64 %idxprom47
+  %11 = load i32, ptr addrspace(4) %arrayidx48, align 4, !tbaa !16
+  %arrayidx50 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_k, i32 256), i32 0, i32 %0
+  store i32 %11, ptr addrspace(3) %arrayidx50, align 4, !tbaa !16
+  %add51 = add nuw nsw i32 %0, 32
+  %idxprom52 = zext nneg i32 %add51 to i64
+  %arrayidx53 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr45, i64 %idxprom52
+  %12 = load i32, ptr addrspace(4) %arrayidx53, align 4, !tbaa !16
+  %arrayidx56 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_k, i32 256), i32 0, i32 %add51
+  store i32 %12, ptr addrspace(3) %arrayidx56, align 4, !tbaa !16
+  %arrayidx58 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr46, i64 %idxprom47
+  %13 = load i32, ptr addrspace(4) %arrayidx58, align 4, !tbaa !16
+  %arrayidx60 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_v, i32 256), i32 0, i32 %0
+  store i32 %13, ptr addrspace(3) %arrayidx60, align 4, !tbaa !16
+  %arrayidx63 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr46, i64 %idxprom52
+  %14 = load i32, ptr addrspace(4) %arrayidx63, align 4, !tbaa !16
+  %arrayidx66 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_v, i32 256), i32 0, i32 %add51
+  store i32 %14, ptr addrspace(3) %arrayidx66, align 4, !tbaa !16
+  br label %if.end68
+
+if.end68:                                         ; preds = %if.end, %if.then44, %entry
+  fence syncscope("block") release
+  tail call void @llvm.mxc.barrier()
+  fence syncscope("block") acquire
+  %cmp69 = icmp slt i32 %3, 1
+  br i1 %cmp69, label %cleanup, label %if.end71
+
+if.end71:                                         ; preds = %if.end68
+  %15 = shl i32 %div324, 12
+  %16 = shl nuw nsw i32 %and, 9
+  %17 = shl nuw nsw i32 %1, 7
+  %18 = add nuw nsw i32 %16, %17
+  %mul76 = add i32 %18, %15
+  %idx.ext77 = sext i32 %mul76 to i64
+  %add.ptr78 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %q.coerce, i64 %idx.ext77
+  %idxprom79 = zext nneg i32 %0 to i64
+  %arrayidx80 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr78, i64 %idxprom79
+  %19 = load i32, ptr addrspace(4) %arrayidx80, align 4, !tbaa !16
+  %add82 = add nuw nsw i32 %0, 32
+  %idxprom83 = zext nneg i32 %add82 to i64
+  %arrayidx84 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr78, i64 %idxprom83
+  %20 = load i32, ptr addrspace(4) %arrayidx84, align 4, !tbaa !16
+  %conv.i349 = trunc i32 %19 to i16
+  %21 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i349)
+  %shr.i387 = lshr i32 %19, 16
+  %conv.i388 = trunc nuw i32 %shr.i387 to i16
+  %22 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i388)
+  %conv.i346 = trunc i32 %20 to i16
+  %23 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i346)
+  %shr.i383 = lshr i32 %20, 16
+  %conv.i384 = trunc nuw i32 %shr.i383 to i16
+  %24 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i384)
+  %arrayidx92 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_k, i32 0, i32 %0
+  %25 = load i32, ptr addrspace(3) %arrayidx92, align 4, !tbaa !16
+  %arrayidx95 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_k, i32 0, i32 %add82
+  %26 = load i32, ptr addrspace(3) %arrayidx95, align 4, !tbaa !16
+  %conv.i343 = trunc i32 %25 to i16
+  %27 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i343)
+  %mul98 = fmul contract float %21, %27
+  %shr.i379 = lshr i32 %25, 16
+  %conv.i380 = trunc nuw i32 %shr.i379 to i16
+  %28 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i380)
+  %mul101 = fmul contract float %22, %28
+  %add102 = fadd contract float %mul98, %mul101
+  %conv.i340 = trunc i32 %26 to i16
+  %29 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i340)
+  %mul105 = fmul contract float %23, %29
+  %add106 = fadd contract float %mul105, %add102
+  %shr.i375 = lshr i32 %26, 16
+  %conv.i376 = trunc nuw i32 %shr.i375 to i16
+  %30 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i376)
+  %mul109 = fmul contract float %24, %30
+  %add110 = fadd contract float %mul109, %add106
+  %31 = bitcast float %add110 to i32
+  %32 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+  %33 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %32) #25
+  %xor.i.i.i = xor i32 %33, 16
+  %34 = and i32 %33, -32
+  %and.i.i.i = add nsw i32 %34, 32
+  %cmp.not.i.i.i = icmp slt i32 %xor.i.i.i, %and.i.i.i
+  %cond.i.i.i = select i1 %cmp.not.i.i.i, i32 %xor.i.i.i, i32 %33
+  %shl.i.i.i = shl i32 %cond.i.i.i, 2
+  %35 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i, i32 %31)
+  %36 = bitcast i32 %35 to float
+  %add113 = fadd contract float %add110, %36
+  %37 = bitcast float %add113 to i32
+  %38 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+  %39 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %38) #25
+  %xor.i.i.i.1 = xor i32 %39, 8
+  %40 = and i32 %39, -32
+  %and.i.i.i.1 = add nsw i32 %40, 32
+  %cmp.not.i.i.i.1 = icmp slt i32 %xor.i.i.i.1, %and.i.i.i.1
+  %cond.i.i.i.1 = select i1 %cmp.not.i.i.i.1, i32 %xor.i.i.i.1, i32 %39
+  %shl.i.i.i.1 = shl i32 %cond.i.i.i.1, 2
+  %41 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.1, i32 %37)
+  %42 = bitcast i32 %41 to float
+  %add113.1 = fadd contract float %add113, %42
+  %43 = bitcast float %add113.1 to i32
+  %44 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+  %45 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %44) #25
+  %xor.i.i.i.2 = xor i32 %45, 4
+  %46 = and i32 %45, -32
+  %and.i.i.i.2 = add nsw i32 %46, 32
+  %cmp.not.i.i.i.2 = icmp slt i32 %xor.i.i.i.2, %and.i.i.i.2
+  %cond.i.i.i.2 = select i1 %cmp.not.i.i.i.2, i32 %xor.i.i.i.2, i32 %45
+  %shl.i.i.i.2 = shl i32 %cond.i.i.i.2, 2
+  %47 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.2, i32 %43)
+  %48 = bitcast i32 %47 to float
+  %add113.2 = fadd contract float %add113.1, %48
+  %49 = bitcast float %add113.2 to i32
+  %50 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+  %51 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %50) #25
+  %xor.i.i.i.3 = xor i32 %51, 2
+  %52 = and i32 %51, -32
+  %and.i.i.i.3 = add nsw i32 %52, 32
+  %cmp.not.i.i.i.3 = icmp slt i32 %xor.i.i.i.3, %and.i.i.i.3
+  %cond.i.i.i.3 = select i1 %cmp.not.i.i.i.3, i32 %xor.i.i.i.3, i32 %51
+  %shl.i.i.i.3 = shl i32 %cond.i.i.i.3, 2
+  %53 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.3, i32 %49)
+  %54 = bitcast i32 %53 to float
+  %add113.3 = fadd contract float %add113.2, %54
+  %55 = bitcast float %add113.3 to i32
+  %56 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+  %57 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %56) #25
+  %xor.i.i.i.4 = xor i32 %57, 1
+  %58 = and i32 %57, -32
+  %and.i.i.i.4 = add nsw i32 %58, 32
+  %cmp.not.i.i.i.4 = icmp slt i32 %xor.i.i.i.4, %and.i.i.i.4
+  %cond.i.i.i.4 = select i1 %cmp.not.i.i.i.4, i32 %xor.i.i.i.4, i32 %57
+  %shl.i.i.i.4 = shl i32 %cond.i.i.i.4, 2
+  %59 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.4, i32 %55)
+  %60 = bitcast i32 %59 to float
+  %add113.4 = fadd contract float %add113.3, %60
+  %mul114 = fmul contract float %add113.4, %sm_scale
+  %cmp115 = icmp eq i32 %3, 2
+  br i1 %cmp115, label %if.then116, label %if.end148
+
+if.then116:                                       ; preds = %if.end71
+  %arrayidx118 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_k, i32 256), i32 0, i32 %0
+  %61 = load i32, ptr addrspace(3) %arrayidx118, align 4, !tbaa !16
+  %arrayidx121 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_k, i32 256), i32 0, i32 %add82
+  %62 = load i32, ptr addrspace(3) %arrayidx121, align 4, !tbaa !16
+  %conv.i337 = trunc i32 %61 to i16
+  %63 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i337)
+  %mul124 = fmul contract float %21, %63
+  %shr.i371 = lshr i32 %61, 16
+  %conv.i372 = trunc nuw i32 %shr.i371 to i16
+  %64 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i372)
+  %mul127 = fmul contract float %22, %64
+  %add128 = fadd contract float %mul124, %mul127
+  %conv.i334 = trunc i32 %62 to i16
+  %65 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i334)
+  %mul131 = fmul contract float %23, %65
+  %add132 = fadd contract float %mul131, %add128
+  %shr.i367 = lshr i32 %62, 16
+  %conv.i368 = trunc nuw i32 %shr.i367 to i16
+  %66 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i368)
+  %mul135 = fmul contract float %24, %66
+  %add136 = fadd contract float %mul135, %add132
+  %67 = bitcast float %add136 to i32
+  %68 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+  %69 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %68) #25
+  %xor.i.i.i467 = xor i32 %69, 16
+  %70 = and i32 %69, -32
+  %and.i.i.i469 = add nsw i32 %70, 32
+  %cmp.not.i.i.i470 = icmp slt i32 %xor.i.i.i467, %and.i.i.i469
+  %cond.i.i.i471 = select i1 %cmp.not.i.i.i470, i32 %xor.i.i.i467, i32 %69
+  %shl.i.i.i472 = shl i32 %cond.i.i.i471, 2
+  %71 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i472, i32 %67)
+  %72 = bitcast i32 %71 to float
+  %add143 = fadd contract float %add136, %72
+  %73 = bitcast float %add143 to i32
+  %74 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+  %75 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %74) #25
+  %xor.i.i.i467.1 = xor i32 %75, 8
+  %76 = and i32 %75, -32
+  %and.i.i.i469.1 = add nsw i32 %76, 32
+  %cmp.not.i.i.i470.1 = icmp slt i32 %xor.i.i.i467.1, %and.i.i.i469.1
+  %cond.i.i.i471.1 = select i1 %cmp.not.i.i.i470.1, i32 %xor.i.i.i467.1, i32 %75
+  %shl.i.i.i472.1 = shl i32 %cond.i.i.i471.1, 2
+  %77 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i472.1, i32 %73)
+  %78 = bitcast i32 %77 to float
+  %add143.1 = fadd contract float %add143, %78
+  %79 = bitcast float %add143.1 to i32
+  %80 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+  %81 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %80) #25
+  %xor.i.i.i467.2 = xor i32 %81, 4
+  %82 = and i32 %81, -32
+  %and.i.i.i469.2 = add nsw i32 %82, 32
+  %cmp.not.i.i.i470.2 = icmp slt i32 %xor.i.i.i467.2, %and.i.i.i469.2
+  %cond.i.i.i471.2 = select i1 %cmp.not.i.i.i470.2, i32 %xor.i.i.i467.2, i32 %81
+  %shl.i.i.i472.2 = shl i32 %cond.i.i.i471.2, 2
+  %83 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i472.2, i32 %79)
+  %84 = bitcast i32 %83 to float
+  %add143.2 = fadd contract float %add143.1, %84
+  %85 = bitcast float %add143.2 to i32
+  %86 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+  %87 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %86) #25
+  %xor.i.i.i467.3 = xor i32 %87, 2
+  %88 = and i32 %87, -32
+  %and.i.i.i469.3 = add nsw i32 %88, 32
+  %cmp.not.i.i.i470.3 = icmp slt i32 %xor.i.i.i467.3, %and.i.i.i469.3
+  %cond.i.i.i471.3 = select i1 %cmp.not.i.i.i470.3, i32 %xor.i.i.i467.3, i32 %87
+  %shl.i.i.i472.3 = shl i32 %cond.i.i.i471.3, 2
+  %89 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i472.3, i32 %85)
+  %90 = bitcast i32 %89 to float
+  %add143.3 = fadd contract float %add143.2, %90
+  %91 = bitcast float %add143.3 to i32
+  %92 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+  %93 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %92) #25
+  %xor.i.i.i467.4 = xor i32 %93, 1
+  %94 = and i32 %93, -32
+  %and.i.i.i469.4 = add nsw i32 %94, 32
+  %cmp.not.i.i.i470.4 = icmp slt i32 %xor.i.i.i467.4, %and.i.i.i469.4
+  %cond.i.i.i471.4 = select i1 %cmp.not.i.i.i470.4, i32 %xor.i.i.i467.4, i32 %93
+  %shl.i.i.i472.4 = shl i32 %cond.i.i.i471.4, 2
+  %95 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i472.4, i32 %91)
+  %96 = bitcast i32 %95 to float
+  %add143.4 = fadd contract float %add143.3, %96
+  %mul147 = fmul contract float %add143.4, %sm_scale
+  br label %if.end148
+
+if.end148:                                        ; preds = %if.then116, %if.end71
+  %score1.0 = phi float [ %mul147, %if.then116 ], [ 0.000000e+00, %if.end71 ]
+  %97 = tail call contract noundef float @llvm.maxnum.f32(float %mul114, float %score1.0)
+  %spec.select = select i1 %cmp115, float %97, float %mul114
+  %sub = fsub contract float %mul114, %spec.select
+  %98 = tail call contract noundef float @llvm.exp.f32(float %sub)
+  %cond156 = select contract i1 %cmp115, float %98, float 1.000000e+00
+  %sub159 = fsub contract float %score1.0, %spec.select
+  %99 = tail call contract noundef float @llvm.exp.f32(float %sub159)
+  %cond163 = select contract i1 %cmp115, float %99, float 0.000000e+00
+  %add164 = fadd contract float %cond156, %cond163
+  %div165 = fdiv contract float 1.000000e+00, %add164
+  %arrayidx167 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_v, i32 0, i32 %0
+  %100 = load i32, ptr addrspace(3) %arrayidx167, align 4, !tbaa !16
+  %arrayidx170 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_v, i32 0, i32 %add82
+  %101 = load i32, ptr addrspace(3) %arrayidx170, align 4, !tbaa !16
+  %conv.i331 = trunc i32 %100 to i16
+  %102 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i331)
+  %mul172 = fmul contract float %102, %cond156
+  %shr.i363 = lshr i32 %100, 16
+  %conv.i364 = trunc nuw i32 %shr.i363 to i16
+  %103 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i364)
+  %mul175 = fmul contract float %103, %cond156
+  %conv.i328 = trunc i32 %101 to i16
+  %104 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i328)
+  %mul178 = fmul contract float %104, %cond156
+  %shr.i359 = lshr i32 %101, 16
+  %conv.i360 = trunc nuw i32 %shr.i359 to i16
+  %105 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i360)
+  %mul181 = fmul contract float %cond156, %105
+  br i1 %cmp115, label %if.then183, label %if.end205
+
+if.then183:                                       ; preds = %if.end148
+  %arrayidx185 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_v, i32 256), i32 0, i32 %0
+  %106 = load i32, ptr addrspace(3) %arrayidx185, align 4, !tbaa !16
+  %arrayidx188 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ39paged_decode_two_token_shared_kv_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_ifE3s_v, i32 256), i32 0, i32 %add82
+  %107 = load i32, ptr addrspace(3) %arrayidx188, align 4, !tbaa !16
+  %conv.i325 = trunc i32 %106 to i16
+  %108 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i325)
+  %mul190 = fmul contract float %cond163, %108
+  %add192 = fadd contract float %mul172, %mul190
+  %shr.i355 = lshr i32 %106, 16
+  %conv.i356 = trunc nuw i32 %shr.i355 to i16
+  %109 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i356)
+  %mul194 = fmul contract float %cond163, %109
+  %add196 = fadd contract float %mul175, %mul194
+  %conv.i = trunc i32 %107 to i16
+  %110 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i)
+  %mul198 = fmul contract float %cond163, %110
+  %add200 = fadd contract float %mul178, %mul198
+  %shr.i = lshr i32 %107, 16
+  %conv.i352 = trunc nuw i32 %shr.i to i16
+  %111 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i352)
+  %mul202 = fmul contract float %cond163, %111
+  %add204 = fadd contract float %mul181, %mul202
+  br label %if.end205
+
+if.end205:                                        ; preds = %if.then183, %if.end148
+  %outv.sroa.14.0 = phi float [ %add204, %if.then183 ], [ %mul181, %if.end148 ]
+  %outv.sroa.10.0 = phi float [ %add200, %if.then183 ], [ %mul178, %if.end148 ]
+  %outv.sroa.6.0 = phi float [ %add196, %if.then183 ], [ %mul175, %if.end148 ]
+  %outv.sroa.0.0 = phi float [ %add192, %if.then183 ], [ %mul172, %if.end148 ]
+  %add.ptr210 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %out.coerce, i64 %idx.ext77
+  %mul212 = fmul contract float %div165, %outv.sroa.0.0
+  %mul214 = fmul contract float %div165, %outv.sroa.6.0
+  %cmp.i.i.i = fcmp contract uno float %mul212, 0.000000e+00
+  %112 = select i1 %cmp.i.i.i, float 0x7FFFE00000000000, float %mul212
+  %113 = bitcast float %112 to i32
+  %shr.i.i.i.i.i = lshr i32 %113, 16
+  %and.i.i.i.i.i = and i32 %shr.i.i.i.i.i, 1
+  %add.i.i.i.i.i = add i32 %113, 32767
+  %add1.i.i.i.i.i = add i32 %add.i.i.i.i.i, %and.i.i.i.i.i
+  %shr2.i.i.i.i.i = lshr i32 %add1.i.i.i.i.i, 16
+  %conv.i.i.i.i.i = trunc nuw i32 %shr2.i.i.i.i.i to i16
+  %cmp.i1.i.i = fcmp contract uno float %mul214, 0.000000e+00
+  %114 = select i1 %cmp.i1.i.i, float 0x7FFFE00000000000, float %mul214
+  %115 = bitcast float %114 to i32
+  %shr.i.i.i2.i.i = lshr i32 %115, 16
+  %and.i.i.i3.i.i = and i32 %shr.i.i.i2.i.i, 1
+  %add.i.i.i4.i.i = add i32 %115, 32767
+  %add1.i.i.i5.i.i = add i32 %add.i.i.i4.i.i, %and.i.i.i3.i.i
+  %shr2.i.i.i6.i.i = lshr i32 %add1.i.i.i5.i.i, 16
+  %conv.i.i.i7.i.i = trunc nuw i32 %shr2.i.i.i6.i.i to i16
+  %arrayidx216 = getelementptr inbounds %struct.__maca_bfloat162.3, ptr addrspace(1) %add.ptr210, i64 %idxprom79
+  store i16 %conv.i.i.i.i.i, ptr addrspace(1) %arrayidx216, align 4, !tbaa !27
+  %y3.i = getelementptr inbounds i8, ptr addrspace(1) %arrayidx216, i64 2
+  store i16 %conv.i.i.i7.i.i, ptr addrspace(1) %y3.i, align 2, !tbaa !27
+  %mul220 = fmul contract float %div165, %outv.sroa.10.0
+  %mul222 = fmul contract float %div165, %outv.sroa.14.0
+  %cmp.i.i.i473 = fcmp contract uno float %mul220, 0.000000e+00
+  %116 = select i1 %cmp.i.i.i473, float 0x7FFFE00000000000, float %mul220
+  %117 = bitcast float %116 to i32
+  %shr.i.i.i.i.i474 = lshr i32 %117, 16
+  %and.i.i.i.i.i475 = and i32 %shr.i.i.i.i.i474, 1
+  %add.i.i.i.i.i476 = add i32 %117, 32767
+  %add1.i.i.i.i.i477 = add i32 %add.i.i.i.i.i476, %and.i.i.i.i.i475
+  %shr2.i.i.i.i.i478 = lshr i32 %add1.i.i.i.i.i477, 16
+  %conv.i.i.i.i.i479 = trunc nuw i32 %shr2.i.i.i.i.i478 to i16
+  %cmp.i1.i.i480 = fcmp contract uno float %mul222, 0.000000e+00
+  %118 = select i1 %cmp.i1.i.i480, float 0x7FFFE00000000000, float %mul222
+  %119 = bitcast float %118 to i32
+  %shr.i.i.i2.i.i481 = lshr i32 %119, 16
+  %and.i.i.i3.i.i482 = and i32 %shr.i.i.i2.i.i481, 1
+  %add.i.i.i4.i.i483 = add i32 %119, 32767
+  %add1.i.i.i5.i.i484 = add i32 %add.i.i.i4.i.i483, %and.i.i.i3.i.i482
+  %shr2.i.i.i6.i.i485 = lshr i32 %add1.i.i.i5.i.i484, 16
+  %conv.i.i.i7.i.i486 = trunc nuw i32 %shr2.i.i.i6.i.i485 to i16
+  %arrayidx225 = getelementptr inbounds %struct.__maca_bfloat162.3, ptr addrspace(1) %add.ptr210, i64 %idxprom83
+  store i16 %conv.i.i.i.i.i479, ptr addrspace(1) %arrayidx225, align 4, !tbaa !27
+  %y3.i489 = getelementptr inbounds i8, ptr addrspace(1) %arrayidx225, i64 2
+  store i16 %conv.i.i.i7.i.i486, ptr addrspace(1) %y3.i489, align 2, !tbaa !27
+  br label %cleanup
+
+cleanup:                                          ; preds = %if.end68, %if.end205
+  ret void
+}
+
+; Function Attrs: mustprogress nofree nosync nounwind speculatable willreturn memory(none)
+declare i32 @llvm.mxc.thread.id.z() #5
+
+; Function Attrs: convergent mustprogress nounwind willreturn
+declare void @llvm.mxc.barrier() #9
+
+; Function Attrs: convergent mustprogress nofree nounwind willreturn memory(none)
+declare i32 @llvm.mxc.bsm.bpermute(i32, i32) #10
+
+; Function Attrs: convergent mustprogress nofree nounwind willreturn memory(none)
+declare i32 @llvm.mxc.mbcnt.lo(i32, i32) #10
+
+; Function Attrs: convergent mustprogress nofree nounwind willreturn memory(none)
+declare i32 @llvm.mxc.mbcnt.hi(i32, i32) #10
+
+; Function Attrs: convergent mustprogress nofree norecurse nounwind willreturn memory(argmem: readwrite)

@@ -1,0 +1,17 @@
+exp599 OJ probe preflight: process and queue check
+UTC 2026-08-18T15:26:41Z
+active relevant processes before --list:
+3704144 /bin/bash -c set -o pipefail {   printf '%s\n' 'exp599 OJ probe preflight: process and queue check'   date -u '+UTC %Y-%m-%dT%H:%M:%SZ'   printf '%s\n' 'active relevant processes before --list:'   pgrep -af '[c]500|[m]aca|[x]puoj|[b]enchmark|[t]est_kernel' || true   printf '%s\n' 'command: python3 tools/xpuoj_submit.py --list'   python3 tools/xpuoj_submit.py --list } 2>&1 | tee log/exp599_oj_list.log rc=${PIPESTATUS[0]} printf 'exit_status=%s\n' "$rc" >> log/exp599_oj_list.log exit "$rc"
+3704145 /bin/bash -c set -o pipefail {   printf '%s\n' 'exp599 OJ probe preflight: process and queue check'   date -u '+UTC %Y-%m-%dT%H:%M:%SZ'   printf '%s\n' 'active relevant processes before --list:'   pgrep -af '[c]500|[m]aca|[x]puoj|[b]enchmark|[t]est_kernel' || true   printf '%s\n' 'command: python3 tools/xpuoj_submit.py --list'   python3 tools/xpuoj_submit.py --list } 2>&1 | tee log/exp599_oj_list.log rc=${PIPESTATUS[0]} printf 'exit_status=%s\n' "$rc" >> log/exp599_oj_list.log exit "$rc"
+command: python3 tools/xpuoj_submit.py --list
+| #116797 | Accepted | 66 | cuda.maca-c500 | 2026-08-18T12:57:22.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #116723 | Accepted | 66 | cuda.maca-c500 | 2026-08-18T11:57:04.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #116571 | Accepted | 66 | cuda.maca-c500 | 2026-08-18T09:13:48.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #116314 | Accepted | 66 | cuda.maca-c500 | 2026-08-18T04:19:51.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #115902 | Accepted | 66 | cuda.maca-c500 | 2026-08-17T16:08:27.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #115744 | Accepted | 66.07 | cuda.maca-c500 | 2026-08-17T13:47:08.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #115685 | Accepted | 66.07 | cuda.maca-c500 | 2026-08-17T12:54:34.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #115590 | Accepted | 66 | cuda.maca-c500 | 2026-08-17T11:21:57.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #115574 | Accepted | 66.14 | cuda.maca-c500 | 2026-08-17T10:54:57.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #114179 | Accepted | 66 | cuda.maca-c500 | 2026-08-16T07:43:51.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+exit_status=0

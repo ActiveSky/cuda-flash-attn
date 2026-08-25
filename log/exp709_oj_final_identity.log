@@ -1,0 +1,9 @@
+UTC 2026-08-24T18:42:34Z
+submission_id=125776 status=Accepted total_score=66.07 accepted=14/14
+target_set=case1:92/3us case2:90/4us case3:83/9us sum=265; no next tier
+1499ce69d186977fb5c49ce75791238fcfcfac83d5e465a48e255a752cac7a36  solutions/archive/2026-08-24-experiments/cuda_control124611_short123_bundle_exp709.cpp
+644101222b6c698a19a9815e51b740bd6b702280d2295d1955c9b85591da3752  results/raw/cuda_125776_raw.json
+raw_detail_content_code_sha256=1499ce69d186977fb5c49ce75791238fcfcfac83d5e465a48e255a752cac7a36
+raw_detail_content_code_bytes=281908
+expected_candidate_sha=1499ce69d186977fb5c49ce75791238fcfcfac83d5e465a48e255a752cac7a36
+exit_status=0

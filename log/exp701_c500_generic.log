@@ -1,0 +1,35 @@
+exp701 isolated real C500 generic correctness
+date=2026-08-24T15:11:42Z
+gpu=MetaX C500
+torch=2.8.0+metax3.7.1.3
+
+Identity checked before/after execution:
+candidate_source_sha256=4f9a42b487c7cd3d5b9e5cc6bfa57d68e090ff8f35aa0a68bb386a168ba28cbd
+control_source_sha256=3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+candidate_library_sha256=b04852a3d2c27d472dbdc3677738c7510fbdc281b6fe699ef99c9448f194d924
+control_library_sha256=4bbe97993b7ad219dc607e95a8a45a11c26c8c96042d857084f91098d00ea873
+workfile_sha256_after=3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+
+No build, timing/A-B, OJ, source, workfile, shared-record, or archive operation was performed by this task.
+
+Commands (each separately run on the real C500, exit 0):
+python3 tests/c500_paged_decode_harness.py --library build/exp701_candidate_normal.so --cases 2 --lengths boundary --seed 20260824
+  [PASS] case 2 B=4 L=2 KV=8 lengths=boundary match=1.000000 max_error=1.562500e-02 max_tol_ratio=0.324 finite=True
+python3 tests/c500_paged_decode_harness.py --library build/exp666_control_normal.so --cases 2 --lengths boundary --seed 20260824
+  [PASS] case 2 B=4 L=2 KV=8 lengths=boundary match=1.000000 max_error=1.562500e-02 max_tol_ratio=0.324 finite=True
+python3 tests/c500_paged_decode_harness.py --library build/exp701_candidate_normal.so --cases 2 --lengths random --seed 20260824
+  [PASS] case 2 B=4 L=2 KV=8 lengths=random match=1.000000 max_error=1.562500e-02 max_tol_ratio=0.299 finite=True
+python3 tests/c500_paged_decode_harness.py --library build/exp666_control_normal.so --cases 2 --lengths random --seed 20260824
+  [PASS] case 2 B=4 L=2 KV=8 lengths=random match=1.000000 max_error=1.562500e-02 max_tol_ratio=0.299 finite=True
+python3 tests/c500_paged_decode_harness.py --library build/exp701_candidate_normal.so --cases 2 --lengths full --seed 20260824
+  [PASS] case 2 B=4 L=2 KV=8 lengths=full match=1.000000 max_error=1.562500e-02 max_tol_ratio=0.324 finite=True
+python3 tests/c500_paged_decode_harness.py --library build/exp666_control_normal.so --cases 2 --lengths full --seed 20260824
+  [PASS] case 2 B=4 L=2 KV=8 lengths=full match=1.000000 max_error=1.562500e-02 max_tol_ratio=0.324 finite=True
+python3 tests/c500_paged_decode_harness.py --library build/exp701_candidate_normal.so --cases 2 --length-values 1,2 --seed 20260824
+  [PASS] exact:1 match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 finite=True
+  [PASS] exact:2 match=1.000000 max_error=1.562500e-02 max_tol_ratio=0.324 finite=True
+python3 tests/c500_paged_decode_harness.py --library build/exp666_control_normal.so --cases 2 --length-values 1,2 --seed 20260824
+  [PASS] exact:1 match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 finite=True
+  [PASS] exact:2 match=1.000000 max_error=1.562500e-02 max_tol_ratio=0.324 finite=True
+
+Result: candidate/control passed case2 boundary, random, full, exact 1/2; no illegal launch, nonfinite output, or source identity drift observed.

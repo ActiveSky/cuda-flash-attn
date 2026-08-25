@@ -1,0 +1,23 @@
+exp597 correctness gate final identity and summary
+UTC 2026-08-18T11:49:26Z
+candidate source:
+f529061ec94575ac1f87d80d35ca6bf02ea2137c2890b809c98f24ece8df3774  solutions/archive/2026-08-18-experiments/cuda_case12_reducer_partial_b64_native_ldg_exp597.cpp
+control/work source:
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/cuda_maca_optimized.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+candidate binary:
+14f12151eb94dd1ebdd4877489fbef5096e451758e9cf860e307df82a81e9b25  build/exp597_c500_candidate.so
+active relevant processes:
+3645105 /bin/bash -c set -o pipefail {   printf '%s\n' 'exp597 correctness gate final identity and summary'   date -u '+UTC %Y-%m-%dT%H:%M:%SZ'   printf '%s\n' 'candidate source:'   sha256sum solutions/archive/2026-08-18-experiments/cuda_case12_reducer_partial_b64_native_ldg_exp597.cpp   printf '%s\n' 'control/work source:'   sha256sum solutions/cuda_maca_optimized.cpp solutions/archive/2026-08-16-submissions/cuda_113889.cpp   printf '%s\n' 'candidate binary:'   sha256sum build/exp597_c500_candidate.so   printf '%s\n' 'active relevant processes:'   pgrep -af '[c]500|[x]puoj|[t]est_kernel|[b]enchmark' || true   printf '%s\n' 'log PASS counts:'   for task_log in log/exp597_cpu_logic.log log/exp597_c500_full.log log/exp597_c500_random.log log/exp597_c500_boundary.log log/exp597_c500_case12_exact.log log/exp597_c500_reuse_32768_1_32768.log log/exp597_c500_reuse_1_32768.log; do     pass_count=$(rg -c '^\[PASS\]' "$task_log" || true)     exit_line=$(rg '^exit_status=' "$task_log" | tail -1 || true)     printf '%s pass_lines=%s %s\n' "$task_log" "${pass_count:-0}" "$exit_line"   done   printf '%s\n' 'commands executed: build; CPU quick logic; C500 all full/random/boundary; case12 exact 241 lengths; reuse 32768,1,32768; reuse 1,32768'   printf '%s\n' 'gate_result=C500 correctness PASS; no A/B; no OJ' } 2>&1 | tee log/exp597_identity.log rc=${PIPESTATUS[0]} printf 'exit_status=%s\n' "$rc" >> log/exp597_identity.log exit "$rc"
+3645106 /bin/bash -c set -o pipefail {   printf '%s\n' 'exp597 correctness gate final identity and summary'   date -u '+UTC %Y-%m-%dT%H:%M:%SZ'   printf '%s\n' 'candidate source:'   sha256sum solutions/archive/2026-08-18-experiments/cuda_case12_reducer_partial_b64_native_ldg_exp597.cpp   printf '%s\n' 'control/work source:'   sha256sum solutions/cuda_maca_optimized.cpp solutions/archive/2026-08-16-submissions/cuda_113889.cpp   printf '%s\n' 'candidate binary:'   sha256sum build/exp597_c500_candidate.so   printf '%s\n' 'active relevant processes:'   pgrep -af '[c]500|[x]puoj|[t]est_kernel|[b]enchmark' || true   printf '%s\n' 'log PASS counts:'   for task_log in log/exp597_cpu_logic.log log/exp597_c500_full.log log/exp597_c500_random.log log/exp597_c500_boundary.log log/exp597_c500_case12_exact.log log/exp597_c500_reuse_32768_1_32768.log log/exp597_c500_reuse_1_32768.log; do     pass_count=$(rg -c '^\[PASS\]' "$task_log" || true)     exit_line=$(rg '^exit_status=' "$task_log" | tail -1 || true)     printf '%s pass_lines=%s %s\n' "$task_log" "${pass_count:-0}" "$exit_line"   done   printf '%s\n' 'commands executed: build; CPU quick logic; C500 all full/random/boundary; case12 exact 241 lengths; reuse 32768,1,32768; reuse 1,32768'   printf '%s\n' 'gate_result=C500 correctness PASS; no A/B; no OJ' } 2>&1 | tee log/exp597_identity.log rc=${PIPESTATUS[0]} printf 'exit_status=%s\n' "$rc" >> log/exp597_identity.log exit "$rc"
+log PASS counts:
+log/exp597_cpu_logic.log pass_lines=14 exit_status=0
+log/exp597_c500_full.log pass_lines=14 exit_status=0
+log/exp597_c500_random.log pass_lines=14 exit_status=0
+log/exp597_c500_boundary.log pass_lines=14 exit_status=0
+log/exp597_c500_case12_exact.log pass_lines=241 exit_status=0
+log/exp597_c500_reuse_32768_1_32768.log pass_lines=3 exit_status=0
+log/exp597_c500_reuse_1_32768.log pass_lines=2 exit_status=0
+commands executed: build; CPU quick logic; C500 all full/random/boundary; case12 exact 241 lengths; reuse 32768,1,32768; reuse 1,32768
+gate_result=C500 correctness PASS; no A/B; no OJ
+exit_status=0

@@ -1,0 +1,32 @@
+GPU: MetaX C500
+library: build/exp632_relaxed_candidate.so
+case2: B=4 cap=2 KV=8
+[PASS] all-one token1+padding poison match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] all-one raw-BF16 GQA tag equality=True
+[PASS] all-one candidate/reference raw-BF16 equality
+[PASS] all-two padding poison match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] all-two raw-BF16 candidate/reference equality
+[PASS] mixed [1,2,1,2] token/padding poison match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] mixed [1,2,1,2] raw-BF16 candidate/reference equality
+[PASS] reverse mixed [2,1,2,1] token/padding poison match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] reverse mixed [2,1,2,1] raw-BF16 candidate/reference equality
+[PASS] workspace full-short-full step=1/3 length=2 match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] workspace full-short-full step=2/3 length=1 match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] workspace full-short-full step=3/3 length=2 match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] workspace full-short-full endpoint_deterministic=True
+[PASS] workspace short-full step=1/2 length=1 match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] workspace short-full step=2/2 length=2 match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] workspace short-full endpoint_deterministic=True
+[PASS] repeat length=1 iter=1/5 match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] repeat length=1 iter=2/5 match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] repeat length=1 iter=3/5 match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] repeat length=1 iter=4/5 match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] repeat length=1 iter=5/5 match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] repeat length=1 deterministic=True
+[PASS] repeat length=2 iter=1/5 match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] repeat length=2 iter=2/5 match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] repeat length=2 iter=3/5 match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] repeat length=2 iter=4/5 match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] repeat length=2 iter=5/5 match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 reference_finite=True finite=True guards=True inputs_untouched=True
+[PASS] repeat length=2 deterministic=True
+overall=PASS

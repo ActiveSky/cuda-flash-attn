@@ -1,0 +1,4 @@
+122: maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+123-  0 bytes stack frame 
+124- maca info  : Used  22 MTregisters, 26 STregisters, 0 bytes shared mem  
+125- maca info  : staticMaxWarps/PEU : 8

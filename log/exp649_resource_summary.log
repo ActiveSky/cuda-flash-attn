@@ -1,0 +1,6 @@
+exp639 candidate tuples=31; exp649 candidate tuples=31
+ordered_common_tuple_match=True
+changed_tuple_positions=[]
+case14_direct_fanin_template=(1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1)
+case14_direct_fanin_resources=[(80, 58, 8320, 0, 6)]
+resource isolation: PASS; helper tx offset did not change any reachable resource tuple

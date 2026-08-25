@@ -1,0 +1,209 @@
+exp670 static audit
+2026-08-24T00:18:39Z
+candidate source SHA:
+c17355863c27caabd414d15497e7530fb6a9c597879e728304c55a9237d3e17e  solutions/archive/2026-08-24-experiments/cuda_control124611_case12_dual_token_short_fallback_exp670.cpp
+parent exp669 SHA:
+f109fe00373b98c93ae2b0514324c82d0036ee89c851cfc32fed292aa40536bf  solutions/archive/2026-08-23-experiments/cuda_control124611_case12_ordered_dual_token_exp669.cpp
+diff stat:
+source selector evidence:
+2574-
+2575-template <bool ALL_NATIVE_ROW_QK = false, bool NATIVE_HEAD_BIT1 = false,
+2576-          bool FIXED_LIVE_BUCKETS = false,
+2577-          bool BF16_NORMALIZED_PARTIAL = false,
+2578:          bool ORDERED_DUAL_TOKEN_BSM = false>
+2579-__global__ void __launch_bounds__(256)
+2580-paged_decode_case13_kv8_headpair_z8_kernel(
+2581-    const __nv_bfloat16* __restrict__ q,
+2582-    const __nv_bfloat16* __restrict__ k_cache,
+--
+2683-    float acc0[8] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
+2684-    float acc1[8] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
+2685-
+2686-    const int32_t* bt_row = block_table + b * pages_per_batch;
+2687:    static_assert(!ORDERED_DUAL_TOKEN_BSM ||
+2688-                      (ALL_NATIVE_ROW_QK && !NATIVE_HEAD_BIT1 &&
+2689-                       !FIXED_LIVE_BUCKETS && !BF16_NORMALIZED_PARTIAL),
+2690-                  "ordered dual-token BSM is case12's scalar partial path");
+2691-    // exp670: the ordered use-def token path is only safe/useful when a
+2692-    // split owns more than one live page.  Keep this predicate uniform over
+2693-    // the CTA so one-page rows use exp666/#124611's synchronous control path
+2694-    // without issuing or waiting on an opaque token.
+2695:    const bool ordered_active = (p_end - p_beg) > 1;
+2696-    BsmToken128 k_bsm_token{};
+2697-    BsmToken128 v_bsm_token{};
+2698-    if (p_beg < p_end) {
+2699-        int32_t pid = bt_row[p_beg];
+2700:        if constexpr (ORDERED_DUAL_TOKEN_BSM) {
+2701:            if (ordered_active) {
+2702-                k_bsm_token = issue_case12_kv8_headpair_z8_tokenized_bsm_page(
+2703-                    k_cache, s_k, pid, kv_head, tx, ty, tz, PAGE_TOKENS);
+2704-                v_bsm_token = issue_case12_kv8_headpair_z8_tokenized_bsm_page(
+2705-                    v_cache, s_v, pid, kv_head, tx, ty, tz, PAGE_TOKENS);
+--
+2719-        for (int p = p_beg; p < p_end; ++p) {
+2720-            // One physical 64-lane wave contains two adjacent z partitions
+2721-            // and owns exactly four token rows, so no cross-wave page data is
+2722-            // consumed in the hot loop.
+2723:            if constexpr (ORDERED_DUAL_TOKEN_BSM) {
+2724:                if (ordered_active) {
+2725-                    wait_token_parallel_page_tokenized_bsm(k_bsm_token);
+2726-                } else {
+2727-                    __syncwarp();
+2728-                }
+--
+2764-            uint32_t next_v0 = 0;
+2765-            uint32_t next_v1 = 0;
+2766-            uint32_t next_v2 = 0;
+2767-            uint32_t next_v3 = 0;
+2768:            if constexpr (ORDERED_DUAL_TOKEN_BSM) {
+2769:                if (ordered_active) {
+2770-                    // The current V request is retired before K-next is
+2771-                    // published.  This is the ordering precondition that
+2772-                    // makes the scope-0 use-def token safe on the physical
+2773-                    // z8 wave.
+--
+2840-            }
+2841-            m0 = m_new0;
+2842-            m1 = m_new1;
+2843-
+2844:            if constexpr (ORDERED_DUAL_TOKEN_BSM) {
+2845:                if (ordered_active) {
+2846-                    if (has_next_page) {
+2847-                        __syncwarp();
+2848-                        v_bsm_token =
+2849-                            issue_case12_kv8_headpair_z8_tokenized_bsm_page(
+target resource tuple:
+159: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+160-  0 bytes stack frame 
+161- maca info  : Used  74 MTregisters, 56 STregisters, 8448 bytes shared mem  
+162- maca info  : staticMaxWarps/PEU : 6
+case13 BF16 normalized/row16 resource tuple:
+171: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+172-  0 bytes stack frame 
+173- maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+174- maca info  : staticMaxWarps/PEU : 5
+target LLVM branch/token evidence:
+131-  %add.ptr94 = getelementptr inbounds i32, ptr addrspace(1) %block_table.coerce, i64 %idx.ext93
+132-  %sub95 = sub nsw i32 %cond.i.i, %mul18
+133:  %cmp96 = icmp sgt i32 %sub95, 1
+134-  br i1 %cmp25.not, label %if.then99, label %if.end226
+135-
+--
+144-if.then103:                                       ; preds = %if.then99
+145-  %cmp.i1431 = icmp ugt i32 %add.i1430, 15
+146:  br i1 %cmp.i1431, label %_Z47issue_case12_kv8_headpair_z8_tokenized_bsm_pagePK15__maca_bfloat16PA64_jiiiiii.exit1447, label %if.end.i1432
+147-
+148-if.end.i1432:                                     ; preds = %if.then103
+--
+158-  %24 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #24
+159-  %25 = addrspacecast ptr addrspace(4) %add.ptr9.i1442 to ptr addrspace(1)
+160:  %26 = tail call noundef <4 x i32> @llvm.mxc.ldg.predicator.bsm.v4i32(ptr addrspace(3) %arrayidx12.i1444, ptr addrspace(1) %25, i32 0, i64 %24, i1 false, i1 true, i1 false, i1 false), !alias.scope !180, !call_argsrelate !171
+161:  br label %_Z47issue_case12_kv8_headpair_z8_tokenized_bsm_pagePK15__maca_bfloat16PA64_jiiiiii.exit1447
+162-
+163:_Z47issue_case12_kv8_headpair_z8_tokenized_bsm_pagePK15__maca_bfloat16PA64_jiiiiii.exit1447: ; preds = %if.then103, %if.end.i1432
+164-  %retval.0.i1446 = phi <4 x i32> [ %26, %if.end.i1432 ], [ zeroinitializer, %if.then103 ]
+165-  br i1 %cmp.i1431, label %for.body110.lr.ph, label %if.end.i1413
+166-
+167:if.end.i1413:                                     ; preds = %_Z47issue_case12_kv8_headpair_z8_tokenized_bsm_pagePK15__maca_bfloat16PA64_jiiiiii.exit1447
+168-  %mul2.i1414 = shl nsw i32 %23, 7
+169-  %mul3.i1415 = shl nuw nsw i32 %add.i1430, 3
+--
+177-  %27 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #24
+178-  %28 = addrspacecast ptr addrspace(4) %add.ptr9.i1423 to ptr addrspace(1)
+179:  %29 = tail call noundef <4 x i32> @llvm.mxc.ldg.predicator.bsm.v4i32(ptr addrspace(3) %arrayidx12.i1425, ptr addrspace(1) %28, i32 0, i64 %27, i1 false, i1 true, i1 false, i1 false), !alias.scope !184, !call_argsrelate !172
+180-  br label %for.body110.lr.ph
+181-
+--
+190-  %add.ptr9.i1473 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr.i1470, i64 %idx.ext30
+191-  %arrayidx12.i1475 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.i1430, i32 %mul29
+192:  tail call void @llvm.memcpy.p3.p4.i64(ptr addrspace(3) noundef align 16 dereferenceable(16) %arrayidx12.i1475, ptr addrspace(4) noundef align 16 dereferenceable(16) %add.ptr9.i1473, i64 16, i1 false), !tbaa.struct !34, !call_argsrelate !64
+193-  %add.ptr.i1456 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i1469
+194-  %add.ptr9.i1459 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr.i1456, i64 %idx.ext30
+195-  %arrayidx12.i1461 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %add.i1430, i32 %mul29
+196:  tail call void @llvm.memcpy.p3.p4.i64(ptr addrspace(3) noundef align 16 dereferenceable(16) %arrayidx12.i1461, ptr addrspace(4) noundef align 16 dereferenceable(16) %add.ptr9.i1459, i64 16, i1 false), !tbaa.struct !34, !call_argsrelate !65
+197-  br label %for.body110.lr.ph
+198-
+199:for.body110.lr.ph:                                ; preds = %if.else, %_Z47issue_case12_kv8_headpair_z8_tokenized_bsm_pagePK15__maca_bfloat16PA64_jiiiiii.exit1447, %if.end.i1413
+200:  %v_bsm_token.0 = phi <4 x i32> [ zeroinitializer, %if.else ], [ %29, %if.end.i1413 ], [ zeroinitializer, %_Z47issue_case12_kv8_headpair_z8_tokenized_bsm_pagePK15__maca_bfloat16PA64_jiiiiii.exit1447 ]
+201:  %k_bsm_token.0 = phi <4 x i32> [ zeroinitializer, %if.else ], [ %retval.0.i1446, %if.end.i1413 ], [ %retval.0.i1446, %_Z47issue_case12_kv8_headpair_z8_tokenized_bsm_pagePK15__maca_bfloat16PA64_jiiiiii.exit1447 ]
+202-  %invariant.gep = getelementptr [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4352), i32 0, i32 %mul29
+203-  %mul123 = shl nuw nsw i32 %2, 1
+--
+270-
+271-if.then112:                                       ; preds = %for.body110
+272:  tail call void @llvm.mxc.barrier.and.wait4(i32 0, <4 x i32> %k_bsm_token.12133)
+273-  br label %if.end114
+274-
+275-if.else113:                                       ; preds = %for.body110
+276-  fence syncscope("warp") release
+277:  tail call void @llvm.mxc.barrier.warp()
+278-  fence syncscope("warp") acquire
+279-  br label %if.end114
+--
+422-
+423-if.then146:                                       ; preds = %if.end114
+424:  tail call void @llvm.mxc.barrier.and.wait4(i32 0, <4 x i32> %v_bsm_token.12132)
+425-  br i1 %cmp143, label %if.then148, label %if.end154
+426-
+427-if.then148:                                       ; preds = %if.then146
+428-  fence syncscope("warp") release
+429:  tail call void @llvm.mxc.barrier.warp()
+430-  fence syncscope("warp") acquire
+431-  %arrayidx151 = getelementptr inbounds i32, ptr addrspace(1) %add.ptr94, i64 %indvars.iv.next
+--
+442-  %99 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #24
+443-  %100 = addrspacecast ptr addrspace(4) %gep to ptr addrspace(1)
+444:  %101 = tail call noundef <4 x i32> @llvm.mxc.ldg.predicator.bsm.v4i32(ptr addrspace(3) %arrayidx12.i1406, ptr addrspace(1) %100, i32 0, i64 %99, i1 false, i1 true, i1 false, i1 false), !alias.scope !188, !call_argsrelate !171
+445-  br label %if.end154
+446-
+--
+607-if.then217:                                       ; preds = %if.then215
+608-  fence syncscope("warp") release
+609:  tail call void @llvm.mxc.barrier.warp()
+610-  fence syncscope("warp") acquire
+611-  br i1 %cmp.i1393, label %if.end222, label %if.end.i
+--
+620-  %154 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #24
+621-  %155 = addrspacecast ptr addrspace(4) %gep2139 to ptr addrspace(1)
+622:  %156 = tail call noundef <4 x i32> @llvm.mxc.ldg.predicator.bsm.v4i32(ptr addrspace(3) %arrayidx12.i, ptr addrspace(1) %155, i32 0, i64 %154, i1 false, i1 true, i1 false, i1 false), !alias.scope !192, !call_argsrelate !172
+623-  br label %if.end222
+624-
+625-if.else219:                                       ; preds = %if.then215
+626-  fence syncscope("block") release
+627:  tail call void @llvm.mxc.barrier()
+628-  fence syncscope("block") acquire
+629-  br label %if.end222
+--
+631-if.else221:                                       ; preds = %if.end210
+632-  fence syncscope("block") release
+633:  tail call void @llvm.mxc.barrier()
+634-  fence syncscope("block") acquire
+635-  br label %if.end222
+case13 BF16/row16 LLVM evidence:
+225-  fence syncscope("warp") release
+226:  tail call void @llvm.mxc.barrier.warp()
+227-  fence syncscope("warp") acquire
+--
+556-  fence syncscope("warp") release
+557:  tail call void @llvm.mxc.barrier.warp()
+558-  fence syncscope("warp") acquire
+--
+621-  fence syncscope("warp") release
+622:  tail call void @llvm.mxc.barrier.warp()
+623-  fence syncscope("warp") acquire
+LLVM stack markers (target and case13):
+159: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+160-  0 bytes stack frame 
+161- maca info  : Used  74 MTregisters, 56 STregisters, 8448 bytes shared mem  
+--
+163: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+164-  0 bytes stack frame 
+165- maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+--
+167: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+168-  0 bytes stack frame 
+169- maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+--
+171: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+172-  0 bytes stack frame 
+173- maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  

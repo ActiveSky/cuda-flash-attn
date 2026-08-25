@@ -1,0 +1,29 @@
+exp634 static lowering verdict
+parent_control=#113889 / exp559
+control_sha=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+candidate=solutions/archive/2026-08-22-experiments/cuda_case1_native_register_fanout_exp634.cpp
+candidate_sha=a5d436ad0a50675bdafd683c5768d7762e3e45ca76162d9a80760f4947865b7b
+target=case1 B=1 KV4 seqlen_k=1 GQA8, single-token <4,8> specialization only
+changed_precondition=explicit register-returning native B128 ldg plus predicated native B128 stg; no ordinary uint4 memcpy expression
+
+device_bc=mxcc -device-bc, .mc_fatbin extracted with llvm-objcopy, target unbundled with clang-offload-bundler, then llvm-dis
+candidate_target_function=_Z32paged_decode_single_token_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKii
+control_target_function=_Z32paged_decode_single_token_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKii
+
+candidate_target_ops:
+  one llvm.mxc.ldg.predicator.v4i32 returns <4 x i32> %24
+  eight llvm.mxc.stg.predicator.v4i32 calls consume the same <4 x i32> %24
+  all eight store consumers are visible in log/exp634_lowering_candidate_target.ll
+control_target_ops:
+  one llvm.memcpy.p1.p4.i64 global-to-output operation
+  no native ldg/stg payload SSA
+dispatch_isolation:
+  candidate <4,8> is native fan-out; candidate <8,4> remains ordinary memcpy and has control resources
+
+candidate_target_resources=20 MTreg / 18 STreg / 0 B shared / 0 B stack / 8 waves
+control_target_resources=6 MTreg / 18 STreg / 0 B shared / 0 B stack / 8 waves
+candidate_false_specialization_resources=6 MTreg / 18 STreg / 0 B shared / 0 B stack / 8 waves
+resource_observation=no spill, no stack, no shared-memory change, and no static wave/occupancy drop; target uses +14 MTreg versus control
+
+VERDICT=LOWERING_MATERIALIZED / STATIC_IMPLEMENTATION_PASS
+NO CPU / NO C500 / NO A-B / NO OJ per task scope

@@ -1,0 +1,238 @@
+--- candidate/control false <4,8> normalized LLVM diff ---
+--- /dev/fd/63	2026-08-22 07:48:22.416464828 +0000
++++ /dev/fd/62	2026-08-22 07:48:22.416464828 +0000
+@@ -1,4 +1,4 @@
+-define protected metaxgpu_kernel void @_Z29paged_decode_two_token_kernelILi4ELi8ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch, float noundef %sm_scale) local_unnamed_addr #8 comdat {
++define protected metaxgpu_kernel void @_Z29paged_decode_two_token_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch, float noundef %sm_scale) local_unnamed_addr #8 comdat {
+ entry:
+   %0 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.x(), !range !26
+   %cmp = icmp ugt i32 %0, 255
+@@ -66,8 +66,8 @@
+   %mul56 = fmul contract float %13, %21
+   %add57 = fadd contract float %mul56, %add53
+   %22 = bitcast float %add57 to i32
+-  %23 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+-  %24 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %23) #25
++  %23 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
++  %24 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %23) #24
+   %xor.i.i.i = xor i32 %24, 16
+   %25 = and i32 %24, -32
+   %and.i.i.i = add nsw i32 %25, 32
+@@ -78,8 +78,8 @@
+   %27 = bitcast i32 %26 to float
+   %add63 = fadd contract float %add57, %27
+   %28 = bitcast float %add63 to i32
+-  %29 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+-  %30 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %29) #25
++  %29 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
++  %30 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %29) #24
+   %xor.i.i.i.1 = xor i32 %30, 8
+   %31 = and i32 %30, -32
+   %and.i.i.i.1 = add nsw i32 %31, 32
+@@ -90,8 +90,8 @@
+   %33 = bitcast i32 %32 to float
+   %add63.1 = fadd contract float %add63, %33
+   %34 = bitcast float %add63.1 to i32
+-  %35 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+-  %36 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %35) #25
++  %35 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
++  %36 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %35) #24
+   %xor.i.i.i.2 = xor i32 %36, 4
+   %37 = and i32 %36, -32
+   %and.i.i.i.2 = add nsw i32 %37, 32
+@@ -102,8 +102,8 @@
+   %39 = bitcast i32 %38 to float
+   %add63.2 = fadd contract float %add63.1, %39
+   %40 = bitcast float %add63.2 to i32
+-  %41 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+-  %42 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %41) #25
++  %41 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
++  %42 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %41) #24
+   %xor.i.i.i.3 = xor i32 %42, 2
+   %43 = and i32 %42, -32
+   %and.i.i.i.3 = add nsw i32 %43, 32
+@@ -114,8 +114,8 @@
+   %45 = bitcast i32 %44 to float
+   %add63.3 = fadd contract float %add63.2, %45
+   %46 = bitcast float %add63.3 to i32
+-  %47 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+-  %48 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %47) #25
++  %47 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
++  %48 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %47) #24
+   %xor.i.i.i.4 = xor i32 %48, 1
+   %49 = and i32 %48, -32
+   %and.i.i.i.4 = add nsw i32 %49, 32
+@@ -150,8 +150,8 @@
+   %mul56.1 = fmul contract float %13, %58
+   %add57.1 = fadd contract float %mul56.1, %add53.1
+   %59 = bitcast float %add57.1 to i32
+-  %60 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+-  %61 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %60) #25
++  %60 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
++  %61 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %60) #24
+   %xor.i.i.i.1363 = xor i32 %61, 16
+   %62 = and i32 %61, -32
+   %and.i.i.i.1364 = add nsw i32 %62, 32
+@@ -162,8 +162,8 @@
+   %64 = bitcast i32 %63 to float
+   %add63.1368 = fadd contract float %add57.1, %64
+   %65 = bitcast float %add63.1368 to i32
+-  %66 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+-  %67 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %66) #25
++  %66 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
++  %67 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %66) #24
+   %xor.i.i.i.1.1 = xor i32 %67, 8
+   %68 = and i32 %67, -32
+   %and.i.i.i.1.1 = add nsw i32 %68, 32
+@@ -174,8 +174,8 @@
+   %70 = bitcast i32 %69 to float
+   %add63.1.1 = fadd contract float %add63.1368, %70
+   %71 = bitcast float %add63.1.1 to i32
+-  %72 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+-  %73 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %72) #25
++  %72 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
++  %73 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %72) #24
+   %xor.i.i.i.2.1 = xor i32 %73, 4
+   %74 = and i32 %73, -32
+   %and.i.i.i.2.1 = add nsw i32 %74, 32
+@@ -186,8 +186,8 @@
+   %76 = bitcast i32 %75 to float
+   %add63.2.1 = fadd contract float %add63.1.1, %76
+   %77 = bitcast float %add63.2.1 to i32
+-  %78 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+-  %79 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %78) #25
++  %78 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
++  %79 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %78) #24
+   %xor.i.i.i.3.1 = xor i32 %79, 2
+   %80 = and i32 %79, -32
+   %and.i.i.i.3.1 = add nsw i32 %80, 32
+@@ -198,8 +198,8 @@
+   %82 = bitcast i32 %81 to float
+   %add63.3.1 = fadd contract float %add63.2.1, %82
+   %83 = bitcast float %add63.3.1 to i32
+-  %84 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+-  %85 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %84) #25
++  %84 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
++  %85 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %84) #24
+   %xor.i.i.i.4.1 = xor i32 %85, 1
+   %86 = and i32 %85, -32
+   %and.i.i.i.4.1 = add nsw i32 %86, 32
+--- candidate/control false <8,4> normalized LLVM diff ---
+--- /dev/fd/63	2026-08-22 07:48:22.420464855 +0000
++++ /dev/fd/62	2026-08-22 07:48:22.424464882 +0000
+@@ -1,4 +1,4 @@
+-define protected metaxgpu_kernel void @_Z29paged_decode_two_token_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch, float noundef %sm_scale) local_unnamed_addr #12 comdat {
++define protected metaxgpu_kernel void @_Z29paged_decode_two_token_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch, float noundef %sm_scale) local_unnamed_addr #10 comdat {
+ entry:
+   %0 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.x(), !range !26
+   %cmp = icmp ugt i32 %0, 127
+@@ -66,8 +66,8 @@
+   %mul56 = fmul contract float %13, %21
+   %add57 = fadd contract float %mul56, %add53
+   %22 = bitcast float %add57 to i32
+-  %23 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+-  %24 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %23) #25
++  %23 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
++  %24 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %23) #24
+   %xor.i.i.i = xor i32 %24, 16
+   %25 = and i32 %24, -32
+   %and.i.i.i = add nsw i32 %25, 32
+@@ -78,8 +78,8 @@
+   %27 = bitcast i32 %26 to float
+   %add63 = fadd contract float %add57, %27
+   %28 = bitcast float %add63 to i32
+-  %29 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+-  %30 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %29) #25
++  %29 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
++  %30 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %29) #24
+   %xor.i.i.i.1 = xor i32 %30, 8
+   %31 = and i32 %30, -32
+   %and.i.i.i.1 = add nsw i32 %31, 32
+@@ -90,8 +90,8 @@
+   %33 = bitcast i32 %32 to float
+   %add63.1 = fadd contract float %add63, %33
+   %34 = bitcast float %add63.1 to i32
+-  %35 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+-  %36 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %35) #25
++  %35 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
++  %36 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %35) #24
+   %xor.i.i.i.2 = xor i32 %36, 4
+   %37 = and i32 %36, -32
+   %and.i.i.i.2 = add nsw i32 %37, 32
+@@ -102,8 +102,8 @@
+   %39 = bitcast i32 %38 to float
+   %add63.2 = fadd contract float %add63.1, %39
+   %40 = bitcast float %add63.2 to i32
+-  %41 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+-  %42 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %41) #25
++  %41 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
++  %42 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %41) #24
+   %xor.i.i.i.3 = xor i32 %42, 2
+   %43 = and i32 %42, -32
+   %and.i.i.i.3 = add nsw i32 %43, 32
+@@ -114,8 +114,8 @@
+   %45 = bitcast i32 %44 to float
+   %add63.3 = fadd contract float %add63.2, %45
+   %46 = bitcast float %add63.3 to i32
+-  %47 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+-  %48 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %47) #25
++  %47 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
++  %48 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %47) #24
+   %xor.i.i.i.4 = xor i32 %48, 1
+   %49 = and i32 %48, -32
+   %and.i.i.i.4 = add nsw i32 %49, 32
+@@ -150,8 +150,8 @@
+   %mul56.1 = fmul contract float %13, %58
+   %add57.1 = fadd contract float %mul56.1, %add53.1
+   %59 = bitcast float %add57.1 to i32
+-  %60 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+-  %61 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %60) #25
++  %60 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
++  %61 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %60) #24
+   %xor.i.i.i.1363 = xor i32 %61, 16
+   %62 = and i32 %61, -32
+   %and.i.i.i.1364 = add nsw i32 %62, 32
+@@ -162,8 +162,8 @@
+   %64 = bitcast i32 %63 to float
+   %add63.1368 = fadd contract float %add57.1, %64
+   %65 = bitcast float %add63.1368 to i32
+-  %66 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+-  %67 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %66) #25
++  %66 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
++  %67 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %66) #24
+   %xor.i.i.i.1.1 = xor i32 %67, 8
+   %68 = and i32 %67, -32
+   %and.i.i.i.1.1 = add nsw i32 %68, 32
+@@ -174,8 +174,8 @@
+   %70 = bitcast i32 %69 to float
+   %add63.1.1 = fadd contract float %add63.1368, %70
+   %71 = bitcast float %add63.1.1 to i32
+-  %72 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+-  %73 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %72) #25
++  %72 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
++  %73 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %72) #24
+   %xor.i.i.i.2.1 = xor i32 %73, 4
+   %74 = and i32 %73, -32
+   %and.i.i.i.2.1 = add nsw i32 %74, 32
+@@ -186,8 +186,8 @@
+   %76 = bitcast i32 %75 to float
+   %add63.2.1 = fadd contract float %add63.1.1, %76
+   %77 = bitcast float %add63.2.1 to i32
+-  %78 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+-  %79 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %78) #25
++  %78 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
++  %79 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %78) #24
+   %xor.i.i.i.3.1 = xor i32 %79, 2
+   %80 = and i32 %79, -32
+   %and.i.i.i.3.1 = add nsw i32 %80, 32
+@@ -198,8 +198,8 @@
+   %82 = bitcast i32 %81 to float
+   %add63.3.1 = fadd contract float %add63.2.1, %82
+   %83 = bitcast float %add63.3.1 to i32
+-  %84 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+-  %85 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %84) #25
++  %84 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
++  %85 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %84) #24
+   %xor.i.i.i.4.1 = xor i32 %85, 1
+   %86 = and i32 %85, -32
+   %and.i.i.i.4.1 = add nsw i32 %86, 32

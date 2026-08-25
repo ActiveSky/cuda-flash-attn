@@ -1,0 +1,62 @@
+exp696 case12 raw physical-wave first z-pair merge static audit
+
+Parent/control:
+  #124611 / exp666
+  solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+  SHA-256 3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+Candidate:
+  solutions/archive/2026-08-24-experiments/cuda_control124611_case12_raw_wave_rebase_exp696.cpp
+  SHA-256 f23ce28fa2e0abdc6329b2d73af9e56b3a236c195a1c703924692e6b7e3071fe
+
+History/changed precondition:
+  The directed search found exp425's case12 raw lane^32 first-z merge as a
+  local-only mixed result, with no OJ submission of this exact contract. The
+  candidate reuses the raw physical-wave lowering already materialized and
+  statically reviewed in exp694/exp695, but enables it only in case12's
+  <true,false,false,false,true> headpair/z8 specialization. Case7 is restored
+  to <true,false,true> and case9/case13 remain raw-merge disabled.
+
+Semantic/source diff:
+  - add raw_wave64_xor32: __lane_id() ^ 32u -> raw
+    __builtin_mxc_bsm_bpermute(source_lane << 2, bits.i) on __MACA_ARCH__ 1000;
+  - add the first adjacent-z pair state merge for both local query heads,
+    exchanging m/l and eight FP32 accumulator words per head, then retain the
+    existing shared tree for the remaining z pairs;
+  - add one opt-in template parameter and one case12-only dispatch change.
+  git diff --no-index --stat: 118 lines changed (109 insertions, 9 deletions).
+
+Build commands (all passed; existing __launch_bounds__ minimum-block warning
+only):
+  tools/build_local_maca.sh <candidate> /tmp/exp696_static.202L9z/candidate_normal.so
+  tools/build_local_maca.sh <candidate> /tmp/exp696_static.202L9z/candidate_resource.so -resource-usage
+  tools/build_local_maca.sh <candidate> /tmp/exp696_static.202L9z/candidate_device.ll -c -emit-llvm -S
+  Same three commands with parent/control -> control_{normal,resource,device}.
+
+Active target resource (resource-usage):
+  candidate _Z42paged_decode_case13_kv8_headpair_z8_kernel<1,0,0,0,1>:
+    80 MTregisters / 50 STregisters / 8448 bytes shared / 0 stack / 6 waves
+  control _Z42paged_decode_case13_kv8_headpair_z8_kernel<1,0,0,0>:
+    82 MTregisters / 50 STregisters / 8448 bytes shared / 0 stack / 5 waves
+  No spill or stack frame; target gains one residency wave while adding 2 raw
+  MTregisters less than the parent target.
+
+Active target LLVM evidence:
+  candidate target function contains 20 actual llvm.mxc.bsm.bpermute calls;
+  control target function contains 0. The 20 calls are 2 (m/l) + 8
+  accumulator words for each of the two local query heads. Other candidate
+  headpair/z8 specializations contain 0 raw-wave BSM calls.
+
+Artifacts:
+  candidate_normal.so 856ed68df58015ecbaab33606dff6484b658f368a280b79517b619ed3763dd75
+  candidate_resource.so b31cfe7dfcbfe881fa61a1faed298dd9124737ec2b1e653b5b8ea2d9b8cb87be
+  candidate_device.ll 61877a5b4c201e39adbedf928302aa37e92e3c39fe0b129a323f8d2953f5ad64
+  control_normal.so c9d643f25e0e15193820b4809f53ce32ebe8cdfabf91505143ec169c61de137b
+  control_resource.so 608c93c732180e8cb96db73586d9866918972b64e47907aaa415d4b54cdf2374
+  control_device.ll c0b1feacbfa1f793737da57fe0104013a92ac56e7408de40deb789d8fd7b29b7
+
+Scope:
+  No work file, notes/results, AGENTS/goal, C500, or OJ was touched. This is
+  an isolated static candidate. Unique online observation target, if admitted,
+  is case12 (B8/KV8/L32768): whether the raw physical-wave first z-pair merge
+  crosses the next display tier (about <=365 us / >=61 points) versus the
+  #124611 control.

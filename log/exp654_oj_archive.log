@@ -1,0 +1,8 @@
+exp654 terminal archive and identity
+raw: results/raw/cuda_124440_raw.json
+raw_sha256: 9e6d1980a04f4e1069f87e0062758d7a661766bba53b07ae3d85146f2b102c37
+source: solutions/archive/2026-08-24-submissions/cuda_124440.cpp
+source_sha256: 314c3445e887e4e2e1e16653a3e7be28d71b44803b8d6a720f73b68d28f13bff
+candidate_sha256: 314c3445e887e4e2e1e16653a3e7be28d71b44803b8d6a720f73b68d28f13bff
+candidate_submitted_cmp: PASS
+manifest: solutions/archive/SUBMISSIONS.md (entry #124440)

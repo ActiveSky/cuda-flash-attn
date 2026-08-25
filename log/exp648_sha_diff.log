@@ -1,0 +1,22 @@
+exp648 non-GPU static isolation
+candidate=solutions/archive/2026-08-23-experiments/cuda_case8_direct_fanin_normalized_bf16_txfix_exp648.cpp
+parent=solutions/archive/2026-08-22-experiments/cuda_case8_direct_fanin_normalized_bf16_exp645.cpp
+candidate_sha=a708993cb5bb10cea02f46b297d8880173c090eb8f08f370070f10863a2f6afd
+parent_sha=2a0ffa3d23cd44950215589fae8818ad1ac283a40b0953503f460c574e8ca83c
+control_sha=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+
+The exact source delta is limited to the one intended fix:
+1. Add int tx to merge_case8_normalized_z_peer.
+2. Add tx*4 uint32 offset after casting peer_acc.
+3. Pass tx at all six direct fan-in call sites.
+No tree, barrier, row assignment, dispatch, target, reducer, or other
+algorithmic text changed.
+
+Static exact-patch verifier:
+exact_expected_patch=True
+line_counts parent/candidate=7100/7101
+dispatch_text_equal=True
+git diff --check=PASS
+
+Working file was not touched. It remained the unrelated pre-existing dirty
+SHA b292a83df4e6fa54301164505aab15e69104bfcf66273a8e27c52feaf395adbf.

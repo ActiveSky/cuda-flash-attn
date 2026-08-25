@@ -1,0 +1,26 @@
+[PASS] case11 input-invariance length=320 candidate finite=True reference_finite=True within_tolerance=True max_error=1.953125e-03 max_tol_ratio=0.098 guards=True
+[PASS] length=320 candidate_input_metadata_unchanged=True
+[PASS] case11 input-invariance length=320 control finite=True reference_finite=True within_tolerance=True max_error=1.953125e-03 max_tol_ratio=0.098 guards=True
+[PASS] length=320 control_input_metadata_unchanged=True
+[PASS] length=320 candidate_control_bit_equal=True
+[PASS] case11 input-invariance length=321 candidate finite=True reference_finite=True within_tolerance=True max_error=1.953125e-03 max_tol_ratio=0.098 guards=True
+[PASS] length=321 candidate_input_metadata_unchanged=True
+[PASS] case11 input-invariance length=321 control finite=True reference_finite=True within_tolerance=True max_error=1.953125e-03 max_tol_ratio=0.098 guards=True
+[PASS] length=321 control_input_metadata_unchanged=True
+[PASS] length=321 candidate_control_bit_equal=True
+[PASS] case11 input-invariance length=640 candidate finite=True reference_finite=True within_tolerance=True max_error=9.765625e-04 max_tol_ratio=0.054 guards=True
+[PASS] length=640 candidate_input_metadata_unchanged=True
+[PASS] case11 input-invariance length=640 control finite=True reference_finite=True within_tolerance=True max_error=9.765625e-04 max_tol_ratio=0.054 guards=True
+[PASS] length=640 control_input_metadata_unchanged=True
+[PASS] length=640 candidate_control_bit_equal=True
+[PASS] case11 input-invariance length=960 candidate finite=True reference_finite=True within_tolerance=True max_error=9.765625e-04 max_tol_ratio=0.054 guards=True
+[PASS] length=960 candidate_input_metadata_unchanged=True
+[PASS] case11 input-invariance length=960 control finite=True reference_finite=True within_tolerance=True max_error=9.765625e-04 max_tol_ratio=0.054 guards=True
+[PASS] length=960 control_input_metadata_unchanged=True
+[PASS] length=960 candidate_control_bit_equal=True
+[PASS] case11 input-invariance length=12251 candidate finite=True reference_finite=True within_tolerance=True max_error=2.441406e-04 max_tol_ratio=0.015 guards=True
+[PASS] length=12251 candidate_input_metadata_unchanged=True
+[PASS] case11 input-invariance length=12251 control finite=True reference_finite=True within_tolerance=True max_error=2.441406e-04 max_tol_ratio=0.015 guards=True
+[PASS] length=12251 control_input_metadata_unchanged=True
+[PASS] length=12251 candidate_control_bit_equal=True
+input_invariance_result=PASS lengths=320,321,640,960,12251

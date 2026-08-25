@@ -1,0 +1,6 @@
+exp598 static gate identity (2026-08-18)
+command: sha256sum solutions/archive/2026-08-16-submissions/cuda_113889.cpp solutions/archive/2026-08-18-experiments/cuda_case11_partial_fp32_native_stg_exp598.cpp solutions/cuda_maca_optimized.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+5f9d7631a48dd8e63a51c5692887f0df17fdddd90f593e28dafc79f4af279d12  solutions/archive/2026-08-18-experiments/cuda_case11_partial_fp32_native_stg_exp598.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/cuda_maca_optimized.cpp
+work_file_sha_matches_control: yes

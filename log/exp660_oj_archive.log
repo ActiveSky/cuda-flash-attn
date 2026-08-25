@@ -1,0 +1,2 @@
+$ python tools/archive_cuda_submissions.py
+archived 366 submissions; manifest: /data/cuda-flash-attn/solutions/archive/SUBMISSIONS.md

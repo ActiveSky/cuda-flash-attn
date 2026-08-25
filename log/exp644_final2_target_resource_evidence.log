@@ -1,0 +1,7 @@
+candidate direct target tuple:
+_Z60paged_decode_case12_kv8_headpair_z8_direct_three_peer_kernelILb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif |82|50|8448|0|5
+candidate vec2 reducer tuple:
+_Z31paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii |38|39|0|0|8
+control case12 producer tuple:
+_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif |82|50|8448|0|5
+target gate: direct <= 82/50/8448/0/5; reducer == 38/39/0/0/8

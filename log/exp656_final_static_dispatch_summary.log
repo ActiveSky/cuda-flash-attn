@@ -1,0 +1,139 @@
+exp656 static/dispatch final audit
+UTC 2026-08-23T19:04:06Z
+candidate/control source SHA:
+1f4268afe58370da69a88a60ff5217c5fffa62aed54589f58f94a9a057b252fb  solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_tailmask_exp656.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+artifact SHA:
+f31334efe090b5e8b1b330bcd9dc4a57054f238d146961ff51aef3ee92656a42  build/exp656_final_candidate_normal.so
+4bafd6fcc181bc3e010d021d61f4278d746c1e6cabd14f2f2557486b4d02f129  build/exp656_final_candidate_resource.so
+d2624460d2a63bf7d672ecd2d51394468125ac9bb3d12ccab79e90d071abd2d3  build/exp656_final_candidate_device.ll
+b6c698cb46553eece3a907dd820881887f7c5b05776d178419f0f6cba81a2fe5  build/exp656_final_control_resource.so
+25509a2cb9cfae61b302b18a5e4ab0f8a6e2bfe7687e8a8763b88eeb85910df1  build/exp656_final_control_device.ll
+candidate target resource:
+193: maca info  : Used  104 MTregisters, 74 STregisters, 8192 bytes shared mem  
+194: maca info  : staticMaxWarps/PEU : 4
+196:  0 bytes stack frame 
+197: maca info  : Used  38 MTregisters, 39 STregisters, 0 bytes shared mem  
+198: maca info  : staticMaxWarps/PEU : 8
+200:  0 bytes stack frame 
+201: maca info  : Used  66 MTregisters, 24 STregisters, 0 bytes shared mem  
+202: maca info  : staticMaxWarps/PEU : 7
+204:  0 bytes stack frame 
+205: maca info  : Used  54 MTregisters, 25 STregisters, 0 bytes shared mem  
+206: maca info  : staticMaxWarps/PEU : 8
+208:  0 bytes stack frame 
+209: maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+210: maca info  : staticMaxWarps/PEU : 7
+212:  0 bytes stack frame 
+213: maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+214: maca info  : staticMaxWarps/PEU : 7
+216:  0 bytes stack frame 
+217: maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+218: maca info  : staticMaxWarps/PEU : 7
+220:  0 bytes stack frame 
+221: maca info  : Used  38 MTregisters, 36 STregisters, 0 bytes shared mem  
+222: maca info  : staticMaxWarps/PEU : 8
+225:  0 bytes stack frame 
+226: maca info  : Used  64 MTregisters, 35 STregisters, 0 bytes shared mem  
+227: maca info  : staticMaxWarps/PEU : 8
+229:  0 bytes stack frame 
+230: maca info  : Used  40 MTregisters, 28 STregisters, 0 bytes shared mem  
+231: maca info  : staticMaxWarps/PEU : 8
+233:  0 bytes stack frame 
+234: maca info  : Used  40 MTregisters, 36 STregisters, 0 bytes shared mem  
+235: maca info  : staticMaxWarps/PEU : 8
+237:  0 bytes stack frame 
+238: maca info  : Used  82 MTregisters, 64 STregisters, 8320 bytes shared mem  
+239: maca info  : staticMaxWarps/PEU : 5
+control case13 resource:
+189: maca info  : Used  104 MTregisters, 74 STregisters, 8192 bytes shared mem  
+190: maca info  : staticMaxWarps/PEU : 4
+192:  0 bytes stack frame 
+193: maca info  : Used  38 MTregisters, 39 STregisters, 0 bytes shared mem  
+194: maca info  : staticMaxWarps/PEU : 8
+196:  0 bytes stack frame 
+197: maca info  : Used  66 MTregisters, 24 STregisters, 0 bytes shared mem  
+198: maca info  : staticMaxWarps/PEU : 7
+200:  0 bytes stack frame 
+201: maca info  : Used  54 MTregisters, 25 STregisters, 0 bytes shared mem  
+202: maca info  : staticMaxWarps/PEU : 8
+204:  0 bytes stack frame 
+205: maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+206: maca info  : staticMaxWarps/PEU : 7
+208:  0 bytes stack frame 
+209: maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+210: maca info  : staticMaxWarps/PEU : 7
+212:  0 bytes stack frame 
+213: maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+214: maca info  : staticMaxWarps/PEU : 7
+216:  0 bytes stack frame 
+217: maca info  : Used  38 MTregisters, 36 STregisters, 0 bytes shared mem  
+218: maca info  : staticMaxWarps/PEU : 8
+220:  0 bytes stack frame 
+221: maca info  : Used  64 MTregisters, 35 STregisters, 0 bytes shared mem  
+222: maca info  : staticMaxWarps/PEU : 8
+225:  0 bytes stack frame 
+226: maca info  : Used  40 MTregisters, 28 STregisters, 0 bytes shared mem  
+227: maca info  : staticMaxWarps/PEU : 8
+229:  0 bytes stack frame 
+230: maca info  : Used  40 MTregisters, 36 STregisters, 0 bytes shared mem  
+231: maca info  : staticMaxWarps/PEU : 8
+233:  0 bytes stack frame 
+234: maca info  : Used  82 MTregisters, 64 STregisters, 8320 bytes shared mem  
+235: maca info  : staticMaxWarps/PEU : 5
+negative case9-direct source scan (expected no output):
+PASS: no case9/direct pairing in candidate source
+negative case9-direct LLVM scan (expected no output):
+PASS: no case9/direct pairing in candidate LLVM
+case13 direct source definition/dispatch:
+3003:paged_decode_case13_kv8_headpair_z8_direct_three_peer_kernel(
+6175:                    paged_decode_case13_kv8_headpair_z8_direct_three_peer_kernel<
+case13 direct LLVM kernel/stub/launch references:
+23272:define protected metaxgpu_kernel void @_Z60paged_decode_case13_kv8_headpair_z8_direct_three_peer_kernelILb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef readnone %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+47215:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z75__device_stub__paged_decode_case13_kv8_headpair_z8_direct_three_peer_kernelILb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %14, ptr noundef %15)
+48234:  %20 = tail call i32 @__mcRegisterFunction(ptr %3, ptr nonnull @_Z75__device_stub__paged_decode_case13_kv8_headpair_z8_direct_three_peer_kernelILb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif, ptr nonnull @16, ptr nonnull @16, i32 -1, ptr null, ptr null, ptr null, ptr null, ptr null)
+batch32/seqlen4096 dispatch diff (control vs candidate; expected empty):
+batch32/seqlen4096 dispatch lines:
+solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_tailmask_exp656.cpp:6146:                } else if (batch_size == 32 && seqlen_k == 4096) {
+solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_tailmask_exp656.cpp-6147-                    // exp389: retain exp388's case9 head-pair/z8 producer,
+solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_tailmask_exp656.cpp-6148-                    // but pair its packed FP16x2 (m,l) metadata contract with
+solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_tailmask_exp656.cpp-6149-                    // the packed-aware vec2 reducer below. exp415 tests
+solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_tailmask_exp656.cpp-6150-                    // split6/43 pages per partial, fused-tail ownership, synchronous
+solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_tailmask_exp656.cpp-6151-                    // K+V-over-PV, Q prescale and the global partial count.
+solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_tailmask_exp656.cpp-6152-                    // exp439 changes only QK/token ownership to the bit1
+solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_tailmask_exp656.cpp-6153-                    // all-native network already validated on case13.
+solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_tailmask_exp656.cpp-6154-                    paged_decode_case13_kv8_headpair_z8_kernel<true, true><<<
+solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_tailmask_exp656.cpp-6155-                        grid, dim3(16, 2, 8)>>>(
+solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_tailmask_exp656.cpp-6156-                        q, k_cache_paged, v_cache_paged, output,
+solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_tailmask_exp656.cpp-6157-                        cache_seqlens, block_table,
+solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_tailmask_exp656.cpp-6158-                        s_partial_m, s_partial_l, s_partial_acc,
+solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_tailmask_exp656.cpp-6159-                        (int)batch_size, (int)pages_per_batch,
+solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_tailmask_exp656.cpp-6160-                        (int)pages_per_split, n_split,
+solutions/archive/2026-08-24-experiments/cuda_case13_raw_fp32_threepeer_tailmask_exp656.cpp-6161-                        sm_scale * 1.4426950408889634f);
+--
+solutions/archive/2026-08-16-submissions/cuda_113889.cpp:5635:                } else if (batch_size == 32 && seqlen_k == 4096) {
+solutions/archive/2026-08-16-submissions/cuda_113889.cpp-5636-                    // exp389: retain exp388's case9 head-pair/z8 producer,
+solutions/archive/2026-08-16-submissions/cuda_113889.cpp-5637-                    // but pair its packed FP16x2 (m,l) metadata contract with
+solutions/archive/2026-08-16-submissions/cuda_113889.cpp-5638-                    // the packed-aware vec2 reducer below. exp415 tests
+solutions/archive/2026-08-16-submissions/cuda_113889.cpp-5639-                    // split6/43 pages per partial, fused-tail ownership, synchronous
+solutions/archive/2026-08-16-submissions/cuda_113889.cpp-5640-                    // K+V-over-PV, Q prescale and the global partial count.
+solutions/archive/2026-08-16-submissions/cuda_113889.cpp-5641-                    // exp439 changes only QK/token ownership to the bit1
+solutions/archive/2026-08-16-submissions/cuda_113889.cpp-5642-                    // all-native network already validated on case13.
+solutions/archive/2026-08-16-submissions/cuda_113889.cpp-5643-                    paged_decode_case13_kv8_headpair_z8_kernel<true, true><<<
+solutions/archive/2026-08-16-submissions/cuda_113889.cpp-5644-                        grid, dim3(16, 2, 8)>>>(
+solutions/archive/2026-08-16-submissions/cuda_113889.cpp-5645-                        q, k_cache_paged, v_cache_paged, output,
+solutions/archive/2026-08-16-submissions/cuda_113889.cpp-5646-                        cache_seqlens, block_table,
+solutions/archive/2026-08-16-submissions/cuda_113889.cpp-5647-                        s_partial_m, s_partial_l, s_partial_acc,
+solutions/archive/2026-08-16-submissions/cuda_113889.cpp-5648-                        (int)batch_size, (int)pages_per_batch,
+solutions/archive/2026-08-16-submissions/cuda_113889.cpp-5649-                        (int)pages_per_split, n_split,
+solutions/archive/2026-08-16-submissions/cuda_113889.cpp-5650-                        sm_scale * 1.4426950408889634f);
+direct kernel IR alloca/spill scan:
+build/test exit statuses:
+build_exit_status=0
+build_exit_status=0
+build_exit_status=0
+build_exit_status=0
+build_exit_status=0
+test_exit_status=0
+test_exit_status=0
+audit_exit_status=0

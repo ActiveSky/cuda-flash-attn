@@ -1,0 +1,6 @@
+COMMAND: python3 inline raw-FP32 online-softmax direct-tree replay | tee log/exp644_c500_cpu_direct_tree.log
+candidate_sha256=8600495c01a8bf16f69cd14a1c12945abca976dc93e38ff793ba57f64d2902ec
+control_sha256=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+cases=20000 z_states=160000 empty_states=54254
+max_abs_diff=9.536743164e-07 max_rel_diff=9.114942513e-04
+CPU direct-tree replay: PASS finite=True no_nan=True no_inf=True

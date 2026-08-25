@@ -1,0 +1,172 @@
+declare i32 @llvm.mxc.mbcnt.hi(i32, i32) #9
+
+; Function Attrs: convergent mustprogress norecurse nounwind willreturn memory(argmem: readwrite)
+define protected metaxgpu_kernel void @_Z50paged_decode_case2_source_owner_native_b128_kernelILi8ELi4EEvPK15__maca_bfloat16PS0_PKiS5_i(ptr addrspace(4) noalias nocapture noundef %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch) local_unnamed_addr #10 comdat {
+entry:
+  %0 = tail call noundef range(i32 0, 2147483647) i32 @llvm.mxc.block.id.x(), !range !15
+  %div36 = lshr i32 %0, 3
+  %and = and i32 %0, 7
+  %idxprom = zext nneg i32 %div36 to i64
+  %arrayidx = getelementptr inbounds i32, ptr addrspace(1) %cache_seqlens.coerce, i64 %idxprom
+  %1 = load i32, ptr addrspace(1) %arrayidx, align 4, !tbaa !16
+  %cmp.not = icmp eq i32 %1, 1
+  br i1 %cmp.not, label %lor.lhs.false, label %cleanup
+
+lor.lhs.false:                                    ; preds = %entry
+  %2 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.x(), !range !26
+  %cmp7 = icmp ugt i32 %2, 15
+  br i1 %cmp7, label %cleanup, label %if.end
+
+if.end:                                           ; preds = %lor.lhs.false
+  %mul = mul nsw i32 %div36, %pages_per_batch
+  %idxprom8 = sext i32 %mul to i64
+  %arrayidx9 = getelementptr inbounds i32, ptr addrspace(1) %block_table.coerce, i64 %idxprom8
+  %3 = load i32, ptr addrspace(1) %arrayidx9, align 4, !tbaa !16
+  %4 = shl i32 %3, 14
+  %5 = shl nuw nsw i32 %and, 7
+  %mul12 = or disjoint i32 %4, %5
+  %idx.ext = sext i32 %mul12 to i64
+  %add.ptr = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext
+  %mul14 = shl nuw nsw i32 %2, 4
+  %idx.ext15 = zext nneg i32 %mul14 to i64
+  %add.ptr16 = getelementptr inbounds i8, ptr addrspace(4) %add.ptr, i64 %idx.ext15
+  %6 = addrspacecast ptr addrspace(4) %add.ptr16 to ptr addrspace(1)
+  %7 = tail call noundef <4 x i32> @llvm.mxc.ldg.predicator.v4i32(ptr addrspace(1) %6, i32 0, i64 -1, i1 true, i1 true, i1 false, i1 false), !call_argsrelate !36
+  %mul19 = shl nuw nsw i32 %and, 2
+  %mul21 = shl nsw i32 %div36, 5
+  %8 = or disjoint i32 %mul19, %mul21
+  %invariant.gep = getelementptr inbounds i8, ptr addrspace(1) %out.coerce, i64 %idx.ext15
+  %mul23 = shl nsw i32 %8, 7
+  %idx.ext24 = zext nneg i32 %mul23 to i64
+  %gep = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %invariant.gep, i64 %idx.ext24
+  %9 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #25
+  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %gep, i32 0, <4 x i32> %7, i64 %9, i1 true, i1 false, i1 false), !call_argsrelate !37
+  %10 = shl i32 %8, 7
+  %mul23.1 = or disjoint i32 %10, 128
+  %idx.ext24.1 = zext nneg i32 %mul23.1 to i64
+  %gep.1 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %invariant.gep, i64 %idx.ext24.1
+  %11 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #25
+  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %gep.1, i32 0, <4 x i32> %7, i64 %11, i1 true, i1 false, i1 false), !call_argsrelate !37
+  %12 = shl i32 %8, 7
+  %mul23.2 = or disjoint i32 %12, 256
+  %idx.ext24.2 = zext nneg i32 %mul23.2 to i64
+  %gep.2 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %invariant.gep, i64 %idx.ext24.2
+  %13 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #25
+  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %gep.2, i32 0, <4 x i32> %7, i64 %13, i1 true, i1 false, i1 false), !call_argsrelate !37
+  %14 = shl i32 %8, 7
+  %mul23.3 = or disjoint i32 %14, 384
+  %idx.ext24.3 = zext nneg i32 %mul23.3 to i64
+  %gep.3 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %invariant.gep, i64 %idx.ext24.3
+  %15 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #25
+  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %gep.3, i32 0, <4 x i32> %7, i64 %15, i1 true, i1 false, i1 false), !call_argsrelate !37
+  br label %cleanup
+
+cleanup:                                          ; preds = %if.end, %entry, %lor.lhs.false
+  ret void
+}
+
+; Function Attrs: mustprogress nounwind willreturn memory(argmem: readwrite)
+declare <4 x i32> @llvm.mxc.ldg.predicator.v4i32(ptr addrspace(1) noalias nocapture, i32 immarg, i64, i1 immarg, i1 immarg, i1 immarg, i1 immarg) #11
+
+; Function Attrs: convergent mustprogress nofree nounwind willreturn memory(none)
+declare i64 @llvm.mxc.icmp.i64.i32(i32, i32, i32 immarg) #9
+
+; Function Attrs: mustprogress nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) noalias nocapture, i32 immarg, <4 x i32>, i64, i1 immarg, i1 immarg, i1 immarg) #11
+
+; Function Attrs: convergent mustprogress nofree norecurse nounwind willreturn memory(argmem: readwrite)
+define protected metaxgpu_kernel void @_Z29paged_decode_two_token_kernelILi8ELi4ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch, float noundef %sm_scale) local_unnamed_addr #12 comdat {
+entry:
+  %0 = tail call noundef range(i32 0, 2147483647) i32 @llvm.mxc.block.id.x(), !range !15
+  %div233 = lshr i32 %0, 3
+  %and = and i32 %0, 7
+  %1 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.x(), !range !26
+  %and9 = and i32 %1, 31
+  %cmp = icmp ugt i32 %1, 127
+  br i1 %cmp, label %cleanup170, label %if.end
+
+if.end:                                           ; preds = %entry
+declare void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) noalias nocapture, i32 immarg, <4 x i32>, i64, i1 immarg, i1 immarg, i1 immarg) #11
+
+; Function Attrs: convergent mustprogress nofree norecurse nounwind willreturn memory(argmem: readwrite)
+define protected metaxgpu_kernel void @_Z29paged_decode_two_token_kernelILi8ELi4ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch, float noundef %sm_scale) local_unnamed_addr #12 comdat {
+entry:
+  %0 = tail call noundef range(i32 0, 2147483647) i32 @llvm.mxc.block.id.x(), !range !15
+  %div233 = lshr i32 %0, 3
+  %and = and i32 %0, 7
+  %1 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.x(), !range !26
+  %and9 = and i32 %1, 31
+  %cmp = icmp ugt i32 %1, 127
+  br i1 %cmp, label %cleanup170, label %if.end
+
+if.end:                                           ; preds = %entry
+  %idxprom = zext nneg i32 %div233 to i64
+  %arrayidx = getelementptr inbounds i32, ptr addrspace(1) %cache_seqlens.coerce, i64 %idxprom
+  %2 = load i32, ptr addrspace(1) %arrayidx, align 4, !tbaa !16
+  %cmp11 = icmp eq i32 %2, 1
+  br i1 %cmp11, label %cleanup170, label %if.end13
+
+if.end13:                                         ; preds = %if.end
+  %mul14 = mul nsw i32 %div233, %pages_per_batch
+  %idxprom15 = sext i32 %mul14 to i64
+  %arrayidx16 = getelementptr inbounds i32, ptr addrspace(1) %block_table.coerce, i64 %idxprom15
+  %3 = load i32, ptr addrspace(1) %arrayidx16, align 4, !tbaa !16
+  %4 = shl i32 %div233, 12
+  %5 = shl nuw nsw i32 %and, 9
+  %6 = shl nuw nsw i32 %1, 2
+  %7 = and i32 %6, 384
+  %8 = or disjoint i32 %5, %7
+  %mul19 = or disjoint i32 %8, %4
+  %idx.ext = sext i32 %mul19 to i64
+  %add.ptr = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %q.coerce, i64 %idx.ext
+  %idxprom20 = zext nneg i32 %and9 to i64
+  %arrayidx21 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr, i64 %idxprom20
+  %9 = load i32, ptr addrspace(4) %arrayidx21, align 4, !tbaa !16
+  %add23 = or disjoint i32 %and9, 32
+  %idxprom24 = zext nneg i32 %add23 to i64
+  %arrayidx25 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr, i64 %idxprom24
+  %10 = load i32, ptr addrspace(4) %arrayidx25, align 4, !tbaa !16
+  %conv.i252 = trunc i32 %9 to i16
+  %11 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i252)
+  %shr.i282 = lshr i32 %9, 16
+  %conv.i283 = trunc nuw i32 %shr.i282 to i16
+  %12 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i283)
+  %conv.i249 = trunc i32 %10 to i16
+  %13 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i249)
+  %shr.i278 = lshr i32 %10, 16
+  %conv.i279 = trunc nuw i32 %shr.i278 to i16
+  %14 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i279)
+  %mul34 = shl nsw i32 %3, 14
+  %idx.ext35 = sext i32 %mul34 to i64
+  %add.ptr36 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext35
+  %15 = shl nuw nsw i32 %and, 7
+  %16 = zext nneg i32 %15 to i64
+  %add.ptr42 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %add.ptr36, i64 %16
+  %arrayidx44 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr42, i64 %idxprom20
+  %17 = load i32, ptr addrspace(4) %arrayidx44, align 4, !tbaa !16
+  %arrayidx47 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr42, i64 %idxprom24
+  %18 = load i32, ptr addrspace(4) %arrayidx47, align 4, !tbaa !16
+  %conv.i246 = trunc i32 %17 to i16
+  %19 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i246)
+  %mul50 = fmul contract float %11, %19
+  %shr.i274 = lshr i32 %17, 16
+  %conv.i275 = trunc nuw i32 %shr.i274 to i16
+  %20 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i275)
+  %mul53 = fmul contract float %12, %20
+  %add54 = fadd contract float %mul50, %mul53
+  %conv.i243 = trunc i32 %18 to i16
+  %21 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i243)
+  %mul57 = fmul contract float %13, %21
+  %add58 = fadd contract float %mul57, %add54
+  %shr.i270 = lshr i32 %18, 16
+  %conv.i271 = trunc nuw i32 %shr.i270 to i16
+  %22 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i271)
+  %mul61 = fmul contract float %14, %22
+  %add62 = fadd contract float %mul61, %add58
+  %23 = bitcast float %add62 to i32
+  %24 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #25
+  %25 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %24) #25
+  %xor.i.i.i = xor i32 %25, 16
+  %26 = and i32 %25, -32
+  %and.i.i.i = add nsw i32 %26, 32
+  %cmp.not.i.i.i = icmp slt i32 %xor.i.i.i, %and.i.i.i

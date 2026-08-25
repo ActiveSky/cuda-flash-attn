@@ -1,0 +1,6 @@
+UTC 2026-08-24T18:23:14Z
+53cca7e99f7d43066a7beb53323c93c0ed2f249e0438f4398d18f8e7e6c75e78  solutions/cuda_maca_optimized.cpp
+53cca7e99f7d43066a7beb53323c93c0ed2f249e0438f4398d18f8e7e6c75e78  solutions/archive/2026-08-24-experiments/cuda_control124611_z8_all_async_register_kv_exp704.cpp
+workfile_equals_candidate=0
+expected_candidate=53cca7e99f7d43066a7beb53323c93c0ed2f249e0438f4398d18f8e7e6c75e78
+exit_status=0

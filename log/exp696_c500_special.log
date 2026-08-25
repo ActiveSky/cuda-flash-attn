@@ -1,0 +1,51 @@
+exp696 C500 enhanced case12 risk-matched correctness
+UTC date: 2026-08-24
+Command (exit 0):
+  python3 tests/exp644_case12_threepeer_special.py \
+    --candidate /tmp/exp696_static.202L9z/candidate_normal.so \
+    --control /tmp/exp696_static.202L9z/control_normal.so --seed 20260824
+
+Harness contract:
+  Existing tests/exp644_case12_threepeer_special.py was used unchanged.
+  It keeps one B=8, L=32768, KV=8 allocation, installs disjoint legal page
+  IDs, unique raw BF16 query-head tags (q=128, k=256, v=512), finite K/V
+  tags, and 32-word output guards.  Candidate and control use the same
+  tensors and are checked independently against flash_attn_with_kvcache;
+  Q/K/V/cache_seqlens/block_table input immutability and guard integrity are
+  checked for every invocation.
+
+Exact boundary evidence:
+  [INFO] exact-241 lengths=241 q_head_tags=128 k_head_tags=256 v_head_tags=512
+  [PASS] exact-001..241, including 1,2,15,16,17; every 832-token
+         split boundary +/-1 and +15/+16/+17; and 32767,32768.
+  Every exact pair reported finite=True, pair_match=True, and input/guard
+  checks true; candidate/control diagnostics were both within tolerance.
+
+Mixed rows and legal poison evidence:
+  [PASS] mixed fixed batch baseline; lengths=(1,15,16,17,831,832,833,32767)
+  [PASS] mixed fixed batch padding-page/token poison pages=14174 tail_rows=48
+  [PASS] mixed fixed batch poison invariance reference/candidate/control=True
+  [PASS] random mixed batch 1 padding-page/token poison pages=12916 tail_rows=105
+  [PASS] random mixed batch 1 poison invariance reference/candidate/control=True
+  [PASS] random mixed batch 2 padding-page/token poison pages=11098 tail_rows=78
+  [PASS] random mixed batch 2 poison invariance reference/candidate/control=True
+  [PASS] random mixed batch 3 padding-page/token poison pages=13743 tail_rows=0
+  [PASS] random mixed batch 3 poison invariance reference/candidate/control=True
+  The poison set covers both legal logical padding pages and invalid tail
+  tokens in the final valid page; reference, candidate, and control outputs
+  remained unchanged.
+
+Workspace reuse and tail/output guard evidence:
+  [PASS] case12 workspace reuse 32768->1->32768
+  [PASS] case12 workspace reuse 1->32768
+  Both sequences repeated for 3 iterations; all steps deterministic,
+  finite, within tolerance, input-untouched, and guards=True.
+  [PASS] case12 exp644 special correctness: PASS finite=True no_nan=True
+         no_inf=True guards=True
+
+Conclusion of this execution only:
+  No candidate-only correctness failure, nonfinite output, input mutation,
+  output-guard overwrite, legal-padding/tail poison observation, or illegal
+  launch was observed in the exercised case12 contract.  Control's inherited
+  diagnostics are reported separately above; they are not attributed to the
+  candidate.  No OJ operation was performed.

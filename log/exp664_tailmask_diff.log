@@ -1,0 +1,124 @@
+--- solutions/archive/2026-08-23-experiments/cuda_case13_bf16_normalized_partial_exp663.cpp	2026-08-23 22:23:19.012856078 +0000
++++ solutions/archive/2026-08-23-experiments/cuda_case13_bf16_normalized_partial_tailmask_exp664.cpp	2026-08-23 22:34:36.121569890 +0000
+@@ -2423,6 +2423,25 @@
+         *reinterpret_cast<const uint4*>(src);
+ }
+ 
++// exp664: the normalized-BF16 case13 probe retains exp663's producer and
++// partial format, but its fused tail must not read padding rows.  Keep this
++// loader private to the case13 z8 fused-tail path; the full-page loader above
++// remains byte-for-byte unchanged for the hot loop and every other dispatch.
++__device__ __forceinline__ void issue_exp664_case13_tail_page(
++    const __nv_bfloat16* __restrict__ cache,
++    uint32_t (*smem)[U32_PER_ROW],
++    int pid, int kv_head, int tx, int ty, int tz, int tail_tokens)
++{
++    const int token = tz * 2 + ty;
++    if (token >= tail_tokens) return;
++    const int cache_row =
++        (pid * PAGE_TOKENS * 8 + token * 8 + kv_head) * HEAD_DIM;
++    const uint32_t* src =
++        reinterpret_cast<const uint32_t*>(cache + cache_row) + tx * 4;
++    *reinterpret_cast<uint4*>(&smem[token][tx * 4]) =
++        *reinterpret_cast<const uint4*>(src);
++}
++
+ template <int HEAD1_LANE = 8>
+ __device__ __forceinline__ void case13_headpair_two_token_pv(
+     float owned_score,
+@@ -2462,6 +2481,51 @@
+     }
+ }
+ 
++// exp664: fused-tail PV must mirror the loader guard above.  In particular,
++// token_base+1 may be padding on an odd tail partition; do not even touch the
++// shared V row unless that token is valid.
++template <int HEAD1_LANE = 8>
++__device__ __forceinline__ void exp664_case13_tail_two_token_pv(
++    float owned_score,
++    float m_new0,
++    float m_new1,
++    uint32_t (*s_v)[U32_PER_ROW],
++    int token_base,
++    int tail_tokens,
++    int tx,
++    float& l0,
++    float& l1,
++    float* acc0,
++    float* acc1)
++{
++    static_assert(HEAD1_LANE == 2 || HEAD1_LANE == 4 || HEAD1_LANE == 8,
++                  "head1 owner must start at lane 2, 4 or 8");
++    if (token_base < tail_tokens) {
++        const float owned_exp_arg =
++            owned_score - ((tx & HEAD1_LANE) ? m_new1 : m_new0);
++        const float owned_weight = __builtin_exp2f(owned_exp_arg);
++        const float w0 = native_row16_broadcast<0>(owned_weight);
++        const float w1 = native_row16_broadcast<HEAD1_LANE>(owned_weight);
++        l0 += w0;
++        l1 += w1;
++        const uint4 vpack = *reinterpret_cast<const uint4*>(
++            &s_v[token_base][tx * 4]);
++        pv_two_heads_same_v(acc0, acc1, vpack, w0, w1);
++    }
++    if (token_base + 1 < tail_tokens) {
++        const float owned_exp_arg =
++            owned_score - ((tx & HEAD1_LANE) ? m_new1 : m_new0);
++        const float owned_weight = __builtin_exp2f(owned_exp_arg);
++        const float w0 = native_row16_broadcast<1>(owned_weight);
++        const float w1 = native_row16_broadcast<HEAD1_LANE + 1>(owned_weight);
++        l0 += w0;
++        l1 += w1;
++        const uint4 vpack = *reinterpret_cast<const uint4*>(
++            &s_v[token_base + 1][tx * 4]);
++        pv_two_heads_same_v(acc0, acc1, vpack, w0, w1);
++    }
++}
++
+ __device__ __forceinline__ void store_case13_headpair_state(
+     float* s_acc,
+     float (*s_md)[2],
+@@ -2720,15 +2784,15 @@
+ 
+     if (owns_fused_tail) {
+         const int32_t pid = bt_row[full_pages];
+-        issue_case13_kv8_headpair_z8_page(
+-            k_cache, s_k, pid, kv_head, tx, ty, tz);
+-        issue_case13_kv8_headpair_z8_page(
+-            v_cache, s_v, pid, kv_head, tx, ty, tz);
++        const int tail_tokens = seqlen & (PAGE_TOKENS - 1);
++        issue_exp664_case13_tail_page(
++            k_cache, s_k, pid, kv_head, tx, ty, tz, tail_tokens);
++        issue_exp664_case13_tail_page(
++            v_cache, s_v, pid, kv_head, tx, ty, tz, tail_tokens);
+         __syncwarp();
+ 
+         float owned_score = -CUDART_INF_F;
+         float owned_page_max = -CUDART_INF_F;
+-        const int tail_tokens = seqlen & (PAGE_TOKENS - 1);
+ #pragma unroll
+         for (int j = 0; j < 2; ++j) {
+             const int token = tz * 2 + j;
+@@ -2776,16 +2840,16 @@
+                 packed_scale(acc1 + 6, acc1 + 6, alpha1);
+             }
+             if constexpr (NATIVE_HEAD_BIT1) {
+-                case13_headpair_two_token_pv<2>(
+-                    owned_score, m_new0, m_new1, s_v, tz * 2, tx,
++                exp664_case13_tail_two_token_pv<2>(
++                    owned_score, m_new0, m_new1, s_v, tz * 2, tail_tokens, tx,
+                     l0, l1, acc0, acc1);
+             } else if constexpr (ALL_NATIVE_ROW_QK) {
+-                case13_headpair_two_token_pv<4>(
+-                    owned_score, m_new0, m_new1, s_v, tz * 2, tx,
++                exp664_case13_tail_two_token_pv<4>(
++                    owned_score, m_new0, m_new1, s_v, tz * 2, tail_tokens, tx,
+                     l0, l1, acc0, acc1);
+             } else {
+-                case13_headpair_two_token_pv<8>(
+-                    owned_score, m_new0, m_new1, s_v, tz * 2, tx,
++                exp664_case13_tail_two_token_pv<8>(
++                    owned_score, m_new0, m_new1, s_v, tz * 2, tail_tokens, tx,
+                     l0, l1, acc0, acc1);
+             }
+             m0 = m_new0;

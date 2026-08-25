@@ -1,0 +1,222 @@
+pair_launch_and_guard:
+1008-
+1009-template <int GQA, bool SYNC_COPY>
+1010-__device__ __forceinline__ void wait_token_parallel_owned_page() {
+1011-    if constexpr (GQA == 4 && SYNC_COPY) {
+1012:        // KV8 uses dim3(16, 4, 4): a fixed z partition is one complete
+1013-        // 64-thread C500 wave and owns its four K/V token rows.
+1014-        __syncwarp();
+1015-    } else {
+1016-        wait_token_parallel_page<SYNC_COPY>();
+--
+3543-        ? (full_pages + CASE14_PAIR_LOGICAL_PAGES - 1) /
+3544-              CASE14_PAIR_LOGICAL_PAGES
+3545-        : (tail_tokens != 0 ? 1 : 0);
+3546-    const int live_aggregate = (live_logical + 1) / 2;
+3547:    if (pair >= live_aggregate || pair >= aggregate_splits) return;
+3548-
+3549-    constexpr int KV_BUFFER_BYTES =
+3550-        2 * PAGE_TOKENS * U32_PER_ROW * (int)sizeof(uint32_t);
+3551-    constexpr int MD_BYTES = PAGE_TOKENS * 2 * (int)sizeof(float);
+--
+5902-                        // exp56: isolate BSM async on the case8 head-pair/z4
+5903-                        // architecture.  Case11 retains synchronous uint4.
+5904-                        paged_decode_case11_headpair_z4_kernel<
+5905-                            false, true, false, true><<<
+5906:                            grid, dim3(16, 4, 4)>>>(
+5907-                            q, k_cache_paged, v_cache_paged, output,
+5908-                            cache_seqlens, block_table,
+5909-                            s_partial_m, s_partial_l, s_partial_acc,
+5910-                            (int)batch_size, (int)pages_per_batch,
+5911-                            (int)pages_per_split, partial_split_count,
+5912-                            sm_scale * 1.4426950408889634f);
+5913-                        paged_decode_case11_headpair_z4_kernel<
+5914-                            false, false, true, true><<<
+5915:                            tail_grid, dim3(16, 4, 4)>>>(
+5916-                            q, k_cache_paged, v_cache_paged, output,
+5917-                            cache_seqlens, block_table,
+5918-                            s_partial_m, s_partial_l, s_partial_acc,
+5919-                            (int)batch_size, (int)pages_per_batch,
+--
+5921-                            sm_scale * 1.4426950408889634f);
+5922-                    } else {
+5923-                        paged_decode_case11_headpair_z4_kernel<
+5924-                            true, true, false, true><<<
+5925:                            grid, dim3(16, 4, 4)>>>(
+5926-                            q, k_cache_paged, v_cache_paged, output,
+5927-                            cache_seqlens, block_table,
+5928-                            s_partial_m, s_partial_l, s_partial_acc,
+5929-                            (int)batch_size, (int)pages_per_batch,
+5930-                            (int)pages_per_split, partial_split_count,
+5931-                            sm_scale * 1.4426950408889634f);
+5932-                        paged_decode_case11_headpair_z4_kernel<
+5933-                            true, false, true, true><<<
+5934:                            tail_grid, dim3(16, 4, 4)>>>(
+5935-                            q, k_cache_paged, v_cache_paged, output,
+5936-                            cache_seqlens, block_table,
+5937-                            s_partial_m, s_partial_l, s_partial_acc,
+5938-                            (int)batch_size, (int)pages_per_batch,
+--
+5959-                        if (preserve_case8_control < 0) {
+5960-                            paged_decode_case11_headpair_z4_kernel<
+5961-                                true, true, false, true, true, true, true, true,
+5962-                                false, true, true, false, false, true, true, true><<<
+5963:                                grid, dim3(16, 4, 4)>>>(
+5964-                                q, k_cache_paged, v_cache_paged, output,
+5965-                                cache_seqlens, block_table,
+5966-                                s_partial_m, s_partial_l, s_partial_acc,
+5967-                                (int)batch_size, (int)pages_per_batch,
+--
+5988-                        paged_decode_case11_headpair_z4_kernel<
+5989-                            true, true, false, true, true, true, true, true,
+5990-                            false, true, false, false, false, true, true, true,
+5991-                            true, true, true><<<
+5992:                            grid, dim3(16, 4, 4)>>>(
+5993-                            q, k_cache_paged, v_cache_paged, output,
+5994-                            cache_seqlens, block_table,
+5995-                            s_partial_m, s_partial_l, s_partial_acc,
+5996-                            (int)batch_size, (int)pages_per_batch,
+--
+6024-                    // splits, retaining the first FP32 state in a separate
+6025-                    // 4160-byte shared allocation before computing the second
+6026-                    // state. The odd logical split 256 is the final pair's
+6027-                    // first member; the kernel emits one aggregate slot.
+6028:                    paged_decode_case14_pair_aggregate_kernel<<<
+6029:                        grid, dim3(16, 4, 4)>>>(
+6030-                        q, k_cache_paged, v_cache_paged, output,
+6031-                        cache_seqlens, block_table,
+6032-                        s_partial_m, s_partial_l, s_partial_acc,
+6033-                        (int)batch_size, (int)pages_per_batch,
+--
+6045-                    // exp291 combines exp288's packed reducer metadata.
+6046-                    paged_decode_case11_headpair_z4_kernel<
+6047-                        true, true, false, true, true, true, false, true,
+6048-                        true, true, false, true, true, false, false, false,
+6049:                        false, true, true><<<grid, dim3(16, 4, 4)>>>(
+6050-                        q, k_cache_paged, v_cache_paged, output,
+6051-                        cache_seqlens, block_table,
+6052-                        s_partial_m, s_partial_l, s_partial_acc,
+6053-                        (int)batch_size, (int)pages_per_batch,
+--
+6062-                    // has twice exp27 case5's pages per split.
+6063-                    paged_decode_case11_headpair_z4_kernel<
+6064-                        true, true, false, true, true, true, true, true,
+6065-                        false, true, false, false, true, true, true, true,
+6066:                        true, true><<<grid, dim3(16, 4, 4)>>>(
+6067-                        q, k_cache_paged, v_cache_paged, output,
+6068-                        cache_seqlens, block_table,
+6069-                        s_partial_m, s_partial_l, s_partial_acc,
+6070-                        (int)batch_size, (int)pages_per_batch,
+--
+6077-                    // split-head QK so one K unpack serves two query heads.
+6078-                    paged_decode_case11_headpair_z4_kernel<
+6079-                        false, false, false, false, false, false, false, false,
+6080-                        false, true, false, false, false, true, true, true,
+6081:                        false, true><<<grid, dim3(16, 4, 4)>>>(
+6082-                        q, k_cache_paged, v_cache_paged, output,
+6083-                        cache_seqlens, block_table,
+6084-                        s_partial_m, s_partial_l, s_partial_acc,
+6085-                        (int)batch_size, (int)pages_per_batch,
+--
+6125-                    // a time across cases9/7/12/13, retaining an independently
+6126-                    // measured control at every step.
+6127-                    paged_decode_token_parallel_kernel<
+6128-                        8, 4, true, true, false, false, false, true><<<
+6129:                        grid, dim3(16, 4, 4)>>>(
+6130-                        q, k_cache_paged, v_cache_paged, output,
+6131-                        cache_seqlens, block_table,
+6132-                        s_partial_m, s_partial_l, s_partial_acc,
+6133-                        (int)batch_size, (int)pages_per_batch,
+6134-                        (int)pages_per_split, partial_split_count,
+6135-                        sm_scale * 1.4426950408889634f);
+6136-                    paged_decode_token_parallel_kernel<
+6137-                        8, 4, true, false, true, false, false, true><<<
+6138:                        tail_grid, dim3(16, 4, 4)>>>(
+6139-                        q, k_cache_paged, v_cache_paged, output,
+6140-                        cache_seqlens, block_table,
+6141-                        s_partial_m, s_partial_l, s_partial_acc,
+6142-                        (int)batch_size, (int)pages_per_batch,
+6143-                        (int)pages_per_split, partial_split_count,
+6144-                        sm_scale * 1.4426950408889634f);
+6145-                } else {
+6146-                    paged_decode_token_parallel_kernel<8, 4, true, true, false><<<
+6147:                        grid, dim3(16, 4, 4)>>>(
+6148-                        q, k_cache_paged, v_cache_paged, output,
+6149-                        cache_seqlens, block_table,
+6150-                        s_partial_m, s_partial_l, s_partial_acc,
+6151-                        (int)batch_size, (int)pages_per_batch,
+6152-                        (int)pages_per_split, partial_split_count,
+6153-                        sm_scale * 1.4426950408889634f);
+6154-                    paged_decode_token_parallel_kernel<8, 4, true, false, true><<<
+6155:                        tail_grid, dim3(16, 4, 4)>>>(
+6156-                        q, k_cache_paged, v_cache_paged, output,
+6157-                        cache_seqlens, block_table,
+6158-                        s_partial_m, s_partial_l, s_partial_acc,
+6159-                        (int)batch_size, (int)pages_per_batch,
+--
+6241-                    // combined launch, direct-out, and four-page ownership.
+6242-                    paged_decode_token_parallel_kernel<
+6243-                        8, 4, false, false, false, false, false, true,
+6244-                        false, false, false, false, true, true, true, true><<<
+6245:                        grid, dim3(16, 4, 4)>>>(
+6246-                        q, k_cache_paged, v_cache_paged, output,
+6247-                        cache_seqlens, block_table,
+6248-                        s_partial_m, s_partial_l, s_partial_acc,
+6249-                        (int)batch_size, (int)pages_per_batch,
+--
+6264-                    paged_decode_token_parallel_kernel<
+6265-                        8, 4, true, false, false, false, false, true,
+6266-                        false, false, true, false, true, true, false, false,
+6267-                        true><<<
+6268:                        grid, dim3(16, 4, 4)>>>(
+6269-                        q, k_cache_paged, v_cache_paged, output,
+6270-                        cache_seqlens, block_table,
+6271-                        s_partial_m, s_partial_l, s_partial_acc,
+6272-                        (int)batch_size, (int)pages_per_batch,
+--
+6533-    paged_decode_case11_headpair_z4_kernel<
+6534-        true, true, false, true, true, true, true, true,
+6535-        false, true, true, false, false, true, true, true, true, true,
+6536-        true><<<
+6537:        grid, dim3(16, 4, 4)>>>(
+6538-        q, k_cache, v_cache, out, cache_seqlens, block_table,
+6539-        partial_m, partial_l, partial_acc,
+6540-        batch_size, pages_per_batch, pages_per_split, n_split, sm_scale);
+6541-}
+case14_dispatch_and_grid:
+5825-    // exp583: pair adjacent 15-page logical producers into one aggregate
+5826-    // slot. The producer owns logical splits [2*pair,2*pair+1], while the
+5827-    // reducer sees 129 aggregate slots and 30 pages per aggregate slot.
+5828:    const bool use_case14_pair_aggregate =
+5829-        num_heads_k == 4 && batch_size == 1 && seqlen_k == 61519;
+5830:    if (use_case14_pair_aggregate) n_split = 129;
+5831:    const int64_t pages_per_split = (max_pages + n_split - 1) / n_split;
+5832-
+5833-    // ---- partial 缓冲（static 缓存，仅首次/扩容时分配；评测多轮调用零开销）----
+5834-    static float* s_partial_m = nullptr;
+--
+5867-    }
+5868-
+5869-    // ---- launch 主 kernel ----
+5870:    const dim3 grid((unsigned)(batch_size * num_heads_k), (unsigned)n_split);
+5871-    const dim3 tail_grid((unsigned)(batch_size * num_heads_k), 1);
+5872-#if XPUOJ_ENABLE_OPTIMIZED_MACA
+5873-    // The MMA-QK candidate is not numerically equivalent under the local
+--
+6019-                        (int)pages_per_split, partial_split_count,
+6020-                        sm_scale * 1.4426950408889634f);
+6021-#endif
+6022:                } else if (use_case14_pair_aggregate) {
+6023-                    // exp583: one CTA owns two adjacent logical 15-page
+6024-                    // splits, retaining the first FP32 state in a separate
+6025-                    // 4160-byte shared allocation before computing the second
+--
+6314-
+6315-    // ---- launch 归约 kernel（单 split 已由主 kernel 直写）----
+6316-    if (n_split > 1) {
+6317:        const int reduce_splits = partial_split_count;
+6318-        // 一个 CTA 协作合并一个 (batch, head)；两个 split 标量数组与
+6319-        // 4 个 warp 临时值存于动态 shared memory。
+6320-        if (num_heads_k == 8 && batch_size == 32 && seqlen_k == 4096) {
+device_synchronize_mentions=
+compile_error_mentions=

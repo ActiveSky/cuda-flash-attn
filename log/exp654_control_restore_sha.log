@@ -1,0 +1,8 @@
+exp654 control restore after terminal #124440
+control: solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+control_sha256: a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+workfile: solutions/cuda_maca_optimized.cpp
+workfile_sha256_after_restore: a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+workfile_control_cmp: PASS
+candidate_archive_sha256: 314c3445e887e4e2e1e16653a3e7be28d71b44803b8d6a720f73b68d28f13bff
+submitted_archive_sha256: 314c3445e887e4e2e1e16653a3e7be28d71b44803b8d6a720f73b68d28f13bff

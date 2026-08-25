@@ -1,0 +1,9 @@
+UTC 2026-08-24T18:21:16Z
+submission_id=125753 status=Accepted total_score=65.43 accepted=14/14
+target_set=case8:52/102us case10:62/39us case11:51/238us case14:53/150us sum=218
+25a637f309f8a8206a2210a1c8f6382fe9e9206507b5b0b4b41f92caefebe083  solutions/archive/2026-08-24-experiments/cuda_control124611_z4_all_async_register_kv_exp705.cpp
+ef03878bd773a5ba05736bd8781a0d0c9ae7664e1ebdf03d4b462ca550705ffb  results/raw/cuda_125753_raw.json
+raw_detail_content_code_sha256=25a637f309f8a8206a2210a1c8f6382fe9e9206507b5b0b4b41f92caefebe083
+raw_detail_content_code_bytes=273199
+expected_candidate_sha=25a637f309f8a8206a2210a1c8f6382fe9e9206507b5b0b4b41f92caefebe083
+exit_status=0

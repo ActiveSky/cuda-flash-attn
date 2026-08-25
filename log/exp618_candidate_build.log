@@ -1,0 +1,10 @@
+exp618 candidate normal build
+UTC 2026-08-21T10:24:59Z
+source: solutions/archive/2026-08-21-experiments/cuda_case11_single_wave_two_token_raw_partial_exp618.cpp
+source SHA-256: 2d7907dc004f406aa81ed5761189bc9ba7b5c847565906474bdd123508357479
+command: tools/build_local_maca.sh solutions/archive/2026-08-21-experiments/cuda_case11_single_wave_two_token_raw_partial_exp618.cpp build/exp618_candidate_normal.so
+compiler: /opt/maca/mxgpu_llvm/bin/mxcc; target: xcore1000
+exit: 0 (PASS)
+artifact: build/exp618_candidate_normal.so
+artifact SHA-256: 9bd7b6adcfc3e7936d1ce254109dfa36b1ba9867d2e9170e613bac324af3da13
+diagnostics: 10 existing __launch_bounds__(256, 6) Maca minimum-block warnings; no compilation error.

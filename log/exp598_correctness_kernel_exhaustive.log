@@ -1,0 +1,17 @@
+[PASS] case1: copy1                 batch=   1 seqlen_k=     1 kv=4 split=      1 | max_err=0.000e+00 mean_err=0.000e+00 | seqlen 范围 [1,1]
+[PASS] case2: attn2                 batch=   4 seqlen_k=     2 kv=8 split=      1 | max_err=6.384e-16 mean_err=1.594e-17 | seqlen 范围 [1,2]
+[PASS] case3: token-parallel        batch=  16 seqlen_k=    17 kv=4 split=      1 | max_err=1.332e-15 mean_err=4.481e-17 | seqlen 范围 [1,17]
+[PASS] case4: token-parallel        batch=  64 seqlen_k=    64 kv=8 split=      1 | max_err=1.332e-15 mean_err=4.012e-17 | seqlen 范围 [1,64]
+[PASS] case5: kv4-z4-mma            batch=  16 seqlen_k=   141 kv=4 split=      5 | max_err=8.882e-16 mean_err=3.840e-17 | seqlen 范围 [1,114]
+[PASS] case6: token-parallel        batch=  16 seqlen_k=   362 kv=8 split=      8 | max_err=6.661e-16 mean_err=2.952e-17 | seqlen 范围 [1,304]
+[PASS] case7: kv8-z8-native         batch=  64 seqlen_k=  2048 kv=8 split=      3 | max_err=1.110e-15 mean_err=2.951e-17 | seqlen 范围 [1,2048]
+[PASS] case8: kv4-z4-mma            batch=  16 seqlen_k=  4096 kv=4 split=     14 | max_err=6.661e-16 mean_err=2.360e-17 | seqlen 范围 [1,3462]
+[PASS] case9: kv8-z8-native         batch=  32 seqlen_k=  4096 kv=8 split=      6 | max_err=8.882e-16 mean_err=2.589e-17 | seqlen 范围 [1,3991]
+[PASS] case10: kv4-z4-mma           batch=   1 seqlen_k=  8192 kv=4 split=    128 | max_err=3.400e-16 mean_err=3.969e-17 | seqlen 范围 [7836,7836]
+[PASS] case11: kv4-z4-mma           batch=  16 seqlen_k= 12251 kv=4 split=     39 | max_err=6.661e-16 mean_err=2.232e-17 | seqlen 范围 [1,11859]
+[PASS] case12: kv8-z8-native        batch=   8 seqlen_k= 32768 kv=8 split=     40 | max_err=4.996e-16 mean_err=2.133e-17 | seqlen 范围 [1,31023]
+[PASS] case13: kv8-z8-native        batch=   1 seqlen_k= 58966 kv=8 split=     65 | max_err=4.857e-16 mean_err=3.953e-17 | seqlen 范围 [40806,40806]
+[PASS] case14: kv4-z4-mma           batch=   1 seqlen_k= 61519 kv=4 split=    257 | max_err=4.892e-16 mean_err=3.989e-17 | seqlen 范围 [45884,45884]
+
+总计: 14/14 通过
+EXIT=0

@@ -1,0 +1,10 @@
+exp690 OJ submit preflight and creation
+candidate: solutions/archive/2026-08-24-experiments/cuda_control124611_case7_threechunk_fused_direct_exp690.cpp
+candidate_sha256: bc90ae1b38e7c79daced75c8495c7426542c500cd30c3e7956b7f410950e8ce2
+parent_control_sha256: 3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+preflight_queue: #125367 Accepted 65.93; no non-terminal submission
+dry_run: target contest #11 problem #1; language cuda.maca-c500; 272163 bytes; no submission created
+final_sha_check: bc90ae1b38e7c79daced75c8495c7426542c500cd30c3e7956b7f410950e8ce2
+submit: one POST; created submission #125388 at 2026-08-24T12:25:57.000Z
+initial_status: Pending
+watch_policy: only #125388; no cancel, parallel submit, or repeat POST

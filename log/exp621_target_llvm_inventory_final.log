@@ -1,0 +1,68 @@
+exp621 target control LLVM inventory
+2026-08-21T12:26:57Z
+control target lines: 1764
+1:define protected metaxgpu_kernel void @_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+1764:}
+control target intrinsic inventory:
+      4 llvm.mxc.barrier
+      3 llvm.mxc.barrier.warp
+     64 llvm.mxc.bf16.to.f32
+      1 llvm.mxc.block.id.x
+      1 llvm.mxc.block.id.y
+     16 llvm.mxc.mma.f32.16x16x2bf16
+     24 llvm.mxc.mov.shfl.i32
+    112 llvm.mxc.pk.fma.f32
+      1 llvm.mxc.thread.id.x
+      1 llvm.mxc.thread.id.y
+      1 llvm.mxc.thread.id.z
+control target global loads/stores/barriers:
+63:  %7 = load <4 x half>, ptr addrspace(4) %invariant.gep, align 8
+72:  %9 = load <4 x half>, ptr addrspace(4) %gep.1, align 8
+81:  %11 = load <4 x half>, ptr addrspace(4) %gep.2, align 8
+90:  %13 = load <4 x half>, ptr addrspace(4) %gep.3, align 8
+99:  %15 = load <4 x half>, ptr addrspace(4) %gep.4, align 8
+108:  %17 = load <4 x half>, ptr addrspace(4) %gep.5, align 8
+117:  %19 = load <4 x half>, ptr addrspace(4) %gep.6, align 8
+126:  %21 = load <4 x half>, ptr addrspace(4) %gep.7, align 8
+153:  tail call void @llvm.memcpy.p3.p4.i64(ptr addrspace(3) noundef align 16 dereferenceable(16) %arrayidx12.i904, ptr addrspace(4) noundef align 16 dereferenceable(16) %add.ptr9.i902, i64 16, i1 false), !tbaa.struct !34, !call_argsrelate !64
+157:  tail call void @llvm.memcpy.p3.p4.i64(ptr addrspace(3) noundef align 16 dereferenceable(16) %arrayidx12.i890, ptr addrspace(4) noundef align 16 dereferenceable(16) %add.ptr9.i888, i64 16, i1 false), !tbaa.struct !34, !call_argsrelate !65
+236:  fence syncscope("warp") release
+237:  tail call void @llvm.mxc.barrier.warp()
+238:  fence syncscope("warp") acquire
+291:  %retval.sroa.0.0.copyload.i926 = load i32, ptr addrspace(4) %gep2097, align 16, !tbaa !16, !alias.scope !78
+293:  %retval.sroa.2.0.copyload.i928 = load i32, ptr addrspace(4) %retval.sroa.2.0.src.0..sroa_idx.i927, align 4, !tbaa !16, !alias.scope !78
+295:  %retval.sroa.3.0.copyload.i930 = load i32, ptr addrspace(4) %retval.sroa.3.0.src.0..sroa_idx.i929, align 8, !tbaa !16, !alias.scope !78
+297:  %retval.sroa.4.0.copyload.i932 = load i32, ptr addrspace(4) %retval.sroa.4.0.src.0..sroa_idx.i931, align 4, !tbaa !16, !alias.scope !78
+299:  %retval.sroa.0.0.copyload.i = load i32, ptr addrspace(4) %gep2099, align 16, !tbaa !16, !alias.scope !81
+301:  %retval.sroa.2.0.copyload.i = load i32, ptr addrspace(4) %retval.sroa.2.0.src.0..sroa_idx.i, align 4, !tbaa !16, !alias.scope !81
+303:  %retval.sroa.3.0.copyload.i = load i32, ptr addrspace(4) %retval.sroa.3.0.src.0..sroa_idx.i, align 8, !tbaa !16, !alias.scope !81
+305:  %retval.sroa.4.0.copyload.i = load i32, ptr addrspace(4) %retval.sroa.4.0.src.0..sroa_idx.i, align 4, !tbaa !16, !alias.scope !81
+592:  fence syncscope("warp") release
+593:  tail call void @llvm.mxc.barrier.warp()
+594:  fence syncscope("warp") acquire
+606:  fence syncscope("block") release
+607:  tail call void @llvm.mxc.barrier()
+608:  fence syncscope("block") acquire
+647:  tail call void @llvm.memcpy.p3.p4.i64(ptr addrspace(3) noundef align 16 dereferenceable(16) %arrayidx12.i876, ptr addrspace(4) noundef align 16 dereferenceable(16) %add.ptr9.i874, i64 16, i1 false), !tbaa.struct !34, !call_argsrelate !64
+651:  tail call void @llvm.memcpy.p3.p4.i64(ptr addrspace(3) noundef align 16 dereferenceable(16) %arrayidx12.i, ptr addrspace(4) noundef align 16 dereferenceable(16) %add.ptr9.i, i64 16, i1 false), !tbaa.struct !34, !call_argsrelate !65
+652:  fence syncscope("warp") release
+653:  tail call void @llvm.mxc.barrier.warp()
+654:  fence syncscope("warp") acquire
+1000:  fence syncscope("block") release
+1001:  tail call void @llvm.mxc.barrier()
+1002:  fence syncscope("block") acquire
+1095:  fence syncscope("block") release
+1096:  tail call void @llvm.mxc.barrier()
+1097:  fence syncscope("block") acquire
+1310:  fence syncscope("block") release
+1311:  tail call void @llvm.mxc.barrier()
+1312:  fence syncscope("block") acquire
+candidate vs control selected counts:
+candidate global-addrspace4 loads=16
+control global-addrspace4 loads=16
+candidate global memcpy p3.p4=4
+control global memcpy p3.p4=4
+candidate warp barriers=5
+control warp barriers=3
+candidate block barriers=4
+control block barriers=4

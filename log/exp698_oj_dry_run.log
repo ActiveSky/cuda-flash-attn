@@ -1,0 +1,5 @@
+target: contest #11, problem #1
+language: cuda.maca-c500
+code: solutions/archive/2026-08-24-experiments/cuda_control124611_case5_single_live_direct_output_exp698.cpp (271528 bytes)
+dry-run: no submission created; use --submit to submit
+exit_status=0

@@ -1,0 +1,25 @@
+exp630 gate: candidate C500 correctness random, all cases
+UTC 2026-08-22T07:54:27Z
+candidate source SHA:
+e96b60455098002d684167531399d6620e8e7427918cadbf5609b64b126866c1  solutions/archive/2026-08-22-experiments/cuda_case2_source_owner_native_b128_exp630.cpp
+candidate binary SHA:
+2b927d76b90100ff2f4a5e02d9e440b15f8413d95a95bf69ac6221941cb99625  build/exp630_candidate.so
+workfile SHA guard:
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/cuda_maca_optimized.cpp
+command: python3 tests/c500_paged_decode_harness.py --library build/exp630_candidate.so --cases all --lengths random --seed 20260809
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+[PASS] case  1 B= 1 L=    1 KV=4 lengths=random   match=1.000000 max_error=0.000000e+00 max_tol_ratio=0.000 finite=True
+[PASS] case  2 B= 4 L=    2 KV=8 lengths=random   match=1.000000 max_error=1.562500e-02 max_tol_ratio=0.324 finite=True
+[PASS] case  3 B=16 L=   17 KV=4 lengths=random   match=1.000000 max_error=1.562500e-02 max_tol_ratio=0.311 finite=True
+[PASS] case  4 B=64 L=   64 KV=8 lengths=random   match=1.000000 max_error=7.812500e-03 max_tol_ratio=0.244 finite=True
+[PASS] case  5 B=16 L=  141 KV=4 lengths=random   match=1.000000 max_error=3.906250e-03 max_tol_ratio=0.163 finite=True
+[PASS] case  6 B=16 L=  362 KV=8 lengths=random   match=1.000000 max_error=7.812500e-03 max_tol_ratio=0.240 finite=True
+[PASS] case  7 B=64 L= 2048 KV=8 lengths=random   match=1.000000 max_error=3.906250e-03 max_tol_ratio=0.163 finite=True
+[PASS] case  8 B=16 L= 4096 KV=4 lengths=random   match=1.000000 max_error=9.765625e-04 max_tol_ratio=0.054 finite=True
+[PASS] case  9 B=32 L= 4096 KV=8 lengths=random   match=1.000000 max_error=3.906250e-03 max_tol_ratio=0.163 finite=True
+[PASS] case 10 B= 1 L= 8192 KV=4 lengths=random   match=1.000000 max_error=4.882812e-04 max_tol_ratio=0.029 finite=True
+[PASS] case 11 B=16 L=12251 KV=4 lengths=random   match=1.000000 max_error=1.953125e-03 max_tol_ratio=0.098 finite=True
+[PASS] case 12 B= 8 L=32768 KV=8 lengths=random   match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True
+[PASS] case 13 B= 1 L=58966 KV=8 lengths=random   match=1.000000 max_error=1.220703e-04 max_tol_ratio=0.008 finite=True
+[PASS] case 14 B= 1 L=61519 KV=4 lengths=random   match=1.000000 max_error=2.441406e-04 max_tol_ratio=0.015 finite=True
+exit_status=0

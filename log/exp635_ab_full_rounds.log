@@ -1,0 +1,24 @@
+GPU: MetaX C500
+case 12 lengths=full warmup=5 iterations=100 rounds=21 correctness=PASS
+round=01 control_ms=0.722168 candidate_ms=0.722824 ratio=1.000907
+round=02 control_ms=0.722949 candidate_ms=0.722870 ratio=0.999890
+round=03 control_ms=0.722645 candidate_ms=0.722898 ratio=1.000351
+round=04 control_ms=0.722998 candidate_ms=0.722373 ratio=0.999136
+round=05 control_ms=0.722775 candidate_ms=0.723369 ratio=1.000822
+round=06 control_ms=0.722662 candidate_ms=0.722117 ratio=0.999245
+round=07 control_ms=0.722194 candidate_ms=0.722253 ratio=1.000082
+round=08 control_ms=0.723246 candidate_ms=0.722028 ratio=0.998315
+round=09 control_ms=0.722324 candidate_ms=0.722214 ratio=0.999848
+round=10 control_ms=0.722171 candidate_ms=0.722330 ratio=1.000220
+round=11 control_ms=0.722261 candidate_ms=0.722591 ratio=1.000457
+round=12 control_ms=0.722130 candidate_ms=0.721836 ratio=0.999592
+round=13 control_ms=0.721994 candidate_ms=0.722202 ratio=1.000287
+round=14 control_ms=0.723187 candidate_ms=0.722772 ratio=0.999427
+round=15 control_ms=0.722217 candidate_ms=0.721994 ratio=0.999692
+round=16 control_ms=0.722411 candidate_ms=0.721912 ratio=0.999309
+round=17 control_ms=0.723331 candidate_ms=0.723412 ratio=1.000113
+round=18 control_ms=0.723343 candidate_ms=0.722900 ratio=0.999388
+round=19 control_ms=0.722301 candidate_ms=0.722849 ratio=1.000759
+round=20 control_ms=0.723077 candidate_ms=0.722721 ratio=0.999508
+round=21 control_ms=0.722627 candidate_ms=0.722143 ratio=0.999330
+summary p10/p50/p90=0.999245/0.999848/1.000759

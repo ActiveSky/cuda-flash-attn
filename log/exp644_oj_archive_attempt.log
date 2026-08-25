@@ -1,0 +1,11 @@
+Command accidentally invoked after the exp644 terminal cleanup:
+python3 tools/archive_cuda_submissions.py --help
+
+Observed stdout:
+archived 343 submissions; manifest: /data/cuda-flash-attn/solutions/archive/SUBMISSIONS.md
+
+The script does not implement --help and performed its archive action. No
+cuda_122987_raw.json or cuda_122987.cpp existed because the submit command
+used --no-archive. The 14 newly generated historical submission snapshots
+and their 14 manifest rows were removed immediately; no exp644 raw or
+immutable source archive was retained.

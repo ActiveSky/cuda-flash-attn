@@ -1,0 +1,12 @@
+2026-08-24T03:52:23Z
+385b32b680e1a58294917a5c6c345b899f1dd87b603152e1dabc38418d52835a  solutions/cuda_maca_optimized.cpp
+| #124788 | Accepted | 65.93 | cuda.maca-c500 | 2026-08-24T03:41:26.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #124761 | Accepted | 66 | cuda.maca-c500 | 2026-08-24T03:22:00.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #124696 | Accepted | 65.93 | cuda.maca-c500 | 2026-08-24T02:19:42.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #124684 | Accepted | 65.5 | cuda.maca-c500 | 2026-08-24T01:51:24.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #124669 | Accepted | 66.07 | cuda.maca-c500 | 2026-08-24T01:30:18.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #124660 | Accepted | 66 | cuda.maca-c500 | 2026-08-24T01:17:06.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #124647 | Accepted | 66 | cuda.maca-c500 | 2026-08-24T00:42:12.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #124621 | Accepted | 65.86 | cuda.maca-c500 | 2026-08-23T23:43:40.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #124611 | Accepted | 66 | cuda.maca-c500 | 2026-08-23T23:16:03.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |
+| #124606 | Accepted | 66 | cuda.maca-c500 | 2026-08-23T22:56:05.000Z | Agent 推理算子库优化 - FlashAttention KV Cache  |

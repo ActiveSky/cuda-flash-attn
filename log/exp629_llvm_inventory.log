@@ -1,0 +1,140 @@
+--- candidate symbols
+18:$_Z29paged_decode_two_token_kernelILi4ELi8ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if = comdat any
+20:$_Z50paged_decode_case2_source_owner_native_b128_kernelILi8ELi4EEvPK15__maca_bfloat16PS0_PKiS5_i = comdat any
+22:$_Z29paged_decode_two_token_kernelILi8ELi4ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if = comdat any
+24:$_Z29paged_decode_two_token_kernelILi8ELi4ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if = comdat any
+665:define protected metaxgpu_kernel void @_Z29paged_decode_two_token_kernelILi4ELi8ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch, float noundef %sm_scale) local_unnamed_addr #8 comdat {
+1011:define protected metaxgpu_kernel void @_Z50paged_decode_case2_source_owner_native_b128_kernelILi8ELi4EEvPK15__maca_bfloat16PS0_PKiS5_i(ptr addrspace(4) noalias nocapture noundef %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch) local_unnamed_addr #10 comdat {
+1085:define protected metaxgpu_kernel void @_Z29paged_decode_two_token_kernelILi8ELi4ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch, float noundef %sm_scale) local_unnamed_addr #12 comdat {
+1426:define protected metaxgpu_kernel void @_Z29paged_decode_two_token_kernelILi8ELi4ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch, float noundef %sm_scale) local_unnamed_addr #12 comdat {
+43500:$_Z44__device_stub__paged_decode_two_token_kernelILi4ELi8ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if = comdat any
+43502:$_Z65__device_stub__paged_decode_case2_source_owner_native_b128_kernelILi8ELi4EEvPK15__maca_bfloat16PS0_PKiS5_i = comdat any
+43504:$_Z44__device_stub__paged_decode_two_token_kernelILi8ELi4ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if = comdat any
+43506:$_Z44__device_stub__paged_decode_two_token_kernelILi8ELi4ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if = comdat any
+43570:@4 = private unnamed_addr constant [86 x i8] c"_Z29paged_decode_two_token_kernelILi4ELi8ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if\00", align 1
+43571:@5 = private unnamed_addr constant [96 x i8] c"_Z50paged_decode_case2_source_owner_native_b128_kernelILi8ELi4EEvPK15__maca_bfloat16PS0_PKiS5_i\00", align 1
+43572:@6 = private unnamed_addr constant [86 x i8] c"_Z29paged_decode_two_token_kernelILi8ELi4ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if\00", align 1
+43573:@7 = private unnamed_addr constant [86 x i8] c"_Z29paged_decode_two_token_kernelILi8ELi4ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if\00", align 1
+43890:  tail call void @_Z44__device_stub__paged_decode_two_token_kernelILi4ELi8ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr noundef %q, ptr noundef %k_cache_paged, ptr noundef %v_cache_paged, ptr noundef %output, ptr noundef %cache_seqlens, ptr noundef %block_table, i32 noundef %conv63, float noundef 0x3FB6A09E60000000) #9
+43906:  tail call void @_Z65__device_stub__paged_decode_case2_source_owner_native_b128_kernelILi8ELi4EEvPK15__maca_bfloat16PS0_PKiS5_i(ptr noundef %v_cache_paged, ptr noundef %output, ptr noundef %cache_seqlens, ptr noundef %block_table, i32 noundef %conv73) #9
+43916:  tail call void @_Z44__device_stub__paged_decode_two_token_kernelILi8ELi4ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr noundef %q, ptr noundef %k_cache_paged, ptr noundef %v_cache_paged, ptr noundef %output, ptr noundef %cache_seqlens, ptr noundef %block_table, i32 noundef %conv80, float noundef 0x3FB6A09E60000000) #9
+43928:  tail call void @_Z44__device_stub__paged_decode_two_token_kernelILi8ELi4ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr noundef %q, ptr noundef %k_cache_paged, ptr noundef %v_cache_paged, ptr noundef %output, ptr noundef %cache_seqlens, ptr noundef %block_table, i32 noundef %conv88, float noundef 0x3FB6A09E60000000) #9
+44694:define linkonce_odr void @_Z44__device_stub__paged_decode_two_token_kernelILi4ELi8ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr noalias noundef %q, ptr noalias noundef %k_cache, ptr noalias noundef %v_cache, ptr noalias noundef %out, ptr noalias noundef %cache_seqlens, ptr noalias noundef %block_table, i32 noundef %pages_per_batch, float noundef %sm_scale) #1 comdat {
+44741:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z44__device_stub__paged_decode_two_token_kernelILi4ELi8ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %8, ptr noundef %9)
+44746:define linkonce_odr void @_Z65__device_stub__paged_decode_case2_source_owner_native_b128_kernelILi8ELi4EEvPK15__maca_bfloat16PS0_PKiS5_i(ptr noalias noundef %v_cache, ptr noalias noundef %out, ptr noalias noundef %cache_seqlens, ptr noalias noundef %block_table, i32 noundef %pages_per_batch) #1 comdat {
+44781:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z65__device_stub__paged_decode_case2_source_owner_native_b128_kernelILi8ELi4EEvPK15__maca_bfloat16PS0_PKiS5_i, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %5, ptr noundef %6)
+44786:define linkonce_odr void @_Z44__device_stub__paged_decode_two_token_kernelILi8ELi4ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr noalias noundef %q, ptr noalias noundef %k_cache, ptr noalias noundef %v_cache, ptr noalias noundef %out, ptr noalias noundef %cache_seqlens, ptr noalias noundef %block_table, i32 noundef %pages_per_batch, float noundef %sm_scale) #1 comdat {
+44833:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z44__device_stub__paged_decode_two_token_kernelILi8ELi4ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %8, ptr noundef %9)
+44838:define linkonce_odr void @_Z44__device_stub__paged_decode_two_token_kernelILi8ELi4ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr noalias noundef %q, ptr noalias noundef %k_cache, ptr noalias noundef %v_cache, ptr noalias noundef %out, ptr noalias noundef %cache_seqlens, ptr noalias noundef %block_table, i32 noundef %pages_per_batch, float noundef %sm_scale) #1 comdat {
+44885:  %call = call noundef i32 @mcLaunchKernel(ptr noundef nonnull @_Z44__device_stub__paged_decode_two_token_kernelILi8ELi4ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if, i64 %grid_dim.coerce.sroa.0.0.copyload, i32 %grid_dim.coerce.sroa.2.0.copyload, i64 %block_dim.coerce.sroa.0.0.copyload, i32 %block_dim.coerce.sroa.2.0.copyload, ptr noundef nonnull %kernel_args1, i64 noundef %8, ptr noundef %9)
+46774:  %8 = tail call i32 @__mcRegisterFunction(ptr %3, ptr nonnull @_Z44__device_stub__paged_decode_two_token_kernelILi4ELi8ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if, ptr nonnull @4, ptr nonnull @4, i32 -1, ptr null, ptr null, ptr null, ptr null, ptr null)
+46775:  %9 = tail call i32 @__mcRegisterFunction(ptr %3, ptr nonnull @_Z65__device_stub__paged_decode_case2_source_owner_native_b128_kernelILi8ELi4EEvPK15__maca_bfloat16PS0_PKiS5_i, ptr nonnull @5, ptr nonnull @5, i32 -1, ptr null, ptr null, ptr null, ptr null, ptr null)
+46776:  %10 = tail call i32 @__mcRegisterFunction(ptr %3, ptr nonnull @_Z44__device_stub__paged_decode_two_token_kernelILi8ELi4ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if, ptr nonnull @6, ptr nonnull @6, i32 -1, ptr null, ptr null, ptr null, ptr null, ptr null)
+46777:  %11 = tail call i32 @__mcRegisterFunction(ptr %3, ptr nonnull @_Z44__device_stub__paged_decode_two_token_kernelILi8ELi4ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if, ptr nonnull @7, ptr nonnull @7, i32 -1, ptr null, ptr null, ptr null, ptr null, ptr null)
+--- candidate native intrinsic counts
+     21 llvm.mxc.ldg.predicator.bsm.v4i32
+      2 llvm.mxc.ldg.predicator.v4i32
+      5 llvm.mxc.stg.predicator.v4i32
+--- candidate native intrinsic lines
+1039-  %add.ptr16 = getelementptr inbounds i8, ptr addrspace(4) %add.ptr, i64 %idx.ext15
+1040-  %6 = addrspacecast ptr addrspace(4) %add.ptr16 to ptr addrspace(1)
+1041:  %7 = tail call noundef <4 x i32> @llvm.mxc.ldg.predicator.v4i32(ptr addrspace(1) %6, i32 0, i64 -1, i1 true, i1 true, i1 false, i1 false), !call_argsrelate !36
+1042-  %mul19 = shl nuw nsw i32 %and, 2
+1043-  %mul21 = shl nsw i32 %div36, 5
+--
+1048-  %gep = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %invariant.gep, i64 %idx.ext24
+1049-  %9 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #25
+1050:  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %gep, i32 0, <4 x i32> %7, i64 %9, i1 true, i1 false, i1 false), !call_argsrelate !37
+1051-  %10 = shl i32 %8, 7
+1052-  %mul23.1 = or disjoint i32 %10, 128
+--
+1054-  %gep.1 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %invariant.gep, i64 %idx.ext24.1
+1055-  %11 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #25
+1056:  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %gep.1, i32 0, <4 x i32> %7, i64 %11, i1 true, i1 false, i1 false), !call_argsrelate !37
+1057-  %12 = shl i32 %8, 7
+1058-  %mul23.2 = or disjoint i32 %12, 256
+--
+1060-  %gep.2 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %invariant.gep, i64 %idx.ext24.2
+1061-  %13 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #25
+1062:  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %gep.2, i32 0, <4 x i32> %7, i64 %13, i1 true, i1 false, i1 false), !call_argsrelate !37
+1063-  %14 = shl i32 %8, 7
+1064-  %mul23.3 = or disjoint i32 %14, 384
+--
+1066-  %gep.3 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %invariant.gep, i64 %idx.ext24.3
+1067-  %15 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #25
+1068:  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %gep.3, i32 0, <4 x i32> %7, i64 %15, i1 true, i1 false, i1 false), !call_argsrelate !37
+1069-  br label %cleanup
+1070-
+--
+1074-
+1075-; Function Attrs: mustprogress nounwind willreturn memory(argmem: readwrite)
+1076:declare <4 x i32> @llvm.mxc.ldg.predicator.v4i32(ptr addrspace(1) noalias nocapture, i32 immarg, i64, i1 immarg, i1 immarg, i1 immarg, i1 immarg) #11
+1077-
+1078-; Function Attrs: convergent mustprogress nofree nounwind willreturn memory(none)
+--
+1080-
+1081-; Function Attrs: mustprogress nounwind willreturn memory(argmem: readwrite)
+1082:declare void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) noalias nocapture, i32 immarg, <4 x i32>, i64, i1 immarg, i1 immarg, i1 immarg) #11
+1083-
+1084-; Function Attrs: convergent mustprogress nofree norecurse nounwind willreturn memory(argmem: readwrite)
+--
+11919-  %23 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #25
+11920-  %24 = addrspacecast ptr addrspace(4) %add.ptr9.i1006 to ptr addrspace(1)
+11921:  %25 = tail call <4 x i32> @llvm.mxc.ldg.predicator.bsm.v4i32(ptr addrspace(3) %arrayidx12.i1008, ptr addrspace(1) %24, i32 0, i64 %23, i1 true, i1 true, i1 false, i1 true), !call_argsrelate !173
+11922-  %add.ptr.i989 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i1002
+11923-  %add.ptr9.i992 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr.i989, i64 %idx.ext8.i1005
+--
+11925-  %26 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #25
+11926-  %27 = addrspacecast ptr addrspace(4) %add.ptr9.i992 to ptr addrspace(1)
+11927:  %28 = tail call <4 x i32> @llvm.mxc.ldg.predicator.bsm.v4i32(ptr addrspace(3) %arrayidx12.i994, ptr addrspace(1) %27, i32 0, i64 %26, i1 true, i1 true, i1 false, i1 true), !call_argsrelate !174
+11928-  %invariant.gep1130 = getelementptr i32, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext8.i1005
+11929-  %invariant.gep1132 = getelementptr i32, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext8.i1005
+--
+12048-  %57 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #25
+12049-  %58 = addrspacecast ptr addrspace(4) %gep1131 to ptr addrspace(1)
+12050:  %59 = tail call <4 x i32> @llvm.mxc.ldg.predicator.bsm.v4i32(ptr addrspace(3) %arrayidx12.i1008, ptr addrspace(1) %58, i32 0, i64 %57, i1 true, i1 true, i1 false, i1 true), !call_argsrelate !173
+12051-  br label %if.end86
+12052-
+--
+12338-  %152 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #25
+12339-  %153 = addrspacecast ptr addrspace(4) %gep1133 to ptr addrspace(1)
+12340:  %154 = tail call <4 x i32> @llvm.mxc.ldg.predicator.bsm.v4i32(ptr addrspace(3) %arrayidx12.i994, ptr addrspace(1) %153, i32 0, i64 %152, i1 true, i1 true, i1 false, i1 true), !call_argsrelate !174
+12341-  br label %if.end161
+12342-
+--
+13067-
+13068-; Function Attrs: mustprogress nounwind willreturn memory(argmem: readwrite)
+13069:declare <4 x i32> @llvm.mxc.ldg.predicator.bsm.v4i32(ptr addrspace(3) noalias nocapture, ptr addrspace(1) noalias nocapture, i32 immarg, i64, i1 immarg, i1 immarg, i1 immarg, i1 immarg) #11
+13070-
+13071-; Function Attrs: mustprogress nounwind willreturn
+--
+13150-  %9 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #25
+13151-  %10 = addrspacecast ptr addrspace(4) %add.ptr9.i1279 to ptr addrspace(1)
+13152:  %11 = tail call <4 x i32> @llvm.mxc.ldg.predicator.bsm.v4i32(ptr addrspace(3) %arrayidx12.i1281, ptr addrspace(1) %10, i32 0, i64 %9, i1 true, i1 true, i1 false, i1 true), !call_argsrelate !173
+13153-  %add.ptr.i1262 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i1275
+13154-  %add.ptr9.i1265 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr.i1262, i64 %idx.ext8.i1278
+--
+13156-  %12 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #25
+13157-  %13 = addrspacecast ptr addrspace(4) %add.ptr9.i1265 to ptr addrspace(1)
+13158:  %14 = tail call <4 x i32> @llvm.mxc.ldg.predicator.bsm.v4i32(ptr addrspace(3) %arrayidx12.i1267, ptr addrspace(1) %13, i32 0, i64 %12, i1 true, i1 true, i1 false, i1 true), !call_argsrelate !174
+13159-  %invariant.gep = getelementptr i32, ptr addrspace(4) %k_cache.coerce, i64 %idx.ext8.i1278
+13160-  %invariant.gep1422 = getelementptr i32, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext8.i1278
+--
+14399-  %458 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #25
+14400-  %459 = addrspacecast ptr addrspace(4) %gep to ptr addrspace(1)
+14401:  %460 = tail call <4 x i32> @llvm.mxc.ldg.predicator.bsm.v4i32(ptr addrspace(3) %arrayidx12.i1281, ptr addrspace(1) %459, i32 0, i64 %458, i1 true, i1 true, i1 false, i1 true), !call_argsrelate !173
+14402-  br label %if.end217
+14403-
+--
+15174-  %661 = addrspacecast ptr addrspace(4) %gep1423 to ptr addrspace(1)
+15175-  %662 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #25
+15176:  %663 = tail call <4 x i32> @llvm.mxc.ldg.predicator.bsm.v4i32(ptr addrspace(3) %arrayidx12.i1267, ptr addrspace(1) %661, i32 0, i64 %662, i1 true, i1 true, i1 false, i1 true), !call_argsrelate !174
+15177-  br label %if.end370
+15178-
+--
+15587-  %9 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #25
+15588-  %10 = addrspacecast ptr addrspace(4) %add.ptr9.i1291 to ptr addrspace(1)
+15589:  %11 = tail call <4 x i32> @llvm.mxc.ldg.predicator.bsm.v4i32(ptr addrspace(3) %arrayidx12.i1293, ptr addrspace(1) %10, i32 0, i64 %9, i1 true, i1 true, i1 false, i1 true), !call_argsrelate !173
+15590-  %add.ptr.i1274 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i1287
+--- control native intrinsic counts
+     21 llvm.mxc.ldg.predicator.bsm.v4i32

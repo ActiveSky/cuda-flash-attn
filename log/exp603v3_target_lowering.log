@@ -1,0 +1,177 @@
+control target line/bytes/bsm
+  1733 140342 build/exp603v3_control_case12_target.ll
+candidate target line/bytes/bsm
+  1807 145154 build/exp603v3_candidate_case12_target.ll
+8
+candidate target BSM + lane snippets
+90-  %8 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %7) #24
+91-  %xor.i1474 = shl i32 %8, 2
+92-  %shl.i1475 = xor i32 %xor.i1474, 128
+93:  %9 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1475, i32 %qpack0.sroa.0.0)
+94-  %10 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+95-  %11 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %10) #24
+96-  %xor.i1471 = shl i32 %11, 2
+97-  %shl.i1472 = xor i32 %xor.i1471, 128
+98:  %12 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1472, i32 %qpack0.sroa.8.0)
+99-  %13 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+100-  %14 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %13) #24
+101:  %xor.i1468 = shl i32 %14, 2
+102-  %shl.i1469 = xor i32 %xor.i1468, 128
+103:  %15 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1469, i32 %qpack0.sroa.13.0)
+104-  %16 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+105-  %17 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %16) #24
+106-  %xor.i1465 = shl i32 %17, 2
+107-  %shl.i1466 = xor i32 %xor.i1465, 128
+108:  %18 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1466, i32 %qpack0.sroa.18.0)
+109-  %19 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+110-  %20 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %19) #24
+111-  %xor.i1462 = shl i32 %20, 2
+112-  %shl.i1463 = xor i32 %xor.i1462, 128
+113:  %21 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1463, i32 %qpack1.sroa.0.0)
+114-  %22 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+115-  %23 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %22) #24
+116-  %xor.i1459 = shl i32 %23, 2
+117-  %shl.i1460 = xor i32 %xor.i1459, 128
+118:  %24 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1460, i32 %qpack1.sroa.8.0)
+119-  %25 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+120-  %26 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %25) #24
+121-  %xor.i1456 = shl i32 %26, 2
+122-  %shl.i1457 = xor i32 %xor.i1456, 128
+123:  %27 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1457, i32 %qpack1.sroa.13.0)
+124-  %28 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+125-  %29 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %28) #24
+126-  %xor.i = shl i32 %29, 2
+127-  %shl.i = xor i32 %xor.i, 128
+128:  %30 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i, i32 %qpack1.sroa.18.0)
+129-  br i1 %cmp27, label %if.end77, label %if.then68
+130-
+131-if.then68:                                        ; preds = %if.end50
+--
+442-if.then176:                                       ; preds = %for.body144
+443-  %arrayidx179 = getelementptr inbounds i32, ptr addrspace(1) %add.ptr136, i64 %indvars.iv.next
+444-  %120 = load i32, ptr addrspace(1) %arrayidx179, align 4, !tbaa !16
+445:  %121 = shl i32 %120, 14
+446-  %mul187 = add i32 %121, %52
+447-  %idx.ext188 = sext i32 %mul187 to i64
+448-  %gep = getelementptr %struct.__maca_bfloat16.1, ptr addrspace(4) %invariant.gep, i64 %idx.ext188
+target q global load snippets candidate
+1:define protected metaxgpu_kernel void @_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef readnone %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+2-entry:
+3-  %0 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.x(), !range !26
+4-  %1 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.y(), !range !26
+--
+52-  %add37 = add nuw nsw i32 %add15, %mul36
+53-  %mul38 = shl nsw i32 %add37, 7
+54-  %idx.ext = zext nneg i32 %mul38 to i64
+55:  %add.ptr = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %q.coerce, i64 %idx.ext
+56-  %mul39 = shl nuw nsw i32 %0, 2
+57-  %idx.ext40 = zext nneg i32 %mul39 to i64
+58-  %add.ptr41 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr, i64 %idx.ext40
+59-  %add43 = add nuw nsw i32 %add17, %mul36
+60-  %mul44 = shl nsw i32 %add43, 7
+61-  %idx.ext45 = zext nneg i32 %mul44 to i64
+62:  %add.ptr46 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %q.coerce, i64 %idx.ext45
+63-  %add.ptr49 = getelementptr inbounds i32, ptr addrspace(4) %add.ptr46, i64 %idx.ext40
+64:  %qpack0.sroa.0.0.copyload = load i32, ptr addrspace(4) %add.ptr41, align 16, !tbaa !16
+65:  %qpack0.sroa.8.0.q0_src.0..sroa_idx = getelementptr inbounds i8, ptr addrspace(4) %add.ptr41, i64 4
+66:  %qpack0.sroa.8.0.copyload = load i32, ptr addrspace(4) %qpack0.sroa.8.0.q0_src.0..sroa_idx, align 4, !tbaa !16
+67:  %qpack0.sroa.13.0.q0_src.0..sroa_idx = getelementptr inbounds i8, ptr addrspace(4) %add.ptr41, i64 8
+68:  %qpack0.sroa.13.0.copyload = load i32, ptr addrspace(4) %qpack0.sroa.13.0.q0_src.0..sroa_idx, align 8, !tbaa !16
+69:  %qpack0.sroa.18.0.q0_src.0..sroa_idx = getelementptr inbounds i8, ptr addrspace(4) %add.ptr41, i64 12
+70:  %qpack0.sroa.18.0.copyload = load i32, ptr addrspace(4) %qpack0.sroa.18.0.q0_src.0..sroa_idx, align 4, !tbaa !16
+71:  %qpack1.sroa.0.0.copyload = load i32, ptr addrspace(4) %add.ptr49, align 16, !tbaa !16
+72:  %qpack1.sroa.8.0.q1_src.0..sroa_idx = getelementptr inbounds i8, ptr addrspace(4) %add.ptr49, i64 4
+73:  %qpack1.sroa.8.0.copyload = load i32, ptr addrspace(4) %qpack1.sroa.8.0.q1_src.0..sroa_idx, align 4, !tbaa !16
+74:  %qpack1.sroa.13.0.q1_src.0..sroa_idx = getelementptr inbounds i8, ptr addrspace(4) %add.ptr49, i64 8
+75:  %qpack1.sroa.13.0.copyload = load i32, ptr addrspace(4) %qpack1.sroa.13.0.q1_src.0..sroa_idx, align 8, !tbaa !16
+76:  %qpack1.sroa.18.0.q1_src.0..sroa_idx = getelementptr inbounds i8, ptr addrspace(4) %add.ptr49, i64 12
+77:  %qpack1.sroa.18.0.copyload = load i32, ptr addrspace(4) %qpack1.sroa.18.0.q1_src.0..sroa_idx, align 4, !tbaa !16
+78-  br label %if.end50
+79-
+80-if.end50:                                         ; preds = %if.then35, %if.end
+81:  %qpack1.sroa.0.0 = phi i32 [ %qpack1.sroa.0.0.copyload, %if.then35 ], [ 0, %if.end ]
+82:  %qpack1.sroa.8.0 = phi i32 [ %qpack1.sroa.8.0.copyload, %if.then35 ], [ 0, %if.end ]
+83:  %qpack1.sroa.13.0 = phi i32 [ %qpack1.sroa.13.0.copyload, %if.then35 ], [ 0, %if.end ]
+84:  %qpack1.sroa.18.0 = phi i32 [ %qpack1.sroa.18.0.copyload, %if.then35 ], [ 0, %if.end ]
+85:  %qpack0.sroa.0.0 = phi i32 [ %qpack0.sroa.0.0.copyload, %if.then35 ], [ 0, %if.end ]
+86:  %qpack0.sroa.8.0 = phi i32 [ %qpack0.sroa.8.0.copyload, %if.then35 ], [ 0, %if.end ]
+87:  %qpack0.sroa.13.0 = phi i32 [ %qpack0.sroa.13.0.copyload, %if.then35 ], [ 0, %if.end ]
+88:  %qpack0.sroa.18.0 = phi i32 [ %qpack0.sroa.18.0.copyload, %if.then35 ], [ 0, %if.end ]
+89-  %7 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+90-  %8 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %7) #24
+91-  %xor.i1474 = shl i32 %8, 2
+92-  %shl.i1475 = xor i32 %xor.i1474, 128
+93:  %9 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1475, i32 %qpack0.sroa.0.0)
+94-  %10 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+95-  %11 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %10) #24
+96-  %xor.i1471 = shl i32 %11, 2
+97-  %shl.i1472 = xor i32 %xor.i1471, 128
+98:  %12 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1472, i32 %qpack0.sroa.8.0)
+99-  %13 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+100-  %14 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %13) #24
+101-  %xor.i1468 = shl i32 %14, 2
+102-  %shl.i1469 = xor i32 %xor.i1468, 128
+103:  %15 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1469, i32 %qpack0.sroa.13.0)
+104-  %16 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+105-  %17 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %16) #24
+106-  %xor.i1465 = shl i32 %17, 2
+107-  %shl.i1466 = xor i32 %xor.i1465, 128
+108:  %18 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1466, i32 %qpack0.sroa.18.0)
+109-  %19 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+110-  %20 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %19) #24
+111-  %xor.i1462 = shl i32 %20, 2
+112-  %shl.i1463 = xor i32 %xor.i1462, 128
+113:  %21 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1463, i32 %qpack1.sroa.0.0)
+114-  %22 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+115-  %23 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %22) #24
+116-  %xor.i1459 = shl i32 %23, 2
+117-  %shl.i1460 = xor i32 %xor.i1459, 128
+118:  %24 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1460, i32 %qpack1.sroa.8.0)
+119-  %25 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+120-  %26 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %25) #24
+121-  %xor.i1456 = shl i32 %26, 2
+122-  %shl.i1457 = xor i32 %xor.i1456, 128
+123:  %27 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i1457, i32 %qpack1.sroa.13.0)
+124-  %28 = tail call i32 @llvm.mxc.mbcnt.lo(i32 -1, i32 0) #24
+125-  %29 = tail call noundef i32 @llvm.mxc.mbcnt.hi(i32 -1, i32 %28) #24
+126-  %xor.i = shl i32 %29, 2
+127-  %shl.i = xor i32 %xor.i, 128
+128:  %30 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i, i32 %qpack1.sroa.18.0)
+129-  br i1 %cmp27, label %if.end77, label %if.then68
+130-
+131-if.then68:                                        ; preds = %if.end50
+132-  br label %if.end77
+133-
+134-if.end77:                                         ; preds = %if.then68, %if.end50
+135:  %qpack1.sroa.0.1 = phi i32 [ %qpack1.sroa.0.0, %if.end50 ], [ %21, %if.then68 ]
+136:  %qpack1.sroa.8.1 = phi i32 [ %qpack1.sroa.8.0, %if.end50 ], [ %24, %if.then68 ]
+137:  %qpack1.sroa.13.1 = phi i32 [ %qpack1.sroa.13.0, %if.end50 ], [ %27, %if.then68 ]
+138:  %qpack1.sroa.18.1 = phi i32 [ %qpack1.sroa.18.0, %if.end50 ], [ %30, %if.then68 ]
+139:  %qpack0.sroa.0.1 = phi i32 [ %qpack0.sroa.0.0, %if.end50 ], [ %9, %if.then68 ]
+140:  %qpack0.sroa.8.1 = phi i32 [ %qpack0.sroa.8.0, %if.end50 ], [ %12, %if.then68 ]
+141:  %qpack0.sroa.13.1 = phi i32 [ %qpack0.sroa.13.0, %if.end50 ], [ %15, %if.then68 ]
+142:  %qpack0.sroa.18.1 = phi i32 [ %qpack0.sroa.18.0, %if.end50 ], [ %18, %if.then68 ]
+143:  %conv.i893 = trunc i32 %qpack0.sroa.0.1 to i16
+144-  %31 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i893)
+145:  %shr.i923 = lshr i32 %qpack0.sroa.0.1, 16
+146-  %conv.i924 = trunc nuw i32 %shr.i923 to i16
+147-  %32 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i924)
+148:  %conv.i890 = trunc i32 %qpack0.sroa.8.1 to i16
+149-  %33 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i890)
+150:  %shr.i919 = lshr i32 %qpack0.sroa.8.1, 16
+151-  %conv.i920 = trunc nuw i32 %shr.i919 to i16
+152-  %34 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i920)
+153:  %conv.i887 = trunc i32 %qpack0.sroa.13.1 to i16
+154-  %35 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i887)
+155:  %shr.i915 = lshr i32 %qpack0.sroa.13.1, 16
+156-  %conv.i916 = trunc nuw i32 %shr.i915 to i16
+157-  %36 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i916)
+158:  %conv.i884 = trunc i32 %qpack0.sroa.18.1 to i16
+159-  %37 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i884)
+160:  %shr.i911 = lshr i32 %qpack0.sroa.18.1, 16
+161-  %conv.i912 = trunc nuw i32 %shr.i911 to i16
+162-  %38 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i912)
+163:  %conv.i881 = trunc i32 %qpack1.sroa.0.1 to i16
+164-  %39 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i881)
+165:  %shr.i907 = lshr i32 %qpack1.sroa.0.1, 16
+166-  %conv.i908 = trunc nuw i32 %shr.i907 to i16

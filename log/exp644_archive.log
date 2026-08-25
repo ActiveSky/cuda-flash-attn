@@ -1,0 +1,24 @@
+exp644 terminal archive evidence (#122987)
+
+The submission was already terminal Accepted. The original OJ execution used
+--no-archive, so the documented --watch fetch was required to obtain the full
+raw_detail before running the repository archive script.
+
+command: python3 tools/xpuoj_submit.py --watch 122987 --poll-seconds 0 --timeout-seconds 30
+result: id=122987 status=Accepted score=66.07 submit_time=2026-08-22T22:43:56.000Z time_used_ms=1592 memory_used_kb=23060532 progress_type=Finished
+testcases: 1=3us/92, 2=4us/90, 3=10us/82, 4=22us/73, 5=17us/73, 6=28us/63, 7=225us/55, 8=93us/54, 9=230us/57, 10=38us/62, 11=222us/52, 12=380us/60, 13=181us/57, 14=139us/55
+
+command: python3 tools/archive_cuda_submissions.py
+result: archived 344 submissions; manifest: /data/cuda-flash-attn/solutions/archive/SUBMISSIONS.md
+
+raw: results/raw/cuda_122987_raw.json
+raw_sha256: 79a85961e4cc5b8b8d96ecf6a26905fc81e677ce86464062589166ceedc285c1
+immutable_source: solutions/archive/2026-08-23-submissions/cuda_122987.cpp
+immutable_source_sha256: 8600495c01a8bf16f69cd14a1c12945abca976dc93e38ff793ba57f64d2902ec
+raw_embedded_code_sha256: 8600495c01a8bf16f69cd14a1c12945abca976dc93e38ff793ba57f64d2902ec
+frozen_candidate: solutions/archive/2026-08-22-experiments/cuda_case12_pair_state_threepeer_fanin_exp644.cpp
+frozen_candidate_sha256: 8600495c01a8bf16f69cd14a1c12945abca976dc93e38ff793ba57f64d2902ec
+raw_embedded_equals_immutable_source: True
+immutable_source_equals_frozen_candidate: True
+raw_count=344 source_count=344 manifest_rows=344
+workfile_control_sha256: a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972

@@ -1,0 +1,7 @@
+exp668 control restore
+restore_method: apply_patch exact reverse of exp668 workfile delta
+control_source: solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+control_sha256: 3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+workfile: solutions/cuda_maca_optimized.cpp
+workfile_sha256_after_restore: 3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+workfile_cmp_control: yes

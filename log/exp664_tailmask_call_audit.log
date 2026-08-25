@@ -1,0 +1,14 @@
+2412:__device__ __forceinline__ void issue_case13_kv8_headpair_z8_page(
+2430:__device__ __forceinline__ void issue_exp664_case13_tail_page(
+2446:__device__ __forceinline__ void case13_headpair_two_token_pv(
+2488:__device__ __forceinline__ void exp664_case13_tail_two_token_pv(
+2660:        issue_case13_kv8_headpair_z8_page(
+2662:        issue_case13_kv8_headpair_z8_page(
+2751:                case13_headpair_two_token_pv<2>(
+2755:                case13_headpair_two_token_pv<4>(
+2759:                case13_headpair_two_token_pv<8>(
+2788:        issue_exp664_case13_tail_page(
+2790:        issue_exp664_case13_tail_page(
+2843:                exp664_case13_tail_two_token_pv<2>(
+2847:                exp664_case13_tail_two_token_pv<4>(
+2851:                exp664_case13_tail_two_token_pv<8>(

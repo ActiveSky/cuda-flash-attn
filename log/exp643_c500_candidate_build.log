@@ -1,0 +1,5 @@
+command: timeout 180s bash tools/build_local_maca.sh solutions/archive/2026-08-22-experiments/cuda_case1_native_bsm_shared_v_exp643.cpp build/exp643_c500_candidate.so
+exit: 0
+compiler: /opt/maca/mxgpu_llvm/bin/mxcc, target: xcore1000
+result: Built build/exp643_c500_candidate.so
+diagnostics: 10 existing -Wmaca-min-blocks-per-multiprocessor warnings; no error

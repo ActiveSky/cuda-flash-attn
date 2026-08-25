@@ -1,0 +1,7 @@
+exp644 final2 candidate resource clean rebuild
+UTC 2026-08-22T22:03:40Z
+source SHA before:
+8600495c01a8bf16f69cd14a1c12945abca976dc93e38ff793ba57f64d2902ec  solutions/archive/2026-08-22-experiments/cuda_case12_pair_state_threepeer_fanin_exp644.cpp
+command: tools/build_local_maca.sh solutions/archive/2026-08-22-experiments/cuda_case12_pair_state_threepeer_fanin_exp644.cpp build/exp644_final2_candidate_resource.so -resource-usage
+build_exit_status=0
+8600495c01a8bf16f69cd14a1c12945abca976dc93e38ff793ba57f64d2902ec  solutions/archive/2026-08-22-experiments/cuda_case12_pair_state_threepeer_fanin_exp644.cpp

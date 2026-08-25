@@ -1,0 +1,243 @@
+exp621 target LLVM inventory corrected
+2026-08-21T12:26:34Z
+candidate target lines: 1807
+control target lines: 0
+candidate target definition:
+1:define protected metaxgpu_kernel void @_Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+1807:}
+control target definition:
+candidate target intrinsic inventory:
+      4 llvm.mxc.barrier
+      5 llvm.mxc.barrier.warp
+     64 llvm.mxc.bf16.to.f32
+      1 llvm.mxc.block.id.x
+      1 llvm.mxc.block.id.y
+     16 llvm.mxc.mma.f32.16x16x2bf16
+     24 llvm.mxc.mov.shfl.i32
+    112 llvm.mxc.pk.fma.f32
+      1 llvm.mxc.thread.id.x
+      1 llvm.mxc.thread.id.y
+      1 llvm.mxc.thread.id.z
+control target intrinsic inventory:
+candidate target selected loads/stores/barriers:
+63:  %7 = load <4 x half>, ptr addrspace(4) %invariant.gep, align 8
+72:  %9 = load <4 x half>, ptr addrspace(4) %gep.1, align 8
+81:  %11 = load <4 x half>, ptr addrspace(4) %gep.2, align 8
+90:  %13 = load <4 x half>, ptr addrspace(4) %gep.3, align 8
+99:  %15 = load <4 x half>, ptr addrspace(4) %gep.4, align 8
+108:  %17 = load <4 x half>, ptr addrspace(4) %gep.5, align 8
+117:  %19 = load <4 x half>, ptr addrspace(4) %gep.6, align 8
+126:  %21 = load <4 x half>, ptr addrspace(4) %gep.7, align 8
+152:  %arrayidx12.i980 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.i968, i32 %mul7.i976
+153:  tail call void @llvm.memcpy.p3.p4.i64(ptr addrspace(3) noundef align 16 dereferenceable(16) %arrayidx12.i980, ptr addrspace(4) noundef align 16 dereferenceable(16) %add.ptr9.i978, i64 16, i1 false), !tbaa.struct !34, !call_argsrelate !64
+156:  %arrayidx12.i966 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %add.i968, i32 %mul7.i976
+157:  tail call void @llvm.memcpy.p3.p4.i64(ptr addrspace(3) noundef align 16 dereferenceable(16) %arrayidx12.i966, ptr addrspace(4) noundef align 16 dereferenceable(16) %add.ptr9.i964, i64 16, i1 false), !tbaa.struct !34, !call_argsrelate !65
+170:  %arrayidx4.i1537 = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %mul.i967, i32 %mul7.i976
+171:  %vpack.i1519.sroa.5.0.arrayidx4.i1537.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx4.i1537, i32 4
+172:  %vpack.i1519.sroa.7.0.arrayidx4.i1537.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx4.i1537, i32 8
+173:  %vpack.i1519.sroa.9.0.arrayidx4.i1537.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx4.i1537, i32 12
+174:  %25 = getelementptr [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %mul.i967
+175:  %arrayidx14.i1658 = getelementptr i8, ptr addrspace(3) %25, i32 256
+176:  %arrayidx17.i1659 = getelementptr inbounds [64 x i32], ptr addrspace(3) %arrayidx14.i1658, i32 0, i32 %mul7.i976
+177:  %vpack11.i1520.sroa.5.0.arrayidx17.i1659.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx17.i1659, i32 4
+178:  %vpack11.i1520.sroa.7.0.arrayidx17.i1659.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx17.i1659, i32 8
+179:  %vpack11.i1520.sroa.9.0.arrayidx17.i1659.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx17.i1659, i32 12
+180:  %arrayidx27.i1780 = getelementptr i8, ptr addrspace(3) %25, i32 512
+181:  %arrayidx30.i1781 = getelementptr inbounds [64 x i32], ptr addrspace(3) %arrayidx27.i1780, i32 0, i32 %mul7.i976
+182:  %vpack24.i1521.sroa.5.0.arrayidx30.i1781.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx30.i1781, i32 4
+183:  %vpack24.i1521.sroa.7.0.arrayidx30.i1781.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx30.i1781, i32 8
+184:  %vpack24.i1521.sroa.9.0.arrayidx30.i1781.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx30.i1781, i32 12
+185:  %arrayidx40.i1902 = getelementptr i8, ptr addrspace(3) %25, i32 768
+186:  %arrayidx43.i1903 = getelementptr inbounds [64 x i32], ptr addrspace(3) %arrayidx40.i1902, i32 0, i32 %mul7.i976
+187:  %vpack37.i1522.sroa.5.0.arrayidx43.i1903.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx43.i1903, i32 4
+188:  %vpack37.i1522.sroa.7.0.arrayidx43.i1903.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx43.i1903, i32 8
+189:  %vpack37.i1522.sroa.9.0.arrayidx43.i1903.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx43.i1903, i32 12
+190:  %next_kpack.sroa.6.0.arrayidx195.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx12.i980, i32 4
+191:  %next_kpack.sroa.8.0.arrayidx195.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx12.i980, i32 8
+192:  %next_kpack.sroa.10.0.arrayidx195.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx12.i980, i32 12
+193:  %next_vpack.sroa.6.0.arrayidx200.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx12.i966, i32 4
+194:  %next_vpack.sroa.8.0.arrayidx200.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx12.i966, i32 8
+195:  %next_vpack.sroa.10.0.arrayidx200.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx12.i966, i32 12
+197:  %arrayidx5.i1424 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.i1398, i32 %mul2.i1421
+199:  %arrayidx5.i1424.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.i1398, i32 %add3.i1422.1
+201:  %arrayidx5.i1424.2 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.i1398, i32 %add3.i1422.2
+203:  %arrayidx5.i1424.3 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.i1398, i32 %add3.i1422.3
+205:  %arrayidx5.i1424.4 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.i1398, i32 %add3.i1422.4
+207:  %arrayidx5.i1424.5 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.i1398, i32 %add3.i1422.5
+209:  %arrayidx5.i1424.6 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.i1398, i32 %add3.i1422.6
+211:  %arrayidx5.i1424.7 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.i1398, i32 %add3.i1422.7
+238:  fence syncscope("warp") release
+239:  tail call void @llvm.mxc.barrier.warp()
+240:  fence syncscope("warp") acquire
+252:  %b_bits.sroa.0.0.copyload.i1425 = load <4 x half>, ptr addrspace(3) %arrayidx5.i1424, align 8, !noalias !75
+254:  %b_bits.sroa.0.0.copyload.i1425.1 = load <4 x half>, ptr addrspace(3) %arrayidx5.i1424.1, align 8, !noalias !75
+256:  %b_bits.sroa.0.0.copyload.i1425.2 = load <4 x half>, ptr addrspace(3) %arrayidx5.i1424.2, align 8, !noalias !75
+258:  %b_bits.sroa.0.0.copyload.i1425.3 = load <4 x half>, ptr addrspace(3) %arrayidx5.i1424.3, align 8, !noalias !75
+260:  %b_bits.sroa.0.0.copyload.i1425.4 = load <4 x half>, ptr addrspace(3) %arrayidx5.i1424.4, align 8, !noalias !75
+262:  %b_bits.sroa.0.0.copyload.i1425.5 = load <4 x half>, ptr addrspace(3) %arrayidx5.i1424.5, align 8, !noalias !75
+264:  %b_bits.sroa.0.0.copyload.i1425.6 = load <4 x half>, ptr addrspace(3) %arrayidx5.i1424.6, align 8, !noalias !75
+266:  %b_bits.sroa.0.0.copyload.i1425.7 = load <4 x half>, ptr addrspace(3) %arrayidx5.i1424.7, align 8, !noalias !75
+303:  %retval.sroa.0.0.copyload.i1002 = load i32, ptr addrspace(4) %gep2215, align 16, !tbaa !16
+305:  %retval.sroa.2.0.copyload.i1004 = load i32, ptr addrspace(4) %retval.sroa.2.0.src.0..sroa_idx.i1003, align 4, !tbaa !16
+307:  %retval.sroa.3.0.copyload.i1006 = load i32, ptr addrspace(4) %retval.sroa.3.0.src.0..sroa_idx.i1005, align 8, !tbaa !16
+309:  %retval.sroa.4.0.copyload.i1008 = load i32, ptr addrspace(4) %retval.sroa.4.0.src.0..sroa_idx.i1007, align 4, !tbaa !16
+311:  %retval.sroa.0.0.copyload.i = load i32, ptr addrspace(4) %gep2217, align 16, !tbaa !16
+313:  %retval.sroa.2.0.copyload.i = load i32, ptr addrspace(4) %retval.sroa.2.0.src.0..sroa_idx.i, align 4, !tbaa !16
+315:  %retval.sroa.3.0.copyload.i = load i32, ptr addrspace(4) %retval.sroa.3.0.src.0..sroa_idx.i, align 8, !tbaa !16
+317:  %retval.sroa.4.0.copyload.i = load i32, ptr addrspace(4) %retval.sroa.4.0.src.0..sroa_idx.i, align 4, !tbaa !16
+392:  %vpack.i1519.sroa.0.0.copyload = load i32, ptr addrspace(3) %arrayidx4.i1537, align 16, !tbaa !16
+393:  %vpack.i1519.sroa.5.0.copyload = load i32, ptr addrspace(3) %vpack.i1519.sroa.5.0.arrayidx4.i1537.sroa_idx, align 4, !tbaa !16
+394:  %vpack.i1519.sroa.7.0.copyload = load i32, ptr addrspace(3) %vpack.i1519.sroa.7.0.arrayidx4.i1537.sroa_idx, align 8, !tbaa !16
+395:  %vpack.i1519.sroa.9.0.copyload = load i32, ptr addrspace(3) %vpack.i1519.sroa.9.0.arrayidx4.i1537.sroa_idx, align 4, !tbaa !16
+442:  %vpack11.i1520.sroa.0.0.copyload = load i32, ptr addrspace(3) %arrayidx17.i1659, align 16, !tbaa !16
+443:  %vpack11.i1520.sroa.5.0.copyload = load i32, ptr addrspace(3) %vpack11.i1520.sroa.5.0.arrayidx17.i1659.sroa_idx, align 4, !tbaa !16
+444:  %vpack11.i1520.sroa.7.0.copyload = load i32, ptr addrspace(3) %vpack11.i1520.sroa.7.0.arrayidx17.i1659.sroa_idx, align 8, !tbaa !16
+445:  %vpack11.i1520.sroa.9.0.copyload = load i32, ptr addrspace(3) %vpack11.i1520.sroa.9.0.arrayidx17.i1659.sroa_idx, align 4, !tbaa !16
+492:  %vpack24.i1521.sroa.0.0.copyload = load i32, ptr addrspace(3) %arrayidx30.i1781, align 16, !tbaa !16
+493:  %vpack24.i1521.sroa.5.0.copyload = load i32, ptr addrspace(3) %vpack24.i1521.sroa.5.0.arrayidx30.i1781.sroa_idx, align 4, !tbaa !16
+494:  %vpack24.i1521.sroa.7.0.copyload = load i32, ptr addrspace(3) %vpack24.i1521.sroa.7.0.arrayidx30.i1781.sroa_idx, align 8, !tbaa !16
+495:  %vpack24.i1521.sroa.9.0.copyload = load i32, ptr addrspace(3) %vpack24.i1521.sroa.9.0.arrayidx30.i1781.sroa_idx, align 4, !tbaa !16
+542:  %vpack37.i1522.sroa.0.0.copyload = load i32, ptr addrspace(3) %arrayidx43.i1903, align 16, !tbaa !16
+543:  %vpack37.i1522.sroa.5.0.copyload = load i32, ptr addrspace(3) %vpack37.i1522.sroa.5.0.arrayidx43.i1903.sroa_idx, align 4, !tbaa !16
+544:  %vpack37.i1522.sroa.7.0.copyload = load i32, ptr addrspace(3) %vpack37.i1522.sroa.7.0.arrayidx43.i1903.sroa_idx, align 8, !tbaa !16
+545:  %vpack37.i1522.sroa.9.0.copyload = load i32, ptr addrspace(3) %vpack37.i1522.sroa.9.0.arrayidx43.i1903.sroa_idx, align 4, !tbaa !16
+604:  fence syncscope("warp") release
+605:  tail call void @llvm.mxc.barrier.warp()
+606:  fence syncscope("warp") acquire
+607:  store i32 %next_kpack.sroa.0.1, ptr addrspace(3) %arrayidx12.i980, align 16, !tbaa !16
+608:  store i32 %next_kpack.sroa.6.1, ptr addrspace(3) %next_kpack.sroa.6.0.arrayidx195.sroa_idx, align 4, !tbaa !16
+609:  store i32 %next_kpack.sroa.8.1, ptr addrspace(3) %next_kpack.sroa.8.0.arrayidx195.sroa_idx, align 8, !tbaa !16
+610:  store i32 %next_kpack.sroa.10.1, ptr addrspace(3) %next_kpack.sroa.10.0.arrayidx195.sroa_idx, align 4, !tbaa !16
+611:  store i32 %next_vpack.sroa.0.1, ptr addrspace(3) %arrayidx12.i966, align 16, !tbaa !16
+612:  store i32 %next_vpack.sroa.6.1, ptr addrspace(3) %next_vpack.sroa.6.0.arrayidx200.sroa_idx, align 4, !tbaa !16
+613:  store i32 %next_vpack.sroa.8.1, ptr addrspace(3) %next_vpack.sroa.8.0.arrayidx200.sroa_idx, align 8, !tbaa !16
+614:  store i32 %next_vpack.sroa.10.1, ptr addrspace(3) %next_vpack.sroa.10.0.arrayidx200.sroa_idx, align 4, !tbaa !16
+623:  fence syncscope("warp") release
+624:  tail call void @llvm.mxc.barrier.warp()
+625:  fence syncscope("warp") acquire
+626:  store i32 %next_kpack.sroa.0.1, ptr addrspace(3) %arrayidx12.i980, align 16, !tbaa !16
+627:  store i32 %next_kpack.sroa.6.1, ptr addrspace(3) %next_kpack.sroa.6.0.arrayidx195.sroa_idx, align 4, !tbaa !16
+628:  store i32 %next_kpack.sroa.8.1, ptr addrspace(3) %next_kpack.sroa.8.0.arrayidx195.sroa_idx, align 8, !tbaa !16
+629:  store i32 %next_kpack.sroa.10.1, ptr addrspace(3) %next_kpack.sroa.10.0.arrayidx195.sroa_idx, align 4, !tbaa !16
+630:  store i32 %next_vpack.sroa.0.1, ptr addrspace(3) %arrayidx12.i966, align 16, !tbaa !16
+631:  store i32 %next_vpack.sroa.6.1, ptr addrspace(3) %next_vpack.sroa.6.0.arrayidx200.sroa_idx, align 4, !tbaa !16
+632:  store i32 %next_vpack.sroa.8.1, ptr addrspace(3) %next_vpack.sroa.8.0.arrayidx200.sroa_idx, align 8, !tbaa !16
+633:  store i32 %next_vpack.sroa.10.1, ptr addrspace(3) %next_vpack.sroa.10.0.arrayidx200.sroa_idx, align 4, !tbaa !16
+637:  fence syncscope("block") release
+638:  tail call void @llvm.mxc.barrier()
+639:  fence syncscope("block") acquire
+666:  fence syncscope("warp") release
+667:  tail call void @llvm.mxc.barrier.warp()
+685:  %arrayidx12.i952 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.i940, i32 %mul7.i948
+686:  tail call void @llvm.memcpy.p3.p4.i64(ptr addrspace(3) noundef align 16 dereferenceable(16) %arrayidx12.i952, ptr addrspace(4) noundef align 16 dereferenceable(16) %add.ptr9.i950, i64 16, i1 false), !tbaa.struct !34, !call_argsrelate !64
+689:  %arrayidx12.i = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %add.i940, i32 %mul7.i948
+690:  tail call void @llvm.memcpy.p3.p4.i64(ptr addrspace(3) noundef align 16 dereferenceable(16) %arrayidx12.i, ptr addrspace(4) noundef align 16 dereferenceable(16) %add.ptr9.i, i64 16, i1 false), !tbaa.struct !34, !call_argsrelate !65
+691:  fence syncscope("warp") release
+692:  tail call void @llvm.mxc.barrier.warp()
+696:  fence syncscope("warp") acquire
+699:  %arrayidx5.i = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.i1390, i32 %mul2.i1394
+700:  %b_bits.sroa.0.0.copyload.i = load <4 x half>, ptr addrspace(3) %arrayidx5.i, align 8, !noalias !79
+703:  %arrayidx5.i.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.i1390, i32 %add3.i.1
+704:  %b_bits.sroa.0.0.copyload.i.1 = load <4 x half>, ptr addrspace(3) %arrayidx5.i.1, align 8, !noalias !79
+707:  %arrayidx5.i.2 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.i1390, i32 %add3.i.2
+708:  %b_bits.sroa.0.0.copyload.i.2 = load <4 x half>, ptr addrspace(3) %arrayidx5.i.2, align 8, !noalias !79
+711:  %arrayidx5.i.3 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.i1390, i32 %add3.i.3
+712:  %b_bits.sroa.0.0.copyload.i.3 = load <4 x half>, ptr addrspace(3) %arrayidx5.i.3, align 8, !noalias !79
+715:  %arrayidx5.i.4 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.i1390, i32 %add3.i.4
+716:  %b_bits.sroa.0.0.copyload.i.4 = load <4 x half>, ptr addrspace(3) %arrayidx5.i.4, align 8, !noalias !79
+719:  %arrayidx5.i.5 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.i1390, i32 %add3.i.5
+720:  %b_bits.sroa.0.0.copyload.i.5 = load <4 x half>, ptr addrspace(3) %arrayidx5.i.5, align 8, !noalias !79
+723:  %arrayidx5.i.6 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.i1390, i32 %add3.i.6
+724:  %b_bits.sroa.0.0.copyload.i.6 = load <4 x half>, ptr addrspace(3) %arrayidx5.i.6, align 8, !noalias !79
+727:  %arrayidx5.i.7 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.i1390, i32 %add3.i.7
+728:  %b_bits.sroa.0.0.copyload.i.7 = load <4 x half>, ptr addrspace(3) %arrayidx5.i.7, align 8, !noalias !79
+814:  %arrayidx4.i = getelementptr inbounds [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %.pre, i32 %mul.i1438
+815:  %vpack.i.sroa.0.0.copyload = load i32, ptr addrspace(3) %arrayidx4.i, align 16, !tbaa !16
+816:  %vpack.i.sroa.5.0.arrayidx4.i.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx4.i, i32 4
+817:  %vpack.i.sroa.5.0.copyload = load i32, ptr addrspace(3) %vpack.i.sroa.5.0.arrayidx4.i.sroa_idx, align 4, !tbaa !16
+818:  %vpack.i.sroa.7.0.arrayidx4.i.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx4.i, i32 8
+819:  %vpack.i.sroa.7.0.copyload = load i32, ptr addrspace(3) %vpack.i.sroa.7.0.arrayidx4.i.sroa_idx, align 8, !tbaa !16
+820:  %vpack.i.sroa.9.0.arrayidx4.i.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx4.i, i32 12
+821:  %vpack.i.sroa.9.0.copyload = load i32, ptr addrspace(3) %vpack.i.sroa.9.0.arrayidx4.i.sroa_idx, align 4, !tbaa !16
+868:  %203 = getelementptr [64 x i32], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 4096), i32 %.pre
+869:  %arrayidx14.i = getelementptr i8, ptr addrspace(3) %203, i32 256
+870:  %arrayidx17.i = getelementptr inbounds [64 x i32], ptr addrspace(3) %arrayidx14.i, i32 0, i32 %mul.i1438
+871:  %vpack11.i.sroa.0.0.copyload = load i32, ptr addrspace(3) %arrayidx17.i, align 16, !tbaa !16
+872:  %vpack11.i.sroa.5.0.arrayidx17.i.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx17.i, i32 4
+873:  %vpack11.i.sroa.5.0.copyload = load i32, ptr addrspace(3) %vpack11.i.sroa.5.0.arrayidx17.i.sroa_idx, align 4, !tbaa !16
+874:  %vpack11.i.sroa.7.0.arrayidx17.i.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx17.i, i32 8
+875:  %vpack11.i.sroa.7.0.copyload = load i32, ptr addrspace(3) %vpack11.i.sroa.7.0.arrayidx17.i.sroa_idx, align 8, !tbaa !16
+876:  %vpack11.i.sroa.9.0.arrayidx17.i.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx17.i, i32 12
+877:  %vpack11.i.sroa.9.0.copyload = load i32, ptr addrspace(3) %vpack11.i.sroa.9.0.arrayidx17.i.sroa_idx, align 4, !tbaa !16
+924:  %arrayidx27.i = getelementptr i8, ptr addrspace(3) %203, i32 512
+925:  %arrayidx30.i = getelementptr inbounds [64 x i32], ptr addrspace(3) %arrayidx27.i, i32 0, i32 %mul.i1438
+926:  %vpack24.i.sroa.0.0.copyload = load i32, ptr addrspace(3) %arrayidx30.i, align 16, !tbaa !16
+927:  %vpack24.i.sroa.5.0.arrayidx30.i.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx30.i, i32 4
+928:  %vpack24.i.sroa.5.0.copyload = load i32, ptr addrspace(3) %vpack24.i.sroa.5.0.arrayidx30.i.sroa_idx, align 4, !tbaa !16
+929:  %vpack24.i.sroa.7.0.arrayidx30.i.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx30.i, i32 8
+930:  %vpack24.i.sroa.7.0.copyload = load i32, ptr addrspace(3) %vpack24.i.sroa.7.0.arrayidx30.i.sroa_idx, align 8, !tbaa !16
+931:  %vpack24.i.sroa.9.0.arrayidx30.i.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx30.i, i32 12
+932:  %vpack24.i.sroa.9.0.copyload = load i32, ptr addrspace(3) %vpack24.i.sroa.9.0.arrayidx30.i.sroa_idx, align 4, !tbaa !16
+979:  %arrayidx40.i = getelementptr i8, ptr addrspace(3) %203, i32 768
+980:  %arrayidx43.i = getelementptr inbounds [64 x i32], ptr addrspace(3) %arrayidx40.i, i32 0, i32 %mul.i1438
+981:  %vpack37.i.sroa.0.0.copyload = load i32, ptr addrspace(3) %arrayidx43.i, align 16, !tbaa !16
+982:  %vpack37.i.sroa.5.0.arrayidx43.i.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx43.i, i32 4
+983:  %vpack37.i.sroa.5.0.copyload = load i32, ptr addrspace(3) %vpack37.i.sroa.5.0.arrayidx43.i.sroa_idx, align 4, !tbaa !16
+984:  %vpack37.i.sroa.7.0.arrayidx43.i.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx43.i, i32 8
+985:  %vpack37.i.sroa.7.0.copyload = load i32, ptr addrspace(3) %vpack37.i.sroa.7.0.arrayidx43.i.sroa_idx, align 8, !tbaa !16
+986:  %vpack37.i.sroa.9.0.arrayidx43.i.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx43.i, i32 12
+987:  %vpack37.i.sroa.9.0.copyload = load i32, ptr addrspace(3) %vpack37.i.sroa.9.0.arrayidx43.i.sroa_idx, align 4, !tbaa !16
+1043:  fence syncscope("block") release
+1044:  tail call void @llvm.mxc.barrier()
+1045:  fence syncscope("block") acquire
+1071:  %add.ptr324 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr324.idx
+1073:  %add.ptr327 = getelementptr inbounds float, ptr addrspace(3) %add.ptr324, i32 %mul325
+1075:  %add.ptr330 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr330.idx
+1076:  %add.ptr333 = getelementptr inbounds float, ptr addrspace(3) %add.ptr330, i32 %mul325
+1078:  store float %acc0.sroa.0.0.vec.extract2566, ptr addrspace(3) %add.ptr327, align 16, !tbaa !73
+1080:  store float %acc1.sroa.0.0.vec.extract2294, ptr addrspace(3) %add.ptr333, align 16, !tbaa !73
+1082:  %arrayidx341.1 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr327, i32 4
+1083:  store float %acc0.sroa.0.4.vec.extract2602, ptr addrspace(3) %arrayidx341.1, align 4, !tbaa !73
+1085:  %arrayidx345.1 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr333, i32 4
+1086:  store float %acc1.sroa.0.4.vec.extract2330, ptr addrspace(3) %arrayidx345.1, align 4, !tbaa !73
+1088:  %arrayidx341.2 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr327, i32 8
+1089:  store float %acc0.sroa.53.8.vec.extract2634, ptr addrspace(3) %arrayidx341.2, align 8, !tbaa !73
+1091:  %arrayidx345.2 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr333, i32 8
+1092:  store float %acc1.sroa.53.8.vec.extract2362, ptr addrspace(3) %arrayidx345.2, align 8, !tbaa !73
+1094:  %arrayidx341.3 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr327, i32 12
+1095:  store float %acc0.sroa.53.12.vec.extract2668, ptr addrspace(3) %arrayidx341.3, align 4, !tbaa !73
+1097:  %arrayidx345.3 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr333, i32 12
+1098:  store float %acc1.sroa.53.12.vec.extract2396, ptr addrspace(3) %arrayidx345.3, align 4, !tbaa !73
+1100:  %arrayidx341.4 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr327, i32 16
+1101:  store float %acc0.sroa.103.16.vec.extract2702, ptr addrspace(3) %arrayidx341.4, align 16, !tbaa !73
+1103:  %arrayidx345.4 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr333, i32 16
+1104:  store float %acc1.sroa.103.16.vec.extract2430, ptr addrspace(3) %arrayidx345.4, align 16, !tbaa !73
+1106:  %arrayidx341.5 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr327, i32 20
+1107:  store float %acc0.sroa.103.20.vec.extract2736, ptr addrspace(3) %arrayidx341.5, align 4, !tbaa !73
+1109:  %arrayidx345.5 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr333, i32 20
+1110:  store float %acc1.sroa.103.20.vec.extract2464, ptr addrspace(3) %arrayidx345.5, align 4, !tbaa !73
+1112:  %arrayidx341.6 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr327, i32 24
+1113:  store float %acc0.sroa.153.24.vec.extract2770, ptr addrspace(3) %arrayidx341.6, align 8, !tbaa !73
+1115:  %arrayidx345.6 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr333, i32 24
+1116:  store float %acc1.sroa.153.24.vec.extract2498, ptr addrspace(3) %arrayidx345.6, align 8, !tbaa !73
+1118:  %arrayidx341.7 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr327, i32 28
+1119:  store float %acc0.sroa.153.28.vec.extract2804, ptr addrspace(3) %arrayidx341.7, align 4, !tbaa !73
+1121:  %arrayidx345.7 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr333, i32 28
+1122:  store float %acc1.sroa.153.28.vec.extract2532, ptr addrspace(3) %arrayidx345.7, align 4, !tbaa !73
+1127:  %arrayidx358 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add321
+1128:  %arrayidx362 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx358, i32 4
+1129:  %arrayidx352 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add318
+1130:  %arrayidx356 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx352, i32 4
+1131:  store float %m0.4, ptr addrspace(3) %arrayidx352, align 8, !tbaa !73
+1132:  store float %l0.6, ptr addrspace(3) %arrayidx356, align 4, !tbaa !73
+1133:  store float %m1.4, ptr addrspace(3) %arrayidx358, align 8, !tbaa !73
+1134:  store float %l1.6, ptr addrspace(3) %arrayidx362, align 4, !tbaa !73
+1138:  fence syncscope("block") release
+1139:  tail call void @llvm.mxc.barrier()
+1140:  fence syncscope("block") acquire
+1148:  %arrayidx373 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add368
+1149:  %260 = load float, ptr addrspace(3) %arrayidx373, align 8, !tbaa !73
+1150:  %arrayidx377 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx373, i32 4
+1151:  %261 = load float, ptr addrspace(3) %arrayidx377, align 4, !tbaa !73
+1153:  %add.ptr380 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr380.idx
+control target selected loads/stores/barriers:

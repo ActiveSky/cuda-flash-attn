@@ -1,0 +1,42 @@
+        const int grid = (int)(batch_size * num_heads_k);
+        if (num_heads_k == 4) {
+            paged_decode_single_token_kernel<4, 8><<<grid, 128>>>(
+                v_cache_paged, output, block_table, (int)pages_per_batch);
+        } else {
+            paged_decode_single_token_kernel<8, 4><<<grid, 64>>>(
+                v_cache_paged, output, block_table, (int)pages_per_batch);
+        }
+        return;
+    }
+    if (seqlen_k == 2) {
+        const int grid = (int)(batch_size * num_heads_k);
+        if (num_heads_k == 8 && batch_size == 4) {
+            // exp641: only case2's B4/KV8 capacity-2 shape uses a single
+            // physical warp to publish both legal K/V rows through 1 KiB of
+            // raw-BF16 shared memory before the four query-head warps run.
+            // All other two-token dispatches retain the control kernel.
+            paged_decode_two_token_shared_kv_kernel<8, 4><<<
+                grid, dim3(32, 1, 4)>>>(
+                q, k_cache_paged, v_cache_paged, output,
+                cache_seqlens, block_table, (int)pages_per_batch, sm_scale);
+        } else if (num_heads_k == 4) {
+            paged_decode_two_token_kernel<4, 8><<<grid, 256>>>(
+                q, k_cache_paged, v_cache_paged, output,
+                cache_seqlens, block_table, (int)pages_per_batch, sm_scale);
+        } else {
+            paged_decode_two_token_kernel<8, 4><<<grid, 128>>>(
+                q, k_cache_paged, v_cache_paged, output,
+                cache_seqlens, block_table, (int)pages_per_batch, sm_scale);
+        }
+        return;
+    }
+
+    // ---- split-KV 切分：目标总 block 数 ~1024，每 split 至少 128 token ----
+    // 这一档是当前线上最佳 v4；case 7/9/11 的问题不能靠简单减少
+    // split 数解决，先保持已经验证过的 CTA/occupancy 配置。
+    int n_split = (int)((seqlen_k + 127) / 128);
+    const int64_t target_splits =
+
+-- all launch call symbols candidate/control common diff --
+
+-- all common resource tuples diff --

@@ -1,0 +1,220 @@
+exp695 target-only static audit
+candidate_sha=8efee54b8335ce391da7aab12f6607f685a58b01bacdbd6bb1a6982b54f472a8
+control_sha=3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+diff_stat:
+hunks=7
+candidate-only symbols/dispatch:
+1040:// exp695: the rebased case9 probe uses the physical 64-lane wave to exchange
+1045:__device__ __forceinline__ float raw_wave64_xor32(float value) {
+2425:__device__ __forceinline__ void merge_kv8_wave_pair_acc2(
+2429:        raw_wave64_xor32(acc[0]), raw_wave64_xor32(acc[1])};
+2434:__device__ __forceinline__ void merge_kv8_wave_pair_state(
+2437:    const float peer_m = raw_wave64_xor32(m);
+2438:    const float peer_l = raw_wave64_xor32(l);
+2445:    merge_kv8_wave_pair_acc2(acc, own_weight, peer_weight);
+2446:    merge_kv8_wave_pair_acc2(acc + 2, own_weight, peer_weight);
+2447:    merge_kv8_wave_pair_acc2(acc + 4, own_weight, peer_weight);
+2448:    merge_kv8_wave_pair_acc2(acc + 6, own_weight, peer_weight);
+2596:          bool RAW_WAVE_FIRST_Z_MERGE = false>
+2914:    if constexpr (RAW_WAVE_FIRST_Z_MERGE) {
+2918:        merge_kv8_wave_pair_state(m0, l0, acc0);
+2919:        merge_kv8_wave_pair_state(m1, l1, acc1);
+5441:        ((batch_size == 64 && seqlen_k == 2048) ||
+5442:         (batch_size == 32 && seqlen_k == 4096))) {
+5447:    if (num_heads_k == 8 && batch_size == 8 && seqlen_k == 32768) {
+5480:    if (num_heads_k == 8 && batch_size == 8 && seqlen_k == 32768) n_split = 40;
+5488:    if (num_heads_k == 8 && batch_size == 64 && seqlen_k == 2048) n_split = 3;
+5492:    if (num_heads_k == 8 && batch_size == 32 && seqlen_k == 4096) n_split = 6;
+5556:        ((batch_size == 64 && seqlen_k == 2048) ||
+5557:         (batch_size == 32 && seqlen_k == 4096) ||
+5558:         (batch_size == 8 && seqlen_k == 32768) ||
+5776:                if ((batch_size == 32 && seqlen_k == 4096) ||
+5777:                    (batch_size == 64 && seqlen_k == 2048) ||
+5778:                    (batch_size == 8 && seqlen_k == 32768) ||
+5821:                if (batch_size == 8 && seqlen_k == 32768) {
+5828:                    paged_decode_case13_kv8_headpair_z8_kernel<true><<<
+5836:                } else if (batch_size == 64 && seqlen_k == 2048) {
+5845:                    // merge disabled here; exp695 targets case9 only.
+5846:                    paged_decode_case13_kv8_headpair_z8_kernel<
+5855:                } else if (batch_size == 32 && seqlen_k == 4096) {
+5863:                    // exp695 independently enables raw first-z merge for this
+5866:                    paged_decode_case13_kv8_headpair_z8_kernel<
+5885:                    paged_decode_case13_kv8_headpair_z8_kernel<
+5981:        if (num_heads_k == 8 && batch_size == 32 && seqlen_k == 4096) {
+control candidate raw-wave gate counts:
+candidate raw-wave helper calls=4
+control raw-wave helper calls=source diff follows
+--- control
++++ candidate
+@@ -1037,6 +1037,26 @@
+ #endif
+ }
+ 
++// exp695: the rebased case9 probe uses the physical 64-lane wave to exchange
++// the first z-state pair.  In dim3(16, 2, 8), lane^32 preserves tx/ty and
++// exchanges the two adjacent z partitions.  Keep this separate from the
++// row-local QK helper: the raw builtin is only valid for this exact wave
++// layout and is enabled by one dedicated kernel template instance.
++__device__ __forceinline__ float raw_wave64_xor32(float value) {
++#if defined(__MACA_ARCH__) && (__MACA_ARCH__ == 1000)
++    union {
++        float f;
++        int i;
++    } bits;
++    bits.f = value;
++    const unsigned source_lane = __lane_id() ^ 32u;
++    bits.i = __builtin_mxc_bsm_bpermute(source_lane << 2, bits.i);
++    return bits.f;
++#else
++    return __shfl_xor_sync(0xffffffffu, value, 32, 64);
++#endif
++}
++
+ template <int MODE>
+ __device__ __forceinline__ float native_row16_shuffle(float value) {
+ #if defined(__MACA_ARCH__) && (__MACA_ARCH__ == 1000)
+@@ -2402,6 +2422,32 @@
+     packed_scale_acc(acc + 6, peer_acc + 6, w1);
+ }
+ 
++__device__ __forceinline__ void merge_kv8_wave_pair_acc2(
++    float* acc, float own_weight, float peer_weight)
++{
++    const float peer_acc[2] = {
++        raw_wave64_xor32(acc[0]), raw_wave64_xor32(acc[1])};
++    packed_scale(acc, acc, own_weight);
++    packed_scale_acc(acc, peer_acc, peer_weight);
++}
++
++__device__ __forceinline__ void merge_kv8_wave_pair_state(
++    float& m, float& l, float* acc)
++{
++    const float peer_m = raw_wave64_xor32(m);
++    const float peer_l = raw_wave64_xor32(l);
++    const float m_all = fmaxf(m, peer_m);
++    const float own_weight = l > 0.f ? __builtin_exp2f(m - m_all) : 0.f;
++    const float peer_weight = peer_l > 0.f
++        ? __builtin_exp2f(peer_m - m_all) : 0.f;
++    l = l * own_weight + peer_l * peer_weight;
++    m = m_all;
++    merge_kv8_wave_pair_acc2(acc, own_weight, peer_weight);
++    merge_kv8_wave_pair_acc2(acc + 2, own_weight, peer_weight);
++    merge_kv8_wave_pair_acc2(acc + 4, own_weight, peer_weight);
++    merge_kv8_wave_pair_acc2(acc + 6, own_weight, peer_weight);
++}
++
+ // exp386: long-KV8 head-pair/z8 architecture probe.  A 256-thread
+ // dim3(16, 2, 8) CTA still owns one complete (batch, kv_head, split) tile,
+ // but every thread computes two query heads over two tokens.  Each shared K/V
+@@ -2546,7 +2592,8 @@
+ 
+ template <bool ALL_NATIVE_ROW_QK = false, bool NATIVE_HEAD_BIT1 = false,
+           bool FIXED_LIVE_BUCKETS = false,
+-          bool BF16_NORMALIZED_PARTIAL = false>
++          bool BF16_NORMALIZED_PARTIAL = false,
++          bool RAW_WAVE_FIRST_Z_MERGE = false>
+ __global__ void __launch_bounds__(256)
+ paged_decode_case13_kv8_headpair_z8_kernel(
+     const __nv_bfloat16* __restrict__ q,
+@@ -2864,12 +2911,58 @@
+     float* s_acc = reinterpret_cast<float*>(s_storage);
+     float (*s_md)[2] = reinterpret_cast<float (*)[2]>(
+         s_storage + KV_BUFFER_BYTES);
+-    if (tz >= 4) {
+-        const int row0 = (tz - 4) * 4 + local_h0;
+-        const int row1 = (tz - 4) * 4 + local_h1;
+-        store_case13_headpair_state(s_acc, s_md, row0, tx, m0, l0, acc0);
+-        store_case13_headpair_state(s_acc, s_md, row1, tx, m1, l1, acc1);
+-    }
++    if constexpr (RAW_WAVE_FIRST_Z_MERGE) {
++        // Merge the two adjacent z partitions within each physical wave.
++        // Every lane executes the raw exchange; only even-z lanes publish the
++        // resulting state to the existing shared-memory tree.
++        merge_kv8_wave_pair_state(m0, l0, acc0);
++        merge_kv8_wave_pair_state(m1, l1, acc1);
++
++        if (tz == 4 || tz == 6) {
++            const int row0 = ((tz - 4) >> 1) * 4 + local_h0;
++            const int row1 = ((tz - 4) >> 1) * 4 + local_h1;
++            store_case13_headpair_state(
++                s_acc, s_md, row0, tx, m0, l0, acc0);
++            store_case13_headpair_state(
++                s_acc, s_md, row1, tx, m1, l1, acc1);
++        }
++        __syncthreads();
++        if (tz == 0 || tz == 2) {
++            const int peer0 = (tz >> 1) * 4 + local_h0;
++            const int peer1 = (tz >> 1) * 4 + local_h1;
++            merge_case11_head_state(
++                m0, l0, acc0, s_md[peer0][0], s_md[peer0][1],
++                s_acc + peer0 * HEAD_DIM + tx * 8);
++            merge_case11_head_state(
++                m1, l1, acc1, s_md[peer1][0], s_md[peer1][1],
++                s_acc + peer1 * HEAD_DIM + tx * 8);
++        }
++        if (tz == 2) {
++            store_case13_headpair_state(
++                s_acc, s_md, 8 + local_h0, tx, m0, l0, acc0);
++            store_case13_headpair_state(
++                s_acc, s_md, 8 + local_h1, tx, m1, l1, acc1);
++        }
++        __syncthreads();
++        if (tz == 0) {
++            merge_case11_head_state(
++                m0, l0, acc0,
++                s_md[8 + local_h0][0], s_md[8 + local_h0][1],
++                s_acc + (8 + local_h0) * HEAD_DIM + tx * 8);
++            merge_case11_head_state(
++                m1, l1, acc1,
++                s_md[8 + local_h1][0], s_md[8 + local_h1][1],
++                s_acc + (8 + local_h1) * HEAD_DIM + tx * 8);
++        }
++    } else {
++        if (tz >= 4) {
++            const int row0 = (tz - 4) * 4 + local_h0;
++            const int row1 = (tz - 4) * 4 + local_h1;
++            store_case13_headpair_state(
++                s_acc, s_md, row0, tx, m0, l0, acc0);
++            store_case13_headpair_state(
++                s_acc, s_md, row1, tx, m1, l1, acc1);
++        }
+     __syncthreads();
+ 
+     if (tz < 4) {
+@@ -2921,7 +3014,10 @@
+             m1, l1, acc1,
+             s_md[local_h1][0], s_md[local_h1][1],
+             s_acc + local_h1 * HEAD_DIM + tx * 8);
++    }
++    }
+ 
++    if (tz == 0) {
+         const int idx0 = (split * batch_size + b) * 32 + h0;
+         const int idx1 = (split * batch_size + b) * 32 + h1;
+         if (tx == 0) {
+@@ -5745,9 +5841,10 @@
+                     // pair its packed metadata with the packed-aware group8
+                     // reducer below so the B64 reducer grid remains fixed.
+                     // exp430 extends only exp428's all-native split-head QK
+-                    // exchange to this case7 geometry.
++                    // exchange to this case7 geometry.  Keep raw first-z
++                    // merge disabled here; exp695 targets case9 only.
+                     paged_decode_case13_kv8_headpair_z8_kernel<
+-                        true, false, true><<<
++                        true, false, true, false, false><<<
+                         grid, dim3(16, 2, 8)>>>(
+                         q, k_cache_paged, v_cache_paged, output,
+                         cache_seqlens, block_table,
+@@ -5763,7 +5860,11 @@
+                     // K+V-over-PV, Q prescale and the global partial count.
+                     // exp439 changes only QK/token ownership to the bit1
+                     // all-native network already validated on case13.
+-                    paged_decode_case13_kv8_headpair_z8_kernel<true, true><<<
++                    // exp695 independently enables raw first-z merge for this
++                    // case9 geometry; the case7 and case13 instances remain
++                    // unchanged.
++                    paged_decode_case13_kv8_headpair_z8_kernel<
++                        true, true, false, false, true><<<
+                         grid, dim3(16, 2, 8)>>>(
+                         q, k_cache_paged, v_cache_paged, output,
+                         cache_seqlens, block_table,

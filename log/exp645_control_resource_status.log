@@ -1,0 +1,2 @@
+command=tools/build_local_maca.sh solutions/archive/2026-08-16-submissions/cuda_113889.cpp build/exp645_control_resource.so -resource-usage
+exit_code=0

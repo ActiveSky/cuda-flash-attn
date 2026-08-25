@@ -1,0 +1,30 @@
+exp588 OJ submission terminal output
+candidate: solutions/archive/2026-08-18-experiments/cuda_case12_native_ldg_shared_q_exp588.cpp
+candidate_sha256: cb8835b53011b62c01358305ea3ff08b4f3bb1f5951a6167b3975573240bc033
+work_file_sha256_at_submit: cb8835b53011b62c01358305ea3ff08b4f3bb1f5951a6167b3975573240bc033
+control_sha256: a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+command: python3 tools/xpuoj_submit.py --submit solutions/cuda_maca_optimized.cpp
+submission_id: 116314
+submit_time: 2026-08-18T04:19:51.000Z
+status: Accepted
+progress: Finished
+score: 66
+time_used_ms: 1589
+memory_used_kb: 23060404
+archive_from_submitter: results/raw/cuda_116314_raw.json
+case01: Accepted 3 us 92
+case02: Accepted 4 us 90
+case03: Accepted 9 us 83
+case04: Accepted 23 us 72
+case05: Accepted 17 us 73
+case06: Accepted 28 us 63
+case07: Accepted 226 us 55
+case08: Accepted 93 us 54
+case09: Accepted 231 us 57
+case10: Accepted 38 us 62
+case11: Accepted 223 us 52
+case12: Accepted 373 us 60 (target; no display-tier crossing)
+case13: Accepted 182 us 56
+case14: Accepted 139 us 55
+unique_success_criterion: case12 display-tier crossing with 14/14 Accepted
+criterion_result: not met

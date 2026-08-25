@@ -1,0 +1,6 @@
+exp621 identity
+2026-08-21T12:23:23Z
+30afeedb1e9c9aa0a82ac9da83b524c22c53c974860e60445560ec6714c6fca8  solutions/archive/2026-08-21-experiments/cuda_case11_fused_tail_register_prefetch_exp621.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/archive/2026-08-16-submissions/cuda_113889.cpp
+a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972  solutions/cuda_maca_optimized.cpp
+workfile/control cmp: PASS

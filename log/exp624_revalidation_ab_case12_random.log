@@ -1,0 +1,10 @@
+exp624 strict interleaved C500 A/B case12 random
+2026-08-21T13:36:52Z
+candidate_sha=8daf875522d473d4c19aa44e6f3523190e098ef22ec3036f6a7ef4320ff4cc43
+control_sha=a92f74e6aae22bc8e9a0a08b627ee9441c014cce9d950cf984f23c8987840972
+command: python3 tests/c500_benchmark.py --control /tmp/exp624_revalidation.CFnpm9/control_normal.so --candidate /tmp/exp624_revalidation.CFnpm9/candidate_normal.so --cases 12 --lengths random --seed 20260809 --warmup 5 --iterations 100 --rounds 21
+GPU: MetaX C500 | torch=2.8.0+metax3.7.1.3
+control:   /tmp/exp624_revalidation.CFnpm9/control_normal.so
+candidate: /tmp/exp624_revalidation.CFnpm9/candidate_normal.so
+case 12 B= 8 L=32768 KV=8 | control p50=0.4865 ms | candidate p50=0.5266 ms | candidate/control p10/p50/p90=1.0813/1.0832/1.0841 | speedup=0.923x
+exit_status=0

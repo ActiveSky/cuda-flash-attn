@@ -1,0 +1,360 @@
+18048:define protected metaxgpu_kernel void @_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef readnone %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %partial_acc.coerce, i32 noundef %batch_size, i32 noundef %pages_per_batch, i32 noundef %pages_per_split, i32 noundef %n_split, float noundef %sm_scale) local_unnamed_addr #11 comdat {
+18195:  %arrayidx12.i1476 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.i1464, i32 %mul29
+18196:  tail call void @llvm.memcpy.p3.p4.i64(ptr addrspace(3) noundef align 16 dereferenceable(16) %arrayidx12.i1476, ptr addrspace(4) noundef align 16 dereferenceable(16) %add.ptr9.i1474, i64 16, i1 false), !tbaa.struct !34, !call_argsrelate !64
+18197:  %add.ptr108 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i1470
+18199:  %vpack.sroa.0.0.copyload = load i32, ptr addrspace(4) %add.ptr111, align 16, !tbaa !16
+18200:  %vpack.sroa.16.0.add.ptr111.sroa_idx = getelementptr inbounds i8, ptr addrspace(4) %add.ptr111, i64 4
+18201:  %vpack.sroa.16.0.copyload = load i32, ptr addrspace(4) %vpack.sroa.16.0.add.ptr111.sroa_idx, align 4, !tbaa !16
+18202:  %vpack.sroa.28.0.add.ptr111.sroa_idx = getelementptr inbounds i8, ptr addrspace(4) %add.ptr111, i64 8
+18203:  %vpack.sroa.28.0.copyload = load i32, ptr addrspace(4) %vpack.sroa.28.0.add.ptr111.sroa_idx, align 8, !tbaa !16
+18204:  %vpack.sroa.40.0.add.ptr111.sroa_idx = getelementptr inbounds i8, ptr addrspace(4) %add.ptr111, i64 12
+18205:  %vpack.sroa.40.0.copyload = load i32, ptr addrspace(4) %vpack.sroa.40.0.add.ptr111.sroa_idx, align 4, !tbaa !16
+18206:  %invariant.gep = getelementptr i32, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext30
+18214:  %arrayidx256 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx12.i1476, i32 4
+18215:  %arrayidx257 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx12.i1476, i32 8
+18216:  %arrayidx258 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx12.i1476, i32 12
+18234:  %arrayidx131 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %mul.i1463, i32 %mul29
+18235:  %kpack.sroa.5.0.arrayidx131.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx131, i32 4
+18236:  %kpack.sroa.7.0.arrayidx131.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx131, i32 8
+18237:  %kpack.sroa.9.0.arrayidx131.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx131, i32 12
+18240:  %arrayidx131.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add126.1, i32 %mul29
+18241:  %kpack.sroa.5.0.arrayidx131.sroa_idx.1 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx131.1, i32 4
+18242:  %kpack.sroa.7.0.arrayidx131.sroa_idx.1 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx131.1, i32 8
+18243:  %kpack.sroa.9.0.arrayidx131.sroa_idx.1 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx131.1, i32 12
+18262:  %vpack.sroa.40.03072 = phi i32 [ %vpack.sroa.40.0.copyload, %if.then96 ], [ %vpack.sroa.40.2, %if.end275 ]
+18263:  %vpack.sroa.28.03071 = phi i32 [ %vpack.sroa.28.0.copyload, %if.then96 ], [ %vpack.sroa.28.2, %if.end275 ]
+18264:  %vpack.sroa.16.03070 = phi i32 [ %vpack.sroa.16.0.copyload, %if.then96 ], [ %vpack.sroa.16.2, %if.end275 ]
+18265:  %vpack.sroa.0.03069 = phi i32 [ %vpack.sroa.0.0.copyload, %if.then96 ], [ %vpack.sroa.0.2, %if.end275 ]
+18269:  %kpack.sroa.0.0.copyload = load i32, ptr addrspace(3) %arrayidx131, align 16, !tbaa !16
+18270:  %kpack.sroa.5.0.copyload = load i32, ptr addrspace(3) %kpack.sroa.5.0.arrayidx131.sroa_idx, align 4, !tbaa !16
+18271:  %kpack.sroa.7.0.copyload = load i32, ptr addrspace(3) %kpack.sroa.7.0.arrayidx131.sroa_idx, align 8, !tbaa !16
+18272:  %kpack.sroa.9.0.copyload = load i32, ptr addrspace(3) %kpack.sroa.9.0.arrayidx131.sroa_idx, align 4, !tbaa !16
+18335:  %kpack.sroa.0.0.copyload.1 = load i32, ptr addrspace(3) %arrayidx131.1, align 16, !tbaa !16
+18336:  %kpack.sroa.5.0.copyload.1 = load i32, ptr addrspace(3) %kpack.sroa.5.0.arrayidx131.sroa_idx.1, align 4, !tbaa !16
+18337:  %kpack.sroa.7.0.copyload.1 = load i32, ptr addrspace(3) %kpack.sroa.7.0.arrayidx131.sroa_idx.1, align 8, !tbaa !16
+18338:  %kpack.sroa.9.0.copyload.1 = load i32, ptr addrspace(3) %kpack.sroa.9.0.arrayidx131.sroa_idx.1, align 4, !tbaa !16
+18486:  %conv.i55.i.i1952 = trunc i32 %vpack.sroa.0.03069 to i16
+18488:  %shr.i69.i.i1957 = lshr i32 %vpack.sroa.0.03069, 16
+18493:  %conv.i52.i.i1979 = trunc i32 %vpack.sroa.16.03070 to i16
+18495:  %shr.i65.i.i1984 = lshr i32 %vpack.sroa.16.03070, 16
+18500:  %conv.i49.i.i2008 = trunc i32 %vpack.sroa.28.03071 to i16
+18502:  %shr.i61.i.i2013 = lshr i32 %vpack.sroa.28.03071, 16
+18507:  %conv.i.i.i2037 = trunc i32 %vpack.sroa.40.03072 to i16
+18509:  %shr.i.i.i2042 = lshr i32 %vpack.sroa.40.03072, 16
+18539:  %127 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i2082, i32 %vpack.sroa.0.03069)
+18540:  %128 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i2082, i32 %vpack.sroa.16.03070)
+18541:  %129 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i2082, i32 %vpack.sroa.28.03071)
+18542:  %130 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i2082, i32 %vpack.sroa.40.03072)
+18574:  %149 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i2076, i32 %vpack.sroa.0.03069)
+18575:  %150 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i2076, i32 %vpack.sroa.16.03070)
+18576:  %151 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i2076, i32 %vpack.sroa.28.03071)
+18577:  %152 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i2076, i32 %vpack.sroa.40.03072)
+18649:  store i32 %next_k0.0, ptr addrspace(3) %arrayidx12.i1476, align 16, !tbaa !16
+18650:  store i32 %next_k1.0, ptr addrspace(3) %arrayidx256, align 4, !tbaa !16
+18651:  store i32 %next_k2.0, ptr addrspace(3) %arrayidx257, align 8, !tbaa !16
+18652:  store i32 %next_k3.0, ptr addrspace(3) %arrayidx258, align 4, !tbaa !16
+18659:  %vpack.sroa.0.0.copyload2824 = load i32, ptr addrspace(4) %gep, align 16, !tbaa !16
+18660:  %vpack.sroa.16.0.add.ptr273.sroa_idx = getelementptr inbounds i8, ptr addrspace(4) %gep, i64 4
+18661:  %vpack.sroa.16.0.copyload2825 = load i32, ptr addrspace(4) %vpack.sroa.16.0.add.ptr273.sroa_idx, align 4, !tbaa !16
+18662:  %vpack.sroa.28.0.add.ptr273.sroa_idx = getelementptr inbounds i8, ptr addrspace(4) %gep, i64 8
+18663:  %vpack.sroa.28.0.copyload2835 = load i32, ptr addrspace(4) %vpack.sroa.28.0.add.ptr273.sroa_idx, align 8, !tbaa !16
+18664:  %vpack.sroa.40.0.add.ptr273.sroa_idx = getelementptr inbounds i8, ptr addrspace(4) %gep, i64 12
+18665:  %vpack.sroa.40.0.copyload2845 = load i32, ptr addrspace(4) %vpack.sroa.40.0.add.ptr273.sroa_idx, align 4, !tbaa !16
+18675:  %vpack.sroa.0.2 = phi i32 [ %vpack.sroa.0.0.copyload2824, %if.then246 ], [ %.sink3771, %if.else274 ]
+18676:  %vpack.sroa.16.2 = phi i32 [ %vpack.sroa.16.0.copyload2825, %if.then246 ], [ %.sink3760, %if.else274 ]
+18677:  %vpack.sroa.28.2 = phi i32 [ %vpack.sroa.28.0.copyload2835, %if.then246 ], [ %.sink3751, %if.else274 ]
+18678:  %vpack.sroa.40.2 = phi i32 [ %vpack.sroa.40.0.copyload2845, %if.then246 ], [ %.sink3742, %if.else274 ]
+18711:  %arrayidx12.i = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.i1459, i32 %mul29
+18712:  tail call void @llvm.memcpy.p3.p4.i64(ptr addrspace(3) noundef align 16 dereferenceable(16) %arrayidx12.i, ptr addrspace(4) noundef align 16 dereferenceable(16) %add.ptr9.i1462, i64 16, i1 false), !tbaa.struct !34, !call_argsrelate !64
+18713:  %add.ptr297 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext.i
+18715:  %tail_vpack.sroa.0.0.copyload = load i32, ptr addrspace(4) %add.ptr300, align 16, !tbaa !16
+18716:  %tail_vpack.sroa.15.0.add.ptr300.sroa_idx = getelementptr inbounds i8, ptr addrspace(4) %add.ptr300, i64 4
+18717:  %tail_vpack.sroa.15.0.copyload = load i32, ptr addrspace(4) %tail_vpack.sroa.15.0.add.ptr300.sroa_idx, align 4, !tbaa !16
+18718:  %tail_vpack.sroa.27.0.add.ptr300.sroa_idx = getelementptr inbounds i8, ptr addrspace(4) %add.ptr300, i64 8
+18719:  %tail_vpack.sroa.27.0.copyload = load i32, ptr addrspace(4) %tail_vpack.sroa.27.0.add.ptr300.sroa_idx, align 8, !tbaa !16
+18720:  %tail_vpack.sroa.39.0.add.ptr300.sroa_idx = getelementptr inbounds i8, ptr addrspace(4) %add.ptr300, i64 12
+18721:  %tail_vpack.sroa.39.0.copyload = load i32, ptr addrspace(4) %tail_vpack.sroa.39.0.add.ptr300.sroa_idx, align 4, !tbaa !16
+18748:  %arrayidx323 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %mul.i1458, i32 %mul29
+18749:  %kpack318.sroa.0.0.copyload = load i32, ptr addrspace(3) %arrayidx323, align 16, !tbaa !16
+18750:  %kpack318.sroa.5.0.arrayidx323.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx323, i32 4
+18751:  %kpack318.sroa.5.0.copyload = load i32, ptr addrspace(3) %kpack318.sroa.5.0.arrayidx323.sroa_idx, align 4, !tbaa !16
+18752:  %kpack318.sroa.7.0.arrayidx323.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx323, i32 8
+18753:  %kpack318.sroa.7.0.copyload = load i32, ptr addrspace(3) %kpack318.sroa.7.0.arrayidx323.sroa_idx, align 8, !tbaa !16
+18754:  %kpack318.sroa.9.0.arrayidx323.sroa_idx = getelementptr inbounds i8, ptr addrspace(3) %arrayidx323, i32 12
+18755:  %kpack318.sroa.9.0.copyload = load i32, ptr addrspace(3) %kpack318.sroa.9.0.arrayidx323.sroa_idx, align 4, !tbaa !16
+18829:  %arrayidx323.1 = getelementptr inbounds [64 x i32], ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add315.1, i32 %mul29
+18830:  %kpack318.sroa.0.0.copyload.1 = load i32, ptr addrspace(3) %arrayidx323.1, align 16, !tbaa !16
+18831:  %kpack318.sroa.5.0.arrayidx323.sroa_idx.1 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx323.1, i32 4
+18832:  %kpack318.sroa.5.0.copyload.1 = load i32, ptr addrspace(3) %kpack318.sroa.5.0.arrayidx323.sroa_idx.1, align 4, !tbaa !16
+18833:  %kpack318.sroa.7.0.arrayidx323.sroa_idx.1 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx323.1, i32 8
+18834:  %kpack318.sroa.7.0.copyload.1 = load i32, ptr addrspace(3) %kpack318.sroa.7.0.arrayidx323.sroa_idx.1, align 8, !tbaa !16
+18835:  %kpack318.sroa.9.0.arrayidx323.sroa_idx.1 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx323.1, i32 12
+18836:  %kpack318.sroa.9.0.copyload.1 = load i32, ptr addrspace(3) %kpack318.sroa.9.0.arrayidx323.sroa_idx.1, align 4, !tbaa !16
+18967:  %conv.i55.i.i1674 = trunc i32 %tail_vpack.sroa.0.0.copyload to i16
+18969:  %shr.i69.i.i1679 = lshr i32 %tail_vpack.sroa.0.0.copyload, 16
+18974:  %conv.i52.i.i1701 = trunc i32 %tail_vpack.sroa.15.0.copyload to i16
+18976:  %shr.i65.i.i1706 = lshr i32 %tail_vpack.sroa.15.0.copyload, 16
+18981:  %conv.i49.i.i1730 = trunc i32 %tail_vpack.sroa.27.0.copyload to i16
+18983:  %shr.i61.i.i1735 = lshr i32 %tail_vpack.sroa.27.0.copyload, 16
+18988:  %conv.i.i.i1759 = trunc i32 %tail_vpack.sroa.39.0.copyload to i16
+18990:  %shr.i.i.i1764 = lshr i32 %tail_vpack.sroa.39.0.copyload, 16
+19020:  %275 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i2070, i32 %tail_vpack.sroa.0.0.copyload), !call_argsrelate !181
+19021:  %276 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i2070, i32 %tail_vpack.sroa.15.0.copyload), !call_argsrelate !181
+19022:  %277 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i2070, i32 %tail_vpack.sroa.27.0.copyload), !call_argsrelate !181
+19023:  %278 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i2070, i32 %tail_vpack.sroa.39.0.copyload), !call_argsrelate !181
+19055:  %297 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i, i32 %tail_vpack.sroa.0.0.copyload), !call_argsrelate !181
+19056:  %298 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i, i32 %tail_vpack.sroa.15.0.copyload), !call_argsrelate !181
+19057:  %299 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i, i32 %tail_vpack.sroa.27.0.copyload), !call_argsrelate !181
+19058:  %300 = tail call i32 @llvm.mxc.bsm.bpermute(i32 %shl.i, i32 %tail_vpack.sroa.39.0.copyload), !call_argsrelate !181
+19165:  %add.ptr.i2734 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr.i2734.idx
+19167:  %add.ptr3.i2737 = getelementptr inbounds float, ptr addrspace(3) %add.ptr.i2734, i32 %mul1.i2735
+19169:  store float %acc0.sroa.0.0.vec.extract3434, ptr addrspace(3) %add.ptr3.i2737, align 16, !tbaa !73
+19171:  %arrayidx5.i2750.1 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2737, i32 4
+19172:  store float %acc0.sroa.0.4.vec.extract3472, ptr addrspace(3) %arrayidx5.i2750.1, align 4, !tbaa !73
+19174:  %arrayidx5.i2750.2 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2737, i32 8
+19175:  store float %acc0.sroa.59.8.vec.extract3510, ptr addrspace(3) %arrayidx5.i2750.2, align 8, !tbaa !73
+19177:  %arrayidx5.i2750.3 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2737, i32 12
+19178:  store float %acc0.sroa.59.12.vec.extract3548, ptr addrspace(3) %arrayidx5.i2750.3, align 4, !tbaa !73
+19180:  %arrayidx5.i2750.4 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2737, i32 16
+19181:  store float %acc0.sroa.115.16.vec.extract3586, ptr addrspace(3) %arrayidx5.i2750.4, align 16, !tbaa !73
+19183:  %arrayidx5.i2750.5 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2737, i32 20
+19184:  store float %acc0.sroa.115.20.vec.extract3624, ptr addrspace(3) %arrayidx5.i2750.5, align 4, !tbaa !73
+19186:  %arrayidx5.i2750.6 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2737, i32 24
+19187:  store float %acc0.sroa.171.24.vec.extract3662, ptr addrspace(3) %arrayidx5.i2750.6, align 8, !tbaa !73
+19189:  %arrayidx5.i2750.7 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2737, i32 28
+19190:  store float %acc0.sroa.171.28.vec.extract3700, ptr addrspace(3) %arrayidx5.i2750.7, align 4, !tbaa !73
+19196:  %arrayidx8.i2745 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add433
+19197:  %arrayidx12.i2746 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx8.i2745, i32 4
+19198:  store float %m0.3, ptr addrspace(3) %arrayidx8.i2745, align 8, !tbaa !73
+19199:  store float %l0.7, ptr addrspace(3) %arrayidx12.i2746, align 4, !tbaa !73
+19204:  %add.ptr.i2713 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr.i2713.idx
+19205:  %add.ptr3.i2716 = getelementptr inbounds float, ptr addrspace(3) %add.ptr.i2713, i32 %mul1.i2735
+19207:  store float %acc1.sroa.0.0.vec.extract3130, ptr addrspace(3) %add.ptr3.i2716, align 16, !tbaa !73
+19209:  %arrayidx5.i2729.1 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2716, i32 4
+19210:  store float %acc1.sroa.0.4.vec.extract3168, ptr addrspace(3) %arrayidx5.i2729.1, align 4, !tbaa !73
+19212:  %arrayidx5.i2729.2 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2716, i32 8
+19213:  store float %acc1.sroa.59.8.vec.extract3206, ptr addrspace(3) %arrayidx5.i2729.2, align 8, !tbaa !73
+19215:  %arrayidx5.i2729.3 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2716, i32 12
+19216:  store float %acc1.sroa.59.12.vec.extract3244, ptr addrspace(3) %arrayidx5.i2729.3, align 4, !tbaa !73
+19218:  %arrayidx5.i2729.4 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2716, i32 16
+19219:  store float %acc1.sroa.115.16.vec.extract3282, ptr addrspace(3) %arrayidx5.i2729.4, align 16, !tbaa !73
+19221:  %arrayidx5.i2729.5 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2716, i32 20
+19222:  store float %acc1.sroa.115.20.vec.extract3320, ptr addrspace(3) %arrayidx5.i2729.5, align 4, !tbaa !73
+19224:  %arrayidx5.i2729.6 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2716, i32 24
+19225:  store float %acc1.sroa.171.24.vec.extract3358, ptr addrspace(3) %arrayidx5.i2729.6, align 8, !tbaa !73
+19227:  %arrayidx5.i2729.7 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2716, i32 28
+19228:  store float %acc1.sroa.171.28.vec.extract3396, ptr addrspace(3) %arrayidx5.i2729.7, align 4, !tbaa !73
+19232:  %arrayidx8.i2724 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add436
+19233:  %arrayidx12.i2725 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx8.i2724, i32 4
+19234:  store float %m1.3, ptr addrspace(3) %arrayidx8.i2724, align 8, !tbaa !73
+19235:  store float %l1.7, ptr addrspace(3) %arrayidx12.i2725, align 4, !tbaa !73
+19249:  %arrayidx448 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add443
+19250:  %321 = load float, ptr addrspace(3) %arrayidx448, align 8, !tbaa !73
+19251:  %arrayidx452 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx448, i32 4
+19252:  %322 = load float, ptr addrspace(3) %arrayidx452, align 4, !tbaa !73
+19254:  %add.ptr455 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr455.idx
+19256:  %add.ptr458 = getelementptr inbounds float, ptr addrspace(3) %add.ptr455, i32 %mul456
+19275:  %330 = load float, ptr addrspace(3) %add.ptr458, align 16, !tbaa !73
+19277:  %arrayidx1.i1291 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr458, i32 4
+19278:  %331 = load float, ptr addrspace(3) %arrayidx1.i1291, align 4, !tbaa !73
+19283:  %add.ptr14.i1071 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr458, i32 8
+19284:  %333 = load float, ptr addrspace(3) %add.ptr14.i1071, align 8, !tbaa !73
+19286:  %arrayidx1.i1283 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr458, i32 12
+19287:  %334 = load float, ptr addrspace(3) %arrayidx1.i1283, align 4, !tbaa !73
+19290:  %add.ptr16.i1072 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr458, i32 16
+19291:  %336 = load float, ptr addrspace(3) %add.ptr16.i1072, align 16, !tbaa !73
+19293:  %arrayidx1.i1275 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr458, i32 20
+19294:  %337 = load float, ptr addrspace(3) %arrayidx1.i1275, align 4, !tbaa !73
+19297:  %add.ptr18.i1073 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr458, i32 24
+19298:  %339 = load float, ptr addrspace(3) %add.ptr18.i1073, align 8, !tbaa !73
+19300:  %arrayidx1.i1270 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr458, i32 28
+19301:  %340 = load float, ptr addrspace(3) %arrayidx1.i1270, align 4, !tbaa !73
+19304:  %arrayidx461 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add445
+19305:  %342 = load float, ptr addrspace(3) %arrayidx461, align 8, !tbaa !73
+19306:  %arrayidx465 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx461, i32 4
+19307:  %343 = load float, ptr addrspace(3) %arrayidx465, align 4, !tbaa !73
+19309:  %add.ptr468 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr468.idx
+19310:  %add.ptr471 = getelementptr inbounds float, ptr addrspace(3) %add.ptr468, i32 %mul456
+19329:  %351 = load float, ptr addrspace(3) %add.ptr471, align 16, !tbaa !73
+19331:  %arrayidx1.i1323 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr471, i32 4
+19332:  %352 = load float, ptr addrspace(3) %arrayidx1.i1323, align 4, !tbaa !73
+19337:  %add.ptr14.i1055 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr471, i32 8
+19338:  %354 = load float, ptr addrspace(3) %add.ptr14.i1055, align 8, !tbaa !73
+19340:  %arrayidx1.i1315 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr471, i32 12
+19341:  %355 = load float, ptr addrspace(3) %arrayidx1.i1315, align 4, !tbaa !73
+19344:  %add.ptr16.i1056 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr471, i32 16
+19345:  %357 = load float, ptr addrspace(3) %add.ptr16.i1056, align 16, !tbaa !73
+19347:  %arrayidx1.i1307 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr471, i32 20
+19348:  %358 = load float, ptr addrspace(3) %arrayidx1.i1307, align 4, !tbaa !73
+19351:  %add.ptr18.i1057 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr471, i32 24
+19352:  %360 = load float, ptr addrspace(3) %add.ptr18.i1057, align 8, !tbaa !73
+19354:  %arrayidx1.i1299 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr471, i32 28
+19355:  %361 = load float, ptr addrspace(3) %arrayidx1.i1299, align 4, !tbaa !73
+19385:  %add.ptr.i2692 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr.i2692.idx
+19387:  %add.ptr3.i2695 = getelementptr inbounds float, ptr addrspace(3) %add.ptr.i2692, i32 %mul1.i2693
+19389:  store float %acc0.sroa.0.0.vec.extract3436, ptr addrspace(3) %add.ptr3.i2695, align 16, !tbaa !73
+19391:  %arrayidx5.i2708.1 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2695, i32 4
+19392:  store float %acc0.sroa.0.4.vec.extract3474, ptr addrspace(3) %arrayidx5.i2708.1, align 4, !tbaa !73
+19394:  %arrayidx5.i2708.2 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2695, i32 8
+19395:  store float %acc0.sroa.59.8.vec.extract3512, ptr addrspace(3) %arrayidx5.i2708.2, align 8, !tbaa !73
+19397:  %arrayidx5.i2708.3 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2695, i32 12
+19398:  store float %acc0.sroa.59.12.vec.extract3550, ptr addrspace(3) %arrayidx5.i2708.3, align 4, !tbaa !73
+19400:  %arrayidx5.i2708.4 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2695, i32 16
+19401:  store float %acc0.sroa.115.16.vec.extract3588, ptr addrspace(3) %arrayidx5.i2708.4, align 16, !tbaa !73
+19403:  %arrayidx5.i2708.5 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2695, i32 20
+19404:  store float %acc0.sroa.115.20.vec.extract3626, ptr addrspace(3) %arrayidx5.i2708.5, align 4, !tbaa !73
+19406:  %arrayidx5.i2708.6 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2695, i32 24
+19407:  store float %acc0.sroa.171.24.vec.extract3664, ptr addrspace(3) %arrayidx5.i2708.6, align 8, !tbaa !73
+19409:  %arrayidx5.i2708.7 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2695, i32 28
+19410:  store float %acc0.sroa.171.28.vec.extract3702, ptr addrspace(3) %arrayidx5.i2708.7, align 4, !tbaa !73
+19416:  %arrayidx8.i2703 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add479
+19417:  %arrayidx12.i2704 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx8.i2703, i32 4
+19418:  store float %m0.4, ptr addrspace(3) %arrayidx8.i2703, align 8, !tbaa !73
+19419:  store float %l0.8, ptr addrspace(3) %arrayidx12.i2704, align 4, !tbaa !73
+19424:  %add.ptr.i2671 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr.i2671.idx
+19425:  %add.ptr3.i2674 = getelementptr inbounds float, ptr addrspace(3) %add.ptr.i2671, i32 %mul1.i2693
+19427:  store float %acc1.sroa.0.0.vec.extract3132, ptr addrspace(3) %add.ptr3.i2674, align 16, !tbaa !73
+19429:  %arrayidx5.i2687.1 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2674, i32 4
+19430:  store float %acc1.sroa.0.4.vec.extract3170, ptr addrspace(3) %arrayidx5.i2687.1, align 4, !tbaa !73
+19432:  %arrayidx5.i2687.2 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2674, i32 8
+19433:  store float %acc1.sroa.59.8.vec.extract3208, ptr addrspace(3) %arrayidx5.i2687.2, align 8, !tbaa !73
+19435:  %arrayidx5.i2687.3 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2674, i32 12
+19436:  store float %acc1.sroa.59.12.vec.extract3246, ptr addrspace(3) %arrayidx5.i2687.3, align 4, !tbaa !73
+19438:  %arrayidx5.i2687.4 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2674, i32 16
+19439:  store float %acc1.sroa.115.16.vec.extract3284, ptr addrspace(3) %arrayidx5.i2687.4, align 16, !tbaa !73
+19441:  %arrayidx5.i2687.5 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2674, i32 20
+19442:  store float %acc1.sroa.115.20.vec.extract3322, ptr addrspace(3) %arrayidx5.i2687.5, align 4, !tbaa !73
+19444:  %arrayidx5.i2687.6 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2674, i32 24
+19445:  store float %acc1.sroa.171.24.vec.extract3360, ptr addrspace(3) %arrayidx5.i2687.6, align 8, !tbaa !73
+19447:  %arrayidx5.i2687.7 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2674, i32 28
+19448:  store float %acc1.sroa.171.28.vec.extract3398, ptr addrspace(3) %arrayidx5.i2687.7, align 4, !tbaa !73
+19452:  %arrayidx8.i2682 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add483
+19453:  %arrayidx12.i2683 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx8.i2682, i32 4
+19454:  store float %m1.4, ptr addrspace(3) %arrayidx8.i2682, align 8, !tbaa !73
+19455:  store float %l1.8, ptr addrspace(3) %arrayidx12.i2683, align 4, !tbaa !73
+19469:  %arrayidx497 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add491
+19470:  %364 = load float, ptr addrspace(3) %arrayidx497, align 8, !tbaa !73
+19471:  %arrayidx501 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx497, i32 4
+19472:  %365 = load float, ptr addrspace(3) %arrayidx501, align 4, !tbaa !73
+19474:  %add.ptr504 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr504.idx
+19476:  %add.ptr507 = getelementptr inbounds float, ptr addrspace(3) %add.ptr504, i32 %mul505
+19495:  %373 = load float, ptr addrspace(3) %add.ptr507, align 16, !tbaa !73
+19497:  %arrayidx1.i1355 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr507, i32 4
+19498:  %374 = load float, ptr addrspace(3) %arrayidx1.i1355, align 4, !tbaa !73
+19503:  %add.ptr14.i1039 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr507, i32 8
+19504:  %376 = load float, ptr addrspace(3) %add.ptr14.i1039, align 8, !tbaa !73
+19506:  %arrayidx1.i1347 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr507, i32 12
+19507:  %377 = load float, ptr addrspace(3) %arrayidx1.i1347, align 4, !tbaa !73
+19510:  %add.ptr16.i1040 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr507, i32 16
+19511:  %379 = load float, ptr addrspace(3) %add.ptr16.i1040, align 16, !tbaa !73
+19513:  %arrayidx1.i1339 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr507, i32 20
+19514:  %380 = load float, ptr addrspace(3) %arrayidx1.i1339, align 4, !tbaa !73
+19517:  %add.ptr18.i1041 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr507, i32 24
+19518:  %382 = load float, ptr addrspace(3) %add.ptr18.i1041, align 8, !tbaa !73
+19520:  %arrayidx1.i1331 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr507, i32 28
+19521:  %383 = load float, ptr addrspace(3) %arrayidx1.i1331, align 4, !tbaa !73
+19524:  %arrayidx510 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add494
+19525:  %385 = load float, ptr addrspace(3) %arrayidx510, align 8, !tbaa !73
+19526:  %arrayidx514 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx510, i32 4
+19527:  %386 = load float, ptr addrspace(3) %arrayidx514, align 4, !tbaa !73
+19529:  %add.ptr517 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr517.idx
+19530:  %add.ptr520 = getelementptr inbounds float, ptr addrspace(3) %add.ptr517, i32 %mul505
+19549:  %394 = load float, ptr addrspace(3) %add.ptr520, align 16, !tbaa !73
+19551:  %arrayidx1.i1387 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr520, i32 4
+19552:  %395 = load float, ptr addrspace(3) %arrayidx1.i1387, align 4, !tbaa !73
+19557:  %add.ptr14.i1023 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr520, i32 8
+19558:  %397 = load float, ptr addrspace(3) %add.ptr14.i1023, align 8, !tbaa !73
+19560:  %arrayidx1.i1379 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr520, i32 12
+19561:  %398 = load float, ptr addrspace(3) %arrayidx1.i1379, align 4, !tbaa !73
+19564:  %add.ptr16.i1024 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr520, i32 16
+19565:  %400 = load float, ptr addrspace(3) %add.ptr16.i1024, align 16, !tbaa !73
+19567:  %arrayidx1.i1371 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr520, i32 20
+19568:  %401 = load float, ptr addrspace(3) %arrayidx1.i1371, align 4, !tbaa !73
+19571:  %add.ptr18.i1025 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr520, i32 24
+19572:  %403 = load float, ptr addrspace(3) %add.ptr18.i1025, align 8, !tbaa !73
+19574:  %arrayidx1.i1363 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr520, i32 28
+19575:  %404 = load float, ptr addrspace(3) %arrayidx1.i1363, align 4, !tbaa !73
+19601:  %add.ptr.i2650 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr.i2650.idx
+19603:  %add.ptr3.i2653 = getelementptr inbounds float, ptr addrspace(3) %add.ptr.i2650, i32 %mul1.i2651
+19605:  store float %acc0.sroa.0.0.vec.extract3438, ptr addrspace(3) %add.ptr3.i2653, align 16, !tbaa !73
+19607:  %arrayidx5.i2666.1 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2653, i32 4
+19608:  store float %acc0.sroa.0.4.vec.extract3476, ptr addrspace(3) %arrayidx5.i2666.1, align 4, !tbaa !73
+19610:  %arrayidx5.i2666.2 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2653, i32 8
+19611:  store float %acc0.sroa.59.8.vec.extract3514, ptr addrspace(3) %arrayidx5.i2666.2, align 8, !tbaa !73
+19613:  %arrayidx5.i2666.3 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2653, i32 12
+19614:  store float %acc0.sroa.59.12.vec.extract3552, ptr addrspace(3) %arrayidx5.i2666.3, align 4, !tbaa !73
+19616:  %arrayidx5.i2666.4 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2653, i32 16
+19617:  store float %acc0.sroa.115.16.vec.extract3590, ptr addrspace(3) %arrayidx5.i2666.4, align 16, !tbaa !73
+19619:  %arrayidx5.i2666.5 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2653, i32 20
+19620:  store float %acc0.sroa.115.20.vec.extract3628, ptr addrspace(3) %arrayidx5.i2666.5, align 4, !tbaa !73
+19622:  %arrayidx5.i2666.6 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2653, i32 24
+19623:  store float %acc0.sroa.171.24.vec.extract3666, ptr addrspace(3) %arrayidx5.i2666.6, align 8, !tbaa !73
+19625:  %arrayidx5.i2666.7 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i2653, i32 28
+19626:  store float %acc0.sroa.171.28.vec.extract3704, ptr addrspace(3) %arrayidx5.i2666.7, align 4, !tbaa !73
+19631:  %arrayidx8.i2661 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %1
+19632:  %arrayidx12.i2662 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx8.i2661, i32 4
+19633:  store float %m0.5, ptr addrspace(3) %arrayidx8.i2661, align 8, !tbaa !73
+19634:  store float %l0.9, ptr addrspace(3) %arrayidx12.i2662, align 4, !tbaa !73
+19639:  %add.ptr.i2644 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr.i2644.idx
+19640:  %add.ptr3.i = getelementptr inbounds float, ptr addrspace(3) %add.ptr.i2644, i32 %mul1.i2651
+19642:  store float %acc1.sroa.0.0.vec.extract3134, ptr addrspace(3) %add.ptr3.i, align 16, !tbaa !73
+19644:  %arrayidx5.i.1 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i, i32 4
+19645:  store float %acc1.sroa.0.4.vec.extract3172, ptr addrspace(3) %arrayidx5.i.1, align 4, !tbaa !73
+19647:  %arrayidx5.i.2 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i, i32 8
+19648:  store float %acc1.sroa.59.8.vec.extract3210, ptr addrspace(3) %arrayidx5.i.2, align 8, !tbaa !73
+19650:  %arrayidx5.i.3 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i, i32 12
+19651:  store float %acc1.sroa.59.12.vec.extract3248, ptr addrspace(3) %arrayidx5.i.3, align 4, !tbaa !73
+19653:  %arrayidx5.i.4 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i, i32 16
+19654:  store float %acc1.sroa.115.16.vec.extract3286, ptr addrspace(3) %arrayidx5.i.4, align 16, !tbaa !73
+19656:  %arrayidx5.i.5 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i, i32 20
+19657:  store float %acc1.sroa.115.20.vec.extract3324, ptr addrspace(3) %arrayidx5.i.5, align 4, !tbaa !73
+19659:  %arrayidx5.i.6 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i, i32 24
+19660:  store float %acc1.sroa.171.24.vec.extract3362, ptr addrspace(3) %arrayidx5.i.6, align 8, !tbaa !73
+19662:  %arrayidx5.i.7 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i, i32 28
+19663:  store float %acc1.sroa.171.28.vec.extract3400, ptr addrspace(3) %arrayidx5.i.7, align 4, !tbaa !73
+19667:  %arrayidx8.i = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add
+19668:  %arrayidx12.i2646 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx8.i, i32 4
+19669:  store float %m1.5, ptr addrspace(3) %arrayidx8.i, align 8, !tbaa !73
+19670:  store float %l1.9, ptr addrspace(3) %arrayidx12.i2646, align 4, !tbaa !73
+19681:  %arrayidx531 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %1
+19682:  %406 = load float, ptr addrspace(3) %arrayidx531, align 8, !tbaa !73
+19683:  %arrayidx535 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx531, i32 4
+19684:  %407 = load float, ptr addrspace(3) %arrayidx535, align 4, !tbaa !73
+19686:  %add.ptr538 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr538.idx
+19689:  %add.ptr541 = getelementptr inbounds float, ptr addrspace(3) %add.ptr538, i32 %mul539
+19705:  %415 = load float, ptr addrspace(3) %add.ptr541, align 16, !tbaa !73
+19707:  %arrayidx1.i1419 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr541, i32 4
+19708:  %416 = load float, ptr addrspace(3) %arrayidx1.i1419, align 4, !tbaa !73
+19713:  %add.ptr14.i1007 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr541, i32 8
+19714:  %418 = load float, ptr addrspace(3) %add.ptr14.i1007, align 8, !tbaa !73
+19716:  %arrayidx1.i1411 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr541, i32 12
+19717:  %419 = load float, ptr addrspace(3) %arrayidx1.i1411, align 4, !tbaa !73
+19720:  %add.ptr16.i1008 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr541, i32 16
+19721:  %421 = load float, ptr addrspace(3) %add.ptr16.i1008, align 16, !tbaa !73
+19723:  %arrayidx1.i1403 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr541, i32 20
+19724:  %422 = load float, ptr addrspace(3) %arrayidx1.i1403, align 4, !tbaa !73
+19727:  %add.ptr18.i1009 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr541, i32 24
+19728:  %424 = load float, ptr addrspace(3) %add.ptr18.i1009, align 8, !tbaa !73
+19730:  %arrayidx1.i1395 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr541, i32 28
+19731:  %425 = load float, ptr addrspace(3) %arrayidx1.i1395, align 4, !tbaa !73
+19734:  %arrayidx544 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add
+19735:  %427 = load float, ptr addrspace(3) %arrayidx544, align 8, !tbaa !73
+19736:  %arrayidx548 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx544, i32 4
+19737:  %428 = load float, ptr addrspace(3) %arrayidx548, align 4, !tbaa !73
+19739:  %add.ptr551 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr551.idx
+19740:  %add.ptr554 = getelementptr inbounds float, ptr addrspace(3) %add.ptr551, i32 %mul539
+19756:  %436 = load float, ptr addrspace(3) %add.ptr554, align 16, !tbaa !73
+19758:  %arrayidx1.i1451 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr554, i32 4
+19759:  %437 = load float, ptr addrspace(3) %arrayidx1.i1451, align 4, !tbaa !73
+19764:  %add.ptr14.i = getelementptr inbounds i8, ptr addrspace(3) %add.ptr554, i32 8
+19765:  %439 = load float, ptr addrspace(3) %add.ptr14.i, align 8, !tbaa !73
+19767:  %arrayidx1.i1443 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr554, i32 12
+19768:  %440 = load float, ptr addrspace(3) %arrayidx1.i1443, align 4, !tbaa !73
+19771:  %add.ptr16.i = getelementptr inbounds i8, ptr addrspace(3) %add.ptr554, i32 16
+19772:  %442 = load float, ptr addrspace(3) %add.ptr16.i, align 16, !tbaa !73
+19774:  %arrayidx1.i1435 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr554, i32 20
+19775:  %443 = load float, ptr addrspace(3) %arrayidx1.i1435, align 4, !tbaa !73
+19778:  %add.ptr18.i = getelementptr inbounds i8, ptr addrspace(3) %add.ptr554, i32 24
+19779:  %445 = load float, ptr addrspace(3) %add.ptr18.i, align 8, !tbaa !73
+19781:  %arrayidx1.i1427 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr554, i32 28
+19782:  %446 = load float, ptr addrspace(3) %arrayidx1.i1427, align 4, !tbaa !73
