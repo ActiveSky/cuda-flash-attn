@@ -1,0 +1,116 @@
+candidate_sha: dc34862daf0767dedc888840ff7ae723b9ec1a5b1c6b67e9f392439f99c8f9c4  solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case6_bf16_sync_partial_exp728.cpp
+parent_sha: 9496b2add95197c698c0ff39af34ec23bf766c7315078eeff9119a4d66d3aab0  solutions/archive/2026-08-24-experiments/cuda_control124611_z4_tail_trap_fix_exp710.cpp
+work_sha: 3a3cab1e1559e623ef8a3c77270b62d3f48e012e10571640971e4c51a0cd8c9e  solutions/cuda_maca_optimized.cpp
+diff_rc: 1
+diff_stat:  1 file changed, 89 insertions(+), 43 deletions(-)
+changed_hunks:
+@@ -5014,7 +5014,8 @@
+@@ -5060,21 +5061,38 @@
+@@ -5135,7 +5153,13 @@
+@@ -5149,7 +5173,11 @@
+@@ -5165,9 +5193,6 @@
+@@ -5179,9 +5204,30 @@
+@@ -5816,19 +5862,11 @@
+@@ -5927,20 +5965,28 @@
+added_async_lines:
+added_case7_12_13_lines:
+target_dispatch_lines:
+5862-                        (int)pages_per_split, n_split,
+5863-                        sm_scale * 1.4426950408889634f);
+5864-                } else {
+5865:                    // exp728: case6 alone switches its global partial_acc to
+5866-                    // normalized BF16; retain the synchronous token-parallel
+5867-                    // producer geometry, native row16 QK, and lookahead.
+5868-                    paged_decode_token_parallel_kernel<
+5869-                        8, 4, true, false, false, false, true, true,
+5870-                        false, false, true, false, true, true, false, false,
+5871-                        true><<<
+5872-                        grid, dim3(16, 4, 4)>>>(
+5873-                        q, k_cache_paged, v_cache_paged, output,
+5874-                        cache_seqlens, block_table,
+5875-                        s_partial_m, s_partial_l, s_partial_acc,
+--
+5946-                    // owner.  Use the already-validated fused-tail count so
+5947-                    // no unwritten partial is read, while reducing the final
+5948-                    // grid from 512 one-head CTAs to 64 eight-head CTAs.
+5949:                    paged_decode_reduce_group8_kernel<
+5950-                        (XPUOJ_USE_BASE2 != 0), false, true, true, true><<<
+5951-                        rgrid, dim3(16, 8), 0>>>(
+5952-                        s_partial_m, s_partial_l, s_partial_acc, output,
+5953-                        cache_seqlens, (int)batch_size,
+5954-                        (int)pages_per_split, reduce_splits);
+5955-                } else if (num_heads_k == 8 && batch_size == 64 &&
+5956-                    seqlen_k == 2048) {
+5957-                    // exp559: case7 has only one to three live split owners.
+5958-                    // Keep the rolled accumulator loop and packed FP16x2
+5959-                    // metadata, but use its fixed row-local source lanes for
+5960-                    // the producer-to-consumer softmax-weight handoff.
+5961:                    paged_decode_reduce_group8_kernel<
+5962-                        (XPUOJ_USE_BASE2 != 0), false, true, true,
+5963-                        false, true, 3><<<
+5964-                        rgrid, dim3(16, 8), 0>>>(
+5965-                        s_partial_m, s_partial_l, s_partial_acc, output,
+5966-                        cache_seqlens, (int)batch_size,
+5967-                        (int)pages_per_split, reduce_splits);
+5968-                } else if (batch_size == 16 && num_heads_k == 4 &&
+5969-                           seqlen_k == 141) {
+5970:                    // exp728 keeps case5 on its original FP32 partial ABI;
+5971-                    // this branch is unchanged except for the explicit split
+5972-                    // from the case6 normalized-BF16 reducer below.
+5973:                    paged_decode_reduce_group8_kernel<
+5974-                        (XPUOJ_USE_BASE2 != 0), false, true, false, true><<<
+5975-                        rgrid, dim3(16, 8), 0>>>(
+5976-                        s_partial_m, s_partial_l, s_partial_acc, output,
+5977-                        cache_seqlens, (int)batch_size,
+5978-                        (int)pages_per_split, reduce_splits);
+5979-                } else if (batch_size == 16 && num_heads_k == 8 &&
+5980-                           seqlen_k == 362) {
+5981:                    // exp728: case6 consumes normalized BF16 partials while
+5982-                    // retaining the synchronous native-row16 group8 geometry
+5983-                    // and FP32 m/l metadata contract.
+5984:                    paged_decode_reduce_group8_kernel<
+5985-                        (XPUOJ_USE_BASE2 != 0), false, true, false, true,
+5986-                        false, 0, true><<<
+5987-                        rgrid, dim3(16, 8), 0>>>(
+5988-                        s_partial_m, s_partial_l, s_partial_acc, output,
+5989-                        cache_seqlens, (int)batch_size,
+5990-                        (int)pages_per_split, reduce_splits);
+5991-                } else if constexpr (separate_tail) {
+5992:                    paged_decode_reduce_group8_kernel<
+5993-                        (XPUOJ_USE_BASE2 != 0), true, true><<<
+5994-                        rgrid, dim3(16, 8), 0>>>(
+5995-                        s_partial_m, s_partial_l, s_partial_acc, output,
+5996-                        cache_seqlens, (int)batch_size,
+5997-                        (int)pages_per_split, reduce_splits);
+5998-                } else {
+5999:                    paged_decode_reduce_group8_kernel<
+6000-                        (XPUOJ_USE_BASE2 != 0), false, true><<<
+6001-                        rgrid, dim3(16, 8), 0>>>(
+6002-                        s_partial_m, s_partial_l, s_partial_acc, output,
+6003-                        cache_seqlens, (int)batch_size,
+6004-                        (int)pages_per_split, reduce_splits);
+6005-                }
+6006-            } else {
+6007-                const size_t rsmem =
+6008-                    (size_t)16 * (size_t)reduce_splits * sizeof(float);
+6009-                if constexpr (separate_tail) {
+6010:                    paged_decode_reduce_group8_kernel<
+6011-                        (XPUOJ_USE_BASE2 != 0), true, false><<<
+6012-                        rgrid, dim3(16, 8), rsmem>>>(
+6013-                        s_partial_m, s_partial_l, s_partial_acc, output,
+6014-                        cache_seqlens, (int)batch_size,
+6015-                        (int)pages_per_split, reduce_splits);
+6016-                } else {
+6017:                    paged_decode_reduce_group8_kernel<
+6018-                        (XPUOJ_USE_BASE2 != 0), false, false><<<
+6019-                        rgrid, dim3(16, 8), rsmem>>>(
+6020-                        s_partial_m, s_partial_l, s_partial_acc, output,
+6021-                        cache_seqlens, (int)batch_size,
+6022-                        (int)pages_per_split, reduce_splits);
+6023-                }
+6024-            }
+6025-        } else {
+6026-            const int rthreads = HEAD_DIM;
+6027-            const int rgrid = (int)(batch_size * 32);
+work_file_unchanged_from_exp727:
+cmp_rc: 0

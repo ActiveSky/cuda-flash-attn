@@ -1,0 +1,458 @@
+=== identity ===
+9496b2add95197c698c0ff39af34ec23bf766c7315078eeff9119a4d66d3aab0  solutions/archive/2026-08-24-experiments/cuda_control124611_z4_tail_trap_fix_exp710.cpp
+3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe  solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+4835586c22dad5e4efbe02ae47441d7959dc94d98f7d463809a3a0c482d27703  solutions/archive/2026-08-25-experiments/cuda_control124611_case13_bf16_async_partial_exp717.cpp
+adaebe806af6f5983ff44d77caa8c880254b433211a837da0138530b4bac85bf  solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case13_group8_async_exp718.cpp
+
+=== build status ===
+log/exp718_device_llvm.log:108:Built build/exp718_device.ll
+log/exp718_resource_build.log:289:Built build/exp718_resource.so
+log/exp718_normal_build.log:157:Built build/exp718_normal.so
+
+=== source diff stats ===
+ ...rol124611_guard_case13_group8_async_exp718.cpp} | 225 ++++++++++++++++-----
+ 1 file changed, 179 insertions(+), 46 deletions(-)
+ ...cuda_control124611_z4_tail_trap_fix_exp710.cpp} | 48 ++++++++++++----------
+ 1 file changed, 27 insertions(+), 21 deletions(-)
+ ...rol124611_guard_case13_group8_async_exp718.cpp} | 29 ++++++++--------------
+ 1 file changed, 11 insertions(+), 18 deletions(-)
+
+=== case7 dispatch (candidate; must remain base) ===
+5474-    const int64_t target_splits =
+5475-        (1024 + batch_size * num_heads_k - 1) / (batch_size * num_heads_k);
+5476-    if (n_split > target_splits) n_split = (int)target_splits;
+5477-    if (n_split < 1) n_split = 1;
+5478-    // Continue the proven KV8 page-parallelism sweep. Both cases retain
+5479-    // exactly eight pages per partial split: 8192 CTAs total per shape.
+5480-    if (num_heads_k == 8 &&
+5481:        ((batch_size == 64 && seqlen_k == 2048) ||
+5482-         (batch_size == 32 && seqlen_k == 4096))) {
+5483-        n_split *= 8;
+5484-    }
+5485-    // Case 12 boundary test: eight pages per partial, matching the proven
+5486-    // granularity of cases 7/9 and exposing 16384 total split CTAs.
+5487-    if (num_heads_k == 8 && batch_size == 8 && seqlen_k == 32768) {
+5488-        n_split *= 16;
+5489-    }
+5490-    // exp422: lane-local BF16 MMA shifts case 11's producer/reducer balance.
+--
+5521-    // exp421/431: split65 remains the discrete optimum after the all-native
+5522-    // QK network; adjacent split64 is ~0.99% slower and split66 crosses a
+5523-    // 56-page critical-path cliff (~13.8% slower).
+5524-    if (num_heads_k == 8 && batch_size == 1 && seqlen_k == 58966) n_split = 65;
+5525-    // exp417: retain three-way split parallelism for variable per-batch
+5526-    // lengths while cutting case7's packed partial/reducer traffic. Unlike
+5527-    // exp416 split1/direct-out, this keeps the existing group8 reducer.
+5528:    if (num_heads_k == 8 && batch_size == 64 && seqlen_k == 2048) n_split = 3;
+5529-    // exp415: case9's head-pair/z8 producer keeps 1536 CTAs at split6 while
+5530-    // reducing packed partial workspace and the explicit vec2 reducer input
+5531-    // to one quarter of the former split24 policy. Splits 5 and 7 are slower.
+5532-    if (num_heads_k == 8 && batch_size == 32 && seqlen_k == 4096) n_split = 6;
+5533-    // exp261: retain exp217's locally optimal 14-way/19-page case-8
+5534-    // producer, then test a corrected fused-tail grouped reducer below.
+5535-    if (num_heads_k == 4 && batch_size == 16 && seqlen_k == 4096) n_split = 14;
+5536-    if (num_heads_k == 8 && batch_size == 16 && seqlen_k == 362) n_split = 8;
+5537-    // Case 14 split-boundary probe: one extra split changes the ceiling from
+--
+5589-    // cases use the mcflashinfer-style token-parallel layout; individual
+5590-    // shapes can be excluded here if their measured z-merge cost dominates.
+5591-    const bool use_token_parallel = token_parallel_layout;
+5592-    // #104217 proves paired-token QK for case 7/9. Extend the same mathematically
+5593-    // identical layout to the other long KV8 shapes to measure its split-KV behavior.
+5594-    const bool use_qk_pair =
+5595-        num_heads_k == 8 &&
+5596:        ((batch_size == 64 && seqlen_k == 2048) ||
+5597-         (batch_size == 32 && seqlen_k == 4096) ||
+5598-         (batch_size == 8 && seqlen_k == 32768) ||
+5599-         (batch_size == 1 && seqlen_k == 58966));
+5600-    if (use_token_parallel) {
+5601-        if (num_heads_k == 4) {
+5602-            const bool sync_kv4 = batch_size == 16 &&
+5603-                (seqlen_k == 4096 || seqlen_k == 12251);
+5604-            if (sync_kv4) {
+5605-                if constexpr (separate_tail) {
+--
+5810-                        sm_scale * 1.4426950408889634f);
+5811-                }
+5812-            }
+5813-        } else {
+5814-            if constexpr (separate_tail) {
+5815-#if 0  // exp384: unreachable since exp109; avoid dead template instances.
+5816-                if ((batch_size == 32 && seqlen_k == 4096) ||
+5817:                    (batch_size == 64 && seqlen_k == 2048) ||
+5818-                    (batch_size == 8 && seqlen_k == 32768) ||
+5819-                    (batch_size == 1 && seqlen_k == 58966)) {
+5820-                    // exp72-75: add raw fixed-row16 QK exchange one shape at
+5821-                    // a time across cases9/7/12/13, retaining an independently
+5822-                    // measured control at every step.
+5823-                    paged_decode_token_parallel_kernel<
+5824-                        8, 4, true, true, false, false, false, true><<<
+5825-                        grid, dim3(16, 4, 4)>>>(
+
+=== case13 producer and reducer dispatch ===
+5906-                        s_partial_m, s_partial_l, s_partial_acc,
+5907-                        (int)batch_size, (int)pages_per_batch,
+5908-                        (int)pages_per_split, n_split,
+5909-                        sm_scale * 1.4426950408889634f);
+5910:                } else if (batch_size == 1 && seqlen_k == 58966) {
+5911-                    // exp386: isolate long-KV8 head-pair/z8 ownership on
+5912-                    // case13. exp421 uses split65/57 pages per partial while
+5913-                    // keeping synchronous page traffic, scalar K+V-over-PV,
+5914-                    // Q prescale, packed
+5915-                    // metadata and the existing vec2 reducer unchanged.
+5916-                    // exp431 extends only the all-native split-head QK
+5917-                    // exchange validated by exp428/430 to this B1 geometry.
+5918-                    // exp434 maps the two heads through tx bit1 so tx bit0
+5919-                    // directly owns this z partition's two tokens.
+5920-                    paged_decode_case13_kv8_headpair_z8_kernel<
+5921:                        true, true, false, true><<<
+5922-                        grid, dim3(16, 2, 8)>>>(
+5923-                        q, k_cache_paged, v_cache_paged, output,
+5924-                        cache_seqlens, block_table,
+5925-                        s_partial_m, s_partial_l, s_partial_acc,
+5926-                        (int)batch_size, (int)pages_per_batch,
+5927-                        (int)pages_per_split, n_split,
+5928-                        sm_scale * 1.4426950408889634f);
+5929-                } else if (batch_size == 64 && seqlen_k == 64) {
+5930-                    // exp77: case4 is the remaining BSM KV8 token-parallel
+5931-                    // shape; isolate raw row16 QK without changing its
+5932-                    // combined launch, direct-out path, or loader/barriers.
+5933-                    // exp156: prescale Q once for the four-page direct-out
+5934-                    // producer, keeping its BSM and CTA ownership unchanged.
+5935-                    // exp185: isolate the native row allreduce on this final
+5936-                    // untested KV8 OJ geometry while preserving BSM copy,
+5937-                    // combined launch, direct-out, and four-page ownership.
+5938-                    paged_decode_token_parallel_kernel<
+5939-                        8, 4, false, false, false, false, false, true,
+--
+6170-                // exp718: retain exp666's normalized-BF16 case13 producer
+6171-                // and valid-tail path, but give the reducer four 128-thread
+6172-                // group8 CTAs.  Dynamic shared memory holds packed (m,l)
+6173-                // metadata; each CTA issues and consumes one 16-byte BF16
+6174-                // payload per lane through the register-returning async path.
+6175:                const int group8_grid = (batch_size * 32 + 7) / 8;
+6176:                const size_t group8_smem =
+6177-                    ((size_t)2 * (size_t)8 * (size_t)reduce_splits + 4) *
+6178-                    sizeof(float);
+6179-                paged_decode_reduce_group8_kernel<
+6180-                    (XPUOJ_USE_BASE2 != 0), false, false, true,
+6181-                    true, true, 0, true, true><<<
+6182:                    group8_grid, dim3(16, 8), group8_smem>>>(
+6183-                    s_partial_m, s_partial_l, s_partial_acc, output,
+6184-                    cache_seqlens, (int)batch_size,
+6185-                    (int)pages_per_split, reduce_splits);
+6186-            } else if (num_heads_k == 4 && batch_size == 1 && seqlen_k == 61519) {
+6187-                const size_t packed_rsmem =
+6188-                    ((size_t)reduce_splits + 8) * sizeof(float);
+6189-                paged_decode_reduce_kernel<
+6190-                    (XPUOJ_USE_BASE2 != 0), false, true, true, true, true,
+6191-                    true><<<
+6192-                    rgrid, rthreads, packed_rsmem>>>(
+6193-                    s_partial_m, s_partial_l, s_partial_acc, output,
+6194-                    cache_seqlens, (int)batch_size,
+6195-                    (int)pages_per_split, reduce_splits);
+6196-            } else if constexpr (separate_tail) {
+6197-                paged_decode_reduce_kernel<
+6198-                    (XPUOJ_USE_BASE2 != 0), true><<<
+6199-                    rgrid, rthreads, rsmem>>>(
+6200-                    s_partial_m, s_partial_l, s_partial_acc, output,
+--
+6228-    int pages_per_split,
+6229-    int n_split,
+6230-    float sm_scale)
+6231-{
+6232-    paged_decode_case11_headpair_z4_kernel<
+6233:        true, true, false, true, true, true, true, true,
+6234-        false, true, true, false, false, true, true, true, true, true,
+6235-        true><<<
+6236-        grid, dim3(16, 4, 4)>>>(
+6237-        q, k_cache, v_cache, out, cache_seqlens, block_table,
+6238-        partial_m, partial_l, partial_acc,
+6239-        batch_size, pages_per_batch, pages_per_split, n_split, sm_scale);
+6240-}
+
+=== exp710 tail-guard inventory normalized equality ===
+PASS: guard expression inventory is byte-identical to exp710 (line shifts ignored)
+candidate guard lines:
+            const int tail_tokens = seqlen & (PAGE_TOKENS - 1);
+                if (token < tail_tokens) {
+                    if (token >= tail_tokens) continue;
+    int valid_tokens,
+    const bool token_valid = token < valid_tokens;
+    if (token_valid) {
+    owned_score = token_valid
+    (void)valid_tokens;
+    int valid_tokens = PAGE_TOKENS)
+    if (token_base < valid_tokens) {
+    if (token_base + 1 < valid_tokens) {
+    if (token_base + 2 < valid_tokens) {
+    if (token_base + 3 < valid_tokens) {
+    int pid, int kv_head, int tx, int ty, int tz, int tail_tokens)
+    if (token >= tail_tokens) return;
+    int tail_tokens,
+    if (token_base < tail_tokens) {
+    if (token_base + 1 < tail_tokens) {
+        const int tail_tokens = seqlen & (PAGE_TOKENS - 1);
+            k_cache, s_k, pid, kv_head, tx, ty, tz, tail_tokens);
+            v_cache, s_v, pid, kv_head, tx, ty, tz, tail_tokens);
+            if (token < tail_tokens) {
+                    owned_score, m_new0, m_new1, s_v, tz * 2, tail_tokens, tx,
+                    owned_score, m_new0, m_new1, s_v, tz * 2, tail_tokens, tx,
+                    owned_score, m_new0, m_new1, s_v, tz * 2, tail_tokens, tx,
+    int valid_tokens = PAGE_TOKENS)
+    if (token >= valid_tokens) return;
+            const int tail_tokens = seqlen & (PAGE_TOKENS - 1);
+                k_cache, s_k, pid, kv_head, tx, ty, tz, tail_tokens);
+                v_cache, s_v, pid, kv_head, tx, ty, tz, tail_tokens);
+                    mma_q_frag_bits, s_k, tx, ty, tz, tail_tokens,
+                    if (token < tail_tokens) {
+                        l0, l1, acc0, acc1, tail_tokens);
+                        if (token >= tail_tokens) continue;
+
+=== case7 forbidden component check ===
+PASS: case7 active producer/reducer dispatch regions contain no exp716/exp717 BF16-normalized or async component
+
+=== source async contract ===
+4031-            for (int i = 0; i < 8; ++i) {
+4032-                s_acc0[i] = acc0[i];
+--
+4045-            merge_case11_head_state(
+4046-                m0, l0, acc0,
+4047-                s_md[head0][0], s_md[head0][1],
+4048:                s_acc + head0 * HEAD_DIM + tx * 8);
+4049-            merge_case11_head_state(
+4050-                m1, l1, acc1,
+4051-                s_md[head1][0], s_md[head1][1],
+4052:                s_acc + head1 * HEAD_DIM + tx * 8);
+4053-
+4054-            if (n_split == 1) {
+4055-                const float inv_l0 = l0 > 0.f ? 1.f / l0 : 0.f;
+4056-                const float inv_l1 = l1 > 0.f ? 1.f / l1 : 0.f;
+4057-                __nv_bfloat162* out0 = reinterpret_cast<__nv_bfloat162*>(
+4058:                    out + (b * 32 + h0) * HEAD_DIM + tx * 8);
+4059-                __nv_bfloat162* out1 = reinterpret_cast<__nv_bfloat162*>(
+4060:                    out + (b * 32 + h1) * HEAD_DIM + tx * 8);
+4061-#pragma unroll
+4062-                for (int i = 0; i < 4; ++i) {
+4063-                    out0[i] = __floats2bfloat162_rn(
+--
+4103-                            acc1[2 * i + 1] * inv_l1);
+4104-                    }
+4105-                } else {
+4106:                    float* out_acc0 = partial_acc + idx0 * HEAD_DIM + tx * 8;
+4107:                    float* out_acc1 = partial_acc + idx1 * HEAD_DIM + tx * 8;
+4108-                    *reinterpret_cast<float4*>(out_acc0) =
+4109-                        make_float4(acc0[0], acc0[1], acc0[2], acc0[3]);
+4110-                    *reinterpret_cast<float4*>(out_acc0 + 4) =
+--
+4318-    float (*s_md)[2] = reinterpret_cast<float (*)[2]>(
+4319-        s_storage + KV_BUFFER_BYTES);
+4320-    const int row = tz * 8 + ty;
+4321:    float* s_acc_row = s_acc + row * HEAD_DIM + tx * 8;
+4322-#pragma unroll
+4323-    for (int i = 0; i < 8; ++i) s_acc_row[i] = acc[i];
+4324-    if (tx == 0) {
+--
+4338-        packed_scale(acc + 2, acc + 2, wz0);
+4339-        packed_scale(acc + 4, acc + 4, wz0);
+4340-        packed_scale(acc + 6, acc + 6, wz0);
+4341:        const float* z1_acc = s_acc + z1_row * HEAD_DIM + tx * 8;
+4342-        packed_scale_acc(acc, z1_acc, wz1);
+4343-        packed_scale_acc(acc + 2, z1_acc + 2, wz1);
+4344-        packed_scale_acc(acc + 4, z1_acc + 4, wz1);
+--
+4347-        if (n_split == 1) {
+4348-            const float inv_l = l_all > 0.f ? 1.f / l_all : 0.f;
+4349-            __nv_bfloat162* out2 = reinterpret_cast<__nv_bfloat162*>(
+4350:                out + (b * 32 + h) * HEAD_DIM + tx * 8);
+4351-            out2[0] = __floats2bfloat162_rn(acc[0] * inv_l, acc[1] * inv_l);
+4352-            out2[1] = __floats2bfloat162_rn(acc[2] * inv_l, acc[3] * inv_l);
+4353-            out2[2] = __floats2bfloat162_rn(acc[4] * inv_l, acc[5] * inv_l);
+--
+4358-                partial_m[idx] = m_all;
+4359-                partial_l[idx] = l_all;
+4360-            }
+4361:            float* out_acc = partial_acc + idx * HEAD_DIM + tx * 8;
+4362-            *reinterpret_cast<float4*>(out_acc) =
+4363-                make_float4(acc[0], acc[1], acc[2], acc[3]);
+4364-            *reinterpret_cast<float4*>(out_acc + 4) =
+--
+5029-          bool PACKED_ML = false,
+5030-          int STATIC_WEIGHT_SPLITS = 0,
+5031-          bool BF16_NORMALIZED_PARTIAL = false,
+5032:          bool ASYNC_BF16_PARTIAL = false>
+5033-__global__ void __launch_bounds__(128)
+5034-paged_decode_reduce_group8_kernel(
+5035-    const float* __restrict__ partial_m,
+--
+5043-{
+5044-    static_assert(STATIC_WEIGHT_SPLITS == 0 || SHUFFLE_WEIGHTS,
+5045-                  "static group8 weights require shuffle-owned metadata");
+5046:    static_assert(!ASYNC_BF16_PARTIAL ||
+5047-                      (BF16_NORMALIZED_PARTIAL && PACKED_ML &&
+5048-                       ((SHUFFLE_WEIGHTS && STATIC_WEIGHT_SPLITS == 3) ||
+5049-                        (!SHUFFLE_WEIGHTS && STATIC_WEIGHT_SPLITS == 0))),
+--
+5075-            n_split, (valid_pages + pages_per_split - 1) / pages_per_split);
+5076-    }
+5077-
+5078:    __nv_bfloat16* out_ptr = out + (b * 32 + h) * HEAD_DIM + tx * 8;
+5079-    if (live_splits <= 1) {
+5080-        float value[8] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
+5081-        if (live_splits == 1) {
+--
+5087-                    reinterpret_cast<const __nv_bfloat16*>(partial_acc);
+5088-                const __nv_bfloat162* src =
+5089-                    reinterpret_cast<const __nv_bfloat162*>(
+5090:                        partial_bf16 + hidx * HEAD_DIM + tx * 8);
+5091-                __nv_bfloat162* out2 =
+5092-                    reinterpret_cast<__nv_bfloat162*>(out_ptr);
+5093-                out2[0] = src[0];
+--
+5104-                    l_value = partial_l[hidx];
+5105-                }
+5106-                const float inv_l = l_value > 0.f ? 1.f / l_value : 0.f;
+5107:                const float* src = partial_acc + hidx * HEAD_DIM + tx * 8;
+5108-                const float4 a0 = *reinterpret_cast<const float4*>(src);
+5109-                const float4 a1 = *reinterpret_cast<const float4*>(src + 4);
+5110-                value[0] = a0.x * inv_l; value[1] = a0.y * inv_l;
+--
+5211-    if constexpr (!SHUFFLE_WEIGHTS) __syncthreads();
+5212-
+5213-    float acc[8] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
+5214:    if constexpr (ASYNC_BF16_PARTIAL) {
+5215-        // All 128 threads issue split zero before entering the rolled loop.
+5216-        // The first wait is CTA-uniform because live_splits >= 2 here; the
+5217-        // live<=1 direct handoff above never executes an async operation or a
+5218-        // barrier.  Each lane owns one aligned 16-byte row segment (8 BF16).
+5219-        const __nv_bfloat16* partial_bf16 =
+5220-            reinterpret_cast<const __nv_bfloat16*>(partial_acc);
+5221:        const int first_hidx = b * 32 + h;
+5222-        const __nv_bfloat16* first_src =
+5223:            partial_bf16 + first_hidx * HEAD_DIM + tx * 8;
+5224:        uint4 async_current = xpuoj_load_global_async128(
+5225-            reinterpret_cast<const uint32_t*>(first_src));
+5226:        __builtin_mxc_arrive(64);
+5227:        __builtin_mxc_barrier();
+5228-
+5229-        for (int s = 0; s < live_splits; ++s) {
+5230-            float w;
+--
+5244-            // that next payload before it becomes the current one.
+5245-            uint4 async_next = {};
+5246-            if (s + 1 < live_splits) {
+5247:                const int next_hidx = ((s + 1) * batch_size + b) * 32 + h;
+5248-                const __nv_bfloat16* next_src =
+5249:                    partial_bf16 + next_hidx * HEAD_DIM + tx * 8;
+5250:                async_next = xpuoj_load_global_async128(
+5251-                    reinterpret_cast<const uint32_t*>(next_src));
+5252-            }
+5253-
+--
+5268-            packed_scale_acc(acc + 6, value + 6, w);
+5269-
+5270-            if (s + 1 < live_splits) {
+5271:                __builtin_mxc_arrive(64);
+5272:                __builtin_mxc_barrier();
+5273-                async_current = async_next;
+5274-            }
+5275-        }
+--
+5293-                    reinterpret_cast<const __nv_bfloat16*>(partial_acc);
+5294-                const __nv_bfloat162* src =
+5295-                    reinterpret_cast<const __nv_bfloat162*>(
+5296:                        partial_bf16 + hidx * HEAD_DIM + tx * 8);
+5297-                value[0] = __bfloat162float(src[0].x);
+5298-                value[1] = __bfloat162float(src[0].y);
+5299-                value[2] = __bfloat162float(src[1].x);
+--
+5303-                value[6] = __bfloat162float(src[3].x);
+5304-                value[7] = __bfloat162float(src[3].y);
+5305-            } else {
+5306:                const float* src = partial_acc + hidx * HEAD_DIM + tx * 8;
+5307-                const float4 a0 = *reinterpret_cast<const float4*>(src);
+5308-                const float4 a1 = *reinterpret_cast<const float4*>(src + 4);
+5309-                value[0] = a0.x; value[1] = a0.y;
+
+=== live split range for case13 ===
+seqlen=0..58966, pages_per_split=57, live_splits min=0 max=65 distinct=66 missing=[]
+source count formula:
+4798:        live_splits = min(
+4799-            n_split, (valid_pages + pages_per_split - 1) / pages_per_split);
+4800-    }
+4801-
+4802-    __nv_bfloat162* out_ptr = reinterpret_cast<__nv_bfloat162*>(
+4803-        out + (b * 32 + h) * HEAD_DIM);
+4804:    if (live_splits <= 1) {
+4805-        float2 value = make_float2(0.f, 0.f);
+4806-        if (live_splits == 1) {
+4807-            const int hidx = b * 32 + h;
+4808-            if constexpr (BF16_NORMALIZED_PARTIAL) {
+4809-                const __nv_bfloat16* partial_bf16 =
+4810-                    reinterpret_cast<const __nv_bfloat16*>(partial_acc);
+4811-                const __nv_bfloat162 value_bf16 =
+4812-                    *reinterpret_cast<const __nv_bfloat162*>(
+4813-                        partial_bf16 + hidx * HEAD_DIM + tid * 2);
+4814-                value.x = __bfloat162float(value_bf16.x);
+--
+5058-    if constexpr (SEPARATE_TAIL) {
+5059-        const int full_pages = seqlen / PAGE_TOKENS;
+5060-        const int main_splits = n_split - 1;
+5061:        live_splits = min(
+5062-            main_splits,
+5063-            (full_pages + pages_per_split - 1) / pages_per_split);
+5064-        live_splits += (seqlen & (PAGE_TOKENS - 1)) != 0;
+5065-    } else if constexpr (FUSE_TAIL_IN_LAST_SPLIT) {
+5066-        const int full_pages = seqlen / PAGE_TOKENS;
+5067-        live_splits = full_pages > 0
+5068-            ? min(n_split,
+5069-                  (full_pages + pages_per_split - 1) / pages_per_split)
+5070-            : ((seqlen & (PAGE_TOKENS - 1)) != 0);
+5071-    } else {
+5072:        const int valid_pages =
+5073-            (seqlen + PAGE_TOKENS - 1) / PAGE_TOKENS;
+5074:        live_splits = min(
+5075-            n_split, (valid_pages + pages_per_split - 1) / pages_per_split);
+5076-    }
+5077-
+5078-    __nv_bfloat16* out_ptr = out + (b * 32 + h) * HEAD_DIM + tx * 8;
+5079:    if (live_splits <= 1) {
+5080-        float value[8] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
+5081-        if (live_splits == 1) {
+5082-            const int hidx = b * 32 + h;
+5083-            if constexpr (BF16_NORMALIZED_PARTIAL) {
+5084-                // A normalized partial is already divided by its local l_s;
+5085-                // the one-split path is therefore a direct BF16 handoff.
+5086-                const __nv_bfloat16* partial_bf16 =
+5087-                    reinterpret_cast<const __nv_bfloat16*>(partial_acc);
+5088-                const __nv_bfloat162* src =
+5089-                    reinterpret_cast<const __nv_bfloat162*>(
+
+=== metadata and lane arithmetic ===
+group8 block: grid=(batch*32+7)/8 = 4 for B1; block=dim3(16,8) = 128 threads; ty owns 8 heads; tx owns 8 BF16 = 16 bytes.
+dynamic smem: (2*8*65+4)*sizeof(float) = 4176 bytes (metadata arrays 2*8*65*4 = 4160 B + 4-float slack = 16 B).
+64-split metadata baseline: 2*8*64*4 = 4096 bytes; 65th split is covered by 4176 B.
+B1 split payload stride: 32 heads*128 BF16*2 = 8192 B; per-lane segment is tx*8 BF16 = 16 B.
+
+=== LLVM target body ===
+target async v4i32 calls=4 (see log/exp718_llvm_audit.log)
+target arrive64 calls=4 (see log/exp718_llvm_audit.log)
+target barrier calls=5 (one metadata barrier plus four async waits; see log/exp718_llvm_audit.log)
+
+=== other reducer async count ===
+all reducer bodies async v4i32 calls excluding target=0 (see log/exp718_llvm_audit.log)
+all module async v4i32 call lines=5 (4 calls + 1 declaration)
+
+=== resource target and no spill/stack ===
+222- maca info  : staticMaxWarps/PEU : 8
+223: maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb0ELb1ELb1ELb1ELi0ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+224-  0 bytes stack frame 
+225- maca info  : Used  42 MTregisters, 24 STregisters, 0 bytes shared mem  
+226- maca info  : staticMaxWarps/PEU : 8
+target expected resource: 42 MTreg / 24 STreg / 0 static shared / 0 stack / 8 waves; dynamic launch smem 4176 B.
+PASS: target resource record present
+PASS: target shows 42 MTreg and zero stack
+
+=== CPU status (non-GPU) ===
+总计: 14/14 通过
+CPU manifest is the exact 14-case table; no GPU execution was performed.

@@ -1,0 +1,45 @@
+=== LLVM target identity ===
+define protected metaxgpu_kernel void @_Z33paged_decode_reduce_group8_kernelILb1ELb0ELb0ELb1ELb1ELb1ELi0ELb1ELb1EE
+41700:define protected metaxgpu_kernel void @_Z33paged_decode_reduce_group8_kernelILb1ELb0ELb0ELb1ELb1ELb1ELi0ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii(ptr addrspace(1) noalias nocapture noundef readonly %partial_m.coerce, ptr addrspace(1) noalias nocapture noundef readnone %partial_l.coerce, ptr addrspace(1) noalias nocapture noundef %partial_acc.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, i32 noundef %batch_size, i32 noundef %pages_per_split, i32 noundef %n_split) local_unnamed_addr #19 comdat {
+
+=== target call sequence evidence ===
+184:  tail call void @llvm.mxc.barrier()
+188:  %59 = tail call <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) %add.ptr128) #24, !alias.scope !288, !call_argsrelate !30
+189:  tail call void @llvm.mxc.arrive(i32 64)
+190:  tail call void @llvm.mxc.barrier()
+197:  %retval.sroa.0.12.vec.extract.i391 = extractelement <4 x i32> %59, i64 3
+198:  %retval.sroa.0.8.vec.extract.i389 = extractelement <4 x i32> %59, i64 2
+199:  %retval.sroa.0.4.vec.extract.i387 = extractelement <4 x i32> %59, i64 1
+200:  %retval.sroa.0.0.vec.extract.i385 = extractelement <4 x i32> %59, i64 0
+250:  %76 = tail call <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) %gep.epil) #24, !alias.scope !292, !call_argsrelate !30
+291:  tail call void @llvm.mxc.arrive(i32 64)
+292:  tail call void @llvm.mxc.barrier()
+434:  %111 = tail call <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) %gep) #24, !alias.scope !292, !call_argsrelate !30
+435:  %retval.sroa.0.0.vec.extract.i = extractelement <4 x i32> %111, i64 0
+436:  %retval.sroa.0.4.vec.extract.i = extractelement <4 x i32> %111, i64 1
+437:  %retval.sroa.0.8.vec.extract.i = extractelement <4 x i32> %111, i64 2
+438:  %retval.sroa.0.12.vec.extract.i = extractelement <4 x i32> %111, i64 3
+483:  tail call void @llvm.mxc.arrive(i32 64)
+484:  tail call void @llvm.mxc.barrier()
+507:  %130 = tail call <4 x i32> @llvm.mxc.load.global.async.v4i32(ptr addrspace(1) %gep.1) #24, !alias.scope !292, !call_argsrelate !30
+508:  %retval.sroa.0.0.vec.extract.i.1 = extractelement <4 x i32> %130, i64 0
+509:  %retval.sroa.0.4.vec.extract.i.1 = extractelement <4 x i32> %130, i64 1
+510:  %retval.sroa.0.8.vec.extract.i.1 = extractelement <4 x i32> %130, i64 2
+511:  %retval.sroa.0.12.vec.extract.i.1 = extractelement <4 x i32> %130, i64 3
+556:  tail call void @llvm.mxc.arrive(i32 64)
+557:  tail call void @llvm.mxc.barrier()
+
+target async v4i32 calls=4
+target arrive64 calls=4
+target barrier calls=5 (one metadata barrier + four async waits expected)
+all reducer async v4i32 calls=4
+other reducer async v4i32 calls=0 (expected 0)
+module async v4i32 lines=5 (calls plus declaration)
+PASS: case13 target has four async issue/wait pairs and no other reducer async
+
+=== target function resource cross-reference ===
+222- maca info  : staticMaxWarps/PEU : 8
+223: maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb0ELb1ELb1ELb1ELi0ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+224-  0 bytes stack frame 
+225- maca info  : Used  42 MTregisters, 24 STregisters, 0 bytes shared mem  
+226- maca info  : staticMaxWarps/PEU : 8

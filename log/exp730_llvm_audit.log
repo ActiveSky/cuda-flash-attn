@@ -1,0 +1,8 @@
+candidate_sha:
+18d5908f778aed67ccf8e7038f723bbd9a816810a45999117768910e73dd1828  solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case12_group8_sync_bf16_exp730.cpp
+llvm_sha:
+3a9b768a0c65714af13d6bc9a2f02f07de98a4b819b8b4d2fa760a7f78e327c7  build/exp730_device_llvm.ll
+symbol=_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1ELb0EE lines=1911 async=0 arrive=0 barrier=10
+symbol=_Z33paged_decode_reduce_group8_kernelILb1ELb0ELb0ELb1ELb1ELb0ELi0ELb1EE lines=607 async=0 arrive=0 barrier=1
+whole_tu_async_arrive_counts:
+async=arrive=4

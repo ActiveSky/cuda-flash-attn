@@ -1,0 +1,24 @@
+exp726 target LLVM audit (build/exp726_device.ll)
+
+Target kernel:
+  _Z41paged_decode_case1_shared_v_fanout_kernelILi4ELi8EEvPK15__maca_bfloat16PS0_PKiS5_i
+  definition body: lines 599-681
+  global V source transfer: 1 llvm.memcpy.p5.p4.i64
+  shared materialization: 1 llvm.memcpy.p3.p5.i64 into 256B v_shared
+  output stores: 4 i32 stores in addrspace(1), representing one uint4
+  per 16B slice for the 128 consumer threads
+  CTA barrier calls: 1 llvm.mxc.barrier, unconditional after the owner branch
+  target async/arrive matches: none
+  target temporary: 1 addrspace(5) alloca (%struct.uint4), matching the
+  reported 32B stack frame; this is a resource risk, not hidden as zero stack
+
+The case1 target signature contains only v_cache, out, cache_seqlens,
+block_table and pages_per_batch; it does not read Q or K. The generated body
+loads cache_seqlens before the owner branch, reads block_table only when
+seqlen > 0, and uses no padding-page load. The module-wide existing
+llvm.mxc.arrive sites remain in non-case1 exp710 paths and are absent from the
+target body; the exp726 source diff adds none.
+
+Host LLVM registration and launch stubs contain the new target once, and the
+run_kernel stub-call inventory has one new case1 call plus the retained KV4/KV8
+single-token fallbacks.

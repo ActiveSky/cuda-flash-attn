@@ -1,0 +1,38 @@
+2026-08-25T11:52:27Z
+candidate target resource
+119: maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi4ELi8ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+120-  0 bytes stack frame 
+121- maca info  : Used  22 MTregisters, 24 STregisters, 0 bytes shared mem  
+122- maca info  : staticMaxWarps/PEU : 8
+123: maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi8ELi4ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+124-  0 bytes stack frame 
+125- maca info  : Used  23 MTregisters, 32 STregisters, 0 bytes shared mem  
+126- maca info  : staticMaxWarps/PEU : 8
+127: maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi8ELi4ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+128-  0 bytes stack frame 
+129- maca info  : Used  22 MTregisters, 24 STregisters, 0 bytes shared mem  
+130- maca info  : staticMaxWarps/PEU : 8
+exp710 guarded-base comparison
+118: maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+119-  0 bytes stack frame 
+120- maca info  : Used  22 MTregisters, 26 STregisters, 0 bytes shared mem  
+121- maca info  : staticMaxWarps/PEU : 8
+122: maca info  : Function properties for  _Z29paged_decode_two_token_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if 
+123-  0 bytes stack frame 
+124- maca info  : Used  22 MTregisters, 26 STregisters, 0 bytes shared mem  
+125- maca info  : staticMaxWarps/PEU : 8
+candidate normal/resource/device status
+log/exp725_device_llvm.log:7:Output: build/exp725_candidate_device.ll
+log/exp725_device_llvm.log:58:10 warnings generated when compiling for xcore1000.
+log/exp725_device_llvm.log:108:10 warnings generated when compiling for host.
+log/exp725_device_llvm.log:109:Built build/exp725_candidate_device.ll
+log/exp725_resource_build.log:7:Output: build/exp725_candidate_resource.so
+log/exp725_resource_build.log:57:10 warnings generated when compiling for xcore1000.
+log/exp725_resource_build.log:218: maca info  : staticMaxWarps/PEU : 710 warnings generated when compiling for xcore1000.
+log/exp725_resource_build.log:293:10 warnings generated when compiling for host.
+log/exp725_resource_build.log:294:Built build/exp725_candidate_resource.so
+log/exp725_normal_build.log:7:Output: build/exp725_candidate_normal.so
+log/exp725_normal_build.log:57:10 warnings generated when compiling for xcore1000.
+log/exp725_normal_build.log:107:10 warnings generated when compiling for xcore1000.
+log/exp725_normal_build.log:157:10 warnings generated when compiling for host.
+log/exp725_normal_build.log:158:Built build/exp725_candidate_normal.so

@@ -1,0 +1,195 @@
+3a3cab1e1559e623ef8a3c77270b62d3f48e012e10571640971e4c51a0cd8c9e  solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case5_bf16_sync_partial_exp727.cpp
+9496b2add95197c698c0ff39af34ec23bf766c7315078eeff9119a4d66d3aab0  solutions/archive/2026-08-24-experiments/cuda_control124611_z4_tail_trap_fix_exp710.cpp
+--- diff stat
+ ...24611_guard_case5_bf16_sync_partial_exp727.cpp} | 124 +++++++++++++++------
+ 1 file changed, 88 insertions(+), 36 deletions(-)
+--- diff check
+--- diff
+diff --git a/solutions/archive/2026-08-24-experiments/cuda_control124611_z4_tail_trap_fix_exp710.cpp b/solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case5_bf16_sync_partial_exp727.cpp
+index 7c2b9fe..27b37e3 100644
+--- a/solutions/archive/2026-08-24-experiments/cuda_control124611_z4_tail_trap_fix_exp710.cpp
++++ b/solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case5_bf16_sync_partial_exp727.cpp
+@@ -5014,7 +5014,8 @@ template <bool BASE2, bool SEPARATE_TAIL = false,
+           bool FUSE_TAIL_IN_LAST_SPLIT = false,
+           bool NATIVE_ROW16_REDUCE = false,
+           bool PACKED_ML = false,
+-          int STATIC_WEIGHT_SPLITS = 0>
++          int STATIC_WEIGHT_SPLITS = 0,
++          bool BF16_NORMALIZED_PARTIAL = false>
+ __global__ void __launch_bounds__(128)
+ paged_decode_reduce_group8_kernel(
+     const float* __restrict__ partial_m,
+@@ -5060,21 +5061,38 @@ paged_decode_reduce_group8_kernel(
+         float value[8] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
+         if (live_splits == 1) {
+             const int hidx = b * 32 + h;
+-            float l_value;
+-            if constexpr (PACKED_ML) {
+-                l_value = __half22float2(
+-                    *reinterpret_cast<const __half2*>(partial_m + hidx)).y;
++            if constexpr (BF16_NORMALIZED_PARTIAL) {
++                // A normalized partial is already divided by its local l_s;
++                // the one-split path is therefore a direct BF16 handoff.
++                const __nv_bfloat16* partial_bf16 =
++                    reinterpret_cast<const __nv_bfloat16*>(partial_acc);
++                const __nv_bfloat162* src =
++                    reinterpret_cast<const __nv_bfloat162*>(
++                        partial_bf16 + hidx * HEAD_DIM + tx * 8);
++                __nv_bfloat162* out2 =
++                    reinterpret_cast<__nv_bfloat162*>(out_ptr);
++                out2[0] = src[0];
++                out2[1] = src[1];
++                out2[2] = src[2];
++                out2[3] = src[3];
++                return;
+             } else {
+-                l_value = partial_l[hidx];
++                float l_value;
++                if constexpr (PACKED_ML) {
++                    l_value = __half22float2(
++                        *reinterpret_cast<const __half2*>(partial_m + hidx)).y;
++                } else {
++                    l_value = partial_l[hidx];
++                }
++                const float inv_l = l_value > 0.f ? 1.f / l_value : 0.f;
++                const float* src = partial_acc + hidx * HEAD_DIM + tx * 8;
++                const float4 a0 = *reinterpret_cast<const float4*>(src);
++                const float4 a1 = *reinterpret_cast<const float4*>(src + 4);
++                value[0] = a0.x * inv_l; value[1] = a0.y * inv_l;
++                value[2] = a0.z * inv_l; value[3] = a0.w * inv_l;
++                value[4] = a1.x * inv_l; value[5] = a1.y * inv_l;
++                value[6] = a1.z * inv_l; value[7] = a1.w * inv_l;
+             }
+-            const float inv_l = l_value > 0.f ? 1.f / l_value : 0.f;
+-            const float* src = partial_acc + hidx * HEAD_DIM + tx * 8;
+-            const float4 a0 = *reinterpret_cast<const float4*>(src);
+-            const float4 a1 = *reinterpret_cast<const float4*>(src + 4);
+-            value[0] = a0.x * inv_l; value[1] = a0.y * inv_l;
+-            value[2] = a0.z * inv_l; value[3] = a0.w * inv_l;
+-            value[4] = a1.x * inv_l; value[5] = a1.y * inv_l;
+-            value[6] = a1.z * inv_l; value[7] = a1.w * inv_l;
+         }
+         __nv_bfloat162* out2 = reinterpret_cast<__nv_bfloat162*>(out_ptr);
+         out2[0] = __floats2bfloat162_rn(value[0], value[1]);
+@@ -5135,7 +5153,13 @@ paged_decode_reduce_group8_kernel(
+             const int hidx = (tx * batch_size + b) * 32 + h;
+             w_lane = softmax_exp<BASE2>(ms_lane - m);
+             const float l_value = PACKED_ML ? ls_lane : partial_l[hidx];
+-            l_sum = l_value * w_lane;
++            const float lw = l_value * w_lane;
++            l_sum = lw;
++            if constexpr (BF16_NORMALIZED_PARTIAL) {
++                // Normalized BF16 accumulators consume the complete LSE
++                // coefficient, l_s * exp(m_s - m), at the data read.
++                w_lane = lw;
++            }
+         }
+     } else {
+         for (int s = tx; s < live_splits; s += 16) {
+@@ -5149,7 +5173,11 @@ paged_decode_reduce_group8_kernel(
+             } else {
+                 l_value = partial_l[hidx];
+             }
+-            l_sum += l_value * w;
++            const float lw = l_value * w;
++            if constexpr (BF16_NORMALIZED_PARTIAL) {
++                s_w[row + s] = lw;
++            }
++            l_sum += lw;
+         }
+     }
+     if constexpr (NATIVE_ROW16_REDUCE) {
+@@ -5165,9 +5193,6 @@ paged_decode_reduce_group8_kernel(
+     float acc[8] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
+     for (int s = 0; s < live_splits; ++s) {
+         const int hidx = (s * batch_size + b) * 32 + h;
+-        const float* src = partial_acc + hidx * HEAD_DIM + tx * 8;
+-        const float4 a0 = *reinterpret_cast<const float4*>(src);
+-        const float4 a1 = *reinterpret_cast<const float4*>(src + 4);
+         float w;
+         if constexpr (SHUFFLE_WEIGHTS) {
+             if constexpr (STATIC_WEIGHT_SPLITS == 0) {
+@@ -5179,9 +5204,30 @@ paged_decode_reduce_group8_kernel(
+         } else {
+             w = s_w[row + s];
+         }
+-        const float value[8] = {
+-            a0.x, a0.y, a0.z, a0.w, a1.x, a1.y, a1.z, a1.w
+-        };
++        float value[8];
++        if constexpr (BF16_NORMALIZED_PARTIAL) {
++            const __nv_bfloat16* partial_bf16 =
++                reinterpret_cast<const __nv_bfloat16*>(partial_acc);
++            const __nv_bfloat162* src =
++                reinterpret_cast<const __nv_bfloat162*>(
++                    partial_bf16 + hidx * HEAD_DIM + tx * 8);
++            value[0] = __bfloat162float(src[0].x);
++            value[1] = __bfloat162float(src[0].y);
++            value[2] = __bfloat162float(src[1].x);
++            value[3] = __bfloat162float(src[1].y);
++            value[4] = __bfloat162float(src[2].x);
++            value[5] = __bfloat162float(src[2].y);
++            value[6] = __bfloat162float(src[3].x);
++            value[7] = __bfloat162float(src[3].y);
++        } else {
++            const float* src = partial_acc + hidx * HEAD_DIM + tx * 8;
++            const float4 a0 = *reinterpret_cast<const float4*>(src);
++            const float4 a1 = *reinterpret_cast<const float4*>(src + 4);
++            value[0] = a0.x; value[1] = a0.y;
++            value[2] = a0.z; value[3] = a0.w;
++            value[4] = a1.x; value[5] = a1.y;
++            value[6] = a1.z; value[7] = a1.w;
++        }
+         packed_scale_acc(acc, value, w);
+         packed_scale_acc(acc + 2, value + 2, w);
+         packed_scale_acc(acc + 4, value + 4, w);
+@@ -5637,13 +5683,12 @@ extern "C" void run_kernel(
+                         (int)pages_per_split, n_split,
+                         sm_scale * 1.4426950408889634f);
+                 } else if (batch_size == 16 && seqlen_k == 141) {
+-                    // exp383: retain case5's five splits, combined masked
+-                    // tail, BSM loader, FP32 partial ABI and group8 reducer.
+-                    // Change only producer ownership to head-pair/z4 and
+-                    // split-head QK so one K unpack serves two query heads.
++                    // exp727: only case5 switches its global partial_acc to
++                    // normalized BF16. Keep the existing head-pair/z4
++                    // producer ownership, grid, and combined masked tail.
+                     paged_decode_case11_headpair_z4_kernel<
+                         false, false, false, false, false, false, false, false,
+-                        false, true, false, false, false, true, true, true,
++                        true, true, false, false, false, true, true, true,
+                         false, true><<<grid, dim3(16, 4, 4)>>>(
+                         q, k_cache_paged, v_cache_paged, output,
+                         cache_seqlens, block_table,
+@@ -5927,15 +5972,22 @@ extern "C" void run_kernel(
+                         s_partial_m, s_partial_l, s_partial_acc, output,
+                         cache_seqlens, (int)batch_size,
+                         (int)pages_per_split, reduce_splits);
+-                } else if (batch_size == 16 &&
+-                           ((num_heads_k == 8 && seqlen_k == 362) ||
+-                            (num_heads_k == 4 && seqlen_k == 141))) {
+-                    // exp186: case6's producer already uses native row-local
+-                    // QK.  Isolate the same four-instruction network in the
+-                    // grouped reducer's max/sum allreduces while preserving
+-                    // its split-weight broadcasts and all producer policy.
+-                    // exp385 revalidates exp191's case5 reducer benefit after
+-                    // exp384 changed only case5's producer ownership.
++                } else if (batch_size == 16 && num_heads_k == 4 &&
++                           seqlen_k == 141) {
++                    // exp727: case5 alone consumes normalized-BF16 partials;
++                    // keep the existing native-row16 synchronous group8
++                    // reducer geometry and FP32 m/l metadata.
++                    paged_decode_reduce_group8_kernel<
++                        (XPUOJ_USE_BASE2 != 0), false, true, false, true,
++                        false, 0, true><<<
++                        rgrid, dim3(16, 8), 0>>>(
++                        s_partial_m, s_partial_l, s_partial_acc, output,
++                        cache_seqlens, (int)batch_size,
++                        (int)pages_per_split, reduce_splits);
++                } else if (batch_size == 16 && num_heads_k == 8 &&
++                           seqlen_k == 362) {
++                    // exp186/385: case6 retains its original FP32 partial
++                    // ABI and native-row16 reducer policy.
+                     paged_decode_reduce_group8_kernel<
+                         (XPUOJ_USE_BASE2 != 0), false, true, false, true><<<
+                         rgrid, dim3(16, 8), 0>>>(

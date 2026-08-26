@@ -1,0 +1,9 @@
+=== identity ===
+9496b2add95197c698c0ff39af34ec23bf766c7315078eeff9119a4d66d3aab0  solutions/archive/2026-08-24-experiments/cuda_control124611_z4_tail_trap_fix_exp710.cpp
+3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe  solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+48f675e4eb8c89ff9797a05830c1183d825f7b5008d8c4b355f38ff7f8b1ca47  solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case7_bf16_sync_partial_exp723.cpp
+=== exp710 -> exp723 stat ===
+ ...24611_guard_case7_bf16_sync_partial_exp723.cpp} | 62 ++++++++++++----------
+ 1 file changed, 33 insertions(+), 29 deletions(-)
+=== forbidden async symbols in candidate target ===
+=== diff check ===

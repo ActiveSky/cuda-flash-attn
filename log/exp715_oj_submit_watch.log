@@ -1,0 +1,6 @@
+target: contest #11, problem #1
+language: cuda.maca-c500
+code: solutions/cuda_maca_optimized.cpp (290890 bytes)
+created submission #126589
+submission=126589 progress=None status=Pending
+error: Submission 126589 did not finish within 900s

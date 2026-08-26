@@ -1,0 +1,4 @@
+target: contest #11, problem #1
+language: cuda.maca-c500
+code: solutions/cuda_maca_optimized.cpp (272383 bytes)
+dry-run: no submission created; use --submit to submit

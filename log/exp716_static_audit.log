@@ -1,0 +1,93 @@
+exp716 identity and LLVM audit (final)
+source SHA256:
+7f5f0a84240cda64c893fa78c6d729b12a4b0ee9880c31a4844a95ff51441beb  solutions/archive/2026-08-25-experiments/cuda_control124611_case7_bf16_async_partial_exp716.cpp
+parent SHA256:
+3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe  solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+exp674 SHA256:
+48dabb57f77b39d55b1f4268bda6ba506f4596d8a29a81700304bdf95643771f  solutions/archive/2026-08-24-experiments/cuda_control124611_case7_bf16_static_exp674.cpp
+binary SHA256:
+b75e8de756e9b952fe43b7ae1fced96ce41be98faf8bb07fa7fb0d9b1806ebe4  build/exp716_candidate.so
+3cdd3b50d00c7c6d335159b51f62acdfbce7e5dee55a2223596bce13f8116418  build/exp716_resource.so
+2d1db17748458d161d11c64649702472e8809e1488e85ffba181a3b995a5ad68  build/exp716_device.ll
+diffstat versus parent:
+ ...trol124611_case7_bf16_async_partial_exp716.cpp} | 210 +++++++++++++++++----
+ 1 file changed, 172 insertions(+), 38 deletions(-)
+diffstat versus exp674:
+ ...trol124611_case7_bf16_async_partial_exp716.cpp} | 161 ++++++++++++++++-----
+ 1 file changed, 121 insertions(+), 40 deletions(-)
+target and all group8 LLVM function counts:
+_Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb1ELb1ELb0ELi0ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii async_v4i32=0 arrive64=0 barrier=0 alloca=0
+_Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb1ELb0ELb1ELi3ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii async_v4i32=4 arrive64=4 barrier=4 alloca=0
+target_first_async_barrier_bf16= 37380 37382 37431
+target_async_lines= [37380, 37426, 37622, 37707]
+target_arrive_lines= [37381, 37468, 37672, 37757]
+target_stride_lines:
+37186:%4 = shl i32 %shr, 12
+37422:%79 = shl i32 %78, 12
+37618:%116 = shl i32 %115, 12
+37703:%137 = shl i32 %136, 12
+_Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb1ELb0ELi0ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii async_v4i32=0 arrive64=0 barrier=0 alloca=0
+_Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb0ELb0ELi0ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii async_v4i32=0 arrive64=0 barrier=0 alloca=0
+_Z33paged_decode_reduce_group8_kernelILb1ELb0ELb0ELb0ELb0ELb0ELi0ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii async_v4i32=0 arrive64=0 barrier=1 alloca=0
+target resource lines:
+158: maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+159-  0 bytes stack frame 
+160- maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+161- maca info  : staticMaxWarps/PEU : 5
+--
+198: maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb1ELb0ELb1ELi3ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+199-  0 bytes stack frame 
+200- maca info  : Used  42 MTregisters, 20 STregisters, 0 bytes shared mem  
+201- maca info  : staticMaxWarps/PEU : 8
+source async section:
+114-// validated exp487 async producer probe.
+115-using XpuojAsyncLoadI4 = __NATIVE_VECTOR__(4, int);
+116:__device__ __forceinline__ uint4 xpuoj_load_global_async128(
+117-    const uint32_t* __restrict__ src)
+118-{
+--
+965-{
+966-#if XPUOJ_HAS_MCFLASHINFER_BSM
+967:    __builtin_mxc_barrier_and_wait4(0, token);
+968-#else
+969-    __syncthreads();
+--
+5024-          int STATIC_WEIGHT_SPLITS = 0,
+5025-          bool BF16_NORMALIZED_PARTIAL = false,
+5026:          bool ASYNC_BF16_PARTIAL = false>
+5027-__global__ void __launch_bounds__(128)
+5028-paged_decode_reduce_group8_kernel(
+--
+5038-    static_assert(STATIC_WEIGHT_SPLITS == 0 || SHUFFLE_WEIGHTS,
+5039-                  "static group8 weights require shuffle-owned metadata");
+5040:    static_assert(!ASYNC_BF16_PARTIAL ||
+5041-                      (BF16_NORMALIZED_PARTIAL && PACKED_ML &&
+5042-                       SHUFFLE_WEIGHTS && STATIC_WEIGHT_SPLITS == 3),
+--
+5205-
+5206-    float acc[8] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
+5207:    if constexpr (ASYNC_BF16_PARTIAL) {
+5208-        // All 128 threads issue split zero before entering the rolled loop.
+5209-        // The first wait is CTA-uniform because live_splits >= 2 here; the
+--
+5215-        const __nv_bfloat16* first_src =
+5216-            partial_bf16 + first_hidx * HEAD_DIM + tx * 8;
+5217:        uint4 async_current = xpuoj_load_global_async128(
+5218-            reinterpret_cast<const uint32_t*>(first_src));
+5219:        __builtin_mxc_arrive(64);
+5220:        __builtin_mxc_barrier();
+5221-
+5222-        for (int s = 0; s < live_splits; ++s) {
+--
+5241-                const __nv_bfloat16* next_src =
+5242-                    partial_bf16 + next_hidx * HEAD_DIM + tx * 8;
+5243:                async_next = xpuoj_load_global_async128(
+5244-                    reinterpret_cast<const uint32_t*>(next_src));
+5245-            }
+--
+5262-
+5263-            if (s + 1 < live_splits) {
+5264:                __builtin_mxc_arrive(64);
+5265:                __builtin_mxc_barrier();
+5266-                async_current = async_next;
+5267-            }

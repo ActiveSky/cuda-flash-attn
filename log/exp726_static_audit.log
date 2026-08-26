@@ -1,0 +1,38 @@
+exp726 static/source/resource audit
+
+Candidate:
+solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case1_shared_v_fanout_exp726.cpp
+SHA-256: 54acbdb57a779fa7699b8404fc17aeb72052b4af0ef1eb906f4fc76de7d37dbc
+Parent: exp710 guarded base, SHA-256 9496b2add95197c698c0ff39af34ec23bf766c7315078eeff9119a4d66d3aab0
+
+Compile-only:
+  normal build: PASS -> build/exp726_normal.so
+  resource build: PASS -> build/exp726_resource.so
+  device LLVM: PASS -> build/exp726_device.ll
+  compiler emitted only the pre-existing Maca min-blocks warnings; no error.
+
+Target resource (log/exp726_resource_build.log lines 110-113):
+  8 MTregisters, 38 STregisters, 256 bytes shared, 32 bytes stack,
+  staticMaxWarps/PEU 8.
+Parent KV4 single-token fallback (lines 114-117):
+  6 MTregisters, 18 STregisters, 0 shared, 0 stack, 8 waves.
+The target therefore reproduces exp700's known +2 MTreg/+20 STreg/+32B
+stack resource cost; this audit does not approve OJ submission.
+
+Case1 contract checks:
+  static_assert KV_HEADS==4 && GQA==8; U4_PER_ROW==16; GQA*U4_PER_ROW==128
+  launch: <<<grid, 128>>> under seqlen_k==1, num_heads_k==4, batch_size==1
+  owner lanes: copy < 16; each reads one aligned raw BF16 uint4 slice
+  shared buffer: __shared__ uint4 v_shared[16] = 256 bytes
+  barrier: all 128 threads reach the unconditional __syncthreads()
+  consumers: all 128 threads map q_head_in_group/copy to output BF16 slices
+  page safety: block_table[b * pages_per_batch] is read only when
+               cache_seqlens[b] > 0; no token1 or padding row is read
+  output mapping: (b * 32 + kv_head * 8 + q_head_in_group) * HEAD_DIM
+  raw BF16: v_cache/out remain __nv_bfloat16; uint4 copies preserve bits
+  no cudaDeviceSynchronize occurrence
+
+CPU-only checks (GPU unavailable on this host):
+  tests/c500_case_manifest.py: 14 cases listed, exit 0
+  tests/test_kernel_logic.py: 14/14 PASS, exit 0
+  No real C500/GPU correctness, timing, or OJ command was run.

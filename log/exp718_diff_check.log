@@ -1,0 +1,351 @@
+=== identity ===
+9496b2add95197c698c0ff39af34ec23bf766c7315078eeff9119a4d66d3aab0  solutions/archive/2026-08-24-experiments/cuda_control124611_z4_tail_trap_fix_exp710.cpp
+3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe  solutions/archive/2026-08-24-submissions/cuda_124611.cpp
+4835586c22dad5e4efbe02ae47441d7959dc94d98f7d463809a3a0c482d27703  solutions/archive/2026-08-25-experiments/cuda_control124611_case13_bf16_async_partial_exp717.cpp
+adaebe806af6f5983ff44d77caa8c880254b433211a837da0138530b4bac85bf  solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case13_group8_async_exp718.cpp
+
+=== base to control ===
+ ...cuda_control124611_z4_tail_trap_fix_exp710.cpp} | 48 ++++++++++++----------
+ 1 file changed, 27 insertions(+), 21 deletions(-)
+
+=== base to candidate stat ===
+ ...rol124611_guard_case13_group8_async_exp718.cpp} | 225 ++++++++++++++++-----
+ 1 file changed, 179 insertions(+), 46 deletions(-)
+
+=== donor to candidate stat ===
+ ...rol124611_guard_case13_group8_async_exp718.cpp} | 29 ++++++++--------------
+ 1 file changed, 11 insertions(+), 18 deletions(-)
+
+=== base to candidate diff ===
+diff --git a/solutions/archive/2026-08-24-experiments/cuda_control124611_z4_tail_trap_fix_exp710.cpp b/solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case13_group8_async_exp718.cpp
+index 7c2b9fe..d4c4392 100644
+--- a/solutions/archive/2026-08-24-experiments/cuda_control124611_z4_tail_trap_fix_exp710.cpp
++++ b/solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case13_group8_async_exp718.cpp
+@@ -109,4 +109,17 @@ __global__ void maca_cute_4wave_k128_materialize_probe() {
+ #define LOGIT_STRIDE 8       // 每页最多 8 个 query head（gqa_ratio <= 8）
+ 
++// The case-13 reducer uses the register-returning global async primitive only
++// for its normalized BF16 partial payload.  The payload stays as one
++// 128-bit vector until the explicit GVM wait below, preserving the validated
++// async128 use-def contract.
++using XpuojAsyncLoadI4 = __NATIVE_VECTOR__(4, int);
++__device__ __forceinline__ uint4 xpuoj_load_global_async128(
++    const uint32_t* __restrict__ src)
++{
++    const XpuojAsyncLoadI4 raw = __builtin_mxc_load_global_async128(
++        reinterpret_cast<XpuojAsyncLoadI4*>(const_cast<uint32_t*>(src)));
++    return *reinterpret_cast<const uint4*>(&raw);
++}
++
+ __device__ __forceinline__ float bf16_lo(uint32_t u);
+ __device__ __forceinline__ float bf16_hi(uint32_t u);
+@@ -5015,5 +5028,7 @@ template <bool BASE2, bool SEPARATE_TAIL = false,
+           bool NATIVE_ROW16_REDUCE = false,
+           bool PACKED_ML = false,
+-          int STATIC_WEIGHT_SPLITS = 0>
++          int STATIC_WEIGHT_SPLITS = 0,
++          bool BF16_NORMALIZED_PARTIAL = false,
++          bool ASYNC_BF16_PARTIAL = false>
+ __global__ void __launch_bounds__(128)
+ paged_decode_reduce_group8_kernel(
+@@ -5029,4 +5044,9 @@ paged_decode_reduce_group8_kernel(
+     static_assert(STATIC_WEIGHT_SPLITS == 0 || SHUFFLE_WEIGHTS,
+                   "static group8 weights require shuffle-owned metadata");
++    static_assert(!ASYNC_BF16_PARTIAL ||
++                      (BF16_NORMALIZED_PARTIAL && PACKED_ML &&
++                       ((SHUFFLE_WEIGHTS && STATIC_WEIGHT_SPLITS == 3) ||
++                        (!SHUFFLE_WEIGHTS && STATIC_WEIGHT_SPLITS == 0))),
++                  "async BF16 partials require normalized packed metadata");
+     constexpr int HEADS_PER_CTA = 8;
+     const int tx = threadIdx.x;
+@@ -5061,19 +5081,37 @@ paged_decode_reduce_group8_kernel(
+         if (live_splits == 1) {
+             const int hidx = b * 32 + h;
+-            float l_value;
+-            if constexpr (PACKED_ML) {
+-                l_value = __half22float2(
+-                    *reinterpret_cast<const __half2*>(partial_m + hidx)).y;
++            if constexpr (BF16_NORMALIZED_PARTIAL) {
++                // A normalized partial is already divided by its local l_s;
++                // the one-split path is therefore a direct BF16 handoff.
++                const __nv_bfloat16* partial_bf16 =
++                    reinterpret_cast<const __nv_bfloat16*>(partial_acc);
++                const __nv_bfloat162* src =
++                    reinterpret_cast<const __nv_bfloat162*>(
++                        partial_bf16 + hidx * HEAD_DIM + tx * 8);
++                __nv_bfloat162* out2 =
++                    reinterpret_cast<__nv_bfloat162*>(out_ptr);
++                out2[0] = src[0];
++                out2[1] = src[1];
++                out2[2] = src[2];
++                out2[3] = src[3];
++                return;
+             } else {
+-                l_value = partial_l[hidx];
++                float l_value;
++                if constexpr (PACKED_ML) {
++                    l_value = __half22float2(
++                        *reinterpret_cast<const __half2*>(partial_m + hidx)).y;
++                } else {
++                    l_value = partial_l[hidx];
++                }
++                const float inv_l = l_value > 0.f ? 1.f / l_value : 0.f;
++                const float* src = partial_acc + hidx * HEAD_DIM + tx * 8;
++                const float4 a0 = *reinterpret_cast<const float4*>(src);
++                const float4 a1 = *reinterpret_cast<const float4*>(src + 4);
++                value[0] = a0.x * inv_l; value[1] = a0.y * inv_l;
++                value[2] = a0.z * inv_l; value[3] = a0.w * inv_l;
++                value[4] = a1.x * inv_l; value[5] = a1.y * inv_l;
++                value[6] = a1.z * inv_l;
++                value[7] = a1.w * inv_l;
+             }
+-            const float inv_l = l_value > 0.f ? 1.f / l_value : 0.f;
+-            const float* src = partial_acc + hidx * HEAD_DIM + tx * 8;
+-            const float4 a0 = *reinterpret_cast<const float4*>(src);
+-            const float4 a1 = *reinterpret_cast<const float4*>(src + 4);
+-            value[0] = a0.x * inv_l; value[1] = a0.y * inv_l;
+-            value[2] = a0.z * inv_l; value[3] = a0.w * inv_l;
+-            value[4] = a1.x * inv_l; value[5] = a1.y * inv_l;
+-            value[6] = a1.z * inv_l; value[7] = a1.w * inv_l;
+         }
+         __nv_bfloat162* out2 = reinterpret_cast<__nv_bfloat162*>(out_ptr);
+@@ -5136,5 +5174,11 @@ paged_decode_reduce_group8_kernel(
+             w_lane = softmax_exp<BASE2>(ms_lane - m);
+             const float l_value = PACKED_ML ? ls_lane : partial_l[hidx];
+-            l_sum = l_value * w_lane;
++            const float lw = l_value * w_lane;
++            l_sum = lw;
++            if constexpr (BF16_NORMALIZED_PARTIAL) {
++                // Normalized BF16 accumulators consume the complete LSE
++                // coefficient, l_s * exp(m_s - m), at the data read.
++                w_lane = lw;
++            }
+         }
+     } else {
+@@ -5150,5 +5194,9 @@ paged_decode_reduce_group8_kernel(
+                 l_value = partial_l[hidx];
+             }
+-            l_sum += l_value * w;
++            const float lw = l_value * w;
++            if constexpr (BF16_NORMALIZED_PARTIAL) {
++                s_w[row + s] = lw;
++            }
++            l_sum += lw;
+         }
+     }
+@@ -5164,27 +5212,109 @@ paged_decode_reduce_group8_kernel(
+ 
+     float acc[8] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
+-    for (int s = 0; s < live_splits; ++s) {
+-        const int hidx = (s * batch_size + b) * 32 + h;
+-        const float* src = partial_acc + hidx * HEAD_DIM + tx * 8;
+-        const float4 a0 = *reinterpret_cast<const float4*>(src);
+-        const float4 a1 = *reinterpret_cast<const float4*>(src + 4);
+-        float w;
+-        if constexpr (SHUFFLE_WEIGHTS) {
+-            if constexpr (STATIC_WEIGHT_SPLITS == 0) {
+-                w = __shfl_sync(0xffffffffu, w_lane, s, 16);
++    if constexpr (ASYNC_BF16_PARTIAL) {
++        // All 128 threads issue split zero before entering the rolled loop.
++        // The first wait is CTA-uniform because live_splits >= 2 here; the
++        // live<=1 direct handoff above never executes an async operation or a
++        // barrier.  Each lane owns one aligned 16-byte row segment (8 BF16).
++        const __nv_bfloat16* partial_bf16 =
++            reinterpret_cast<const __nv_bfloat16*>(partial_acc);
++        const int first_hidx = b * 32 + h;
++        const __nv_bfloat16* first_src =
++            partial_bf16 + first_hidx * HEAD_DIM + tx * 8;
++        uint4 async_current = xpuoj_load_global_async128(
++            reinterpret_cast<const uint32_t*>(first_src));
++        __builtin_mxc_arrive(64);
++        __builtin_mxc_barrier();
++
++        for (int s = 0; s < live_splits; ++s) {
++            float w;
++            if constexpr (SHUFFLE_WEIGHTS) {
++                if constexpr (STATIC_WEIGHT_SPLITS == 0) {
++                    w = __shfl_sync(0xffffffffu, w_lane, s, 16);
++                } else {
++                    w = group8_static_weight_handoff<STATIC_WEIGHT_SPLITS>(
++                        w_lane, s);
++                }
+             } else {
+-                w = group8_static_weight_handoff<STATIC_WEIGHT_SPLITS>(
+-                    w_lane, s);
++                w = s_w[row + s];
++            }
++
++            // Issue the next split while the current register payload is
++            // consumed.  The following uniform arrive/barrier retires only
++            // that next payload before it becomes the current one.
++            uint4 async_next = {};
++            if (s + 1 < live_splits) {
++                const int next_hidx = ((s + 1) * batch_size + b) * 32 + h;
++                const __nv_bfloat16* next_src =
++                    partial_bf16 + next_hidx * HEAD_DIM + tx * 8;
++                async_next = xpuoj_load_global_async128(
++                    reinterpret_cast<const uint32_t*>(next_src));
++            }
++
++            const __nv_bfloat162* src =
++                reinterpret_cast<const __nv_bfloat162*>(&async_current);
++            float value[8];
++            value[0] = __bfloat162float(src[0].x);
++            value[1] = __bfloat162float(src[0].y);
++            value[2] = __bfloat162float(src[1].x);
++            value[3] = __bfloat162float(src[1].y);
++            value[4] = __bfloat162float(src[2].x);
++            value[5] = __bfloat162float(src[2].y);
++            value[6] = __bfloat162float(src[3].x);
++            value[7] = __bfloat162float(src[3].y);
++            packed_scale_acc(acc, value, w);
++            packed_scale_acc(acc + 2, value + 2, w);
++            packed_scale_acc(acc + 4, value + 4, w);
++            packed_scale_acc(acc + 6, value + 6, w);
++
++            if (s + 1 < live_splits) {
++                __builtin_mxc_arrive(64);
++                __builtin_mxc_barrier();
++                async_current = async_next;
+             }
+-        } else {
+-            w = s_w[row + s];
+         }
+-        const float value[8] = {
+-            a0.x, a0.y, a0.z, a0.w, a1.x, a1.y, a1.z, a1.w
+-        };
+-        packed_scale_acc(acc, value, w);
+-        packed_scale_acc(acc + 2, value + 2, w);
+-        packed_scale_acc(acc + 4, value + 4, w);
+-        packed_scale_acc(acc + 6, value + 6, w);
++    } else {
++        for (int s = 0; s < live_splits; ++s) {
++            const int hidx = (s * batch_size + b) * 32 + h;
++            float w;
++            if constexpr (SHUFFLE_WEIGHTS) {
++                if constexpr (STATIC_WEIGHT_SPLITS == 0) {
++                    w = __shfl_sync(0xffffffffu, w_lane, s, 16);
++                } else {
++                    w = group8_static_weight_handoff<STATIC_WEIGHT_SPLITS>(
++                        w_lane, s);
++                }
++            } else {
++                w = s_w[row + s];
++            }
++            float value[8];
++            if constexpr (BF16_NORMALIZED_PARTIAL) {
++                const __nv_bfloat16* partial_bf16 =
++                    reinterpret_cast<const __nv_bfloat16*>(partial_acc);
++                const __nv_bfloat162* src =
++                    reinterpret_cast<const __nv_bfloat162*>(
++                        partial_bf16 + hidx * HEAD_DIM + tx * 8);
++                value[0] = __bfloat162float(src[0].x);
++                value[1] = __bfloat162float(src[0].y);
++                value[2] = __bfloat162float(src[1].x);
++                value[3] = __bfloat162float(src[1].y);
++                value[4] = __bfloat162float(src[2].x);
++                value[5] = __bfloat162float(src[2].y);
++                value[6] = __bfloat162float(src[3].x);
++                value[7] = __bfloat162float(src[3].y);
++            } else {
++                const float* src = partial_acc + hidx * HEAD_DIM + tx * 8;
++                const float4 a0 = *reinterpret_cast<const float4*>(src);
++                const float4 a1 = *reinterpret_cast<const float4*>(src + 4);
++                value[0] = a0.x; value[1] = a0.y;
++                value[2] = a0.z; value[3] = a0.w;
++                value[4] = a1.x; value[5] = a1.y;
++                value[6] = a1.z; value[7] = a1.w;
++            }
++            packed_scale_acc(acc, value, w);
++            packed_scale_acc(acc + 2, value + 2, w);
++            packed_scale_acc(acc + 4, value + 4, w);
++            packed_scale_acc(acc + 6, value + 6, w);
++        }
+     }
+ 
+@@ -6038,14 +6168,17 @@ extern "C" void run_kernel(
+             } else if (num_heads_k == 8 && batch_size == 1 &&
+                        seqlen_k == 58966) {
+-                // exp666: retain exp665's normalized-BF16 case13 producer and
+-                // valid-tail path, but use the physical-row serial reducer.
+-                // B1 case13 has only 32 reducer CTAs; give its four row
+-                // leaders dedicated shared slots without changing grid/block.
+-                const size_t vec2_smem =
+-                    ((size_t)2 * (size_t)reduce_splits + 4) * sizeof(float);
+-                paged_decode_reduce_vec2_kernel<
+-                    (XPUOJ_USE_BASE2 != 0), false, true, false, true,
+-                    true><<<
+-                    rgrid, 64, vec2_smem>>>(
++                // exp718: retain exp666's normalized-BF16 case13 producer
++                // and valid-tail path, but give the reducer four 128-thread
++                // group8 CTAs.  Dynamic shared memory holds packed (m,l)
++                // metadata; each CTA issues and consumes one 16-byte BF16
++                // payload per lane through the register-returning async path.
++                const int group8_grid = (batch_size * 32 + 7) / 8;
++                const size_t group8_smem =
++                    ((size_t)2 * (size_t)8 * (size_t)reduce_splits + 4) *
++                    sizeof(float);
++                paged_decode_reduce_group8_kernel<
++                    (XPUOJ_USE_BASE2 != 0), false, false, true,
++                    true, true, 0, true, true><<<
++                    group8_grid, dim3(16, 8), group8_smem>>>(
+                     s_partial_m, s_partial_l, s_partial_acc, output,
+                     cache_seqlens, (int)batch_size,
+
+=== donor to candidate diff ===
+diff --git a/solutions/archive/2026-08-25-experiments/cuda_control124611_case13_bf16_async_partial_exp717.cpp b/solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case13_group8_async_exp718.cpp
+index 4f04edb..d4c4392 100644
+--- a/solutions/archive/2026-08-25-experiments/cuda_control124611_case13_bf16_async_partial_exp717.cpp
++++ b/solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case13_group8_async_exp718.cpp
+@@ -109,8 +109,8 @@ __global__ void maca_cute_4wave_k128_materialize_probe() {
+ #define LOGIT_STRIDE 8       // 每页最多 8 个 query head（gqa_ratio <= 8）
+ 
+-// The case-7 reducer uses the register-returning global async primitive only
+-// for its BF16 partial payload.  The payload stays as one 128-bit vector until
+-// the explicit GVM wait below; this is the same use-def contract as the
+-// validated exp487 async producer probe.
++// The case-13 reducer uses the register-returning global async primitive only
++// for its normalized BF16 partial payload.  The payload stays as one
++// 128-bit vector until the explicit GVM wait below, preserving the validated
++// async128 use-def contract.
+ using XpuojAsyncLoadI4 = __NATIVE_VECTOR__(4, int);
+ __device__ __forceinline__ uint4 xpuoj_load_global_async128(
+@@ -5883,8 +5883,6 @@ extern "C" void run_kernel(
+                     // exp430 extends only exp428's all-native split-head QK
+                     // exchange to this case7 geometry.
+-                    // exp674 changes only the partial storage ABI at this
+-                    // producer/consumer pair.
+                     paged_decode_case13_kv8_headpair_z8_kernel<
+-                        true, false, true, true><<<
++                        true, false, true><<<
+                         grid, dim3(16, 2, 8)>>>(
+                         q, k_cache_paged, v_cache_paged, output,
+@@ -6053,10 +6051,7 @@ extern "C" void run_kernel(
+                     // metadata, but use its fixed row-local source lanes for
+                     // the producer-to-consumer softmax-weight handoff.
+-                    // exp716 keeps exp674's normalized BF16 partial ABI and
+-                    // pipelines its split payloads through register-returning
+-                    // async128 loads; all other group8 instances stay sync.
+                     paged_decode_reduce_group8_kernel<
+                         (XPUOJ_USE_BASE2 != 0), false, true, true,
+-                        false, true, 3, true, true><<<
++                        false, true, 3><<<
+                         rgrid, dim3(16, 8), 0>>>(
+                         s_partial_m, s_partial_l, s_partial_acc, output,
+@@ -6173,11 +6168,9 @@ extern "C" void run_kernel(
+             } else if (num_heads_k == 8 && batch_size == 1 &&
+                        seqlen_k == 58966) {
+-                // exp717: case13 keeps exp666's normalized-BF16 producer
+-                // ABI, but changes only its reducer ownership and partial
+-                // consumer.  Four 128-thread CTAs each own eight query
+-                // heads; dynamic packed (m,l) metadata lives in shared
+-                // memory while the BF16 payloads are issued as register-
+-                // returning 128-bit loads.  All eight heads in a CTA share
+-                // cache_seqlens[b], so the live-split async phase is uniform.
++                // exp718: retain exp666's normalized-BF16 case13 producer
++                // and valid-tail path, but give the reducer four 128-thread
++                // group8 CTAs.  Dynamic shared memory holds packed (m,l)
++                // metadata; each CTA issues and consumes one 16-byte BF16
++                // payload per lane through the register-returning async path.
+                 const int group8_grid = (batch_size * 32 + 7) / 8;
+                 const size_t group8_smem =

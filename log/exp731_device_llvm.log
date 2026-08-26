@@ -1,0 +1,16 @@
+exp731 device LLVM compile-only build
+
+candidate_sha256=0a3641330135853c8238a90132f2246c22cada03f714068129f604e793f90f05
+command=tools/build_local_maca.sh solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case12_group8_sync_single_lse_exp731.cpp build/exp731_device.ll -c -emit-llvm -S
+exit_code=0
+output=build/exp731_device.ll
+artifact_sha256=04bdeb405bd3d5f864808471ecf7df4c879c09a7455f515558ef72d672bf66e2
+warnings=unused -shared plus expected MACA __launch_bounds__ warnings; no compile errors
+
+Target producer LLVM definition starts at line 19037 and target reducer at line 41859.
+Both retain the existing kernel parameter list. LLVM marks target producer %partial_l
+and target reducer %partial_l as readnone, matching the single-LSE dataflow rather
+than changing the external ABI.
+
+validation_scope=LLVM/compile-only; host has no available GPU
+result=PASS

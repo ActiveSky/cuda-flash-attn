@@ -1,0 +1,22 @@
+exp726 exact source/diff audit
+
+base SHA-256:
+9496b2add95197c698c0ff39af34ec23bf766c7315078eeff9119a4d66d3aab0  solutions/archive/2026-08-24-experiments/cuda_control124611_z4_tail_trap_fix_exp710.cpp
+candidate SHA-256:
+54acbdb57a779fa7699b8404fc17aeb72052b4af0ef1eb906f4fc76de7d37dbc  solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case1_shared_v_fanout_exp726.cpp
+historical exp700 SHA-256:
+55f213e1718cb5a29cec8cb16a6641fbe8badd8c5c138a88ca95755858aef527  solutions/archive/2026-08-24-experiments/cuda_control124611_case1_shared_v_fanout_exp700.cpp
+
+git diff --no-index --stat (exp710 -> exp726):
+ ...l124611_guard_case1_shared_v_fanout_exp726.cpp} | 55 +++++++++++++++++++++-
+ 1 file changed, 53 insertions(+), 2 deletions(-)
+
+The two expected hunks are exactly:
+1. one case1-only kernel insertion after paged_decode_single_token_kernel;
+2. one seqlen_k==1, num_heads_k==4, batch_size==1 dispatch split, with the
+   original single-token fallback retained for batch_size != 1.
+
+git diff --no-index --check: PASS (no output).
+No added diff line contains another experiment identifier, async/arrive
+intrinsic, or case7/case11/case12/case13 mechanism. Existing exp710 guards and
+all case2-case14 source remain in the base file unchanged.

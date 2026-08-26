@@ -1,0 +1,112 @@
+candidate_sha e2f5962fc88141610dafa82df27e24b1abc71a9af32bbda9e581bc7b8fcb679f
+target_source_lines 3089 3471
+target_token float* s_acc = count 0
+target_token reinterpret_cast<float*>(s_storage) count 0
+target_token float* s_peer count 0
+target_token float s_peer count 0
+target_token float peer_acc count 0
+target_token float peer[ count 0
+target_shared_raw_float_pointer False
+target_external_raw_partial_acc True
+target_bf16_shared_pointer True
+target_tail_safe_loader_in_tail True
+target_old_tail_loader_in_tail False
+target_tail_loader_calls 2
+target_fanin_barriers_source 1
+target_row_bases True
+target_peer_order_source True
+--- LLVM target ---
+target_llvm_lines 18060 20196
+shared_symbol @_ZZ60paged_decode_case12_kv8_headpair_z8_direct_three_peer_kernelILb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage = linkonce_odr protected local_unnamed_addr addrspace(3) global [8448 x i8] undef, comdat, align 16
+llvm_total_cta_barriers 3
+llvm_fanin_cta_barriers_after_publication 1
+llvm_alloca_count 0
+llvm_publication_bf16_i16_stores_before_fanin_barrier 16
+llvm_peer_shared_float_loads_after_barrier 12
+llvm_peer_metadata_base_8192_refs 6
+llvm_peer_bf16_word_loads_after_barrier 24
+llvm_peer_bf16_row_refs 6
+llvm_peer_exp2_calls 12
+llvm_peer_bf16_to_f32_calls 48
+llvm_external_partial_acc_float_stores 16
+--- LLVM selected publication/barrier/peer lines ---
+19426: if.then383:                                       ; preds = %_Z27exp715_merge_intrawave_acc2Pfffb.exit1667, %_Z27exp715_merge_intrawave_acc2Pfffb.exit1667, %_Z27exp715_merge_intrawave_acc2Pfffb.exit1667
+19427:   %cmp380 = icmp eq i32 %2, 4
+19428:   %cmp379 = icmp eq i32 %2, 2
+19429:   %cond388 = select i1 %cmp380, i32 4, i32 8
+19430:   %cond390 = select i1 %cmp379, i32 0, i32 %cond388
+19431:   %add391 = add nuw nsw i32 %cond390, %1
+19432:   %cmp.i1354 = fcmp contract ogt float %l0.8, 0.000000e+00
+19433:   %div.i1355 = fdiv contract float 1.000000e+00, %l0.8
+19434:   %cond.i1356 = select contract i1 %cmp.i1354, float %div.i1355, float 0.000000e+00
+19435:   %add.ptr.i1359.idx = shl nuw nsw i32 %add391, 8
+19436:   %add.ptr.i1359 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ60paged_decode_case12_kv8_headpair_z8_direct_three_peer_kernelILb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr.i1359.idx
+19437:   %add.ptr3.i1362 = getelementptr inbounds %struct.__maca_bfloat162.3, ptr addrspace(3) %add.ptr.i1359, i32 %mul29
+19460:   store i16 %conv.i.i.i.i.i, ptr addrspace(3) %add.ptr3.i1362, align 16, !tbaa !27
+19461:   %y3.i = getelementptr inbounds i8, ptr addrspace(3) %add.ptr3.i1362, i32 2
+19462:   store i16 %conv.i.i.i7.i.i, ptr addrspace(3) %y3.i, align 2, !tbaa !27
+19545:   %arrayidx15.i1371 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ60paged_decode_case12_kv8_headpair_z8_direct_three_peer_kernelILb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add391
+19546:   %arrayidx19.i1372 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx15.i1371, i32 4
+19547:   store float %m0.4, ptr addrspace(3) %arrayidx15.i1371, align 8, !tbaa !73
+19548:   store float %l0.8, ptr addrspace(3) %arrayidx19.i1372, align 4, !tbaa !73
+19549:   br label %_Z29exp715_store_normalized_stateP16__maca_bfloat162PA2_fiiffPKf.exit1386
+19671: if.end395:                                        ; preds = %if.then.i1346, %_Z29exp715_store_normalized_stateP16__maca_bfloat162PA2_fiiffPKf.exit1386, %_Z27exp715_merge_intrawave_acc2Pfffb.exit1667
+19672:   fence syncscope("block") release
+19673:   tail call void @llvm.mxc.barrier()
+19674:   fence syncscope("block") acquire
+19675:   %cmp396 = icmp eq i32 %2, 0
+19676:   br i1 %cmp396, label %if.then397, label %if.end488
+19677: 
+19678: if.then397:                                       ; preds = %if.end395
+19679:   %arrayidx400 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ60paged_decode_case12_kv8_headpair_z8_direct_three_peer_kernelILb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %1
+19680:   %434 = load float, ptr addrspace(3) %arrayidx400, align 8, !tbaa !73
+19681:   %arrayidx404 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx400, i32 4
+19682:   %435 = load float, ptr addrspace(3) %arrayidx404, align 4, !tbaa !73
+19683:   %add.ptr407.idx = shl nuw nsw i32 %1, 8
+19684:   %add.ptr407 = getelementptr inbounds i8, ptr addrspace(3) @_ZZ60paged_decode_case12_kv8_headpair_z8_direct_three_peer_kernelILb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 %add.ptr407.idx
+19685:   %add.ptr410 = getelementptr inbounds %struct.__maca_bfloat162.3, ptr addrspace(3) %add.ptr407, i32 %mul29
+19704:   %443 = load i32, ptr addrspace(3) %add.ptr410, align 16, !tbaa !16
+19705:   %conv.i.i1774 = trunc i32 %443 to i16
+19706:   %444 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i1774)
+19707:   %shr.i.i1778 = lshr i32 %443, 16
+19708:   %conv.i12.i1779 = trunc nuw i32 %shr.i.i1778 to i16
+19709:   %445 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i12.i1779)
+19710:   %vecinit.i1783 = insertelement <2 x float> poison, float %444, i64 0
+19711:   %vecinit2.i1784 = insertelement <2 x float> %vecinit.i1783, float %445, i64 1
+19712:   %vecinit3.i1785 = insertelement <2 x float> poison, float %cond6.i1553, i64 0
+19713:   %vecinit4.i1786 = shufflevector <2 x float> %vecinit3.i1785, <2 x float> poison, <2 x i32> zeroinitializer
+19714:   %446 = tail call contract <2 x float> @llvm.mxc.pk.fma.f32(<2 x float> %vecinit2.i1784, <2 x float> %vecinit4.i1786, <2 x float> %439)
+19715:   %arrayidx14.i1579 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr410, i32 4
+19716:   %447 = load i32, ptr addrspace(3) %arrayidx14.i1579, align 4, !tbaa !16
+19717:   %conv.i.i1754 = trunc i32 %447 to i16
+19718:   %448 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i1754)
+19719:   %shr.i.i1758 = lshr i32 %447, 16
+19720:   %conv.i12.i1759 = trunc nuw i32 %shr.i.i1758 to i16
+19721:   %449 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i12.i1759)
+19722:   %vecinit.i1763 = insertelement <2 x float> poison, float %448, i64 0
+19723:   %vecinit2.i1764 = insertelement <2 x float> %vecinit.i1763, float %449, i64 1
+19724:   %450 = tail call contract <2 x float> @llvm.mxc.pk.fma.f32(<2 x float> %vecinit2.i1764, <2 x float> %vecinit4.i1786, <2 x float> %440)
+19725:   %arrayidx16.i1580 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr410, i32 8
+19726:   %451 = load i32, ptr addrspace(3) %arrayidx16.i1580, align 8, !tbaa !16
+19727:   %conv.i.i1734 = trunc i32 %451 to i16
+19728:   %452 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i1734)
+19729:   %shr.i.i1738 = lshr i32 %451, 16
+19730:   %conv.i12.i1739 = trunc nuw i32 %shr.i.i1738 to i16
+19731:   %453 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i12.i1739)
+19732:   %vecinit.i1743 = insertelement <2 x float> poison, float %452, i64 0
+19733:   %vecinit2.i1744 = insertelement <2 x float> %vecinit.i1743, float %453, i64 1
+19734:   %454 = tail call contract <2 x float> @llvm.mxc.pk.fma.f32(<2 x float> %vecinit2.i1744, <2 x float> %vecinit4.i1786, <2 x float> %441)
+19735:   %arrayidx18.i1581 = getelementptr inbounds i8, ptr addrspace(3) %add.ptr410, i32 12
+19736:   %455 = load i32, ptr addrspace(3) %arrayidx18.i1581, align 4, !tbaa !16
+19737:   %conv.i.i1721 = trunc i32 %455 to i16
+19738:   %456 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i.i1721)
+19739:   %shr.i.i1723 = lshr i32 %455, 16
+19740:   %conv.i12.i = trunc nuw i32 %shr.i.i1723 to i16
+19741:   %457 = tail call contract noundef float @llvm.mxc.bf16.to.f32(i16 %conv.i12.i)
+19742:   %vecinit.i1726 = insertelement <2 x float> poison, float %456, i64 0
+19743:   %vecinit2.i1727 = insertelement <2 x float> %vecinit.i1726, float %457, i64 1
+19744:   %458 = tail call contract <2 x float> @llvm.mxc.pk.fma.f32(<2 x float> %vecinit2.i1727, <2 x float> %vecinit4.i1786, <2 x float> %442)
+19745:   %arrayidx413 = getelementptr inbounds [2 x float], ptr addrspace(3) getelementptr inbounds (i8, ptr addrspace(3) @_ZZ60paged_decode_case12_kv8_headpair_z8_direct_three_peer_kernelILb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiifE9s_storage, i32 8192), i32 %add
+19746:   %459 = load float, ptr addrspace(3) %arrayidx413, align 8, !tbaa !73
+19747:   %arrayidx417 = getelementptr inbounds i8, ptr addrspace(3) %arrayidx413, i32 4
+19748:   %460 = load float, ptr addrspace(3) %arrayidx417, align 4, !tbaa !73

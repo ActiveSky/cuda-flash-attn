@@ -1,0 +1,19 @@
+exp723 targeted device LLVM audit (build/exp723_device.ll)
+
+Case7 normalized-BF16 producer:
+  symbol: _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif
+  body: lines 20805-22749
+  async/arrive/memcpy_async/cp_async matches in body: none
+  only barrier matches are llvm.mxc.barrier / llvm.mxc.barrier.warp
+
+Case7 synchronous static-weight group8 reducer:
+  symbol: _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb1ELb0ELb1ELi3ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii
+  body: lines 38142-38807
+  async/arrive/memcpy_async/cp_async matches in body: none
+
+Module-wide check:
+  llvm.mxc.load.global.async: none
+  llvm.mxc.arrive call sites: lines 12497, 13960, 16397 only
+  enclosing functions: non-case7 case11/token-parallel instantiations
+  target case7 dispatch selects the case13 producer above and the group8
+  reducer above; neither target body reaches an async intrinsic.

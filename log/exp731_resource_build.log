@@ -1,0 +1,18 @@
+exp731 resource compile-only build
+
+candidate_sha256=0a3641330135853c8238a90132f2246c22cada03f714068129f604e793f90f05
+command=tools/build_local_maca.sh solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case12_group8_sync_single_lse_exp731.cpp build/exp731_resource.so -resource-usage
+exit_code=0
+output=build/exp731_resource.so
+artifact_sha256=977b50c5afce2342e3cae4240a5a27313b5aa737bd2ce49a3d8def898a065e68
+warnings=expected MACA __launch_bounds__ minimum-block warnings; no compile errors
+
+Target resource rows from mxcc -resource-usage:
+  producer _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1ELb0ELb1EE:
+    stack=0 B, MT=82, ST=50, static_shared=8448 B, staticMaxWarps/PEU=5
+  reducer _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb0ELb1ELb1ELb0ELi0ELb1ELb1EE:
+    stack=0 B, MT=64, ST=26, static_shared=0 B, staticMaxWarps/PEU=8
+  case12 reducer launch dynamic_shared=1296 B
+
+validation_scope=MACA resource compile-only; no GPU/runtime claim
+result=PASS

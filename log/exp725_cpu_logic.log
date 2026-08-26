@@ -1,0 +1,18 @@
+2026-08-25T11:50:36Z
+61a2af7a70eaedeaf521124bb01072f7a99291a5d663761e76c9ac8429b2639a  solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case2_native_b128_vcopy_exp725.cpp
+[PASS] case1: copy1                 batch=   1 seqlen_k=     1 kv=4 split=      1 | max_err=0.000e+00 mean_err=0.000e+00 | seqlen 范围 [1,1]
+[PASS] case2: attn2                 batch=   4 seqlen_k=     2 kv=8 split=      1 | max_err=6.384e-16 mean_err=1.594e-17 | seqlen 范围 [1,2]
+[PASS] case3: token-parallel        batch=  16 seqlen_k=    17 kv=4 split=      1 | max_err=1.332e-15 mean_err=4.481e-17 | seqlen 范围 [1,17]
+[PASS] case4: token-parallel        batch=  64 seqlen_k=    64 kv=8 split=      1 | max_err=1.332e-15 mean_err=4.012e-17 | seqlen 范围 [1,64]
+[PASS] case5: kv4-z4-mma bounded    batch=  16 seqlen_k=    64 kv=4 split=      5 | max_err=1.332e-15 mean_err=4.199e-17 | seqlen 范围 [1,61]
+[PASS] case6: token-parallel bounded batch=  16 seqlen_k=    64 kv=8 split=      8 | max_err=9.992e-16 mean_err=4.081e-17 | seqlen 范围 [1,36]
+[PASS] case7: kv8-z8-native bounded batch=  64 seqlen_k=    64 kv=8 split=      3 | max_err=1.443e-15 mean_err=4.018e-17 | seqlen 范围 [1,63]
+[PASS] case8: kv4-z4-mma bounded    batch=  16 seqlen_k=    64 kv=4 split=     14 | max_err=1.360e-15 mean_err=3.888e-17 | seqlen 范围 [1,64]
+[PASS] case9: kv8-z8-native bounded batch=  32 seqlen_k=    64 kv=8 split=      6 | max_err=1.332e-15 mean_err=3.786e-17 | seqlen 范围 [1,62]
+[PASS] case10: kv4-z4-mma bounded   batch=   1 seqlen_k=    64 kv=4 split=    128 | max_err=5.551e-16 mean_err=7.057e-17 | seqlen 范围 [45,45]
+[PASS] case11: kv4-z4-mma bounded   batch=  16 seqlen_k=    64 kv=4 split=     39 | max_err=9.992e-16 mean_err=3.824e-17 | seqlen 范围 [1,63]
+[PASS] case12: kv8-z8-native bounded batch=   8 seqlen_k=    64 kv=8 split=     40 | max_err=1.332e-15 mean_err=2.756e-17 | seqlen 范围 [1,62]
+[PASS] case13: kv8-z8-native bounded batch=   1 seqlen_k=    64 kv=8 split=     65 | max_err=1.013e-15 mean_err=8.942e-17 | seqlen 范围 [41,41]
+[PASS] case14: kv4-z4-mma bounded   batch=   1 seqlen_k=    64 kv=4 split=    257 | max_err=5.551e-16 mean_err=7.073e-17 | seqlen 范围 [37,37]
+
+总计: 14/14 通过

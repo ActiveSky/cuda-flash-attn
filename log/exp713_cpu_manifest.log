@@ -1,0 +1,16 @@
+Tue Aug 25 07:08:16 UTC 2026
+command: python3 tests/c500_case_manifest.py
+case  1: B= 1 L=    1 KV=4 edge | copy1          splits=  1 pages/split= 1
+case  2: B= 4 L=    2 KV=8 edge | attn2          splits=  1 pages/split= 1
+case  3: B=16 L=   17 KV=4 edge | token-parallel splits=  1 pages/split= 2
+case  4: B=64 L=   64 KV=8 perf | token-parallel splits=  1 pages/split= 4
+case  5: B=16 L=  141 KV=4 perf | kv4-z4-mma     splits=  5 pages/split= 2
+case  6: B=16 L=  362 KV=8 perf | token-parallel splits=  8 pages/split= 3
+case  7: B=64 L= 2048 KV=8 perf | kv8-z8-native  splits=  3 pages/split=43
+case  8: B=16 L= 4096 KV=4 perf | kv4-z4-mma     splits= 14 pages/split=19
+case  9: B=32 L= 4096 KV=8 perf | kv8-z8-native  splits=  6 pages/split=43
+case 10: B= 1 L= 8192 KV=4 perf | kv4-z4-mma     splits=128 pages/split= 4
+case 11: B=16 L=12251 KV=4 perf | kv4-z4-mma     splits= 39 pages/split=20
+case 12: B= 8 L=32768 KV=8 perf | kv8-z8-native  splits= 40 pages/split=52
+case 13: B= 1 L=58966 KV=8 perf | kv8-z8-native  splits= 65 pages/split=57
+case 14: B= 1 L=61519 KV=4 perf | kv4-z4-mma     splits=257 pages/split=15

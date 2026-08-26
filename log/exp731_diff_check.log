@@ -1,0 +1,27 @@
+exp731 diff identity and scope
+
+base_source=solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case12_group8_sync_bf16_exp730.cpp
+base_sha256=18d5908f778aed67ccf8e7038f723bbd9a816810a45999117768910e73dd1828
+candidate_source=solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case12_group8_sync_single_lse_exp731.cpp
+candidate_sha256=0a3641330135853c8238a90132f2246c22cada03f714068129f604e793f90f05
+
+git diff --no-index --stat:
+  1 file changed, 73 insertions(+), 34 deletions(-)
+  10 diff hunks; no source files other than the isolated candidate differ from base.
+
+Exact candidate change:
+  - Add case12-only SINGLE_LSE_PARTIAL to the normalized-BF16 head-pair producer.
+  - Store m + log2(l) in the existing FP32 partial_m slot, use -Inf for empty l,
+    and omit partial_l stores in that specialization.
+  - Add group8-only SINGLE_LSE reducer mode; reuse s_m as the post-max weight
+    array, guard -Inf weights, and use exp2(lse - max_lse).
+  - Dispatch only the case12 producer/reducer specializations to the new mode.
+  - Reduce case12 dynamic reducer shared memory from 2576 B to 1296 B.
+
+Unchanged contract:
+  - Producer/reducer ABI and argument order remain unchanged.
+  - split40, fused-tail ownership, valid-page/padding guard, BF16 payload,
+    dim3(16,8) reducer geometry, and synchronous barrier path remain unchanged.
+  - No async movement, arrive intrinsic, new backend capability, or new CTA geometry.
+
+result=PASS_STATIC_SCOPE

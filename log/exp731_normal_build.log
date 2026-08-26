@@ -1,0 +1,10 @@
+exp731 normal compile-only build
+
+candidate_sha256=0a3641330135853c8238a90132f2246c22cada03f714068129f604e793f90f05
+command=tools/build_local_maca.sh solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case12_group8_sync_single_lse_exp731.cpp build/exp731_normal.so
+exit_code=0
+output=build/exp731_normal.so
+artifact_sha256=29f604f53582b6712a9338cb4cb51799608451935a7985d7fadc20c6ca99d09f
+warnings=expected MACA __launch_bounds__ minimum-block warnings; no compile errors
+validation_scope=MACA compile-only; host has no available GPU, so this is not GPU validation
+result=PASS

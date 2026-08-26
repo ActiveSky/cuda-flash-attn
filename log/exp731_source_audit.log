@@ -1,0 +1,18 @@
+exp731 source safety audit
+
+base_sha256=18d5908f778aed67ccf8e7038f723bbd9a816810a45999117768910e73dd1828
+candidate_sha256=0a3641330135853c8238a90132f2246c22cada03f714068129f604e793f90f05
+
+Reviewed candidate-vs-exp730 diff:
+  - SINGLE_LSE_PARTIAL is enabled only in the case12 producer dispatch.
+  - SINGLE_LSE is enabled only in the case12 group8 reducer dispatch.
+  - Empty partials use -Inf and reducer weight evaluation guards -Inf.
+  - partial_l allocation and call argument remain present for ABI compatibility;
+    the target producer does not write it and target reducer does not read it.
+  - Existing cache_seqlens valid-page bound, fused-tail ownership, split40,
+    GQA mapping, normalized BF16 payload and workspace allocation are unchanged.
+  - No cudaDeviceSynchronize() or new device/runtime synchronization was added.
+
+This is static/source evidence only. Full random, split-boundary, padding-trap,
+workspace-reuse and real C500 runtime coverage remain outstanding on this host.
+result=PASS_STATIC_SAFETY_REVIEW

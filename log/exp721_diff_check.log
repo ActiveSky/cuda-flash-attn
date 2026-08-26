@@ -1,0 +1,107 @@
+=== identity ===
+9496b2add95197c698c0ff39af34ec23bf766c7315078eeff9119a4d66d3aab0  solutions/archive/2026-08-24-experiments/cuda_control124611_z4_tail_trap_fix_exp710.cpp
+3d3e981ef2811b90569daca8139f385db39b15310df952b6663c0c5e8dbc735b  solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case12_group8_async_exp721.cpp
+924fdca197bf3663d8032dc07fe974741089f382701d370d11b37ea50697338a  solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case12_group8_async_exp720.cpp
+=== base-to-candidate diff stat ===
+ ...rol124611_guard_case12_group8_async_exp721.cpp} | 225 +++++++++++++++++----
+ 1 file changed, 183 insertions(+), 42 deletions(-)
+=== base-to-candidate hunk headers ===
+@@ -108,6 +108,19 @@
+@@ -5014,7 +5027,9 @@
+@@ -5028,6 +5043,11 @@
+@@ -5060,21 +5080,39 @@
+@@ -5135,7 +5173,13 @@
+@@ -5149,7 +5193,11 @@
+@@ -5163,29 +5211,111 @@
+@@ -5735,7 +5865,11 @@
+@@ -6027,11 +6161,18 @@
+=== changed dispatch/source markers ===
++++ solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case12_group8_async_exp721.cpp	2026-08-25 11:17:06.418141980 +0000
++__device__ __forceinline__ uint4 xpuoj_load_global_async128(
++          bool ASYNC_BF16_PARTIAL = false>
++    static_assert(!ASYNC_BF16_PARTIAL ||
++    if constexpr (ASYNC_BF16_PARTIAL) {
++        uint4 async_current = xpuoj_load_global_async128(
++                async_next = xpuoj_load_global_async128(
+-                    paged_decode_case13_kv8_headpair_z8_kernel<true><<<
++                    // exp721 changes only the case12 producer/consumer
++                    paged_decode_case13_kv8_headpair_z8_kernel<
+-                paged_decode_reduce_vec2_kernel<
++                // exp721 changes only the case12 consumer geometry and
++                const int group8_grid = (batch_size * 32 + 7) / 8;
++                paged_decode_reduce_group8_kernel<
++                    group8_grid, dim3(16, 8), group8_smem>>>(
+=== candidate active dispatch ===
+                        (int)pages_per_split, partial_split_count,
+                        sm_scale * 1.4426950408889634f);
+                }
+#endif
+            } else {
+                if (batch_size == 8 && seqlen_k == 32768) {
+                    // exp387: extend exp386's head-pair/z8 producer ownership
+                    // only to case12. exp414 uses split40/52 pages per partial,
+                    // fused-tail ownership, synchronous K+V-over-PV, Q
+                    // prescale, packed metadata, global partial count and vec2
+                    // reducer unchanged. exp428 changes only this z8
+                    // producer's QK exchange to the all-native row network.
+                    // exp721 changes only the case12 producer/consumer
+                    // storage contract: normalized BF16 partials feed the
+                    // independent group8 async128 reducer below.
+                    paged_decode_case13_kv8_headpair_z8_kernel<
+                        true, false, false, true><<<
+                        grid, dim3(16, 2, 8)>>>(
+                        q, k_cache_paged, v_cache_paged, output,
+                        cache_seqlens, block_table,
+                        s_partial_m, s_partial_l, s_partial_acc,
+                        (int)batch_size, (int)pages_per_batch,
+                        (int)pages_per_split, n_split,
+                        sm_scale * 1.4426950408889634f);
+                } else if (batch_size == 64 && seqlen_k == 2048) {
+                    // exp390: extend the case13/12/9 head-pair/z8 producer
+                    // ownership only to case7. Keep split14, ten
+                    s_partial_m, s_partial_l, s_partial_acc, output,
+                    cache_seqlens, (int)batch_size,
+                    (int)pages_per_split, reduce_splits);
+            } else if (num_heads_k == 8 && batch_size == 8 &&
+                       seqlen_k == 32768) {
+                // exp149: case12 shares case10's 128-partial one-head
+                // reducer shape. Preserve exp109's fused-tail owner count,
+                // but fill one complete C500 wave and own two dimensions per
+                // thread; producer, CTA count, workspace, and math stay fixed.
+                // exp721 changes only the case12 consumer geometry and
+                // storage contract: eight query heads share each 128-thread
+                // CTA, while normalized BF16 partials are streamed through
+                // the register-returning async128 issue/wait/consume path.
+                const int group8_grid = (batch_size * 32 + 7) / 8;
+                const size_t group8_smem =
+                    ((size_t)2 * (size_t)8 * (size_t)reduce_splits + 4) *
+                    sizeof(float);
+                paged_decode_reduce_group8_kernel<
+                    (XPUOJ_USE_BASE2 != 0), false, false, true,
+                    true, true, 0, true, true><<<
+                    group8_grid, dim3(16, 8), group8_smem>>>(
+                    s_partial_m, s_partial_l, s_partial_acc, output,
+                    cache_seqlens, (int)batch_size,
+                    (int)pages_per_split, reduce_splits);
+            } else if (num_heads_k == 8 && batch_size == 1 &&
+                       seqlen_k == 58966) {
+                // exp666: retain exp665's normalized-BF16 case13 producer and
+                // valid-tail path, but use the physical-row serial reducer.
+                // B1 case13 has only 32 reducer CTAs; give its four row
+                // leaders dedicated shared slots without changing grid/block.
+                const size_t vec2_smem =
+                    ((size_t)2 * (size_t)reduce_splits + 4) * sizeof(float);
+                paged_decode_reduce_vec2_kernel<
+                    (XPUOJ_USE_BASE2 != 0), false, true, false, true,
+                    true><<<
+                    rgrid, 64, vec2_smem>>>(
+                    s_partial_m, s_partial_l, s_partial_acc, output,
+                    cache_seqlens, (int)batch_size,
+                    (int)pages_per_split, reduce_splits);
+            } else if (num_heads_k == 4 && batch_size == 1 && seqlen_k == 61519) {
+                const size_t packed_rsmem =
+                    ((size_t)reduce_splits + 8) * sizeof(float);
+                paged_decode_reduce_kernel<
+                    (XPUOJ_USE_BASE2 != 0), false, true, true, true, true,
+                    true><<<
+                    rgrid, rthreads, packed_rsmem>>>(

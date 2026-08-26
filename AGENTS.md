@@ -34,6 +34,7 @@
 | control SHA-256 | `3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe` |
 | 历史最高 timing 样本 | `#115574`、`#116965` 并列 `66.14`；不是可归因的结构性 control |
 | 最新安全 probe | `#125788 / exp710 / 14/14 Accepted / 65.57`；未胜出 control，暂不切换 |
+| 当前 host GPU 能力 | 当前无可运行 GPU：`nvidia-smi` 不存在，`mx-smi` rc=2 无设备，仅有 `/dev/mxcd`（不视为 GPU）；每次新 session/换 host 必须重新核验 |
 | 动态执行状态 | 不在本文件固化；每次 session/压缩后实时查询 OJ 队列、活跃 subagent 和工作文件 SHA；最新逐提交事实见 `results/cuda_result.md` |
 | 工作文件 | `solutions/cuda_maca_optimized.cpp`；空闲时应与 control 字节一致，使用前必须实时核验 |
 | 第三名门槛 | `leadboard.md` 中的 `69.64` |
@@ -81,7 +82,7 @@ OJ 固定快路径为 `seqlen_q=1`、32 query heads、4 或 8 KV heads、headdim
 - 不允许 NaN、Inf、未初始化或跨调用旧 partial；`run_kernel` 内不得调用 `cudaDeviceSynchronize()`；
 - 长 case reference 的 Exit 137/Killed 只表示资源失败，不能报告为数值通过。
 
-这些是实现必须保持的语义，不等于每次 OJ 前都必须完成全量本地覆盖。主 Agent 可按改动风险安排 smoke 或 target correctness，但某项本地验证尚未完成、本地环境无法覆盖或没有本地性能收益，本身都不能阻止一次探索性 OJ probe；候选拟被接受为新 control 前，必须完成短长度、页边界、split 边界、random、padding trap 和同进程 workspace reuse 等完整本地覆盖。
+这些是实现必须保持的语义，不等于每次 OJ 前都必须完成全量本地覆盖。当前 host 无可用 GPU：`nvidia-smi` 不存在，`mx-smi` rc=2 返回 `No available devices were discovered`，仅有 `/dev/mxcd`，不能视为可运行 GPU。本地仅做必要的 CPU/静态/源码审计及按需 compile-only、resource 或 LLVM 检查，均不得称为 GPU 验证；真实运行、correctness、性能和 display tier 以远端 OJ 为核心，本地无 GPU、覆盖缺失或无法复现不得阻止达到最低安全门槛且有明确目标的串行 probe。GPU 可用时再补齐 full、boundary、random、padding 和 workspace reuse 等覆盖；当前无 GPU 时依据 OJ 14/14 与必要安全证据判断 control，记录未覆盖风险并在具备 GPU 的环境后回补。
 
 ## 5. 候选与 OJ 闭环
 

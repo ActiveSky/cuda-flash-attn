@@ -1,0 +1,15 @@
+sha_chain:
+18d5908f778aed67ccf8e7038f723bbd9a816810a45999117768910e73dd1828  solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case12_group8_sync_bf16_exp730.cpp
+9496b2add95197c698c0ff39af34ec23bf766c7315078eeff9119a4d66d3aab0  solutions/archive/2026-08-24-experiments/cuda_control124611_z4_tail_trap_fix_exp710.cpp
+23ed23da50608d66dda439d8895ab0bf783a1f8fceb9efaabdf6e3120b6aa9f7  solutions/cuda_maca_optimized.cpp
+diff_hunks:
+@@ -2550,7 +2550,8 @@
+@@ -2929,10 +2930,17 @@
+@@ -5014,7 +5022,8 @@
+@@ -5060,21 +5069,38 @@
+@@ -5135,7 +5161,13 @@
+@@ -5149,7 +5181,11 @@
+@@ -5165,9 +5201,6 @@
+@@ -5179,9 +5212,30 @@
+@@ -5729,13 +5783,14 @@
+@@ -6023,15 +6078,20 @@

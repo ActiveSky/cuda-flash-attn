@@ -1,0 +1,190 @@
+=== source/static identity ===
+9496b2add95197c698c0ff39af34ec23bf766c7315078eeff9119a4d66d3aab0  solutions/archive/2026-08-24-experiments/cuda_control124611_z4_tail_trap_fix_exp710.cpp
+3d3e981ef2811b90569daca8139f385db39b15310df952b6663c0c5e8dbc735b  solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case12_group8_async_exp721.cpp
+candidate_equals_exp710=NO (expected)
+case manifest expectations:
+5487:    if (num_heads_k == 8 && batch_size == 8 && seqlen_k == 32768) {
+5520:    if (num_heads_k == 8 && batch_size == 8 && seqlen_k == 32768) n_split = 40;
+5524:    if (num_heads_k == 8 && batch_size == 1 && seqlen_k == 58966) n_split = 65;
+5598:         (batch_size == 8 && seqlen_k == 32768) ||
+5599:         (batch_size == 1 && seqlen_k == 58966));
+5818:                    (batch_size == 8 && seqlen_k == 32768) ||
+5819:                    (batch_size == 1 && seqlen_k == 58966)) {
+5861:                if (batch_size == 8 && seqlen_k == 32768) {
+5914:                } else if (batch_size == 1 && seqlen_k == 58966) {
+case12 producer/reducer dispatch:
+                }
+#endif
+            } else {
+                if (batch_size == 8 && seqlen_k == 32768) {
+                    // exp387: extend exp386's head-pair/z8 producer ownership
+                    // only to case12. exp414 uses split40/52 pages per partial,
+                    // fused-tail ownership, synchronous K+V-over-PV, Q
+                    // prescale, packed metadata, global partial count and vec2
+                    // reducer unchanged. exp428 changes only this z8
+                    // producer's QK exchange to the all-native row network.
+                    // exp721 changes only the case12 producer/consumer
+                    // storage contract: normalized BF16 partials feed the
+                    // independent group8 async128 reducer below.
+                    paged_decode_case13_kv8_headpair_z8_kernel<
+                        true, false, false, true><<<
+                        grid, dim3(16, 2, 8)>>>(
+                        q, k_cache_paged, v_cache_paged, output,
+                        cache_seqlens, block_table,
+                        s_partial_m, s_partial_l, s_partial_acc,
+                        (int)batch_size, (int)pages_per_batch,
+                        (int)pages_per_split, n_split,
+                        sm_scale * 1.4426950408889634f);
+                } else if (batch_size == 64 && seqlen_k == 2048) {
+            } else if (num_heads_k == 8 && batch_size == 8 &&
+                       seqlen_k == 32768) {
+                // exp149: case12 shares case10's 128-partial one-head
+                // reducer shape. Preserve exp109's fused-tail owner count,
+                // but fill one complete C500 wave and own two dimensions per
+                // thread; producer, CTA count, workspace, and math stay fixed.
+                // exp721 changes only the case12 consumer geometry and
+                // storage contract: eight query heads share each 128-thread
+                // CTA, while normalized BF16 partials are streamed through
+                // the register-returning async128 issue/wait/consume path.
+                const int group8_grid = (batch_size * 32 + 7) / 8;
+                const size_t group8_smem =
+                    ((size_t)2 * (size_t)8 * (size_t)reduce_splits + 4) *
+                    sizeof(float);
+                paged_decode_reduce_group8_kernel<
+                    (XPUOJ_USE_BASE2 != 0), false, false, true,
+                    true, true, 0, true, true><<<
+                    group8_grid, dim3(16, 8), group8_smem>>>(
+                    s_partial_m, s_partial_l, s_partial_acc, output,
+                    cache_seqlens, (int)batch_size,
+                    (int)pages_per_split, reduce_splits);
+            } else if (num_heads_k == 8 && batch_size == 1 &&
+                       seqlen_k == 58966) {
+                // exp666: retain exp665's normalized-BF16 case13 producer and
+                // valid-tail path, but use the physical-row serial reducer.
+case13 reducer dispatch (must remain vec2):
+                       seqlen_k == 58966) {
+                // exp666: retain exp665's normalized-BF16 case13 producer and
+                // valid-tail path, but use the physical-row serial reducer.
+                // B1 case13 has only 32 reducer CTAs; give its four row
+                // leaders dedicated shared slots without changing grid/block.
+                const size_t vec2_smem =
+                    ((size_t)2 * (size_t)reduce_splits + 4) * sizeof(float);
+                paged_decode_reduce_vec2_kernel<
+                    (XPUOJ_USE_BASE2 != 0), false, true, false, true,
+                    true><<<
+                    rgrid, 64, vec2_smem>>>(
+                    s_partial_m, s_partial_l, s_partial_acc, output,
+                    cache_seqlens, (int)batch_size,
+                    (int)pages_per_split, reduce_splits);
+            } else if (num_heads_k == 4 && batch_size == 1 && seqlen_k == 61519) {
+                const size_t packed_rsmem =
+                    ((size_t)reduce_splits + 8) * sizeof(float);
+                paged_decode_reduce_kernel<
+                    (XPUOJ_USE_BASE2 != 0), false, true, true, true, true,
+                    true><<<
+                    rgrid, rthreads, packed_rsmem>>>(
+                    s_partial_m, s_partial_l, s_partial_acc, output,
+                    cache_seqlens, (int)batch_size,
+                    (int)pages_per_split, reduce_splits);
+            } else if constexpr (separate_tail) {
+                paged_decode_reduce_kernel<
+source async references:
+116:__device__ __forceinline__ uint4 xpuoj_load_global_async128(
+119:    const XpuojAsyncLoadI4 raw = __builtin_mxc_load_global_async128(
+5032:          bool ASYNC_BF16_PARTIAL = false>
+5046:    static_assert(!ASYNC_BF16_PARTIAL ||
+5214:    if constexpr (ASYNC_BF16_PARTIAL) {
+5224:        uint4 async_current = xpuoj_load_global_async128(
+5250:                async_next = xpuoj_load_global_async128(
+case13 reducer source async contamination check:
+=== resource target tuples ===
+--
+164: maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+165- maca info  : staticMaxWarps/PEU : 5
+166- maca info  : Function properties for  _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb1ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+--
+168: maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+169- maca info  : staticMaxWarps/PEU : 5
+170- maca info  : Function properties for  _Z34paged_decode_token_parallel_kernelILi8ELi4ELb0ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb0ELb0ELb1ELb1ELb1ELb1ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+--
+172: maca info  : Used  74 MTregisters, 44 STregisters, 8320 bytes shared mem  
+173- maca info  : staticMaxWarps/PEU : 6
+174- maca info  : Function properties for  _Z34paged_decode_token_parallel_kernelILi8ELi4ELb1ELb0ELb0ELb0ELb0ELb1ELb0ELb0ELb1ELb0ELb1ELb1ELb0ELb0ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+--
+176: maca info  : Used  80 MTregisters, 44 STregisters, 8320 bytes shared mem  
+177- maca info  : staticMaxWarps/PEU : 6
+178- maca info  : Function properties for  _Z33paged_decode_split_qk_pair_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+--
+180: maca info  : Used  118 MTregisters, 50 STregisters, 8192 bytes shared mem  
+181- maca info  : staticMaxWarps/PEU : 4
+182- maca info  : Function properties for  _Z25paged_decode_split_kernelILi4ELi8EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+--
+184: maca info  : Used  104 MTregisters, 74 STregisters, 8192 bytes shared mem  
+185- maca info  : staticMaxWarps/PEU : 4
+186- maca info  : Function properties for  _Z25paged_decode_split_kernelILi8ELi4EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+--
+188: maca info  : Used  104 MTregisters, 74 STregisters, 8192 bytes shared mem  
+189- maca info  : staticMaxWarps/PEU : 4
+190- maca info  : Function properties for  _Z31paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb0ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+--
+192: maca info  : Used  38 MTregisters, 39 STregisters, 0 bytes shared mem  
+193- maca info  : staticMaxWarps/PEU : 8
+194- maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb1ELb1ELb0ELi0ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+--
+196: maca info  : Used  66 MTregisters, 24 STregisters, 0 bytes shared mem  
+197- maca info  : staticMaxWarps/PEU : 7
+198- maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb1ELb0ELb1ELi3ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+--
+200: maca info  : Used  58 MTregisters, 25 STregisters, 0 bytes shared mem  
+201- maca info  : staticMaxWarps/PEU : 8
+202- maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb1ELb0ELi0ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+--
+204: maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+205- maca info  : staticMaxWarps/PEU : 7
+206- maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb0ELb0ELb0ELi0ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+--
+208: maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+209- maca info  : staticMaxWarps/PEU : 7
+210- maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb0ELb0ELb0ELb0ELi0ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+--
+212: maca info  : Used  66 MTregisters, 26 STregisters, 0 bytes shared mem  
+213- maca info  : staticMaxWarps/PEU : 7
+214- maca info  : Function properties for  _Z31paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb1ELb1ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+--
+216: maca info  : Used  38 MTregisters, 36 STregisters, 0 bytes shared 10 warnings generated when compiling for xcore1000.
+217-mem  
+218- maca info  : staticMaxWarps/PEU : 8
+--
+221: maca info  : Used  64 MTregisters, 35 STregisters, 0 bytes shared mem  
+222- maca info  : staticMaxWarps/PEU : 8
+223: maca info  : Function properties for  _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb0ELb1ELb1ELb1ELi0ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+224-  0 bytes stack frame 
+225: maca info  : Used  42 MTregisters, 24 STregisters, 0 bytes shared mem  
+226- maca info  : staticMaxWarps/PEU : 8
+227- maca info  : Function properties for  _Z31paged_decode_reduce_vec2_kernelILb1ELb0ELb1ELb0ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+--
+229: maca info  : Used  36 MTregisters, 33 STregisters, 0 bytes shared mem  
+230- maca info  : staticMaxWarps/PEU : 8
+231- maca info  : Function properties for  _Z26paged_decode_reduce_kernelILb1ELb0ELb1ELb1ELb1ELb1ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+--
+233: maca info  : Used  40 MTregisters, 28 STregisters, 0 bytes shared mem  
+234- maca info  : staticMaxWarps/PEU : 8
+235- maca info  : Function properties for  _Z26paged_decode_reduce_kernelILb1ELb0ELb0ELb0ELb0ELb0ELb0EEvPKfS1_S1_P15__maca_bfloat16PKiiii 
+--
+237: maca info  : Used  40 MTregisters, 36 STregisters, 0 bytes shared mem  
+238- maca info  : staticMaxWarps/PEU : 8
+239- maca info  : Function properties for  _Z38paged_decode_case11_headpair_z4_kernelILb1ELb1ELb0ELb1ELb1ELb1ELb1ELb1ELb0ELb1ELb1ELb0ELb0ELb1ELb1ELb1ELb1ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+--
+241: maca info  : Used  80 MTregisters, 64 STregisters, 8320 bytes shared mem  
+242- maca info  : staticMaxWarps/PEU : 6
+243-solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case12_group8_async_exp721.cpp:348:40: warning: set minimum blocks' number is illegal in Maca and the value will be ignored [-Wmaca-min-blocks-per-multiprocessor]
+=== target LLVM intrinsic counts ===
+      4 llvm.mxc.arrive
+      5 llvm.mxc.barrier
+      4 llvm.mxc.load.global.async.v4i32
+target_symbol_present=3
+case13_vec2_symbol_present=3
+case13_vec2_async_intrinsics=case12_dynamic_smem_bytes=2576
+=== CPU/tooling result tails ===
+总计: 14/14 通过
+case 14: B= 1 L=61519 KV=4 perf | kv4-z4-mma     splits=257 pages/split=15

@@ -1,0 +1,15 @@
+exp731 CPU kernel-logic check
+
+candidate_sha256=0a3641330135853c8238a90132f2246c22cada03f714068129f604e793f90f05
+command=python3 tests/test_kernel_logic.py
+exit_code=0
+result=14/14 PASS
+
+max_err by case:
+  case1  0.000e+00    case2  6.384e-16    case3  1.332e-15
+  case4  1.332e-15    case5  1.332e-15    case6  9.992e-16
+  case7  1.443e-15    case8  1.360e-15    case9  1.332e-15
+  case10 5.551e-16    case11 9.992e-16    case12 1.332e-15
+  case13 1.013e-15    case14 5.551e-16
+
+validation_scope=CPU NumPy mathematical-contract check; not C500 GPU/OJ validation

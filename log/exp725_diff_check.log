@@ -1,0 +1,103 @@
+2026-08-25T11:52:27Z
+candidate
+61a2af7a70eaedeaf521124bb01072f7a99291a5d663761e76c9ac8429b2639a  solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case2_native_b128_vcopy_exp725.cpp
+exp710 guarded base
+9496b2add95197c698c0ff39af34ec23bf766c7315078eeff9119a4d66d3aab0  solutions/archive/2026-08-24-experiments/cuda_control124611_z4_tail_trap_fix_exp710.cpp
+diff -u exp710 candidate
+--- solutions/archive/2026-08-24-experiments/cuda_control124611_z4_tail_trap_fix_exp710.cpp	2026-08-24 18:32:24.195051429 +0000
++++ solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case2_native_b128_vcopy_exp725.cpp	2026-08-25 11:49:21.430534956 +0000
+@@ -144,7 +144,28 @@
+         reinterpret_cast<const uint4*>(v_row)[d4];
+ }
+ 
+-template <int KV_HEADS, int GQA>
++// exp725: case2's exact one-token rows use a distinct V memory consumer:
++// load one aligned 16-byte V chunk directly into a native register vector and
++// publish that raw BF16 payload with the matching native global store.  The
++// specialization is deliberately disabled for every other dispatch.
++using XpuojCase2NativeU4 = __NATIVE_VECTOR__(4, uint32_t);
++
++__device__ __forceinline__ XpuojCase2NativeU4
++xpuoj_case2_native_ldg_b128(const void* src)
++{
++    return __builtin_mxc_ldg_b128(
++        const_cast<void*>(src), 0, -1, true, true, false, false);
++}
++
++__device__ __forceinline__ void
++xpuoj_case2_native_stg_b128(void* dst, XpuojCase2NativeU4 value)
++{
++    __builtin_mxc_stg_b128_predicator(
++        reinterpret_cast<XpuojCase2NativeU4*>(dst), 0, value,
++        true, false, false, true, 1, MACA_ICMP_EQ);
++}
++
++template <int KV_HEADS, int GQA, bool EXACT_SINGLE_TOKEN_VCOPY = false>
+ __global__ void __launch_bounds__(GQA * 32)
+ paged_decode_two_token_kernel(
+     const __nv_bfloat16* __restrict__ q,
+@@ -162,6 +183,32 @@
+     const int lane = threadIdx.x & 31;
+     const int q_head_in_group = threadIdx.x >> 5;
+     if (q_head_in_group >= GQA) return;
++    const int seqlen = cache_seqlens[b];
++
++    // exp725: case2 permits a mixed batch of exact one- and two-token rows.
++    // For a one-token row softmax is identically one, so publish token0 V
++    // directly to every query head before touching Q, K, or token1.  Each
++    // active lane owns one aligned 16-byte chunk of the 256-byte row.
++    if constexpr (EXACT_SINGLE_TOKEN_VCOPY) {
++        if (seqlen == 1) {
++            const int h = kv_head * GQA + q_head_in_group;
++            const int pid = block_table[b * pages_per_batch];
++            const __nv_bfloat16* v_row =
++                v_cache + (pid * PAGE_TOKENS * KV_HEADS + kv_head) * HEAD_DIM;
++            __nv_bfloat16* out_row =
++                out + (b * 32 + h) * HEAD_DIM;
++            if (lane < 16) {
++                const void* src = static_cast<const void*>(
++                    reinterpret_cast<const uint8_t*>(v_row) + lane * 16);
++                void* dst = static_cast<void*>(
++                    reinterpret_cast<uint8_t*>(out_row) + lane * 16);
++                const XpuojCase2NativeU4 payload =
++                    xpuoj_case2_native_ldg_b128(src);
++                xpuoj_case2_native_stg_b128(dst, payload);
++            }
++            return;
++        }
++    }
+     const int h = kv_head * GQA + q_head_in_group;
+     const int pid = block_table[b * pages_per_batch];
+ 
+@@ -191,7 +238,6 @@
+         score[token] = part * sm_scale;
+     }
+ 
+-    const int seqlen = cache_seqlens[b];
+     const float m = seqlen > 1 ? fmaxf(score[0], score[1]) : score[0];
+     const float w0 = 1.f;
+     const float w1 = seqlen > 1 ? __expf(score[1] - m) : 0.f;
+@@ -5326,11 +5372,18 @@
+     if (seqlen_k == 2) {
+         const int grid = (int)(batch_size * num_heads_k);
+         if (num_heads_k == 4) {
+-            paged_decode_two_token_kernel<4, 8><<<grid, 256>>>(
++            paged_decode_two_token_kernel<4, 8, false><<<grid, 256>>>(
++                q, k_cache_paged, v_cache_paged, output,
++                cache_seqlens, block_table, (int)pages_per_batch, sm_scale);
++        } else if (batch_size == 4) {
++            // exp725 is isolated to the authoritative OJ case2 shape:
++            // B=4, KV8, seqlen_k capacity=2.  Only exact seqlen==1 rows
++            // enter the native V->output endpoint; seqlen==2 is unchanged.
++            paged_decode_two_token_kernel<8, 4, true><<<grid, 128>>>(
+                 q, k_cache_paged, v_cache_paged, output,
+                 cache_seqlens, block_table, (int)pages_per_batch, sm_scale);
+         } else {
+-            paged_decode_two_token_kernel<8, 4><<<grid, 128>>>(
++            paged_decode_two_token_kernel<8, 4, false><<<grid, 128>>>(
+                 q, k_cache_paged, v_cache_paged, output,
+                 cache_seqlens, block_table, (int)pages_per_batch, sm_scale);
+         }
+diff_exit=1 expected=1
+diff --check
+diff_check_exit=1 expected=1 with no whitespace output

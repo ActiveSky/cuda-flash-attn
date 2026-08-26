@@ -1,0 +1,1234 @@
+case12_manifest:
+343-    float* __restrict__ partial_m,    // [n_split, batch, num_heads]
+344-    float* __restrict__ partial_l,    // [n_split, batch, num_heads]
+345-    float* __restrict__ partial_acc,  // [n_split, batch, num_heads, headdim]
+346-    int batch_size,
+347-    int pages_per_batch,  // block_table 行宽 = num_blocks / batch_size
+348:    int pages_per_split,  // 每个 split 最多处理的 page 数
+349-    int n_split,          // split 总数（1 时直接输出，跳过归约）
+350-    float sm_scale)
+351-{
+352-    static_assert(KV_HEADS == 4 || KV_HEADS == 8, "fast path supports KV4/KV8");
+353-    static_assert(KV_HEADS * GQA == 32, "fixed h32 GQA mapping");
+--
+362-
+363-    // 有效 KV 范围：只遍历 [0, cache_seqlens[b])，超出即 padding
+364-    const int seqlen      = cache_seqlens[b];
+365-    const int valid_pages = (seqlen + PAGE_TOKENS - 1) / PAGE_TOKENS;
+366-
+367:    const int p_beg = split * pages_per_split;
+368:    const int p_end = min(p_beg + pages_per_split, valid_pages);
+369-
+370-    if (p_beg >= p_end) return;
+371-
+372-    // 加载本 warp 的 q：dims {2*lane, 2*lane+1, 2*lane+64, 2*lane+65}
+373-    // （每 2 个连续 bf16 打包为 1 个 uint32 读入）
+--
+518-    int64_t num_heads,
+519-    int64_t num_heads_k,
+520-    int64_t headdim,
+521-    int64_t page_block_size,
+522-    int64_t pages_per_batch,
+523:    int64_t pages_per_split,
+524-    int64_t n_split,
+525-    float sm_scale)
+526-{
+527-#if XPUOJ_HAS_MACA_WMMA && defined(__CUDA_ARCH__)
+528-    using namespace mxmaca;
+--
+531-    const int64_t kv_head = blockIdx.x % num_heads_k;
+532-    const int64_t split = blockIdx.y;
+533-    const int gqa_ratio = (int)(num_heads / num_heads_k);
+534-    const int64_t seqlen = cache_seqlens[b];
+535-    const int64_t valid_pages = (seqlen + page_block_size - 1) / page_block_size;
+536:    const int64_t p_beg = split * pages_per_split;
+537:    const int64_t p_end = min(p_beg + pages_per_split, valid_pages);
+538-
+539-    const int32_t* bt_row = block_table + b * pages_per_batch;
+540-    const int64_t kv_stride = num_heads_k * headdim;
+541-
+542-    // Each outer index is a m16n16k16 K tile. Q is tile-packed as
+--
+709-    float* __restrict__ partial_m,    // [n_split, batch, num_heads]
+710-    float* __restrict__ partial_l,    // [n_split, batch, num_heads]
+711-    float* __restrict__ partial_acc,  // [n_split, batch, num_heads, headdim]
+712-    int batch_size,
+713-    int pages_per_batch,  // block_table 行宽 = num_blocks / batch_size
+714:    int pages_per_split,  // 每个 split 最多处理的 page 数
+715-    int n_split,          // split 总数（1 时直接输出，跳过归约）
+716-    float sm_scale)
+717-{
+718-    static_assert(KV_HEADS == 4 || KV_HEADS == 8, "fast path supports KV4/KV8");
+719-    static_assert(KV_HEADS * GQA == 32, "fixed h32 GQA mapping");
+--
+728-
+729-    // 有效 KV 范围：只遍历 [0, cache_seqlens[b])，超出即 padding
+730-    const int seqlen      = cache_seqlens[b];
+731-    const int valid_pages = (seqlen + PAGE_TOKENS - 1) / PAGE_TOKENS;
+732-
+733:    const int p_beg = split * pages_per_split;
+734:    const int p_end = min(p_beg + pages_per_split, valid_pages);
+735-
+736-    if (p_beg >= p_end) return;
+737-
+738-    // Pair-token QK divides each 32-lane warp into two 16-lane subgroups.
+739-    // Each subgroup owns one token and eight dimensions per lane, so both
+--
+1237-    float* __restrict__ partial_m,
+1238-    float* __restrict__ partial_l,
+1239-    float* __restrict__ partial_acc,
+1240-    int batch_size,
+1241-    int pages_per_batch,
+1242:    int pages_per_split,
+1243-    int n_split,
+1244-    float sm_scale)
+1245-{
+1246-    static_assert(KV_HEADS == 4 || KV_HEADS == 8, "fast path supports KV4/KV8");
+1247-    static_assert(KV_HEADS * GQA == 32, "fixed h32 GQA mapping");
+--
+1295-    int p_end;
+1296-    if constexpr (CASE4_DEDICATED) {
+1297-        p_beg = 0;
+1298-        p_end = (seqlen + PAGE_TOKENS - 1) / PAGE_TOKENS;
+1299-    } else if constexpr (FULL_PAGES_ONLY) {
+1300:        p_beg = split * pages_per_split;
+1301:        p_end = min(p_beg + pages_per_split, full_pages);
+1302-    } else if constexpr (TAIL_PAGE_ONLY) {
+1303-        if ((seqlen & (PAGE_TOKENS - 1)) == 0) return;
+1304-        p_beg = full_pages;
+1305-        p_end = full_pages + 1;
+1306:        out_split = (full_pages + pages_per_split - 1) / pages_per_split;
+1307-    } else {
+1308-        const int valid_pages =
+1309-            (seqlen + PAGE_TOKENS - 1) / PAGE_TOKENS;
+1310:        p_beg = split * pages_per_split;
+1311:        p_end = min(p_beg + pages_per_split, valid_pages);
+1312-    }
+1313-
+1314-    const bool owns_fused_tail = FUSE_TAIL_IN_LAST_SPLIT &&
+1315-        ((seqlen & (PAGE_TOKENS - 1)) != 0) &&
+1316-        split == (full_pages > 0
+1317:            ? (full_pages - 1) / pages_per_split : 0);
+1318-    if (p_beg >= p_end && !owns_fused_tail) return;
+1319-
+1320-    // K and V occupy 8 KiB together.  Declared first so the KV4 Q staging can
+1321-    // optionally reuse the K half instead of a separate dynamic buffer: with
+1322-    // INPLACE_SHARED_Q (case 11) Q is staged into s_k and read into registers
+--
+2549-}
+2550-
+2551-template <bool ALL_NATIVE_ROW_QK = false, bool NATIVE_HEAD_BIT1 = false,
+2552-          bool FIXED_LIVE_BUCKETS = false,
+2553-          bool BF16_NORMALIZED_PARTIAL = false,
+2554:          bool FP16_PACKED_ML_PARTIAL = true>
+2555-__global__ void __launch_bounds__(256)
+2556-paged_decode_case13_kv8_headpair_z8_kernel(
+2557-    const __nv_bfloat16* __restrict__ q,
+2558-    const __nv_bfloat16* __restrict__ k_cache,
+2559-    const __nv_bfloat16* __restrict__ v_cache,
+--
+2563-    float* __restrict__ partial_m,
+2564-    float* __restrict__ partial_l,
+2565-    float* __restrict__ partial_acc,
+2566-    int batch_size,
+2567-    int pages_per_batch,
+2568:    int pages_per_split,
+2569-    int n_split,
+2570-    float sm_scale)
+2571-{
+2572-    const int tx = threadIdx.x;
+2573-    const int ty = threadIdx.y;
+--
+2609-            ((seqlen & (PAGE_TOKENS - 1)) != 0) &&
+2610-            split == live_splits - 1;
+2611-        if (split >= live_splits ||
+2612-            (p_beg >= p_end && !owns_fused_tail)) return;
+2613-    } else {
+2614:        p_beg = split * pages_per_split;
+2615:        p_end = min(p_beg + pages_per_split, full_pages);
+2616-        owns_fused_tail =
+2617-            ((seqlen & (PAGE_TOKENS - 1)) != 0) &&
+2618-            split == (full_pages > 0
+2619:                ? (full_pages - 1) / pages_per_split : 0);
+2620-        if (p_beg >= p_end && !owns_fused_tail) return;
+2621-    }
+2622-
+2623-    constexpr int KV_BUFFER_BYTES =
+2624-        2 * PAGE_TOKENS * U32_PER_ROW * (int)sizeof(uint32_t);
+--
+2928-            s_acc + local_h1 * HEAD_DIM + tx * 8);
+2929-
+2930-        const int idx0 = (split * batch_size + b) * 32 + h0;
+2931-        const int idx1 = (split * batch_size + b) * 32 + h1;
+2932-        if (tx == 0) {
+2933:            if constexpr (FP16_PACKED_ML_PARTIAL) {
+2934-                *reinterpret_cast<__half2*>(partial_m + idx0) =
+2935-                    __floats2half2_rn(m0, l0);
+2936-                *reinterpret_cast<__half2*>(partial_m + idx1) =
+2937-                    __floats2half2_rn(m1, l1);
+2938-            } else {
+--
+3269-          bool PRESCALE_Q = false,
+3270-          bool BF16_NORMALIZED_PARTIAL = false,
+3271-          bool NATIVE_ROW16_QK = false,
+3272-          bool CASE8_FIXED_19_PAGES = false,
+3273-          bool CASE14_FIXED_15_PAGES = false,
+3274:          bool FP16_PACKED_ML_PARTIAL = false,
+3275-          bool DISTRIBUTED_ROW_EXP = false,
+3276-          bool DISTRIBUTED_SCORE_STATE = false,
+3277-          bool DISTRIBUTED_HEAD_MAX = false,
+3278-          bool SKIP_EMPTY_RESCALE = false,
+3279-          bool BF16_MMA_QK = false,
+--
+3289-    float* __restrict__ partial_m,
+3290-    float* __restrict__ partial_l,
+3291-    float* __restrict__ partial_acc,
+3292-    int batch_size,
+3293-    int pages_per_batch,
+3294:    int pages_per_split,
+3295-    int n_split,
+3296-    float sm_scale)
+3297-{
+3298-    static_assert(!(FULL_PAGES_ONLY && TAIL_PAGE_ONLY), "exclusive page modes");
+3299-    static_assert(!FUSE_TAIL_IN_LAST_SPLIT || FULL_PAGES_ONLY,
+--
+3359-    const int full_pages = seqlen / PAGE_TOKENS;
+3360-    int out_split = split;
+3361-    int p_beg;
+3362-    int p_end;
+3363-    if constexpr (FULL_PAGES_ONLY) {
+3364:        p_beg = split * pages_per_split;
+3365:        p_end = min(p_beg + pages_per_split, full_pages);
+3366-    } else if constexpr (TAIL_PAGE_ONLY) {
+3367-        if ((seqlen & (PAGE_TOKENS - 1)) == 0) return;
+3368-        p_beg = full_pages;
+3369-        p_end = full_pages + 1;
+3370:        out_split = (full_pages + pages_per_split - 1) / pages_per_split;
+3371-    } else {
+3372-        const int valid_pages =
+3373-            (seqlen + PAGE_TOKENS - 1) / PAGE_TOKENS;
+3374:        p_beg = split * pages_per_split;
+3375:        p_end = min(p_beg + pages_per_split, valid_pages);
+3376-    }
+3377-    const bool owns_fused_tail = FUSE_TAIL_IN_LAST_SPLIT &&
+3378-        ((seqlen & (PAGE_TOKENS - 1)) != 0) &&
+3379-        split == (full_pages > 0
+3380:            ? (full_pages - 1) / pages_per_split : 0);
+3381-    if (p_beg >= p_end && !owns_fused_tail) return;
+3382-
+3383-    constexpr int KV_BUFFER_BYTES =
+3384-        2 * PAGE_TOKENS * U32_PER_ROW * (int)sizeof(uint32_t);
+3385-    constexpr int MD_BYTES = PAGE_TOKENS * 2 * (int)sizeof(float);
+--
+3939-                        acc0[2 * i] * inv_l0, acc0[2 * i + 1] * inv_l0);
+3940-                }
+3941-            } else {
+3942-                const int idx0 = (out_split * batch_size + b) * 32 + h0;
+3943-                if (tx == 0) {
+3944:                    if constexpr (FP16_PACKED_ML_PARTIAL) {
+3945-                        *reinterpret_cast<__half2*>(partial_m + idx0) =
+3946-                            __floats2half2_rn(m0, l0);
+3947-                    } else {
+3948-                        partial_m[idx0] = m0;
+3949-                        partial_l[idx0] = l0;
+--
+3986-                        acc1[2 * i] * inv_l1, acc1[2 * i + 1] * inv_l1);
+3987-                }
+3988-            } else {
+3989-                const int idx1 = (out_split * batch_size + b) * 32 + h1;
+3990-                if (tx == 0) {
+3991:                    if constexpr (FP16_PACKED_ML_PARTIAL) {
+3992-                        *reinterpret_cast<__half2*>(partial_m + idx1) =
+3993-                            __floats2half2_rn(m1, l1);
+3994-                    } else {
+3995-                        partial_m[idx1] = m1;
+3996-                        partial_l[idx1] = l1;
+--
+4062-                }
+4063-            } else {
+4064-                const int idx0 = (out_split * batch_size + b) * 32 + h0;
+4065-                const int idx1 = (out_split * batch_size + b) * 32 + h1;
+4066-                if (tx == 0) {
+4067:                    if constexpr (FP16_PACKED_ML_PARTIAL) {
+4068-                        // exp288/291: case14 already stores normalized BF16
+4069-                        // accumulators. Pack both scalar merge statistics in the
+4070-                        // existing four-byte partial_m slot and omit partial_l.
+4071-                        *reinterpret_cast<__half2*>(partial_m + idx0) =
+4072-                            __floats2half2_rn(m0, l0);
+--
+4131-    float* __restrict__ partial_m,
+4132-    float* __restrict__ partial_l,
+4133-    float* __restrict__ partial_acc,
+4134-    int batch_size,
+4135-    int pages_per_batch,
+4136:    int pages_per_split,
+4137-    int n_split,
+4138-    float sm_scale)
+4139-{
+4140-    static_assert(!(FULL_PAGES_ONLY && TAIL_PAGE_ONLY), "exclusive page modes");
+4141-    const int tx = threadIdx.x;
+--
+4150-    const int full_pages = seqlen / PAGE_TOKENS;
+4151-    int out_split = split;
+4152-    int p_beg;
+4153-    int p_end;
+4154-    if constexpr (FULL_PAGES_ONLY) {
+4155:        p_beg = split * pages_per_split;
+4156:        p_end = min(p_beg + pages_per_split, full_pages);
+4157-    } else if constexpr (TAIL_PAGE_ONLY) {
+4158-        if ((seqlen & (PAGE_TOKENS - 1)) == 0) return;
+4159-        p_beg = full_pages;
+4160-        p_end = full_pages + 1;
+4161:        out_split = (full_pages + pages_per_split - 1) / pages_per_split;
+4162-    } else {
+4163-        const int valid_pages =
+4164-            (seqlen + PAGE_TOKENS - 1) / PAGE_TOKENS;
+4165:        p_beg = split * pages_per_split;
+4166:        p_end = min(p_beg + pages_per_split, valid_pages);
+4167-    }
+4168-    if (p_beg >= p_end) return;
+4169-
+4170-    constexpr int KV_BUFFER_BYTES =
+4171-        2 * PAGE_TOKENS * U32_PER_ROW * (int)sizeof(uint32_t);
+--
+4376-// 仅计算一次稳定 LSE 权重，再由各维度线程读取该权重合并 partial_acc。
+4377-// ============================================================================
+4378-template <bool BASE2, bool SEPARATE_TAIL = false,
+4379-          bool BF16_NORMALIZED_PARTIAL = false,
+4380-          bool FUSE_TAIL_IN_LAST_SPLIT = false,
+4381:          bool FP16_PACKED_ML_PARTIAL = false,
+4382-          bool REGISTER_PACKED_ML = false,
+4383-          bool NATIVE_ROW16_REDUCE = false>
+4384-__global__ void __launch_bounds__(128)
+4385-paged_decode_reduce_kernel(
+4386-    const float* __restrict__ partial_m,
+4387-    const float* __restrict__ partial_l,
+4388-    const float* __restrict__ partial_acc,
+4389-    __nv_bfloat16* __restrict__ out,
+4390-    const int32_t* __restrict__ cache_seqlens,
+4391-    int batch_size,
+4392:    int pages_per_split,
+4393-    int n_split)
+4394-{
+4395:    static_assert(!FP16_PACKED_ML_PARTIAL || BF16_NORMALIZED_PARTIAL,
+4396-                  "packed m/l requires normalized partial accumulators");
+4397:    static_assert(!REGISTER_PACKED_ML || FP16_PACKED_ML_PARTIAL,
+4398-                  "register m/l retention requires packed metadata");
+4399-    const int tid = threadIdx.x;
+4400-    const int lane = tid & 31;
+4401-    const int warp = tid >> 5;
+4402-    const int row16_lane = tid & 15;
+--
+4409-    if constexpr (SEPARATE_TAIL) {
+4410-        const int full_pages = seqlen / PAGE_TOKENS;
+4411-        const int main_splits = n_split - 1;
+4412-        live_splits = min(
+4413-            main_splits,
+4414:            (full_pages + pages_per_split - 1) / pages_per_split);
+4415-        live_splits += (seqlen & (PAGE_TOKENS - 1)) != 0;
+4416-    } else if constexpr (FUSE_TAIL_IN_LAST_SPLIT) {
+4417-        // The producer folds a partial tail page into the final split that
+4418:        // owns full pages.  Counting ceil(valid_pages/pages_per_split) would
+4419-        // invent an unwritten split whenever full_pages is an exact multiple
+4420:        // of pages_per_split.  A tail-only sequence is represented by split 0.
+4421-        const int full_pages = seqlen / PAGE_TOKENS;
+4422-        live_splits = full_pages > 0
+4423-            ? min(n_split,
+4424:                  (full_pages + pages_per_split - 1) / pages_per_split)
+4425-            : ((seqlen & (PAGE_TOKENS - 1)) != 0);
+4426-    } else {
+4427-        const int valid_pages =
+4428-            (seqlen + PAGE_TOKENS - 1) / PAGE_TOKENS;
+4429-        live_splits = min(
+4430:            n_split, (valid_pages + pages_per_split - 1) / pages_per_split);
+4431-    }
+4432-
+4433-    // Random cache lengths frequently leave only split zero alive.  In that
+4434-    // case its accumulator is already expressed at partial_m's scale, so the
+4435-    // final result is simply acc / l and needs no LSE merge or shared memory.
+--
+4499-        m_local = fmaxf(own_m0, fmaxf(own_m1, own_m2));
+4500-    } else {
+4501-        for (int s = tid; s < live_splits; s += blockDim.x) {
+4502-            const int hidx = (s * batch_size + b) * 32 + h;
+4503-            float ms;
+4504:            if constexpr (FP16_PACKED_ML_PARTIAL) {
+4505-                const __half2 packed =
+4506-                    *reinterpret_cast<const __half2*>(partial_m + hidx);
+4507-                const float2 ml = __half22float2(packed);
+4508-                ms = ml.x;
+4509-                // s_w is dead until the exponent pass, so retain l here.
+--
+4575-        }
+4576-    } else {
+4577-        for (int s = tid; s < live_splits; s += blockDim.x) {
+4578-            const int hidx = (s * batch_size + b) * 32 + h;
+4579-            const float w = softmax_exp<BASE2>(s_m[s] - m);
+4580:            const float partial_l_value = FP16_PACKED_ML_PARTIAL
+4581-                ? s_w[s] : partial_l[hidx];
+4582-            const float lw = partial_l_value * w;
+4583-            if constexpr (BF16_NORMALIZED_PARTIAL) {
+4584-                // Normalized BF16 partials need the complete LSE coefficient.
+4585-                s_w[s] = lw;
+--
+4651-    const float* __restrict__ partial_l,
+4652-    const float* __restrict__ partial_acc,
+4653-    __nv_bfloat16* __restrict__ out,
+4654-    const int32_t* __restrict__ cache_seqlens,
+4655-    int batch_size,
+4656:    int pages_per_split,
+4657-    int n_split)
+4658-{
+4659-    const int lane = threadIdx.x;
+4660-    const int bh = blockIdx.x;
+4661-    const int b = bh >> 5;
+--
+4665-    if constexpr (SEPARATE_TAIL) {
+4666-        const int full_pages = seqlen / PAGE_TOKENS;
+4667-        const int main_splits = n_split - 1;
+4668-        live_splits = min(
+4669-            main_splits,
+4670:            (full_pages + pages_per_split - 1) / pages_per_split);
+4671-        live_splits += (seqlen & (PAGE_TOKENS - 1)) != 0;
+4672-    } else if constexpr (FUSE_TAIL_IN_LAST_SPLIT) {
+4673-        const int full_pages = seqlen / PAGE_TOKENS;
+4674-        live_splits = full_pages > 0
+4675-            ? min(n_split,
+4676:                  (full_pages + pages_per_split - 1) / pages_per_split)
+4677-            : ((seqlen & (PAGE_TOKENS - 1)) != 0);
+4678-    } else {
+4679-        const int valid_pages = (seqlen + PAGE_TOKENS - 1) / PAGE_TOKENS;
+4680-        live_splits = min(
+4681:            n_split, (valid_pages + pages_per_split - 1) / pages_per_split);
+4682-    }
+4683-    __nv_bfloat16* out_ptr =
+4684-        out + (b * 32 + h) * HEAD_DIM + lane * 4;
+4685-
+4686-    if (live_splits <= 1) {
+--
+4761-    const float* __restrict__ partial_l,
+4762-    const float* __restrict__ partial_acc,
+4763-    __nv_bfloat16* __restrict__ out,
+4764-    const int32_t* __restrict__ cache_seqlens,
+4765-    int batch_size,
+4766:    int pages_per_split,
+4767-    int n_split)
+4768-{
+4769-    const int tid = threadIdx.x;
+4770-    const int lane = tid & 31;
+4771-    const int warp = tid >> 5;
+--
+4777-    if constexpr (SEPARATE_TAIL) {
+4778-        const int full_pages = seqlen / PAGE_TOKENS;
+4779-        const int main_splits = n_split - 1;
+4780-        live_splits = min(
+4781-            main_splits,
+4782:            (full_pages + pages_per_split - 1) / pages_per_split);
+4783-        live_splits += (seqlen & (PAGE_TOKENS - 1)) != 0;
+4784-    } else if constexpr (FUSE_TAIL_IN_LAST_SPLIT) {
+4785-        const int full_pages = seqlen / PAGE_TOKENS;
+4786-        live_splits = full_pages > 0
+4787-            ? min(n_split,
+4788:                  (full_pages + pages_per_split - 1) / pages_per_split)
+4789-            : ((seqlen & (PAGE_TOKENS - 1)) != 0);
+4790-    } else {
+4791-        const int valid_pages =
+4792-            (seqlen + PAGE_TOKENS - 1) / PAGE_TOKENS;
+4793-        live_splits = min(
+4794:            n_split, (valid_pages + pages_per_split - 1) / pages_per_split);
+4795-    }
+4796-
+4797-    __nv_bfloat162* out_ptr = reinterpret_cast<__nv_bfloat162*>(
+4798-        out + (b * 32 + h) * HEAD_DIM);
+4799-    if (live_splits <= 1) {
+--
+5030-    const float* __restrict__ partial_l,
+5031-    const float* __restrict__ partial_acc,
+5032-    __nv_bfloat16* __restrict__ out,
+5033-    const int32_t* __restrict__ cache_seqlens,
+5034-    int batch_size,
+5035:    int pages_per_split,
+5036-    int n_split)
+5037-{
+5038-    static_assert(STATIC_WEIGHT_SPLITS == 0 || SHUFFLE_WEIGHTS,
+5039-                  "static group8 weights require shuffle-owned metadata");
+5040-    constexpr int HEADS_PER_CTA = 8;
+--
+5047-    if constexpr (SEPARATE_TAIL) {
+5048-        const int full_pages = seqlen / PAGE_TOKENS;
+5049-        const int main_splits = n_split - 1;
+5050-        live_splits = min(
+5051-            main_splits,
+5052:            (full_pages + pages_per_split - 1) / pages_per_split);
+5053-        live_splits += (seqlen & (PAGE_TOKENS - 1)) != 0;
+5054-    } else if constexpr (FUSE_TAIL_IN_LAST_SPLIT) {
+5055-        const int full_pages = seqlen / PAGE_TOKENS;
+5056-        live_splits = full_pages > 0
+5057-            ? min(n_split,
+5058:                  (full_pages + pages_per_split - 1) / pages_per_split)
+5059-            : ((seqlen & (PAGE_TOKENS - 1)) != 0);
+5060-    } else {
+5061-        const int valid_pages =
+5062-            (seqlen + PAGE_TOKENS - 1) / PAGE_TOKENS;
+5063-        live_splits = min(
+5064:            n_split, (valid_pages + pages_per_split - 1) / pages_per_split);
+5065-    }
+5066-
+5067-    __nv_bfloat16* out_ptr = out + (b * 32 + h) * HEAD_DIM + tx * 8;
+5068-    if (live_splits <= 1) {
+5069-        float value[8] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
+--
+5314-    float* partial_m,
+5315-    float* partial_l,
+5316-    float* partial_acc,
+5317-    int batch_size,
+5318-    int pages_per_batch,
+5319:    int pages_per_split,
+5320-    int n_split,
+5321-    float sm_scale);
+5322-
+5323-// ============================================================================
+5324-// run_kernel：入口（extern "C"，符号与参数必须与题目约定完全一致）
+--
+5406-         (batch_size == 32 && seqlen_k == 4096))) {
+5407-        n_split *= 8;
+5408-    }
+5409-    // Case 12 boundary test: eight pages per partial, matching the proven
+5410-    // granularity of cases 7/9 and exposing 16384 total split CTAs.
+5411:    if (num_heads_k == 8 && batch_size == 8 && seqlen_k == 32768) {
+5412-        n_split *= 16;
+5413-    }
+5414-    // exp422: lane-local BF16 MMA shifts case 11's producer/reducer balance.
+5415-    // Use 39 slots (20 cache pages per live partial); split 39/40 were the
+5416-    // only sweep points that improved full, random and boundary distributions.
+--
+5439-    }
+5440-    // exp414: case12 now shares the five-wave head-pair/z8 producer. split40
+5441-    // retains 2560 producer CTAs while cutting workspace and vec2-reducer
+5442-    // input to 31.25% of the former split128 policy. Splits 39 and 41 are
+5443-    // both slower, so keep this isolated discrete optimum.
+5444:    if (num_heads_k == 8 && batch_size == 8 && seqlen_k == 32768) n_split = 40;
+5445-    // exp421/431: split65 remains the discrete optimum after the all-native
+5446-    // QK network; adjacent split64 is ~0.99% slower and split66 crosses a
+5447-    // 56-page critical-path cliff (~13.8% slower).
+5448-    if (num_heads_k == 8 && batch_size == 1 && seqlen_k == 58966) n_split = 65;
+5449-    // exp417: retain three-way split parallelism for variable per-batch
+--
+5459-    if (num_heads_k == 4 && batch_size == 16 && seqlen_k == 4096) n_split = 14;
+5460-    if (num_heads_k == 8 && batch_size == 16 && seqlen_k == 362) n_split = 8;
+5461-    // Case 14 split-boundary probe: one extra split changes the ceiling from
+5462-    // 16 to 15 pages/CTA while adding only four producer CTAs in total.
+5463-    if (num_heads_k == 4 && batch_size == 1 && seqlen_k == 61519) n_split = 257;
+5464:    const int64_t pages_per_split = (max_pages + n_split - 1) / n_split;
+5465-
+5466-    // ---- partial 缓冲（static 缓存，仅首次/扩容时分配；评测多轮调用零开销）----
+5467-    static float* s_partial_m = nullptr;
+5468-    static float* s_partial_l = nullptr;
+5469-    static float* s_partial_acc = nullptr;
+--
+5517-    // identical layout to the other long KV8 shapes to measure its split-KV behavior.
+5518-    const bool use_qk_pair =
+5519-        num_heads_k == 8 &&
+5520-        ((batch_size == 64 && seqlen_k == 2048) ||
+5521-         (batch_size == 32 && seqlen_k == 4096) ||
+5522:         (batch_size == 8 && seqlen_k == 32768) ||
+5523-         (batch_size == 1 && seqlen_k == 58966));
+5524-    if (use_token_parallel) {
+5525-        if (num_heads_k == 4) {
+5526-            const bool sync_kv4 = batch_size == 16 &&
+5527-                (seqlen_k == 4096 || seqlen_k == 12251);
+--
+5539-                            grid, dim3(16, 4, 4)>>>(
+5540-                            q, k_cache_paged, v_cache_paged, output,
+5541-                            cache_seqlens, block_table,
+5542-                            s_partial_m, s_partial_l, s_partial_acc,
+5543-                            (int)batch_size, (int)pages_per_batch,
+5544:                            (int)pages_per_split, partial_split_count,
+5545-                            sm_scale * 1.4426950408889634f);
+5546-                        paged_decode_case11_headpair_z4_kernel<
+5547-                            false, false, true, true><<<
+5548-                            tail_grid, dim3(16, 4, 4)>>>(
+5549-                            q, k_cache_paged, v_cache_paged, output,
+5550-                            cache_seqlens, block_table,
+5551-                            s_partial_m, s_partial_l, s_partial_acc,
+5552-                            (int)batch_size, (int)pages_per_batch,
+5553:                            (int)pages_per_split, partial_split_count,
+5554-                            sm_scale * 1.4426950408889634f);
+5555-                    } else {
+5556-                        paged_decode_case11_headpair_z4_kernel<
+5557-                            true, true, false, true><<<
+5558-                            grid, dim3(16, 4, 4)>>>(
+5559-                            q, k_cache_paged, v_cache_paged, output,
+5560-                            cache_seqlens, block_table,
+5561-                            s_partial_m, s_partial_l, s_partial_acc,
+5562-                            (int)batch_size, (int)pages_per_batch,
+5563:                            (int)pages_per_split, partial_split_count,
+5564-                            sm_scale * 1.4426950408889634f);
+5565-                        paged_decode_case11_headpair_z4_kernel<
+5566-                            true, false, true, true><<<
+5567-                            tail_grid, dim3(16, 4, 4)>>>(
+5568-                            q, k_cache_paged, v_cache_paged, output,
+5569-                            cache_seqlens, block_table,
+5570-                            s_partial_m, s_partial_l, s_partial_acc,
+5571-                            (int)batch_size, (int)pages_per_batch,
+5572:                            (int)pages_per_split, partial_split_count,
+5573-                            sm_scale * 1.4426950408889634f);
+5574-                    }
+5575-#endif
+5576-                } else {
+5577-                    // exp105/106: retain each shape's proven head-pair/z4
+--
+5596-                                grid, dim3(16, 4, 4)>>>(
+5597-                                q, k_cache_paged, v_cache_paged, output,
+5598-                                cache_seqlens, block_table,
+5599-                                s_partial_m, s_partial_l, s_partial_acc,
+5600-                                (int)batch_size, (int)pages_per_batch,
+5601:                                (int)pages_per_split, n_split,
+5602-                                sm_scale * 1.4426950408889634f);
+5603-                        } else {
+5604-                            launch_case8_exp340(
+5605-                                grid, q, k_cache_paged, v_cache_paged, output,
+5606-                                cache_seqlens, block_table,
+5607-                                s_partial_m, s_partial_l, s_partial_acc,
+5608-                                (int)batch_size, (int)pages_per_batch,
+5609:                                (int)pages_per_split, n_split,
+5610-                                sm_scale * 1.4426950408889634f);
+5611-                        }
+5612-                    } else {
+5613-                        // exp308 extends exp307 only for case11: each lane
+5614-                        // maintains one tx-selected head max and lane 0/4
+--
+5625-                            grid, dim3(16, 4, 4)>>>(
+5626-                            q, k_cache_paged, v_cache_paged, output,
+5627-                            cache_seqlens, block_table,
+5628-                            s_partial_m, s_partial_l, s_partial_acc,
+5629-                            (int)batch_size, (int)pages_per_batch,
+5630:                            (int)pages_per_split, n_split,
+5631-                            sm_scale * 1.4426950408889634f);
+5632-                    }
+5633-                }
+5634-            } else {
+5635-                if constexpr (separate_tail) {
+--
+5638-                        grid, dim3(16, 8, 2), 8 * U32_PER_ROW * sizeof(uint32_t)>>>(
+5639-                        q, k_cache_paged, v_cache_paged, output,
+5640-                        cache_seqlens, block_table,
+5641-                        s_partial_m, s_partial_l, s_partial_acc,
+5642-                        (int)batch_size, (int)pages_per_batch,
+5643:                        (int)pages_per_split, partial_split_count,
+5644-                        sm_scale * 1.4426950408889634f);
+5645-                    paged_decode_token_parallel_kernel<4, 8, false, false, true><<<
+5646-                        tail_grid, dim3(16, 8, 2),
+5647-                        8 * U32_PER_ROW * sizeof(uint32_t)>>>(
+5648-                        q, k_cache_paged, v_cache_paged, output,
+5649-                        cache_seqlens, block_table,
+5650-                        s_partial_m, s_partial_l, s_partial_acc,
+5651-                        (int)batch_size, (int)pages_per_batch,
+5652:                        (int)pages_per_split, partial_split_count,
+5653-                        sm_scale * 1.4426950408889634f);
+5654-#endif
+5655-                } else if (batch_size == 1 && seqlen_k == 61519) {
+5656-                    // exp163: exp63's case14 head-pair/z4 probe predated the
+5657-                    // synchronous register-lookahead that made exp120's
+--
+5669-                        false, true, true><<<grid, dim3(16, 4, 4)>>>(
+5670-                        q, k_cache_paged, v_cache_paged, output,
+5671-                        cache_seqlens, block_table,
+5672-                        s_partial_m, s_partial_l, s_partial_acc,
+5673-                        (int)batch_size, (int)pages_per_batch,
+5674:                        (int)pages_per_split, n_split,
+5675-                        sm_scale * 1.4426950408889634f);
+5676-                } else if (batch_size == 1 && seqlen_k == 8192) {
+5677-                    // exp382: case10 spends about 74% in its four-page/split
+5678-                    // producer.  Reuse the case8/11/14 head-pair/z4 layout so
+5679-                    // one K load/unpack feeds two query heads, while retaining
+--
+5686-                        true, true><<<grid, dim3(16, 4, 4)>>>(
+5687-                        q, k_cache_paged, v_cache_paged, output,
+5688-                        cache_seqlens, block_table,
+5689-                        s_partial_m, s_partial_l, s_partial_acc,
+5690-                        (int)batch_size, (int)pages_per_batch,
+5691:                        (int)pages_per_split, n_split,
+5692-                        sm_scale * 1.4426950408889634f);
+5693-                } else if (batch_size == 16 && seqlen_k == 141) {
+5694-                    // exp383: retain case5's five splits, combined masked
+5695-                    // tail, BSM loader, FP32 partial ABI and group8 reducer.
+5696-                    // Change only producer ownership to head-pair/z4 and
+--
+5701-                        false, true><<<grid, dim3(16, 4, 4)>>>(
+5702-                        q, k_cache_paged, v_cache_paged, output,
+5703-                        cache_seqlens, block_table,
+5704-                        s_partial_m, s_partial_l, s_partial_acc,
+5705-                        (int)batch_size, (int)pages_per_batch,
+5706:                        (int)pages_per_split, n_split,
+5707-                        sm_scale * 1.4426950408889634f);
+5708-                } else if (batch_size == 16 && seqlen_k == 17) {
+5709-                    // exp79: finish the fixed-row16 wrapper sweep on case3.
+5710-                    // Keep its single combined BSM launch and direct output.
+5711-                    // exp190: isolate the native row-local QK allreduce on
+--
+5718-                        8 * U32_PER_ROW * sizeof(uint32_t)>>>(
+5719-                        q, k_cache_paged, v_cache_paged, output,
+5720-                        cache_seqlens, block_table,
+5721-                        s_partial_m, s_partial_l, s_partial_acc,
+5722-                        (int)batch_size, (int)pages_per_batch,
+5723:                        (int)pages_per_split, n_split,
+5724-                        sm_scale * 1.4426950408889634f);
+5725-                } else {
+5726-                    paged_decode_token_parallel_kernel<4, 8, false><<<
+5727-                        grid, dim3(16, 8, 2),
+5728-                        8 * U32_PER_ROW * sizeof(uint32_t)>>>(
+5729-                        q, k_cache_paged, v_cache_paged, output,
+5730-                        cache_seqlens, block_table,
+5731-                        s_partial_m, s_partial_l, s_partial_acc,
+5732-                        (int)batch_size, (int)pages_per_batch,
+5733:                        (int)pages_per_split, n_split,
+5734-                        sm_scale * 1.4426950408889634f);
+5735-                }
+5736-            }
+5737-        } else {
+5738-            if constexpr (separate_tail) {
+5739-#if 0  // exp384: unreachable since exp109; avoid dead template instances.
+5740-                if ((batch_size == 32 && seqlen_k == 4096) ||
+5741-                    (batch_size == 64 && seqlen_k == 2048) ||
+5742:                    (batch_size == 8 && seqlen_k == 32768) ||
+5743-                    (batch_size == 1 && seqlen_k == 58966)) {
+5744-                    // exp72-75: add raw fixed-row16 QK exchange one shape at
+5745-                    // a time across cases9/7/12/13, retaining an independently
+5746-                    // measured control at every step.
+5747-                    paged_decode_token_parallel_kernel<
+--
+5749-                        grid, dim3(16, 4, 4)>>>(
+5750-                        q, k_cache_paged, v_cache_paged, output,
+5751-                        cache_seqlens, block_table,
+5752-                        s_partial_m, s_partial_l, s_partial_acc,
+5753-                        (int)batch_size, (int)pages_per_batch,
+5754:                        (int)pages_per_split, partial_split_count,
+5755-                        sm_scale * 1.4426950408889634f);
+5756-                    paged_decode_token_parallel_kernel<
+5757-                        8, 4, true, false, true, false, false, true><<<
+5758-                        tail_grid, dim3(16, 4, 4)>>>(
+5759-                        q, k_cache_paged, v_cache_paged, output,
+5760-                        cache_seqlens, block_table,
+5761-                        s_partial_m, s_partial_l, s_partial_acc,
+5762-                        (int)batch_size, (int)pages_per_batch,
+5763:                        (int)pages_per_split, partial_split_count,
+5764-                        sm_scale * 1.4426950408889634f);
+5765-                } else {
+5766-                    paged_decode_token_parallel_kernel<8, 4, true, true, false><<<
+5767-                        grid, dim3(16, 4, 4)>>>(
+5768-                        q, k_cache_paged, v_cache_paged, output,
+5769-                        cache_seqlens, block_table,
+5770-                        s_partial_m, s_partial_l, s_partial_acc,
+5771-                        (int)batch_size, (int)pages_per_batch,
+5772:                        (int)pages_per_split, partial_split_count,
+5773-                        sm_scale * 1.4426950408889634f);
+5774-                    paged_decode_token_parallel_kernel<8, 4, true, false, true><<<
+5775-                        tail_grid, dim3(16, 4, 4)>>>(
+5776-                        q, k_cache_paged, v_cache_paged, output,
+5777-                        cache_seqlens, block_table,
+5778-                        s_partial_m, s_partial_l, s_partial_acc,
+5779-                        (int)batch_size, (int)pages_per_batch,
+5780:                        (int)pages_per_split, partial_split_count,
+5781-                        sm_scale * 1.4426950408889634f);
+5782-                }
+5783-#endif
+5784-            } else {
+5785:                if (batch_size == 8 && seqlen_k == 32768) {
+5786-                    // exp730: case12 alone keeps the normalized-BF16 partial
+5787-                    // producer but stores its merge metadata as FP32 (m,l),
+5788-                    // allowing the synchronous group8 consumer to use the
+5789-                    // same metadata contract as the case5/6 BF16 probes.
+5790-                    // Split40, fused-tail ownership, QK/PV, GQA mapping and
+5791-                    // the valid-page/padding guard remain unchanged.
+5792-                    paged_decode_case13_kv8_headpair_z8_kernel<
+5793:                        true, false, false, true, false><<<
+5794-                        grid, dim3(16, 2, 8)>>>(
+5795-                        q, k_cache_paged, v_cache_paged, output,
+5796-                        cache_seqlens, block_table,
+5797-                        s_partial_m, s_partial_l, s_partial_acc,
+5798-                        (int)batch_size, (int)pages_per_batch,
+5799:                        (int)pages_per_split, n_split,
+5800-                        sm_scale * 1.4426950408889634f);
+5801-                } else if (batch_size == 64 && seqlen_k == 2048) {
+5802-                    // exp390: extend the case13/12/9 head-pair/z8 producer
+5803-                    // ownership only to case7. Keep split14, ten
+5804-                    // pages/partial, fused-tail ownership, synchronous
+--
+5812-                        grid, dim3(16, 2, 8)>>>(
+5813-                        q, k_cache_paged, v_cache_paged, output,
+5814-                        cache_seqlens, block_table,
+5815-                        s_partial_m, s_partial_l, s_partial_acc,
+5816-                        (int)batch_size, (int)pages_per_batch,
+5817:                        (int)pages_per_split, n_split,
+5818-                        sm_scale * 1.4426950408889634f);
+5819-                } else if (batch_size == 32 && seqlen_k == 4096) {
+5820-                    // exp389: retain exp388's case9 head-pair/z8 producer,
+5821-                    // but pair its packed FP16x2 (m,l) metadata contract with
+5822-                    // the packed-aware vec2 reducer below. exp415 tests
+--
+5828-                        grid, dim3(16, 2, 8)>>>(
+5829-                        q, k_cache_paged, v_cache_paged, output,
+5830-                        cache_seqlens, block_table,
+5831-                        s_partial_m, s_partial_l, s_partial_acc,
+5832-                        (int)batch_size, (int)pages_per_batch,
+5833:                        (int)pages_per_split, n_split,
+5834-                        sm_scale * 1.4426950408889634f);
+5835-                } else if (batch_size == 1 && seqlen_k == 58966) {
+5836-                    // exp386: isolate long-KV8 head-pair/z8 ownership on
+5837-                    // case13. exp421 uses split65/57 pages per partial while
+5838-                    // keeping synchronous page traffic, scalar K+V-over-PV,
+--
+5847-                        grid, dim3(16, 2, 8)>>>(
+5848-                        q, k_cache_paged, v_cache_paged, output,
+5849-                        cache_seqlens, block_table,
+5850-                        s_partial_m, s_partial_l, s_partial_acc,
+5851-                        (int)batch_size, (int)pages_per_batch,
+5852:                        (int)pages_per_split, n_split,
+5853-                        sm_scale * 1.4426950408889634f);
+5854-                } else if (batch_size == 64 && seqlen_k == 64) {
+5855-                    // exp77: case4 is the remaining BSM KV8 token-parallel
+5856-                    // shape; isolate raw row16 QK without changing its
+5857-                    // combined launch, direct-out path, or loader/barriers.
+--
+5866-                        grid, dim3(16, 4, 4)>>>(
+5867-                        q, k_cache_paged, v_cache_paged, output,
+5868-                        cache_seqlens, block_table,
+5869-                        s_partial_m, s_partial_l, s_partial_acc,
+5870-                        (int)batch_size, (int)pages_per_batch,
+5871:                        (int)pages_per_split, n_split,
+5872-                        sm_scale * 1.4426950408889634f);
+5873-                } else {
+5874-                    // exp78: case6 is the only remaining OJ KV8
+5875-                    // token-parallel instance using the width=16 wrapper.
+5876-                    // exp157: probe the three-pages-per-split boundary for
+--
+5889-                        grid, dim3(16, 4, 4)>>>(
+5890-                        q, k_cache_paged, v_cache_paged, output,
+5891-                        cache_seqlens, block_table,
+5892-                        s_partial_m, s_partial_l, s_partial_acc,
+5893-                        (int)batch_size, (int)pages_per_batch,
+5894:                        (int)pages_per_split, n_split,
+5895-                        sm_scale * 1.4426950408889634f);
+5896-                }
+5897-            }
+5898-        }
+5899-    } else if (use_qk_pair) {
+5900-        paged_decode_split_qk_pair_kernel<8, 4><<<grid, 128>>>(
+5901-            q, k_cache_paged, v_cache_paged, output, cache_seqlens, block_table,
+5902-            s_partial_m, s_partial_l, s_partial_acc,
+5903:            (int)batch_size, (int)pages_per_batch, (int)pages_per_split,
+5904-            n_split, sm_scale);
+5905-    } else {
+5906-        if (num_heads_k == 4) {
+5907-            paged_decode_split_kernel<4, 8><<<grid, 256>>>(
+5908-                q, k_cache_paged, v_cache_paged, output, cache_seqlens, block_table,
+5909-                s_partial_m, s_partial_l, s_partial_acc,
+5910:                (int)batch_size, (int)pages_per_batch, (int)pages_per_split,
+5911-                n_split, sm_scale);
+5912-        } else {
+5913-            paged_decode_split_kernel<8, 4><<<grid, 128>>>(
+5914-                q, k_cache_paged, v_cache_paged, output, cache_seqlens, block_table,
+5915-                s_partial_m, s_partial_l, s_partial_acc,
+5916:                (int)batch_size, (int)pages_per_batch, (int)pages_per_split,
+5917-                n_split, sm_scale);
+5918-        }
+5919-    }
+5920-#else
+5921-    if (num_heads_k == 4) {
+5922-        paged_decode_split_kernel<4, 8><<<grid, 256>>>(
+5923-            q, k_cache_paged, v_cache_paged, output, cache_seqlens, block_table,
+5924-            s_partial_m, s_partial_l, s_partial_acc,
+5925:            (int)batch_size, (int)pages_per_batch, (int)pages_per_split,
+5926-            n_split, sm_scale);
+5927-    } else {
+5928-        paged_decode_split_kernel<8, 4><<<grid, 128>>>(
+5929-            q, k_cache_paged, v_cache_paged, output, cache_seqlens, block_table,
+5930-            s_partial_m, s_partial_l, s_partial_acc,
+5931:            (int)batch_size, (int)pages_per_batch, (int)pages_per_split,
+5932-            n_split, sm_scale);
+5933-    }
+5934-#endif
+5935-
+5936-    // ---- launch 归约 kernel（单 split 已由主 kernel 直写）----
+--
+5949-            paged_decode_reduce_vec2_kernel<
+5950-                (XPUOJ_USE_BASE2 != 0), false, true><<<
+5951-                rgrid, 64, vec2_smem>>>(
+5952-                s_partial_m, s_partial_l, s_partial_acc, output,
+5953-                cache_seqlens, (int)batch_size,
+5954:                (int)pages_per_split, reduce_splits);
+5955-        } else if (reduce_splits <= 32) {
+5956-            const int rgrid = (int)(batch_size * 4);
+5957-            if (reduce_splits <= 16) {
+5958-                if (num_heads_k == 4 && batch_size == 16 &&
+5959-                    seqlen_k == 4096) {
+5960-                    // exp261: exp208's grouped reducer used the generic
+5961:                    // ceil(valid_pages/pages_per_split) live count even
+5962-                    // though case 8 folds a tail into its last full-page
+5963-                    // owner.  Use the already-validated fused-tail count so
+5964-                    // no unwritten partial is read, while reducing the final
+5965-                    // grid from 512 one-head CTAs to 64 eight-head CTAs.
+5966-                    paged_decode_reduce_group8_kernel<
+5967-                        (XPUOJ_USE_BASE2 != 0), false, true, true, true><<<
+5968:                        rgrid, dim3(16, 8), 0>>>(
+5969-                        s_partial_m, s_partial_l, s_partial_acc, output,
+5970-                        cache_seqlens, (int)batch_size,
+5971:                        (int)pages_per_split, reduce_splits);
+5972-                } else if (num_heads_k == 8 && batch_size == 64 &&
+5973-                    seqlen_k == 2048) {
+5974-                    // exp559: case7 has only one to three live split owners.
+5975-                    // Keep the rolled accumulator loop and packed FP16x2
+5976-                    // metadata, but use its fixed row-local source lanes for
+5977-                    // the producer-to-consumer softmax-weight handoff.
+5978-                    paged_decode_reduce_group8_kernel<
+5979-                        (XPUOJ_USE_BASE2 != 0), false, true, true,
+5980-                        false, true, 3><<<
+5981:                        rgrid, dim3(16, 8), 0>>>(
+5982-                        s_partial_m, s_partial_l, s_partial_acc, output,
+5983-                        cache_seqlens, (int)batch_size,
+5984:                        (int)pages_per_split, reduce_splits);
+5985-                } else if (batch_size == 16 &&
+5986-                           ((num_heads_k == 8 && seqlen_k == 362) ||
+5987-                            (num_heads_k == 4 && seqlen_k == 141))) {
+5988-                    // exp186: case6's producer already uses native row-local
+5989-                    // QK.  Isolate the same four-instruction network in the
+--
+5991-                    // its split-weight broadcasts and all producer policy.
+5992-                    // exp385 revalidates exp191's case5 reducer benefit after
+5993-                    // exp384 changed only case5's producer ownership.
+5994-                    paged_decode_reduce_group8_kernel<
+5995-                        (XPUOJ_USE_BASE2 != 0), false, true, false, true><<<
+5996:                        rgrid, dim3(16, 8), 0>>>(
+5997-                        s_partial_m, s_partial_l, s_partial_acc, output,
+5998-                        cache_seqlens, (int)batch_size,
+5999:                        (int)pages_per_split, reduce_splits);
+6000-                } else if constexpr (separate_tail) {
+6001-                    paged_decode_reduce_group8_kernel<
+6002-                        (XPUOJ_USE_BASE2 != 0), true, true><<<
+6003:                        rgrid, dim3(16, 8), 0>>>(
+6004-                        s_partial_m, s_partial_l, s_partial_acc, output,
+6005-                        cache_seqlens, (int)batch_size,
+6006:                        (int)pages_per_split, reduce_splits);
+6007-                } else {
+6008-                    paged_decode_reduce_group8_kernel<
+6009-                        (XPUOJ_USE_BASE2 != 0), false, true><<<
+6010:                        rgrid, dim3(16, 8), 0>>>(
+6011-                        s_partial_m, s_partial_l, s_partial_acc, output,
+6012-                        cache_seqlens, (int)batch_size,
+6013:                        (int)pages_per_split, reduce_splits);
+6014-                }
+6015-            } else {
+6016-                const size_t rsmem =
+6017-                    (size_t)16 * (size_t)reduce_splits * sizeof(float);
+6018-                if constexpr (separate_tail) {
+6019-                    paged_decode_reduce_group8_kernel<
+6020-                        (XPUOJ_USE_BASE2 != 0), true, false><<<
+6021:                        rgrid, dim3(16, 8), rsmem>>>(
+6022-                        s_partial_m, s_partial_l, s_partial_acc, output,
+6023-                        cache_seqlens, (int)batch_size,
+6024:                        (int)pages_per_split, reduce_splits);
+6025-                } else {
+6026-                    paged_decode_reduce_group8_kernel<
+6027-                        (XPUOJ_USE_BASE2 != 0), false, false><<<
+6028:                        rgrid, dim3(16, 8), rsmem>>>(
+6029-                        s_partial_m, s_partial_l, s_partial_acc, output,
+6030-                        cache_seqlens, (int)batch_size,
+6031:                        (int)pages_per_split, reduce_splits);
+6032-                }
+6033-            }
+6034-        } else {
+6035-            const int rthreads = HEAD_DIM;
+6036-            const int rgrid = (int)(batch_size * 32);
+--
+6049-                paged_decode_reduce_vec2_kernel<
+6050-                    (XPUOJ_USE_BASE2 != 0), false, true, true, true><<<
+6051-                    rgrid, 64, vec2_smem>>>(
+6052-                    s_partial_m, s_partial_l, s_partial_acc, output,
+6053-                    cache_seqlens, (int)batch_size,
+6054:                    (int)pages_per_split, reduce_splits);
+6055-            } else if (num_heads_k == 4 && batch_size == 16 &&
+6056-                       seqlen_k == 4096) {
+6057-                // exp106: case8 now has 48 fused-tail partial slots; preserve
+6058-                // exp88's vec4 ownership and count only full-page owners.
+6059-                const size_t vec4_smem =
+--
+6061-                paged_decode_reduce_vec4_kernel<
+6062-                    (XPUOJ_USE_BASE2 != 0), false, true><<<
+6063-                    rgrid, 32, vec4_smem>>>(
+6064-                    s_partial_m, s_partial_l, s_partial_acc, output,
+6065-                    cache_seqlens, (int)batch_size,
+6066:                    (int)pages_per_split, reduce_splits);
+6067-            } else if (num_heads_k == 4 && batch_size == 16 &&
+6068-                       seqlen_k == 12251) {
+6069-                // exp105: case11 now has fused-tail partial slots; preserve
+6070-                // exp89's vec4 ownership and count only full-page owners.
+6071-                const size_t vec4_smem =
+--
+6073-                paged_decode_reduce_vec4_kernel<
+6074-                    (XPUOJ_USE_BASE2 != 0), false, true><<<
+6075-                    rgrid, 32, vec4_smem>>>(
+6076-                    s_partial_m, s_partial_l, s_partial_acc, output,
+6077-                    cache_seqlens, (int)batch_size,
+6078:                    (int)pages_per_split, reduce_splits);
+6079-            } else if (num_heads_k == 8 && batch_size == 8 &&
+6080:                       seqlen_k == 32768) {
+6081-                // exp730: case12 consumes normalized BF16 partials through
+6082-                // the synchronous group8 reducer.  Each CTA owns eight query
+6083-                // heads; FP32 (m,l) stays in the existing metadata arrays,
+6084-                // while each lane owns one aligned 16-byte BF16 payload.
+6085-                // The fused-tail live-count and split40 workspace contract
+6086-                // are unchanged; only the reducer grid/block is replaced.
+6087:                const int group8_grid = (batch_size * 32 + 7) / 8;
+6088-                const size_t group8_smem =
+6089-                    ((size_t)2 * (size_t)8 * (size_t)reduce_splits + 4) *
+6090-                    sizeof(float);
+6091-                paged_decode_reduce_group8_kernel<
+6092-                    (XPUOJ_USE_BASE2 != 0), false, false, true,
+6093-                    true, false, 0, true><<<
+6094:                    group8_grid, dim3(16, 8), group8_smem>>>(
+6095-                    s_partial_m, s_partial_l, s_partial_acc, output,
+6096-                    cache_seqlens, (int)batch_size,
+6097:                    (int)pages_per_split, reduce_splits);
+6098-            } else if (num_heads_k == 8 && batch_size == 1 &&
+6099-                       seqlen_k == 58966) {
+6100-                // exp666: retain exp665's normalized-BF16 case13 producer and
+6101-                // valid-tail path, but use the physical-row serial reducer.
+6102-                // B1 case13 has only 32 reducer CTAs; give its four row
+--
+6107-                    (XPUOJ_USE_BASE2 != 0), false, true, false, true,
+6108-                    true><<<
+6109-                    rgrid, 64, vec2_smem>>>(
+6110-                    s_partial_m, s_partial_l, s_partial_acc, output,
+6111-                    cache_seqlens, (int)batch_size,
+6112:                    (int)pages_per_split, reduce_splits);
+6113-            } else if (num_heads_k == 4 && batch_size == 1 && seqlen_k == 61519) {
+6114-                const size_t packed_rsmem =
+6115-                    ((size_t)reduce_splits + 8) * sizeof(float);
+6116-                paged_decode_reduce_kernel<
+6117-                    (XPUOJ_USE_BASE2 != 0), false, true, true, true, true,
+6118-                    true><<<
+6119-                    rgrid, rthreads, packed_rsmem>>>(
+6120-                    s_partial_m, s_partial_l, s_partial_acc, output,
+6121-                    cache_seqlens, (int)batch_size,
+6122:                    (int)pages_per_split, reduce_splits);
+6123-            } else if constexpr (separate_tail) {
+6124-                paged_decode_reduce_kernel<
+6125-                    (XPUOJ_USE_BASE2 != 0), true><<<
+6126-                    rgrid, rthreads, rsmem>>>(
+6127-                    s_partial_m, s_partial_l, s_partial_acc, output,
+6128-                    cache_seqlens, (int)batch_size,
+6129:                    (int)pages_per_split, reduce_splits);
+6130-            } else {
+6131-                paged_decode_reduce_kernel<
+6132-                    (XPUOJ_USE_BASE2 != 0), false><<<
+6133-                    rgrid, rthreads, rsmem>>>(
+6134-                    s_partial_m, s_partial_l, s_partial_acc, output,
+6135-                    cache_seqlens, (int)batch_size,
+6136:                    (int)pages_per_split, reduce_splits);
+6137-            }
+6138-        }
+6139-    }
+6140-}
+6141-
+--
+6150-    float* partial_m,
+6151-    float* partial_l,
+6152-    float* partial_acc,
+6153-    int batch_size,
+6154-    int pages_per_batch,
+6155:    int pages_per_split,
+6156-    int n_split,
+6157-    float sm_scale)
+6158-{
+6159-    paged_decode_case11_headpair_z4_kernel<
+6160-        true, true, false, true, true, true, true, true,
+6161-        false, true, true, false, false, true, true, true, true, true,
+6162-        true><<<
+6163-        grid, dim3(16, 4, 4)>>>(
+6164-        q, k_cache, v_cache, out, cache_seqlens, block_table,
+6165-        partial_m, partial_l, partial_acc,
+6166:        batch_size, pages_per_batch, pages_per_split, n_split, sm_scale);
+6167-}
+tail_live_padding_guards:
+124:    const int32_t* __restrict__ block_table,
+137:    const int pid = block_table[b * pages_per_batch];
+155:    const int32_t* __restrict__ block_table,
+166:    const int pid = block_table[b * pages_per_batch];
+328://   - 只遍历 block_table[b] 中本 split 区间 [p_beg, p_end) 的有效 page，
+342:    const int32_t* __restrict__ block_table,
+347:    int pages_per_batch,  // block_table 行宽 = num_blocks / batch_size
+365:    const int valid_pages = (seqlen + PAGE_TOKENS - 1) / PAGE_TOKENS;
+367:    const int p_beg = split * pages_per_split;
+368:    const int p_end = min(p_beg + pages_per_split, valid_pages);
+370:    if (p_beg >= p_end) return;
+396:    const int32_t* bt_row = block_table + b * pages_per_batch;
+399:    for (int p = p_beg; p < p_end; p++) {
+513:    const int32_t* __restrict__ block_table,
+535:    const int64_t valid_pages = (seqlen + page_block_size - 1) / page_block_size;
+536:    const int64_t p_beg = split * pages_per_split;
+537:    const int64_t p_end = min(p_beg + pages_per_split, valid_pages);
+539:    const int32_t* bt_row = block_table + b * pages_per_batch;
+577:    for (int64_t p = p_beg; p < p_end; ++p) {
+708:    const int32_t* __restrict__ block_table,
+713:    int pages_per_batch,  // block_table 行宽 = num_blocks / batch_size
+731:    const int valid_pages = (seqlen + PAGE_TOKENS - 1) / PAGE_TOKENS;
+733:    const int p_beg = split * pages_per_split;
+734:    const int p_end = min(p_beg + pages_per_split, valid_pages);
+736:    if (p_beg >= p_end) return;
+768:    const int32_t* bt_row = block_table + b * pages_per_batch;
+771:    for (int p = p_beg; p < p_end; p++) {
+1236:    const int32_t* __restrict__ block_table,
+1294:    int p_beg;
+1295:    int p_end;
+1297:        p_beg = 0;
+1298:        p_end = (seqlen + PAGE_TOKENS - 1) / PAGE_TOKENS;
+1300:        p_beg = split * pages_per_split;
+1301:        p_end = min(p_beg + pages_per_split, full_pages);
+1304:        p_beg = full_pages;
+1305:        p_end = full_pages + 1;
+1308:        const int valid_pages =
+1310:        p_beg = split * pages_per_split;
+1311:        p_end = min(p_beg + pages_per_split, valid_pages);
+1314:    const bool owns_fused_tail = FUSE_TAIL_IN_LAST_SPLIT &&
+1318:    if (p_beg >= p_end && !owns_fused_tail) return;
+1391:    const int32_t* bt_row = block_table + b * pages_per_batch;
+1417:    if (!used_case4_fixed_4 && p_beg < p_end) {
+1418:        int32_t pid = bt_row[p_beg];
+1440:        for (int p = p_beg; p < p_end; ++p) {
+1560:            const bool has_next_page = p + 1 < p_end;
+1815:        if (owns_fused_tail) {
+1825:            const int tail_tokens = seqlen & (PAGE_TOKENS - 1);
+1829:                if (token < tail_tokens) {
+1893:                    if (token >= tail_tokens) continue;
+2437:    int pid, int kv_head, int tx, int ty, int tz, int tail_tokens)
+2440:    if (token >= tail_tokens) return;
+2498:    int tail_tokens,
+2507:    if (token_base < tail_tokens) {
+2519:    if (token_base + 1 < tail_tokens) {
+2562:    const int32_t* __restrict__ block_table,
+2585:    int p_beg;
+2586:    int p_end;
+2587:    bool owns_fused_tail;
+2592:        // exp448's per-row valid_pages/n_split division and never exposes a
+2606:        p_beg = split * bucket_pages;
+2607:        p_end = min(p_beg + bucket_pages, full_pages);
+2608:        owns_fused_tail =
+2612:            (p_beg >= p_end && !owns_fused_tail)) return;
+2614:        p_beg = split * pages_per_split;
+2615:        p_end = min(p_beg + pages_per_split, full_pages);
+2616:        owns_fused_tail =
+2620:        if (p_beg >= p_end && !owns_fused_tail) return;
+2662:    const int32_t* bt_row = block_table + b * pages_per_batch;
+2663:    if (p_beg < p_end) {
+2664:        int32_t pid = bt_row[p_beg];
+2670:        for (int p = p_beg; p < p_end; ++p) {
+2702:            const bool has_next_page = p + 1 < p_end;
+2790:    if (owns_fused_tail) {
+2792:        const int tail_tokens = seqlen & (PAGE_TOKENS - 1);
+2794:            k_cache, s_k, pid, kv_head, tx, ty, tz, tail_tokens);
+2796:            v_cache, s_v, pid, kv_head, tx, ty, tz, tail_tokens);
+2804:            if (token < tail_tokens) {
+2849:                    owned_score, m_new0, m_new1, s_v, tz * 2, tail_tokens, tx,
+2853:                    owned_score, m_new0, m_new1, s_v, tz * 2, tail_tokens, tx,
+2857:                    owned_score, m_new0, m_new1, s_v, tz * 2, tail_tokens, tx,
+3034:// evaluate the dynamic p+1<p_end predicate.  The caller retains the generic
+3288:    const int32_t* __restrict__ block_table,
+3361:    int p_beg;
+3362:    int p_end;
+3364:        p_beg = split * pages_per_split;
+3365:        p_end = min(p_beg + pages_per_split, full_pages);
+3368:        p_beg = full_pages;
+3369:        p_end = full_pages + 1;
+3372:        const int valid_pages =
+3374:        p_beg = split * pages_per_split;
+3375:        p_end = min(p_beg + pages_per_split, valid_pages);
+3377:    const bool owns_fused_tail = FUSE_TAIL_IN_LAST_SPLIT &&
+3381:    if (p_beg >= p_end && !owns_fused_tail) return;
+3460:    const int32_t* bt_row = block_table + b * pages_per_batch;
+3475:        int32_t pid = bt_row[p_beg];
+3490:                    p_beg + page_i, kv_head, tx, ty, tz,
+3496:                p_beg + 18, kv_head, tx, ty, tz,
+3504:                    p_beg + page_i, kv_head, tx, ty, tz,
+3510:                p_beg + 18, kv_head, tx, ty, tz,
+3515:        int32_t pid = bt_row[p_beg];
+3526:                p_beg + page_i, kv_head, tx, ty, tz,
+3533:            p_beg + 14, kv_head, tx, ty, tz,
+3536:    } else if (p_beg < p_end) {
+3537:        int32_t pid = bt_row[p_beg];
+3543:        for (int p = p_beg; p < p_end; ++p) {
+3550:            if (p + 1 < p_end) next_pid = bt_row[p + 1];
+3639:            if (p + 1 < p_end) {
+3651:            if (p + 1 < p_end) __syncwarp();
+3652:            if (p + 1 < p_end) {
+3722:            if (p + 1 < p_end) {
+3734:            if (p + 1 < p_end) {
+3753:        if (owns_fused_tail) {
+3754:            const int tail_tokens = seqlen & (PAGE_TOKENS - 1);
+3757:                k_cache, s_k, pid, kv_head, tx, ty, tz, tail_tokens);
+3759:                v_cache, s_v, pid, kv_head, tx, ty, tz, tail_tokens);
+3770:                    mma_q_frag_bits, s_k, tx, ty, tz, tail_tokens,
+3778:                    if (token < tail_tokens) {
+3832:                        l0, l1, acc0, acc1, tail_tokens);
+3837:                        if (token >= tail_tokens) continue;
+4130:    const int32_t* __restrict__ block_table,
+4152:    int p_beg;
+4153:    int p_end;
+4155:        p_beg = split * pages_per_split;
+4156:        p_end = min(p_beg + pages_per_split, full_pages);
+4159:        p_beg = full_pages;
+4160:        p_end = full_pages + 1;
+4163:        const int valid_pages =
+4165:        p_beg = split * pages_per_split;
+4166:        p_end = min(p_beg + pages_per_split, valid_pages);
+4168:    if (p_beg >= p_end) return;
+4213:    const int32_t* bt_row = block_table + b * pages_per_batch;
+4214:    int32_t pid = bt_row[p_beg];
+4220:    for (int p = p_beg; p < p_end; ++p) {
+4249:        if (p + 1 < p_end) {
+4306:        if (p + 1 < p_end) {
+4418:        // owns full pages.  Counting ceil(valid_pages/pages_per_split) would
+4427:        const int valid_pages =
+4430:            n_split, (valid_pages + pages_per_split - 1) / pages_per_split);
+4679:        const int valid_pages = (seqlen + PAGE_TOKENS - 1) / PAGE_TOKENS;
+4681:            n_split, (valid_pages + pages_per_split - 1) / pages_per_split);
+4791:        const int valid_pages =
+4794:            n_split, (valid_pages + pages_per_split - 1) / pages_per_split);
+5061:        const int valid_pages =
+5064:            n_split, (valid_pages + pages_per_split - 1) / pages_per_split);
+5264:    const int32_t* __restrict__ block_table,
+5288:        const int32_t pid = block_table[b * pages_per_batch + t / page_block_size];
+5313:    const int32_t* block_table,
+5332:    const int32_t* block_table,
+5358:            cache_seqlens, block_table,
+5373:                v_cache_paged, output, block_table, (int)pages_per_batch);
+5376:                v_cache_paged, output, block_table, (int)pages_per_batch);
+5385:                cache_seqlens, block_table, (int)pages_per_batch, sm_scale);
+5389:                cache_seqlens, block_table, (int)pages_per_batch, sm_scale);
+5541:                            cache_seqlens, block_table,
+5550:                            cache_seqlens, block_table,
+5560:                            cache_seqlens, block_table,
+5569:                            cache_seqlens, block_table,
+5598:                                cache_seqlens, block_table,
+5606:                                cache_seqlens, block_table,
+5627:                            cache_seqlens, block_table,
+5640:                        cache_seqlens, block_table,
+5649:                        cache_seqlens, block_table,
+5671:                        cache_seqlens, block_table,
+5688:                        cache_seqlens, block_table,
+5703:                        cache_seqlens, block_table,
+5720:                        cache_seqlens, block_table,
+5730:                        cache_seqlens, block_table,
+5751:                        cache_seqlens, block_table,
+5760:                        cache_seqlens, block_table,
+5769:                        cache_seqlens, block_table,
+5777:                        cache_seqlens, block_table,
+5796:                        cache_seqlens, block_table,
+5814:                        cache_seqlens, block_table,
+5830:                        cache_seqlens, block_table,
+5849:                        cache_seqlens, block_table,
+5868:                        cache_seqlens, block_table,
+5891:                        cache_seqlens, block_table,
+5901:            q, k_cache_paged, v_cache_paged, output, cache_seqlens, block_table,
+5908:                q, k_cache_paged, v_cache_paged, output, cache_seqlens, block_table,
+async_source_tokens:

@@ -1,0 +1,36 @@
+exp731 target LLVM intrinsic audit
+
+candidate_sha256=0a3641330135853c8238a90132f2246c22cada03f714068129f604e793f90f05
+module=build/exp731_device.ll
+
+Target producer:
+  symbol=_Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb0ELb1ELb0ELb1EE
+  lines=19037-20951
+  llvm.mxc.load.global.async=0
+  llvm.mxc.arrive=0
+  llvm.mxc.barrier=7
+  llvm.mxc.barrier.warp=3
+  llvm.mxc.barrier.inst=0
+  llvm.mxc.barrier.and.wait4=0
+  llvm.log2.f32=2
+  llvm.exp2.f32=19
+
+Target group8 reducer:
+  symbol=_Z33paged_decode_reduce_group8_kernelILb1ELb0ELb0ELb1ELb1ELb0ELi0ELb1ELb1EE
+  lines=41859-42451
+  llvm.mxc.load.global.async=0
+  llvm.mxc.arrive=0
+  llvm.mxc.barrier=1
+  llvm.mxc.barrier.warp=0
+  llvm.mxc.barrier.inst=0
+  llvm.mxc.barrier.and.wait4=0
+  llvm.exp2.f32=1
+
+exp730 synchronous reference counts:
+  producer barrier=7, barrier.warp=3, arrive=0, async_load=0
+  reducer barrier=1, barrier.warp=0, arrive=0, async_load=0
+
+The target instances introduce no async/arrive intrinsic and retain the expected
+synchronous barrier behavior. The module contains unrelated arrive/barrier forms
+in other kernels; the counts above are restricted to the two target definitions.
+result=PASS_TARGET_AUDIT

@@ -1,0 +1,74 @@
+2026-08-25T11:52:27Z
+candidate device LLVM SHA
+1c34fbfa2b3a952dceb89a745c193aee5f43462f9c78717dd61972c75836b36c  build/exp725_candidate_device.ll
+case2 native target definition and lowering
+define protected metaxgpu_kernel void @_Z29paged_decode_two_token_kernelILi8ELi4ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch, float noundef %sm_scale) local_unnamed_addr #10 comdat {
+entry:
+  %0 = tail call noundef range(i32 0, 2147483647) i32 @llvm.mxc.block.id.x(), !range !15
+  %div274 = lshr i32 %0, 3
+  %and = and i32 %0, 7
+  %1 = tail call noundef range(i32 0, 1024) i32 @llvm.mxc.thread.id.x(), !range !26
+  %and9 = and i32 %1, 31
+  %shr = lshr i32 %1, 5
+  %cmp = icmp ugt i32 %1, 127
+  br i1 %cmp, label %cleanup199, label %if.end
+
+if.end:                                           ; preds = %entry
+  %idxprom = zext nneg i32 %div274 to i64
+  %arrayidx = getelementptr inbounds i32, ptr addrspace(1) %cache_seqlens.coerce, i64 %idxprom
+  %2 = load i32, ptr addrspace(1) %arrayidx, align 4, !tbaa !16
+  %cmp11 = icmp eq i32 %2, 1
+  br i1 %cmp11, label %if.then12, label %if.end35
+
+if.then12:                                        ; preds = %if.end
+  %cmp25 = icmp ult i32 %and9, 16
+  br i1 %cmp25, label %if.then26, label %cleanup199
+
+if.then26:                                        ; preds = %if.then12
+  %mul = shl nuw nsw i32 %and, 2
+  %mul20 = shl nsw i32 %div274, 5
+  %3 = or disjoint i32 %mul, %mul20
+  %add21 = or disjoint i32 %3, %shr
+  %mul22 = shl nsw i32 %add21, 7
+  %idx.ext23 = zext nneg i32 %mul22 to i64
+  %add.ptr24 = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(1) %out.coerce, i64 %idx.ext23
+  %mul13 = mul nsw i32 %div274, %pages_per_batch
+  %idxprom14 = sext i32 %mul13 to i64
+  %arrayidx15 = getelementptr inbounds i32, ptr addrspace(1) %block_table.coerce, i64 %idxprom14
+  %4 = load i32, ptr addrspace(1) %arrayidx15, align 4, !tbaa !16
+  %5 = shl i32 %4, 14
+  %6 = shl nuw nsw i32 %and, 7
+  %mul19 = or disjoint i32 %5, %6
+  %idx.ext = sext i32 %mul19 to i64
+  %add.ptr = getelementptr inbounds %struct.__maca_bfloat16.1, ptr addrspace(4) %v_cache.coerce, i64 %idx.ext
+  %mul27 = shl nuw nsw i32 %and9, 4
+  %idx.ext28 = zext nneg i32 %mul27 to i64
+  %add.ptr29 = getelementptr inbounds i8, ptr addrspace(4) %add.ptr, i64 %idx.ext28
+  %add.ptr32 = getelementptr inbounds i8, ptr addrspace(1) %add.ptr24, i64 %idx.ext28
+  %7 = addrspacecast ptr addrspace(4) %add.ptr29 to ptr addrspace(1)
+  %8 = tail call noundef <4 x i32> @llvm.mxc.ldg.predicator.v4i32(ptr addrspace(1) %7, i32 0, i64 -1, i1 true, i1 true, i1 false, i1 false), !call_argsrelate !36
+  %9 = tail call i64 @llvm.mxc.icmp.i64.i32(i32 1, i32 1, i32 32) #25
+  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %add.ptr32, i32 0, <4 x i32> %8, i64 %9, i1 true, i1 false, i1 false), !call_argsrelate !37
+  br label %cleanup199
+
+if.end35:                                         ; preds = %if.end
+  %mul37 = shl nuw nsw i32 %and, 2
+  %mul40 = mul nsw i32 %div274, %pages_per_batch
+  %idxprom41 = sext i32 %mul40 to i64
+  %arrayidx42 = getelementptr inbounds i32, ptr addrspace(1) %block_table.coerce, i64 %idxprom41
+  %10 = load i32, ptr addrspace(1) %arrayidx42, align 4, !tbaa !16
+kernel registrations
+18:$_Z29paged_decode_two_token_kernelILi4ELi8ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if = comdat any
+20:$_Z29paged_decode_two_token_kernelILi8ELi4ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if = comdat any
+22:$_Z29paged_decode_two_token_kernelILi8ELi4ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if = comdat any
+670:define protected metaxgpu_kernel void @_Z29paged_decode_two_token_kernelILi4ELi8ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch, float noundef %sm_scale) local_unnamed_addr #8 comdat {
+1016:define protected metaxgpu_kernel void @_Z29paged_decode_two_token_kernelILi8ELi4ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch, float noundef %sm_scale) local_unnamed_addr #10 comdat {
+1397:define protected metaxgpu_kernel void @_Z29paged_decode_two_token_kernelILi8ELi4ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if(ptr addrspace(4) noalias nocapture noundef readonly %q.coerce, ptr addrspace(4) noalias nocapture noundef readonly %k_cache.coerce, ptr addrspace(4) noalias nocapture noundef readonly %v_cache.coerce, ptr addrspace(1) noalias nocapture noundef writeonly %out.coerce, ptr addrspace(1) noalias nocapture noundef readonly %cache_seqlens.coerce, ptr addrspace(1) noalias nocapture noundef readonly %block_table.coerce, i32 noundef %pages_per_batch, float noundef %sm_scale) local_unnamed_addr #12 comdat {
+47416:@4 = private unnamed_addr constant [86 x i8] c"_Z29paged_decode_two_token_kernelILi4ELi8ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if\00", align 1
+47417:@5 = private unnamed_addr constant [86 x i8] c"_Z29paged_decode_two_token_kernelILi8ELi4ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if\00", align 1
+47418:@6 = private unnamed_addr constant [86 x i8] c"_Z29paged_decode_two_token_kernelILi8ELi4ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_if\00", align 1
+native intrinsic references
+1060:  %8 = tail call noundef <4 x i32> @llvm.mxc.ldg.predicator.v4i32(ptr addrspace(1) %7, i32 0, i64 -1, i1 true, i1 true, i1 false, i1 false), !call_argsrelate !36
+1062:  tail call void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) %add.ptr32, i32 0, <4 x i32> %8, i64 %9, i1 true, i1 false, i1 false), !call_argsrelate !37
+1388:declare <4 x i32> @llvm.mxc.ldg.predicator.v4i32(ptr addrspace(1) noalias nocapture, i32 immarg, i64, i1 immarg, i1 immarg, i1 immarg, i1 immarg) #11
+1394:declare void @llvm.mxc.stg.predicator.v4i32(ptr addrspace(1) noalias nocapture, i32 immarg, <4 x i32>, i64, i1 immarg, i1 immarg, i1 immarg) #11

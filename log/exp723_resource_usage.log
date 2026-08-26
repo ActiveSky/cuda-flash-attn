@@ -1,0 +1,19 @@
+exp723 resource extraction (mxcc xcore1000, build/exp723_resource.so)
+
+Case7 normalized-BF16 producer (source dispatch: case7, paged_decode_case13_kv8_headpair_z8_kernel<true, false, true, true>):
+  mangled: _Z42paged_decode_case13_kv8_headpair_z8_kernelILb1ELb0ELb1ELb1EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif
+  resource log line: 158
+  Used: 82 MTregisters, 50 STregisters
+  shared memory: 8448 bytes
+  staticMaxWarps/PEU: 5
+
+Case7 synchronous static-weight group8 reducer (source dispatch: group8<true, false, true, true, false, true, 3, true>):
+  mangled: _Z33paged_decode_reduce_group8_kernelILb1ELb0ELb1ELb1ELb0ELb1ELi3ELb1EEvPKfS1_S1_P15__maca_bfloat16PKiiii
+  resource log line: 198
+  Used: 52 MTregisters, 22 STregisters
+  shared memory: 0 bytes
+  staticMaxWarps/PEU: 8
+
+The neighboring case13 producer variants and other reducers are retained in
+log/exp723_resource_build.log; the entries above are the exact case7 target
+instantiations.

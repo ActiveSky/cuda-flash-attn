@@ -1,10 +1,36 @@
 # XPUOJ FlashAttention KV Cache Decode 提交结果记录
 
-## 当前权威状态（2026-08-25 #125788 终态后）
+## 当前权威状态（2026-08-26 #126955 终态后）
+
+- **最新终态：#126955 / exp731 case12 normalized-BF16 partial + synchronous group8 single-FP32-LSE reducer / `65.86` / 14/14 Accepted**。唯一target case12为`375 µs / 60分`，较结构control `#124611` 的`371 µs / 60分`未跨至预注册`>=61分`（约`<=365.70 µs`）；关闭exact exp731 contract，不切control。case1–14时延/分数=`3/92、4/90、9/83、23/72、17/73、28/63、226/55、102/52、232/57、39/62、228/52、375/60、181/57、146/54 µs/分`；非target case、aggregate和同场timing不归因。
+
+- **最新终态：#126937 / exp730 case12 normalized-BF16 partial + synchronous group8 reducer / `65.79` / 14/14 Accepted**。唯一target case12为`378 µs / 60分`，较结构control `#124611` 的`371 µs / 60分`退化且未达到预注册`>=61分`（约`<=365.70 µs`）；关闭exact exp730 contract，不切control。case1–14时延/分数=`3/92、4/90、9/83、22/73、17/73、28/63、227/55、101/52、235/57、40/61、226/52、378/60、182/56、146/54 µs/分`；非target case、aggregate和同场timing不归因。
 
 - **当前结构性 control：#124611 / exp666 case13 normalized-BF16 global partial + native row16 reducer / `66.00` / 14/14 Accepted**。唯一target case13（B1/KV8/L58966）为`181 µs / 57分`，相对前一候选#124606的`183 µs / 56分`和旧结构性control #113889 的`182 µs / 56分`跨过目标display tier；case13 BF16 global partial与native row16 reducer的组合形成可归因结构性收益，继承#113889的case7收益，故切换control。其它case、aggregate和同场timing不归因；raw、不可变源码与candidate SHA见下方提交条目，终态后工作文件与新control一致；当前实时队列状态见下方动态条目。
 
-- **最新终态：#125788 / exp710 z4 tail-padding guard / `65.57` / 14/14 Accepted**。候选在KV4 z4 fused-tail路径增加`valid_tokens`门控；OJ case8/10/11/14分别为`103/39/226/146 µs`、`51/62/52/54分`，目标display sum为`219`。该条同时记录C500 tail-NaN trap中candidate四个目标case finite、control nonfinite的安全反馈；线上性能与control状态分别按OJ事实和主Agent裁决处理。
+- **最新终态：#126894 / exp729 case5 BF16 sync 7-wave changed-precondition / `65.50` / 14/14 Accepted**。唯一target case5为`20 µs / 69分`，较结构control `#124611` 的`17 µs / 73分`退化且未达到预注册`>=74分`；相对exp727恢复producer `72 MT / 48 ST / 7 waves`的changed precondition未形成目标收益，关闭exact case5 BF16 sync 7-wave contract，不切control。case1–14时延/分数=`3/92、4/90、9/83、22/73、20/69、28/63、226/55、103/51、233/57、40/61、227/52、375/60、180/57、146/54 µs/分`；非target case、aggregate和同场timing不归因。
+
+- **最新终态：#126879 / exp728 case6 BF16 sync partial / `65.50` / 14/14 Accepted**。唯一target case6为`29 µs / 62分`，较结构control `#124611` 的`28 µs / 63分`退化且未达到预注册`>=64分`；关闭exact case6 BF16 sync partial contract，不切control。case1–14时延/分数=`3/92、4/90、9/83、23/72、18/71、29/62、225/55、102/52、233/57、40/61、226/52、376/60、182/56、146/54 µs/分`；非target case、aggregate和同场timing不归因。
+
+- **最新终态：#126847 / exp727 case5 BF16 sync partial / `65.57` / 14/14 Accepted**。唯一target case5为`19 µs / 70分`，较结构control `#124611` 的`17 µs / 73分`退化且未达到预注册`>=74分`；关闭exact case5 BF16 sync partial contract，不切control。case1–14时延/分数=`3/92、4/90、9/83、23/72、19/70、28/63、225/55、101/52、234/57、40/61、226/52、375/60、181/57、146/54 µs/分`；非target资源变化、aggregate和同场timing不归因。
+
+- **最新终态：#126832 / exp726 case1 shared-V fanout / `65.71` / 14/14 Accepted**。唯一target case1为`3 µs / 92分`，未严格高于control的`92分`；关闭exact case1 shared-V fanout contract，不切control。case1–14时延/分数=`3/92、4/90、9/83、23/72、17/73、28/63、225/55、103/51、232/57、40/61、226/52、377/60、181/57、143/54 µs/分`；非target case、aggregate和同场timing不归因。
+
+- **最新终态：#126819 / exp725 guarded case2 native-B128 V-copy / `65.79` / 14/14 Accepted**。唯一target case2为`4 µs / 90分`，未达到预注册`>=91分`（约进入`3 us`档）；关闭exact guarded case2 native-B128 V-copy contract，不切control。case1–14时延/分数=`3/92、4/90、9/83、24/71、17/73、28/63、225/55、102/52、234/57、39/62、227/52、374/60、181/57、146/54 µs/分`；非target case、aggregate和同场timing不归因。
+
+- **最新终态：#126791 / exp721 case12 group8 async guard / `65.71` / 14/14 Accepted**。唯一target case12为`383 µs / 59分`，较结构control `#124611` 的`371 µs / 60分`退化且未达到预注册`>=61分`；关闭exact case12 group8 async guard contract，不切control。case1–14时延/分数=`3/92、4/90、9/83、23/72、17/73、28/63、225/55、102/52、237/57、40/61、224/52、383/59、181/57、142/54 µs/分`；非target case、aggregate和同场timing不归因。
+
+- **最新终态：#126741 / exp718 case13 guarded group8 async-BF16 partial consumer / `65.50` / 14/14 Accepted**。唯一target case13为`202 µs / 54分`，较结构control `#124611` 的`181 µs / 57分`退化且未达到预注册`>=58分`；拒绝并关闭exact case13 group8 async-partial consumer，不切control。case1–14时延/分数=`3/92、4/90、10/82、23/72、17/73、29/62、224/55、102/52、234/57、39/62、227/52、378/60、202/54、143/54 µs/分`；非target case、aggregate和同场timing不归因。
+
+- **前一终态：#126665 / exp716 case7 BF16 async partial / `65.93` / 14/14 Accepted**。唯一target case7为`228 µs / 55分`，未达到预注册`>=56分`；关闭exact case7 BF16 async partial contract，不切control。该候选未继承exp710的KV4 tail guard，非target case、aggregate和同场timing不归因。
+
+- **最新终态：#126589 / exp715 case12 normalized internal z-state + direct fan-in / `65.86` / 14/14 Accepted**。唯一target case12为`380 µs / 60分`，较结构control `#124611` 的`371 µs / 60分`退化且未达到预注册`>=61分`；拒绝并关闭exact normalized internal z-state + direct fan-in，不切control。case1–14时延/分数=`3/92、4/90、9/82、23/72、17/73、28/63、227/55、102/52、235/57、39/62、224/52、373/60、182/56、146/54 µs/分`；非target case、aggregate和同场timing不归因。
+
+- **前一终态：#126532 / exp714 case11 fused-tail direct register/raw-BSM consumer / `65.64` / 14/14 Accepted**。唯一target case11为`224 µs / 52分`，与结构control `#124611` 同档，未达到预注册`>=53分`；拒绝并关闭exact fused-tail direct register/raw-BSM consumer，不切control。case1–14时延/分数=`3/92、4/90、9/82、23/72、17/73、28/63、227/55、102/52、235/57、39/61、224/52、373/60、182/56、146/54 µs/分`；非target case、aggregate和同场timing不归因。
+
+- **前一终态：#126478 / exp713 case11 guarded last-live split finalizer ownership / `65.57` / 14/14 Accepted**。唯一target case11为`255 µs / 49分`，较结构control `#124611` 的`224 µs / 52分`及exp710的`226 µs / 52分`显著退化，未达到预注册`>=53分`；关闭exact guarded last-live split finalizer ownership，不切control。case1–14时延/分数=`3/92、4/90、9/83、23/72、17/73、28/63、227/55、102/52、235/57、39/62、255/49、373/60、182/56、146/54 µs/分`；非target case、aggregate和同场timing不归因。
+
+- **前一终态：#125788 / exp710 z4 tail-padding guard / `65.57` / 14/14 Accepted**。候选在KV4 z4 fused-tail路径增加`valid_tokens`门控；OJ case8/10/11/14分别为`103/39/226/146 µs`、`51/62/52/54分`，目标display sum为`219`。该条同时记录C500 tail-NaN trap中candidate四个目标case finite、control nonfinite的安全反馈；线上性能与control状态分别按OJ事实和主Agent裁决处理。
 
 - **前一终态：#125765 / exp704 z8 all async register-K/V backend / `65.93` / 14/14 Accepted**。唯一target cases7/9/12/13分别为`229/236/375/184 µs`、`55/57/60/56分`，display sum为`228`，低于当前control对应`229`；关闭exact z8 all async register-K/V backend contract，不切control、不重投或扫描。非target case、aggregate和同场timing不归因，终态后工作文件保持control。
 
@@ -122,8 +148,112 @@
 - 前一终态：**#113658 / exp544 / `65.93` / 14/14 Accepted**。case7 packed group8 physical-row16 reducer 令目标时延`227→225 μs`，但显示分仍为55；没有可归因的 display 收益，关闭且不替换control。
 - 前一终态：**#113642 / exp543 / `66.00` / 14/14 Accepted**。group8 final native-STG 的覆盖case5/6未变、case7虽`227→226 μs`仍55分、case8`93→94 μs`仍54分，关闭且不替换control。
 - 较早终态：**#113566 / exp542 / `65.86` / 14/14 Accepted**。唯一覆盖目标case12由`375→376 μs`、显示分仍60，关闭且不替换control。
-- 动态 OJ 队列与工作文件（本次归档记录时）：`#125788 / exp710`已进入`Accepted`终态，终态后工作文件恢复control SHA；无未决提交。动态状态由主 Agent按启动流程实时核对。
-- raw 终态统计：**397** 份（364 Accepted、17 CompilationError、12 WrongAnswer、4 Canceled）。
+- 动态 OJ 队列与工作文件（本次归档记录时）：当前队列无非终态提交；工作文件已恢复#124611 control，SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`。动态状态由主 Agent按启动流程实时核验。
+- raw 终态统计：**410** 份（377 Accepted、17 CompilationError、12 WrongAnswer、4 Canceled）。
+
+### 提交 #126955 · exp731 case12 normalized-BF16 partial + synchronous group8 single-FP32-LSE reducer
+
+- **代码溯源**：官方 raw 为[`cuda_126955_raw.json`](raw/cuda_126955_raw.json)，不可变提交源码为[`cuda_126955.cpp`](../solutions/archive/2026-08-25-submissions/cuda_126955.cpp)，实验候选为[`cuda_control124611_guard_case12_group8_sync_single_lse_exp731.cpp`](../solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case12_group8_sync_single_lse_exp731.cpp)。父/current control为`#124611 / exp666`，control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`；base exp730 SHA=`18d5908f778aed67ccf8e7038f723bbd9a816810a45999117768910e73dd1828`；candidate、submitted及immutable源码SHA-256均为`0a3641330135853c8238a90132f2246c22cada03f714068129f604e793f90f05`；raw JSON SHA-256为`e3b85500b692b3ba79d40dbcf985e11029b45356e4c7c28d25a5b045d1c08e3a`。
+
+- **线上终态与唯一目标归因**：唯一串行OJ提交`#126955`为`Accepted`、总分`65.86`、14/14；OJ总耗时`1613 ms`、内存`23060704 KB`。case1–14时延/分数依次为`3/92、4/90、9/83、23/72、17/73、28/63、226/55、102/52、232/57、39/62、228/52、375/60、181/57、146/54 µs/分`，全部`Accepted`。唯一target case12为`375 µs / 60分`，较结构control `#124611` 的`371 µs / 60分`未跨至预注册`>=61分`（约`<=365.70 us`）；拒绝并关闭exact case12 normalized-BF16 partial + synchronous group8 single-FP32-LSE reducer contract，不切control。非target case、aggregate和同场timing不归因。
+
+- **提交、归档与恢复**：此前POST已返回`#126955`但客户端随后遭遇503；身份恢复阶段实时列表确认该ID为对应提交，未重新POST，仅对同一ID执行watch并取得raw。实际POST次数为1，无取消、并行或重投；archive/raw/candidate SHA链一致。终态时队列已清空，工作文件恢复control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`。
+
+### 提交 #126937 · exp730 case12 normalized-BF16 partial + synchronous group8 reducer
+
+- **代码溯源**：官方 raw 为[`cuda_126937_raw.json`](raw/cuda_126937_raw.json)，不可变提交源码为[`cuda_126937.cpp`](../solutions/archive/2026-08-25-submissions/cuda_126937.cpp)，实验候选为[`cuda_control124611_guard_case12_group8_sync_bf16_exp730.cpp`](../solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case12_group8_sync_bf16_exp730.cpp)。父/current control为`#124611 / exp666`，control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`；candidate、submitted及immutable源码SHA-256均为`18d5908f778aed67ccf8e7038f723bbd9a816810a45999117768910e73dd1828`；raw JSON SHA-256为`8425f35cee8e72952f5a5c21168ac8cde584a9931d9f1dc47d2dd715849bae94`。
+
+- **线上终态与唯一目标归因**：唯一串行OJ提交`#126937`为`Accepted`、总分`65.79`、14/14；OJ总耗时`1618 ms`、内存`23060452 KB`。case1–14时延/分数依次为`3/92、4/90、9/83、22/73、17/73、28/63、227/55、101/52、235/57、40/61、226/52、378/60、182/56、146/54 µs/分`，全部`Accepted`。唯一target case12为`378 µs / 60分`，较结构control `#124611` 的`371 µs / 60分`退化且未达到预注册`>=61分`（约`<=365.70 µs`）；拒绝并关闭exact exp730 case12 normalized-BF16 partial + synchronous group8 reducer contract，不切control。非target case、aggregate和同场timing不归因。
+
+- **提交、归档与恢复**：实际`--submit`只创建`#126937`一次，首次watch超时后仅继续watch同一ID至`Finished/Accepted`，无重复POST、取消或并行；archive/raw/candidate SHA链一致。终态时队列已清空，工作文件恢复control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`。
+
+### 提交 #126894 · exp729 case5 BF16 sync 7-wave changed-precondition
+
+- **代码溯源**：官方 raw 为[`cuda_126894_raw.json`](raw/cuda_126894_raw.json)，不可变提交源码为[`cuda_126894.cpp`](../solutions/archive/2026-08-25-submissions/cuda_126894.cpp)，实验候选为[`cuda_control124611_guard_case5_bf16_sync_7wave_exp729.cpp`](../solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case5_bf16_sync_7wave_exp729.cpp)。父/current control为`#124611 / exp666`，control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`；candidate、submitted及immutable源码SHA-256均为`23ed23da50608d66dda439d8895ab0bf783a1f8fceb9efaabdf6e3120b6aa9f7`；raw JSON SHA-256为`0f35335ad1c93a576d23467aa08874fffa37b76e1702669443b887fc57069ec9`。
+
+- **线上终态与唯一目标归因**：唯一串行OJ提交`#126894`为`Accepted`、总分`65.50`、14/14；OJ总耗时`1617 ms`、内存`23060424 KB`。case1–14时延/分数依次为`3/92、4/90、9/83、22/73、20/69、28/63、226/55、103/51、233/57、40/61、227/52、375/60、180/57、146/54 µs/分`，全部`Accepted`。唯一target case5为`20 µs / 69分`，较结构control `#124611` 的`17 µs / 73分`退化且未达到预注册`>=74分`；相对exp727的changed precondition未形成目标收益，拒绝并关闭exact case5 BF16 sync 7-wave contract，不切control。非target case、aggregate和同场timing不归因。
+
+- **提交、归档与恢复**：实际`--submit`只创建`#126894`一次，首次watch 900s超时后仅继续watch同一ID至`Finished/Accepted`，无重复POST、取消或并行；archive/raw/candidate SHA链一致。终态时队列已清空，工作文件恢复control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`。
+
+### 提交 #126879 · exp728 case6 BF16 sync partial
+
+- **代码溯源**：官方 raw 为[`cuda_126879_raw.json`](raw/cuda_126879_raw.json)，不可变提交源码为[`cuda_126879.cpp`](../solutions/archive/2026-08-25-submissions/cuda_126879.cpp)，实验候选为[`cuda_control124611_guard_case6_bf16_sync_partial_exp728.cpp`](../solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case6_bf16_sync_partial_exp728.cpp)。父/current control为`#124611 / exp666`，control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`；candidate、submitted及immutable源码SHA-256均为`dc34862daf0767dedc888840ff7ae723b9ec1a5b1c6b67e9f392439f99c8f9c4`；raw JSON SHA-256为`523c9c955d2de63c17439ae8e51f0611b7a6899528cdf199d1c39bb7952410da`。
+
+- **线上终态与唯一目标归因**：唯一串行OJ提交`#126879`为`Accepted`、总分`65.50`、14/14；OJ总耗时`1616 ms`、内存`23060360 KB`。case1–14时延/分数依次为`3/92、4/90、9/83、23/72、18/71、29/62、225/55、102/52、233/57、40/61、226/52、376/60、182/56、146/54 µs/分`，全部`Accepted`。唯一target case6为`29 µs / 62分`，较结构control `#124611` 的`28 µs / 63分`退化且未达到预注册`>=64分`；拒绝并关闭exact case6 BF16 sync partial contract，不切control。非target case、aggregate和同场timing不归因。
+
+- **提交、归档与恢复**：实际`--submit`只创建`#126879`一次，首次watch 900s超时后仅继续watch同一ID至`Finished/Accepted`，无重复POST、取消或并行；archive/raw/candidate SHA链一致。终态时队列已清空，工作文件恢复control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`。
+
+### 提交 #126847 · exp727 case5 BF16 sync partial
+
+- **代码溯源**：官方 raw 为[`cuda_126847_raw.json`](raw/cuda_126847_raw.json)，不可变提交源码为[`cuda_126847.cpp`](../solutions/archive/2026-08-25-submissions/cuda_126847.cpp)，实验候选为[`cuda_control124611_guard_case5_bf16_sync_partial_exp727.cpp`](../solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case5_bf16_sync_partial_exp727.cpp)。父/current control为`#124611 / exp666`，control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`；candidate、submitted及immutable源码SHA-256均为`3a3cab1e1559e623ef8a3c77270b62d3f48e012e10571640971e4c51a0cd8c9e`；raw JSON SHA-256为`066a4065997903464a699b3f4f975d8360a5ec0c889cc974889331f85aa8ca5a`。
+
+- **线上终态与唯一目标归因**：唯一串行OJ提交`#126847`为`Accepted`、总分`65.57`、14/14；OJ总耗时`1614 ms`、内存`23060496 KB`。case1–14时延/分数依次为`3/92、4/90、9/83、23/72、19/70、28/63、225/55、101/52、234/57、40/61、226/52、375/60、181/57、146/54 µs/分`，全部`Accepted`。唯一target case5为`19 µs / 70分`，较结构control `#124611` 的`17 µs / 73分`退化且未达到预注册`>=74分`；拒绝并关闭exact case5 BF16 sync partial contract，不切control。非target资源变化、aggregate和同场timing不归因。
+
+- **提交、归档与恢复**：实际`--submit`只创建`#126847`一次，首次watch 900s超时后仅继续watch同一ID至`Finished/Accepted`，无重复POST、取消或并行；archive/raw/candidate SHA链一致。终态时队列已清空，工作文件恢复control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`。
+
+### 提交 #126832 · exp726 case1 shared-V fanout
+
+- **代码溯源**：官方 raw 为[`cuda_126832_raw.json`](raw/cuda_126832_raw.json)，不可变提交源码为[`cuda_126832.cpp`](../solutions/archive/2026-08-25-submissions/cuda_126832.cpp)，实验候选为[`cuda_control124611_guard_case1_shared_v_fanout_exp726.cpp`](../solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case1_shared_v_fanout_exp726.cpp)。父/current control为`#124611 / exp666`，control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`；candidate、submitted及immutable源码SHA-256均为`54acbdb57a779fa7699b8404fc17aeb72052b4af0ef1eb906f4fc76de7d37dbc`；raw JSON SHA-256为`6bcf2369f9935645c498da2be8a322301ee818bfda6ac0c54dc21acb21401271`。
+
+- **线上终态与唯一目标归因**：唯一串行OJ提交`#126832`为`Accepted`、总分`65.71`、14/14；OJ总耗时`1611 ms`、内存`23060472 KB`。case1–14时延/分数依次为`3/92、4/90、9/83、23/72、17/73、28/63、225/55、103/51、232/57、40/61、226/52、377/60、181/57、143/54 µs/分`，全部`Accepted`。唯一target case1为`3 µs / 92分`，未严格高于control的`92分`；拒绝并关闭exact case1 shared-V fanout contract，不切control。非target case、aggregate和同场timing不归因。
+
+- **提交、归档与恢复**：实际`--submit`只创建`#126832`一次，watch由`Pending→Running→Finished/Accepted`，无重复POST、取消或并行；archive/raw/candidate SHA链一致。终态时队列已清空，工作文件恢复control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`。
+
+### 提交 #126819 · exp725 guarded case2 native-B128 V-copy
+
+- **代码溯源**：官方 raw 为[`cuda_126819_raw.json`](raw/cuda_126819_raw.json)，不可变提交源码为[`cuda_126819.cpp`](../solutions/archive/2026-08-25-submissions/cuda_126819.cpp)，实验候选为[`cuda_control124611_guard_case2_native_b128_vcopy_exp725.cpp`](../solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case2_native_b128_vcopy_exp725.cpp)。父/current control为`#124611 / exp666`，control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`；candidate、submitted及immutable源码SHA-256均为`61a2af7a70eaedeaf521124bb01072f7a99291a5d663761e76c9ac8429b2639a`；raw JSON SHA-256为`d4f49b9132386f7a2cb56addf4d17b840b5b8b78ec4eb36aafa737169df0aa99`。
+
+- **线上终态与唯一目标归因**：唯一串行OJ提交`#126819`为`Accepted`、总分`65.79`、14/14；OJ总耗时`1613 ms`、内存`23060488 KB`。case1–14时延/分数依次为`3/92、4/90、9/83、24/71、17/73、28/63、225/55、102/52、234/57、39/62、227/52、374/60、181/57、146/54 µs/分`，全部`Accepted`。唯一target case2为`4 µs / 90分`，未达到预注册`>=91分`；拒绝并关闭exact guarded case2 native-B128 V-copy contract，不切control。非target case、aggregate和同场timing不归因。
+
+- **提交、归档与恢复**：实际`--submit`只创建`#126819`一次，watch由`Pending→Running→Finished/Accepted`，无重复POST、取消或并行；archive/raw/candidate SHA链一致。终态时队列已清空，工作文件恢复control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`。
+
+### 提交 #126791 · exp721 case12 group8 async guard
+
+- **代码溯源**：官方 raw 为[`cuda_126791_raw.json`](raw/cuda_126791_raw.json)，不可变提交源码为[`cuda_126791.cpp`](../solutions/archive/2026-08-25-submissions/cuda_126791.cpp)，实验候选为[`cuda_control124611_guard_case12_group8_async_exp721.cpp`](../solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case12_group8_async_exp721.cpp)。父/current control为`#124611 / exp666`，control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`；candidate、submitted及immutable源码SHA-256均为`3d3e981ef2811b90569daca8139f385db39b15310df952b6663c0c5e8dbc735b`；raw JSON SHA-256为`8b01f0866c334b6418ed12c39507429dea3d0778b896b2dacad0d040800fd56d`。
+
+- **线上终态与唯一目标归因**：唯一串行OJ提交`#126791`为`Accepted`、总分`65.71`、14/14；OJ总耗时`1618 ms`、内存`23060588 KB`。case1–14时延/分数依次为`3/92、4/90、9/83、23/72、17/73、28/63、225/55、102/52、237/57、40/61、224/52、383/59、181/57、142/54 µs/分`，全部`Accepted`。唯一target case12为`383 µs / 59分`，较结构control `#124611` 的`371 µs / 60分`退化且未达到预注册`>=61分`；拒绝并关闭exact case12 group8 async guard contract，不切control。非target case、aggregate和同场timing不归因。
+
+- **提交、归档与恢复**：实际`--submit`只创建`#126791`一次，watch由`Pending→Running→Finished/Accepted`，无重复POST、取消或并行；archive/raw/candidate SHA链一致。终态时队列已清空，工作文件恢复control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`。
+
+### 提交 #126741 · exp718 case13 guarded group8 async-BF16 partial consumer
+
+- **代码溯源**：官方 raw 为[`cuda_126741_raw.json`](raw/cuda_126741_raw.json)，不可变提交源码为[`cuda_126741.cpp`](../solutions/archive/2026-08-25-submissions/cuda_126741.cpp)，实验候选为[`cuda_control124611_guard_case13_group8_async_exp718.cpp`](../solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case13_group8_async_exp718.cpp)。父/current control为`#124611 / exp666`，control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`；candidate、submitted、immutable及raw内嵌源码SHA-256均为`adaebe806af6f5983ff44d77caa8c880254b433211a837da0138530b4bac85bf`；raw JSON SHA-256为`61036a6a89de721a6f80766659de6c88adf06df64e62f084a8705680db955c78`。
+
+- **线上终态与唯一目标归因**：唯一串行OJ提交`#126741`为`Accepted`、总分`65.50`、14/14；OJ总耗时`1635 ms`、内存`23060556 KB`。case1–14时延/分数依次为`3/92、4/90、10/82、23/72、17/73、29/62、224/55、102/52、234/57、39/62、227/52、378/60、202/54、143/54 µs/分`，全部`Accepted`。唯一target case13为`202 µs / 54分`，较结构control `#124611` 的`181 µs / 57分`退化且未达到预注册`>=58分`；拒绝并关闭exact case13 group8 async-partial consumer，不切control。非target case、aggregate和同场timing不归因。
+
+- **提交、归档与恢复**：实际`--submit`只创建`#126741`一次，watch由`Pending→Running→Finished/Accepted`，无重复POST、取消或并行；archive/raw/candidate SHA链一致。终态时队列已清空，工作文件恢复control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`。
+
+### 提交 #126665 · exp716 case7 BF16 async partial
+
+- **代码溯源**：官方 raw 为[`cuda_126665_raw.json`](raw/cuda_126665_raw.json)，不可变提交源码为[`cuda_126665.cpp`](../solutions/archive/2026-08-25-submissions/cuda_126665.cpp)，实验候选为[`cuda_control124611_case7_bf16_async_partial_exp716.cpp`](../solutions/archive/2026-08-25-experiments/cuda_control124611_case7_bf16_async_partial_exp716.cpp)。父/current control为`#124611 / exp666`，control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`；candidate、submitted、immutable及raw内嵌源码SHA-256均为`7f5f0a84240cda64c893fa78c6d729b12a4b0ee9880c31a4844a95ff51441beb`；raw JSON SHA-256为`74561657a62a4c4311786bc7f08c757e729c7ee4b2cdb4d3b085c04f77db6ac5`。
+
+- **线上终态与唯一目标归因**：唯一串行OJ提交`#126665`为`Accepted`、总分`65.93`、14/14；OJ总耗时`1595 ms`、内存`23060524 KB`。case1–14时延/分数依次为`3/92、4/90、10/82、23/72、17/73、29/62、228/55、93/54、234/57、38/62、223/52、373/60、181/57、139/55 µs/分`，全部`Accepted`。唯一target case7为`228 µs / 55分`，未达到预注册`>=56分`；关闭exact case7 BF16 async partial contract，不切control。非target case、aggregate和同场timing不归因。
+
+- **提交、归档与恢复**：实际`--submit`只创建`#126665`一次，900s和1800s watch超时后仅继续watch同一ID至`Finished/Accepted`，无重复POST、取消或并行；archive/raw/candidate SHA链一致。终态时队列已清空，工作文件恢复control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`。
+
+### 提交 #126589 · exp715 case12 normalized internal z-state + direct fan-in
+
+- **代码溯源**：官方 raw 为[`cuda_126589_raw.json`](raw/cuda_126589_raw.json)，不可变提交源码为[`cuda_126589.cpp`](../solutions/archive/2026-08-25-submissions/cuda_126589.cpp)，实验候选为[`cuda_control124611_case12_normalized_direct_fanin_exp715.cpp`](../solutions/archive/2026-08-25-experiments/cuda_control124611_case12_normalized_direct_fanin_exp715.cpp)。父/current control为`#124611 / exp666`，control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`；candidate、submitted、immutable及raw内嵌源码SHA-256均为`e2f5962fc88141610dafa82df27e24b1abc71a9af32bbda9e581bc7b8fcb679f`；raw JSON SHA-256为`76a2acc16d4bff4d83ec56fc6205312346e8580ecb7d0a622d86243effd52b1c`。
+
+- **线上终态与唯一目标归因**：唯一串行OJ提交`#126589`为`Accepted`、总分`65.86`、14/14；case1–14时延/分数依次为`3/92、4/90、9/82、23/72、17/73、28/63、227/55、102/52、235/57、39/62、224/52、373/60、182/56、146/54 µs/分`，全部`Accepted`。唯一target case12为`380 µs / 60分`，较结构control `#124611` 的`371 µs / 60分`退化且未达到预注册`>=61分`；拒绝并关闭exact normalized internal z-state + direct fan-in，不切control。非target case、aggregate和同场timing不归因。
+
+- **提交、归档与恢复**：实际`--submit`只创建`#126589`一次，900s和1800s watch超时后仅继续watch同一ID，无重复POST；archive/raw/candidate SHA链一致。终态时队列已清空，工作文件恢复control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`；后续exp716动态状态不在本条固化。
+
+### 提交 #126532 · exp714 case11 fused-tail direct register/raw-BSM consumer
+
+- **代码溯源**：官方 raw 为[`cuda_126532_raw.json`](raw/cuda_126532_raw.json)，不可变提交源码为[`cuda_126532.cpp`](../solutions/archive/2026-08-25-submissions/cuda_126532.cpp)，实验候选为[`cuda_control124611_case11_direct_tail_consumer_exp714.cpp`](../solutions/archive/2026-08-25-experiments/cuda_control124611_case11_direct_tail_consumer_exp714.cpp)。父/current control为`#124611 / exp666`，control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`；candidate、submitted、immutable及raw内嵌源码SHA-256均为`fb5c169061dc2eb73812ec493ce5fa1f8fc9c61ec10fc69d94efa8bb72a8f1f1`；raw JSON SHA-256为`b4a75c32ba1c38ea9b9bcae5421a05a6c9d2b2f16d501014e26bbcb481cf2ccc`。
+
+- **线上终态与唯一目标归因**：唯一串行OJ提交`#126532`为`Accepted`、总分`65.64`、14/14；case1–14时延/分数依次为`3/92、4/90、9/82、23/72、17/73、28/63、227/55、102/52、235/57、39/61、224/52、373/60、182/56、146/54 µs/分`，全部`Accepted`。唯一target case11为`224 µs / 52分`，与结构control `#124611` 同档，未达到预注册`>=53分`；拒绝并关闭exact fused-tail direct register/raw-BSM consumer，不切control。非target case、aggregate和同场timing不归因。
+
+- **提交、归档与恢复**：实际`--submit`只创建`#126532`一次，首次watch 900s超时后仅继续watch同一ID，无重复POST；archive/raw/candidate SHA链一致。终态时队列已清空，工作文件恢复control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`；后续exp715动态状态不在本条固化。
+
+### 提交 #126478 · exp713 case11 guarded last-live split finalizer ownership
+
+- **代码溯源**：官方 raw 为[`cuda_126478_raw.json`](raw/cuda_126478_raw.json)，不可变提交源码为[`cuda_126478.cpp`](../solutions/archive/2026-08-25-submissions/cuda_126478.cpp)，实验候选为[`cuda_control124611_case11_last_live_finalizer_guard_exp713.cpp`](../solutions/archive/2026-08-25-experiments/cuda_control124611_case11_last_live_finalizer_guard_exp713.cpp)。父/current control为`#124611 / exp666`，control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`；candidate、submitted、immutable及raw内嵌源码SHA-256均为`c302663c408d6792d114c227daaeb28ec18f1d0a3db6d3eec63cceddd85d0f7b`；raw JSON SHA-256为`a587666f967eaa8cba605e9b2aa488f0b8b52b565a884c192471f1c2b6c4782b`。
+
+- **线上终态与唯一目标归因**：唯一串行OJ提交`#126478`为`Accepted`、总分`65.57`、14/14；OJ总耗时`1643 ms`、内存`23060436 KB`。case1–14时延/分数依次为`3/92、4/90、9/83、23/72、17/73、28/63、227/55、102/52、235/57、39/62、255/49、373/60、182/56、146/54 µs/分`，全部`Accepted`。唯一target case11为`255 µs / 49分`，较结构control `#124611` 的`224 µs / 52分`及exp710的`226 µs / 52分`显著退化，未达到预注册`>=53分`；关闭exact guarded last-live split finalizer ownership，不切control。非target case、aggregate和同场timing不归因。
+
+- **提交、归档与恢复**：实际`--submit`只创建`#126478`一次，首次watch 900s超时后仅继续watch同一ID，无重复POST；archive/raw/candidate SHA链一致。终态后工作文件恢复control SHA=`3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe`，终态队列已清空。
 
 ### 提交 #125788 · exp710 z4 tail-padding guard
 

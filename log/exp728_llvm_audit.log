@@ -1,0 +1,16 @@
+candidate_sha: dc34862daf0767dedc888840ff7ae723b9ec1a5b1c6b67e9f392439f99c8f9c4  solutions/archive/2026-08-25-experiments/cuda_control124611_guard_case6_bf16_sync_partial_exp728.cpp
+llvm_sha: b5c1643cffd6bb3fd93a3c32b34dbfa9824b3c728e904edb448146c94e7ab109  build/exp728_device.ll
+target_producer_lines: 1577
+target_reducer_lines: 582
+target_producer_async_ops: target_reducer_async_ops: target_producer_bf16_i16_stores: 8
+target_reducer_bf16_i16_loads: 48
+target_reducer_native_bpermute_ops: 5
+whole_tu_global_async_intrinsics: whole_tu_arrive_intrinsics: 4
+target producer async matches:
+target reducer async matches:
+target reducer barrier/bpermute matches:
+189:  %49 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.epil, i32 %33)
+367:  %86 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i, i32 %33)
+421:  %107 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.1, i32 %33)
+475:  %128 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.2, i32 %33)
+529:  %149 = tail call noundef i32 @llvm.mxc.bsm.bpermute(i32 %shl.i.i.i.3, i32 %33)

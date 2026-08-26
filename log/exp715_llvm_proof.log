@@ -1,0 +1,149 @@
+candidate_sha e2f5962fc88141610dafa82df27e24b1abc71a9af32bbda9e581bc7b8fcb679f
+parent_sha 3ebd35f58147ccab4de6637f32689384dadc5a4cd68590fd1efd39e3f22bc1fe
+candidate_bytes 290890 parent_bytes 269538
+--- target dispatch ---
+6229:                     // producer's QK exchange to the all-native row network.
+6230:                     if (num_heads_k == 8 && n_split == 40 &&
+6231:                         pages_per_split == 52) {
+6232:                         // exp715: only the exact B8/KV8/32768 split40/52
+6233:                         // target uses the independent normalized peer fan-in.
+6234:                         paged_decode_case12_kv8_headpair_z8_direct_three_peer_kernel<
+6235:                             true><<<grid, dim3(16, 2, 8)>>>(
+6236:                             q, k_cache_paged, v_cache_paged, output,
+6237:                             cache_seqlens, block_table,
+6238:                             s_partial_m, s_partial_l, s_partial_acc,
+6239:                             (int)batch_size, (int)pages_per_batch,
+6240:                             (int)pages_per_split, n_split,
+6241:                             sm_scale * 1.4426950408889634f);
+6242:                     } else {
+6243:                         paged_decode_case13_kv8_headpair_z8_kernel<true><<<
+6244:                             grid, dim3(16, 2, 8)>>>(
+6245:                             q, k_cache_paged, v_cache_paged, output,
+6246:                             cache_seqlens, block_table,
+6247:                             s_partial_m, s_partial_l, s_partial_acc,
+6248:                             (int)batch_size, (int)pages_per_batch,
+6249:                             (int)pages_per_split, n_split,
+6250:                             sm_scale * 1.4426950408889634f);
+6251:                     }
+--- source fanin ---
+3402:     // exp715 keeps P0 in z0 registers and publishes only normalized BF16
+3403:     // rows for P1, P2 and P3.  Metadata is separate FP32 m/l, and this is the
+3404:     // sole CTA barrier in the cross-wave fan-in.
+3405:     __nv_bfloat162* s_acc_bf16 =
+3406:         reinterpret_cast<__nv_bfloat162*>(s_storage);
+3407:     float (*s_md)[2] = reinterpret_cast<float (*)[2]>(
+3408:         s_storage + KV_BUFFER_BYTES);
+3409:     const bool consume_peer = (tz & 1) == 0;
+3410:     exp715_merge_intrawave_state(m0, l0, acc0, consume_peer);
+3411:     exp715_merge_intrawave_state(m1, l1, acc1, consume_peer);
+3412: 
+3413:     if (tz == 2 || tz == 4 || tz == 6) {
+3414:         const int row_base = tz == 2 ? 0 : (tz == 4 ? 4 : 8);
+3415:         exp715_store_normalized_state(
+3416:             s_acc_bf16, s_md, row_base + local_h0, tx, m0, l0, acc0);
+3417:         exp715_store_normalized_state(
+3418:             s_acc_bf16, s_md, row_base + local_h1, tx, m1, l1, acc1);
+3419:     }
+3420:     __syncthreads();
+3421: 
+3422:     if (tz == 0) {
+3423:         // Consume peers in P1 -> P2 -> P3 order; P0 remains in registers.
+3424:         exp715_merge_normalized_state(
+3425:             m0, l0, acc0,
+3426:             s_md[local_h0][0], s_md[local_h0][1],
+3427:             s_acc_bf16 + local_h0 * (HEAD_DIM / 2) + tx * 4);
+3428:         exp715_merge_normalized_state(
+3429:             m1, l1, acc1,
+3430:             s_md[local_h1][0], s_md[local_h1][1],
+3431:             s_acc_bf16 + local_h1 * (HEAD_DIM / 2) + tx * 4);
+3432:         exp715_merge_normalized_state(
+3433:             m0, l0, acc0,
+3434:             s_md[4 + local_h0][0], s_md[4 + local_h0][1],
+3435:             s_acc_bf16 + (4 + local_h0) * (HEAD_DIM / 2) + tx * 4);
+3436:         exp715_merge_normalized_state(
+3437:             m1, l1, acc1,
+3438:             s_md[4 + local_h1][0], s_md[4 + local_h1][1],
+3439:             s_acc_bf16 + (4 + local_h1) * (HEAD_DIM / 2) + tx * 4);
+3440:         exp715_merge_normalized_state(
+3441:             m0, l0, acc0,
+3442:             s_md[8 + local_h0][0], s_md[8 + local_h0][1],
+3443:             s_acc_bf16 + (8 + local_h0) * (HEAD_DIM / 2) + tx * 4);
+3444:         exp715_merge_normalized_state(
+3445:             m1, l1, acc1,
+3446:             s_md[8 + local_h1][0], s_md[8 + local_h1][1],
+3447:             s_acc_bf16 + (8 + local_h1) * (HEAD_DIM / 2) + tx * 4);
+3448:     }
+3449: 
+3450:     if (tz == 0) {
+3451:         const int idx0 = (split * batch_size + b) * 32 + h0;
+--- LLVM target function ---
+function_symbol define protected metaxgpu_kernel void @_Z60paged_decode_case12_kv8_headpair_z8_direct_three_peer_kernel
+shared_storage_decl False
+llvm_total_cta_barriers 3
+llvm_total_warp_barriers 3
+llvm_post_publication_cta_barriers 1
+llvm_post_publication_warp_barriers 0
+llvm_alloca_count 0
+llvm_post_publication_shared_bf16_i16_stores 0
+llvm_post_publication_shared_float_loads 12
+llvm_post_publication_shared_i32_loads 24
+llvm_post_publication_shared_float_metadata_ptrs 6
+llvm_post_publication_bf16_pair_ptrs 6
+llvm_post_publication_exp2 12
+llvm_post_publication_bf16_to_f32 48
+llvm_external_partial_acc_float_stores 16
+--- selected LLVM fan-in lines ---
+--- resource target ---
+  0 bytes stack frame 
+  0 bytes stack frame 
+  0 bytes stack frame 
+  0 bytes stack frame 
+  0 bytes stack frame 
+  0 bytes stack frame 
+ maca info  : staticMaxWarps/PEU : 5
+  0 bytes stack frame 
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 66 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+  0 bytes stack frame 
+  0 bytes stack frame 
+  0 bytes stack frame 
+ maca info  : staticMaxWarps/PEU : 5
+  0 bytes stack frame 
+ maca info  : staticMaxWarps/PEU : 5
+ maca info  : Function properties for  _Z60paged_decode_case12_kv8_headpair_z8_direct_three_peer_kernelILb1ELb0ELb0EEvPK15__maca_bfloat16S2_S2_PS0_PKiS5_PfS6_S6_iiiif 
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 50 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 48 STregisters, 8448 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+  0 bytes stack frame 
+  0 bytes stack frame 
+  0 bytes stack frame 
+  0 bytes stack frame 
+  0 bytes stack frame 
+  0 bytes stack frame 
+  0 bytes stack frame 
+  0 bytes stack frame 
+  0 bytes stack frame 
+  0 bytes stack frame 
+  0 bytes stack frame 
+  0 bytes stack frame 
+  0 bytes stack frame 
+  0 bytes stack frame 
+  0 bytes stack frame 
+  0 bytes stack frame 
+  0 bytes stack frame 
+ maca info  : Used  82 MTregisters, 64 STregisters, 8320 bytes shared mem  
+ maca info  : staticMaxWarps/PEU : 5
+--- symbol inventory ---
